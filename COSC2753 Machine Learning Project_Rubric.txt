@@ -1,0 +1,55 @@
+COSC2753 Machine Learning Project_2024
+COSC2753 Machine Learning Project_2024
+Criteria	Ratings	Pts
+This criterion is linked to a Learning OutcomeApproach
+50 to >39.0 pts
+HD
+Outstanding across the course. The approach is an excellent and extremely thorough investigation of the chosen ML problem. It explored multiple algorithms and techniques for solving the problem. It goes beyond using the tools provided in class. There are no gaps in what the investigation has considered. The approach makes careful consideration of the unique aspects of the chosen ML problem------The choices in the investigation are highly justified and have an excellent explanation. The reader is left with no questions.------The design of the approach includes excellent choice of training data selection, preprocessing, model training, parameter tuning, and evaluation. Be able to showcase your understanding not only of building the ML model but also of how to integrate ML model into a real-world application.
+39 to >30.0 pts
+DI
+The approach is a good and reasonably thorough investigation of the chosen ML problem. It is mostly limited to the techniques and algorithms discussed in class. There are small gaps between in the investigation in what could have been explored. The approach considers, but not fully, the unique aspects of the chosen ML problem------The choices in the investigation are justified and have a good explanation. The reader is left with minor questions------The design of the approach includes all necessary steps including the choice of training data selection, pre-processing, model training, parameter tuning, and evaluation. Be able to showcase your understanding not only of building the ML model but also of how to integrate ML model into a real-world application.
+30 to >25.0 pts
+CR
+The approach is sufficient, but not a thorough investigation of the chosen ML problem. It is limited to the techniques and algorithms discussed in class, such as a pure reproduction of lab code. There are gaps in the investigation and alternative algorithms or techniques are better than the ones in the approach. The approach has a limited consideration of the unique aspects of the chosen ML problem------The choices in the investigation have sufficient justification, however, there are unexplained choices and the reader is left with important open questions------The design of the approach includes most of the necessary steps such as the choice of training data selection, preprocessing, model training, parameter tuning, and evaluation.
+25 to >17.0 pts
+PA
+The approach is a minimally sufficient investigation of the chosen ML problem. It only examines the bare minimum requirements of suitable techniques and algorithms. There are many gaps in the investigation and there are algorithms or techniques are are clearly more suited to the chosen ML problem. The approach has limited or minimal consideration of the unique aspects of the chosen ML problem------The choices in the investigation have the bare minimal justification. The reader is left with important unanswered questions that are not considered------The design of the approach includes most of the necessary steps such as the choice of training data selection, preprocessing, model training, parameter tuning, and evaluation.
+17 to >0 pts
+NN
+Poor, superficial, or incomplete approach that does not meet the minimum requirements for PA------Does not justifies the approach. Does not explain the approach------The design of the approach is missing significant steps such as the choice of training data selection, pre-processing, model training, parameter tuning, and evaluation.
+50 pts
+This criterion is linked to a Learning OutcomeUltimate Judgement and Evaluation
+30 to >24.0 pts
+HD
+Outstanding across the course. Ultimate Judgement is established and exceptionally justified------Evaluation of the Ultimate Judgement is exceptional and clearly demonstrated (or proves) the viability of the trained model in real-world practice------The evaluation is independent.
+24 to >20.0 pts
+DI
+Ultimate Judgement is established and suitably justified---Evaluation of the Ultimate Judgement is sound and suitably explained, however, the reader may not be fully convinced and have minor questions---The evaluation is independent.
+20 to >15.0 pts
+CR
+Ultimate Judgement is established, but there are unexplained choices, or the justification is hard to follow------An sufficient attempt at evaluating the Ultimate Judgement is made------The evaluation is independent.
+15 to >10.0 pts
+PA
+An Ultimate Judgement is made by not justified------The Ultimate Judgement is not evaluated or the evaluation is incomplete and insufficient------The evaluation is not independent.
+10 to >0 pts
+NN
+Not completed. An Ultimate Judgement is not made.
+30 pts
+This criterion is linked to a Learning OutcomeReport Presentation
+20 to >17.0 pts
+HD
+Outstanding across the course. Report is easy to read and flows well. It is structured well, leading the reader to fully understand the rationale for the final approach taken------Approaches are excellently described. Tables, figures and other visualisation are tailored to the descriptions and justifications made in the report’s text.
+17 to >12.0 pts
+DI
+Report is reasonably easy to read and flows relatively well. It is structured reasonably well, leading the reader to reasonably understand the rationale for the final approach taken------Approaches are described well, Tables, figures and other visualisation are easy to read and to interpret, but may not be highly relevant or appropriately tailored to the descriptions and justifications in the report’s text.
+12 to >9.0 pts
+CR
+Report can be followed but does not flows well in places. It is adequately structured, but reader may find it difficult to understand the rationale of selected approach------Approaches are described in sufficient detail, but aspects may be incomplete. Tables, figures and other visualisation are sufficient but are difficult to interpret.
+9 to >6.0 pts
+PA
+Report is difficult to follow and doesn’t flows well. Readers find t difficult to understand the rationale of the selected approach------Approaches are described to a minimal standard. Tables, figures and other visualisation are provided to a care minimum amount.
+6 to >0 pts
+NN
+Not completed. Incomplete or error ridden report.
+20 pts
+Total Points: 100
