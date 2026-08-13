@@ -3,16 +3,6 @@
 COSC2753 Machine Learning · Assignment 2 (2026B) · RMIT
 **Due: Sat 12 Sep 2026, 23:59 (Canvas)** — worth 40% of the course.
 
-## Tasks
-
-| Task | Target | Owner |
-|------|--------|-------|
-| 1 | `articleType` classification (125 classes) | _Bạn 1_ |
-| 2 | `season` classification | _Bạn 2_ |
-| 3 | `gender` + `usage` classification | _Bạn 3_ |
-| 4 | Visual search (Top-K similar items) + GUI/API | _Bạn 4_ |
-| — | Report + Ultimate Judgement + independent eval + QA | _Bạn 5_ |
-
 ## Repo structure
 
 ```
