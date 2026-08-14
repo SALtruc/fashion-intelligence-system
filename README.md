@@ -3,24 +3,13 @@
 COSC2753 Machine Learning · Assignment 2 (2026B) · RMIT
 **Due: Sat 12 Sep 2026, 23:59 (Canvas)** — worth 40% of the course.
 
-## Tasks
-
-| Task | Target | Owner |
-|------|--------|-------|
-| 1 | `articleType` classification (125 classes) | _Bạn 1_ |
-| 2 | `season` classification | _Bạn 2_ |
-| 3 | `gender` + `usage` classification | _Bạn 3_ |
-| 4 | Visual search (Top-K similar items) + GUI/API | _Bạn 4_ |
-| — | Report + Ultimate Judgement + independent eval + QA | _Bạn 5_ |
-
 ## Repo structure
 
 ```
-Dataset/          # FashionDataset (train 38,617 rows / test 5,829 images) — committed for easy Colab clone
+datasets/         # FashionDataset (train 38,617 rows / test 5,829 images) — committed for easy Colab clone
 notebooks/        # eda.ipynb, task1_*.ipynb ... task4_*.ipynb
 src/              # shared code: data loading, split, metrics
 splits/           # fixed stratified train/val split — EVERYONE evaluates on this
-report/           # report drafts (max 5 pages + 2 appendix, font 11)
 predictions/      # prediction CSVs in styles_prediction.csv format
 ```
 
@@ -33,12 +22,31 @@ predictions/      # prediction CSVs in styles_prediction.csv format
 5. Log every experiment in the shared experiments sheet so it can go in the report comparison table.
 6. Prediction files must keep the exact `styles_prediction.csv` format: `id,gender,articleType,season,usage`.
 
-## Setup (Colab)
+## Setup
 
+Clone the repository and change into the project directory:
+
+```bash
+git clone https://github.com/SALtruc/Machine-Learning-Assignment-2.git
+
+cd Machine-Learning-Assignment-2
 ```
-!git clone https://github.com/SALtruc/Machine-Learning-Assignment-2.git
-%cd Machine-Learning-Assignment-2
-!pip install -q -r requirements.txt
+
+Before setting up the project, make sure [`uv`](https://docs.astral.sh/uv/getting-started/installation/) is installed globally and available on your `PATH`:
+
+```bash
+# macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows PowerShell
+irm https://astral.sh/uv/install.ps1 | iex
+```
+
+Verify the installation, then run the following from the repository root. This creates `.venv` and installs the locked dependencies:
+
+```bash
+uv --version
+uv sync --frozen
 ```
 
 > Dataset is for educational use in this course only. Keep this repo **private**.
