@@ -1,3 +1,6 @@
+# datasets — share via Drive, too big for git
+datasets/
+
 # model weights — share via Drive, too big for git
 *.h5
 *.pt
