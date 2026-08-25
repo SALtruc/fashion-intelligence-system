@@ -32,39 +32,39 @@ The model should use the image as its main input. Metadata such as `articleType`
 ## 2. Pipeline overview
 
 ```text
-Raw CSV + image folders
-        |
-        v
-Data audit and exploratory analysis
-        |
-        v
-Leakage/duplicate checks and invalid-image filtering
-        |
-        v
-Create one fixed, reproducible train/validation split
-        |
-        +----------------------------+
-        |                            |
-        v                            v
+        Raw CSV + image folders
+                        |
+                        v
+        Data audit and exploratory analysis
+                        |
+                        v
+        Data cleaning and duplicate/group checks
+                        |
+                        v
+        Create one fixed, reproducible train/validation split
+                        |
+        +-------------------------------+
+        |                               |
+        v                               v
 Training-only preprocessing      Validation preprocessing
   (fit on train only)              (transform only)
-        |                            |
-        +-------------+--------------+
-                      v
-                 +--> Simple CNN baseline --------+
-                 |                                |
-                 +--> Advanced DL model 1 -------+--> Tune and compare
-                 |                                |    using the same
-                 +--> Optional DL model 2 --------+    validation protocol
-                      |
-                      v
-       Select final model using multiple criteria
-                      |
-                      v
-       Use the selected trained model for final predictions
-                      |
-                      v
-       Predict test labels / retrieve gallery images / save files
+        |                               |
+        +---------------+---------------+
+                        v
+        +--> Simple CNN baseline --------+
+        |                                |
+        +--> Advanced DL model 1 -------+--> Tune and compare
+        |                                |    using the same
+        +--> Optional DL model 2 --------+    validation protocol
+                        |
+                        v
+        Select final model using multiple criteria
+                        |
+                        v
+        Use the selected trained model for final predictions
+                        |
+                        v
+        Predict test labels / retrieve gallery images / save files
 ```
 
 Use the same overall pipeline for every target, but allow the preprocessing and model settings to differ. For example, class weighting may be important for `articleType`, while images may contain little direct information about `season`. Measure and discuss these differences. The only non-neural reference is the majority-class predictor.
@@ -82,78 +82,63 @@ Before modelling, record:
 
 Use one configuration file, or clearly defined constants, for paths and random seeds. Save label mappings, preprocessing settings, model weights, metrics, and prediction code so another group member can repeat the predictions. Do not commit the educational dataset or large model files if repository policy excludes them; explain where an evaluator can obtain them.
 
-## 4. Stage 1 — Explore and check the data
+## 4. Stage 1 — Exploratory data analysis (EDA)
 
-Explore the data before choosing the split, preprocessing, or model. Focus on questions that can change your modelling decisions.
+Use EDA to understand the dataset before cleaning it, creating the split, or choosing a model. Report findings that may affect modelling decisions; do not modify the raw files during EDA.
 
-### 4.1 Tabular and label audit
+### 4.1 Tabular and label analysis
 
-For `styles_train.csv`:
+For `styles_train.csv`, inspect:
 
-1. Check the number of rows, unique IDs, duplicate IDs, missing values, invalid label values, and unexpected data types.
-2. Verify that each labelled ID has exactly one corresponding image and identify missing or unreadable image files.
-3. Count every class for `articleType`, `season`, `gender`, and `usage`.
-4. Report the percentage of samples in the largest and smallest classes and the number of rare classes.
-5. Inspect relationships between targets, such as `articleType` versus `gender`, `season`, and `usage`.
-6. Inspect `year`, `baseColour`, `masterCategory`, and `subCategory` for useful descriptive patterns and suspicious leakage.
+1. The number of rows, unique IDs, duplicate IDs, missing values, invalid label values, and data types.
+2. The number of classes and sample count for `articleType`, `season`, `gender`, and `usage`.
+3. The percentage of samples in the largest and smallest classes and the number of rare classes.
+4. Relationships between targets, such as `articleType` versus `gender`, `season`, and `usage`.
+5. `year`, `baseColour`, `masterCategory`, and `subCategory` for useful patterns or possible leakage.
 
-The class counts determine whether accuracy is enough. If a few common item types dominate the data, a model can have high accuracy but perform poorly on rare classes. This is why macro-F1, recall for each class, and a confusion matrix should be the main evidence.
+The class counts show whether accuracy is enough. If a few common item types dominate the data, a model can have high accuracy but perform poorly on rare classes. This is why macro-F1, recall for each class, and a confusion matrix should be the main evidence.
 
-### 4.2 Image audit
+### 4.2 Image analysis
 
 Measure or visualize:
 
 - image dimensions and aspect ratios;
-- colour mode and corrupted files;
+- colour mode and the number of corrupted or unreadable files;
 - brightness, contrast, background, and object scale;
-- near-duplicate or repeated images;
+- possible duplicate or repeated images;
 - examples from common and rare classes;
 - examples of visually ambiguous labels.
 
 Create contact sheets for random samples and important classes. They can show whether the labels can be learned from the images, whether the background is distracting, and whether resizing or cropping might remove important details.
 
-### 4.3 Dataset quality and leakage audit
+### 4.3 EDA conclusions
 
-Check for exact duplicates and, if possible, near duplicates using image hashes or simple image fingerprints. Also check whether the same product, image variant, or very similar photograph appears in both partitions. If nearly identical images appear in both train and validation, the score may be unrealistically high.
+Summarize the findings that affect the next stages. For example, record class imbalance, missing or unreadable files, possible duplicate groups, suspicious labels, and image properties that may guide preprocessing or augmentation. Cleaning and splitting are performed in Stage 2.
 
-If duplicates are found, group them together and place the complete group in only one partition. Record the rule and the number of affected samples. If no reliable product-group identifier exists, state the limitation and use the strongest available duplicate check.
+## 5. Stage 2 — Data cleaning and stratified splitting
 
-## 5. Stage 2 — Prepare and split the data safely
+Clean the dataset using a documented rule, then create one fixed split for all experiments. Do not modify the raw files; create a cleaned index or manifest that points to them.
 
-Separate steps that can be done before splitting from steps that must learn values from the training data.
+### 5.1 Data cleaning before splitting
 
-### 5.1 Operations safe before splitting
+Perform these checks before creating the train/validation split:
 
-These do not learn a value from the labels or from the validation distribution:
+- confirm that the required CSV columns are present and have the expected data types;
+- match each CSV ID to its image file and remove or record missing, unreadable, or corrupted images;
+- check for duplicate CSV rows and duplicate image files;
+- identify near-duplicate images, image variants, or same-product groups when possible;
+- remove rows with a missing or invalid target for the relevant task;
+- record every removed row, duplicate group, and cleaning rule.
 
-- matching CSV IDs to image filenames;
-- removing rows whose image is missing or unreadable;
-- converting images to a consistent colour mode;
-- checking file integrity;
-- removing exact duplicate records according to a documented rule;
-- defining the target columns and excluding rows with a missing target for that task.
+Do not resize, normalize, augment, relabel, or balance the images during cleaning. Those operations belong to Stage 3 or model training. If a duplicate or product group is valid, do not needlessly delete it; keep the group together when splitting so related images cannot appear in both partitions.
 
-Removing invalid records before the split is safe because it checks data quality rather than fitting a model. Record the rule and the number of removed records.
+### 5.2 Stratified split
 
-### 5.2 Operations that must be training-only
+Using the cleaned index, create a fixed train/validation split, such as 80/20, while keeping class proportions as similar as possible in both parts. Use the same split indices for all models so that differences come from the methods, not from different validation images. The repository already provides a shared split in `splits/`; all group members should use it.
 
-Fit these using the training partition only. Then apply the same result to validation and test data:
+For separate target models, verify class coverage of the shared split for all four targets. If a rare class is absent from validation or cannot be stratified safely, document the issue and use a task-specific stratified split only when necessary. Never tune on the unlabeled test images or repeatedly change the validation split to obtain a better result.
 
-- label encoders and class-index mappings;
-- class weights calculated from target frequencies;
-- learned image normalization statistics, if custom statistics are used;
-- any learned preprocessing parameters or decision thresholds;
-- augmentation policy parameters selected from experiments.
-
-For neural networks, fixed steps such as resizing and converting pixels to `[0, 1]` do not learn from the data. If you use dataset-specific normalization values, calculate them from training images only.
-
-### 5.3 Stratified split
-
-Create a fixed train/validation split, such as 80/20, while keeping class proportions as similar as possible in both parts. Use the same split indices for all models so that differences come from the methods, not from different validation images. The repository already provides a shared split in `splits/`; all group members should use it.
-
-For separate target models, verify the class coverage of the shared split for all four targets. If a rare class is absent from validation or cannot be stratified safely, document the issue and use a task-specific stratified split only when necessary. Never tune on the unlabeled test images or repeatedly change the validation split to obtain a better result.
-
-If duplicate or product groups are available, keep each group in only one partition and preserve class proportions as far as possible. The main goal is to prevent related images from appearing on both sides of the evaluation split.
+If duplicate or product groups are available, keep each complete group in only one partition while preserving class proportions as far as possible. The main goal is to prevent related images from appearing on both sides of the evaluation split.
 
 ## 6. Stage 3 — Prepare images for each task
 
@@ -170,7 +155,19 @@ Start with a consistent image pipeline:
 
 Reasonable training augmentations are small horizontal flips, rotations, translations, scale changes, and brightness/contrast changes. Avoid transformations that change the target's meaning, such as aggressive colour changes if colour is informative for clothing type or season. Validation and test images must receive deterministic preprocessing only.
 
-### 6.2 Neural-network input format
+### 6.2 Training-only settings
+
+Fit these using the training partition only, then apply the same result to validation and test data:
+
+- label encoders and class-index mappings;
+- class weights calculated from training-label frequencies;
+- learned image-normalization statistics, if custom statistics are used;
+- any learned preprocessing parameters or decision thresholds;
+- augmentation settings selected from experiments.
+
+Fixed steps such as resizing and converting pixels to `[0, 1]` do not learn from the data. If you use dataset-specific normalization values, calculate them from training images only.
+
+### 6.3 Neural-network input format
 
 All classifiers receive image tensors:
 
@@ -183,7 +180,7 @@ All classifiers receive image tensors:
 
 Use the same tensor format when comparing neural models. This makes it clearer whether differences come from the model architecture or its settings.
 
-### 6.3 Target-specific considerations
+### 6.4 Target-specific considerations
 
 - **`articleType`:** expect many classes and strong imbalance. Use class-weighted training, inspect minority-class recall, and analyse confusions between visually similar types such as shirt/T-shirt or trousers/jeans.
 - **`season`:** inspect whether some classes are rare and whether the labels are inferred from weak visual cues. Report whether the model is genuinely better than a majority-class predictor.
