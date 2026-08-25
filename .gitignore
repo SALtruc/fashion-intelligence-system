@@ -1,14 +1,20 @@
 # datasets — share via Drive, too big for git
-datasets/
+datasets/**/*.csv
+datasets/**/*.jpg
+
+!datasets/.gitkeep
+!datasets/README.md
 
 # model weights — share via Drive, too big for git
-*.h5
-*.pt
-*.pth
-*.keras
-*.pkl
-*.joblib
-models/
+models/**/*.h5
+models/**/*.pt
+models/**/*.pth
+models/**/*.keras
+models/**/*.pkl
+models/**/*.joblib
+
+!models/.gitkeep
+!models/README.md
 
 # junk
 __MACOSX/
