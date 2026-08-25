@@ -51,4 +51,62 @@ uv --version
 uv sync --frozen
 ```
 
+## Run the finalized EDA
+
+Before running the notebook, confirm the training dataset has this structure:
+
+```text
+datasets/
+└── train/
+    ├── styles_train.csv
+    └── images_train/
+        ├── 1163.jpg
+        └── ...
+```
+
+### Run interactively
+
+Start JupyterLab from the repository root:
+
+```bash
+uv run jupyter lab
+```
+
+Open `notebooks/finalize_eda.ipynb`, select the project's `.venv` kernel if
+prompted, then choose **Kernel → Restart Kernel and Run All Cells**. Press
+`Ctrl+S` to save the cell outputs in the notebook.
+
+The image validation and duplicate-detection sections process approximately
+38,000 images, so a complete run may take several minutes.
+
+### Run from the command line
+
+To execute every cell in a fresh kernel and save the outputs to a separate
+notebook, run the following from the repository root.
+
+Windows PowerShell:
+
+```powershell
+uv run jupyter nbconvert `
+  --to notebook `
+  --execute "notebooks\finalize_eda.ipynb" `
+  --output "finalize_eda_executed.ipynb" `
+  --ExecutePreprocessor.timeout=-1
+```
+
+macOS or Linux:
+
+```bash
+uv run jupyter nbconvert \
+  --to notebook \
+  --execute notebooks/finalize_eda.ipynb \
+  --output finalize_eda_executed.ipynb \
+  --ExecutePreprocessor.timeout=-1
+```
+
+The executed notebook is saved as
+`notebooks/finalize_eda_executed.ipynb`. If execution immediately raises a
+`FileNotFoundError`, verify that `datasets/train/styles_train.csv` and
+`datasets/train/images_train/` exist.
+
 > Dataset is for educational use in this course only. Keep this repo **private**.
