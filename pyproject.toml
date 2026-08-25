@@ -8,10 +8,11 @@ dependencies = [
     "jupyter",
     "numpy",
     "pandas",
+    "tqdm",
     "matplotlib",
     "seaborn",
     "scikit-learn",
-    "tensorflow",
-    "pillow",
-    "tqdm"
+    "torch",
+    "torchvision",
+    "faiss-cpu",
 ]
