@@ -61,7 +61,7 @@ Training-only preprocessing      Validation preprocessing
        Select final model using multiple criteria
                       |
                       v
-       Retrain selected configuration on all labelled data
+       Use the selected trained model for final predictions
                       |
                       v
        Predict test labels / retrieve gallery images / save files
@@ -249,7 +249,7 @@ Tune a small, pre-declared set of high-impact parameters for the one baseline an
 
 Do not tune every parameter at once. Start with a small search, keep the configuration with the best validation macro-F1, and then test it with several random seeds if possible.
 
-Keep a dated experiment table with the configuration, seed, training time, validation metrics, and observations. Do not select a model after looking only at one favourable metric. The final configuration should be frozen before the last training run.
+Keep a dated experiment table with the configuration, seed, training time, validation metrics, and observations. Do not select a model after looking only at one favourable metric. Freeze the selected configuration before evaluating it on the test data.
 
 ## 8. How to evaluate the models
 
@@ -317,12 +317,12 @@ A model with slightly lower macro-F1 may be the better practical choice if it is
 
 Do not choose the final model using the unlabeled test set. The test set is reserved for producing the final submission after the configuration is frozen.
 
-## 10. Final training and separate evaluation
+## 10. Final model use and separate evaluation
 
-After selecting the configurations:
+After selecting the trained models:
 
 1. Freeze preprocessing, architecture, hyperparameters, class mappings, and decision criteria.
-2. Retrain each selected classification model on all labelled, valid training data.
+2. Use the selected classification model for each target.
 3. For the visual-search system, build the final gallery from all valid labelled training images.
 4. Generate predictions for every test ID in `images_test`.
 5. Preserve the exact sample-prediction format and column order:
@@ -379,6 +379,6 @@ Keep one row per experiment with the task, split version, preprocessing, model, 
 - [ ] Macro-F1, weighted-F1, accuracy, per-class metrics, and confusion matrices are reported.
 - [ ] Visual search reports Recall@K/Precision@K or mAP@K and explains its similarity rule.
 - [ ] Error analysis and controlled improvement tests support the final decision.
-- [ ] Final models are retrained only after the configuration is frozen.
+- [ ] Final models are selected only after the configuration is frozen.
 - [ ] Prediction CSV has exactly `id,gender,articleType,season,usage` and one row per test image.
 - [ ] Code, model-loading instructions, environment information, and required files are included.
