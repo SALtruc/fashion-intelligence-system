@@ -72,7 +72,7 @@ Start JupyterLab from the repository root:
 uv run jupyter lab
 ```
 
-Open `notebooks/finalize_eda.ipynb`, select the project's `.venv` kernel if
+Open `notebooks/00_eda_and_preprocessing.ipynb`, select the project's `.venv` kernel if
 prompted, then choose **Kernel → Restart Kernel and Run All Cells**. Press
 `Ctrl+S` to save the cell outputs in the notebook.
 
@@ -89,8 +89,8 @@ Windows PowerShell:
 ```powershell
 uv run jupyter nbconvert `
   --to notebook `
-  --execute "notebooks\finalize_eda.ipynb" `
-  --output "finalize_eda_executed.ipynb" `
+  --execute "notebooks\00_eda_and_preprocessing.ipynb" `
+  --output "00_eda_and_preprocessing_executed.ipynb" `
   --ExecutePreprocessor.timeout=-1
 ```
 
@@ -99,13 +99,13 @@ macOS or Linux:
 ```bash
 uv run jupyter nbconvert \
   --to notebook \
-  --execute notebooks/finalize_eda.ipynb \
-  --output finalize_eda_executed.ipynb \
+  --execute notebooks/00_eda_and_preprocessing.ipynb \
+  --output 00_eda_and_preprocessing_executed.ipynb \
   --ExecutePreprocessor.timeout=-1
 ```
 
 The executed notebook is saved as
-`notebooks/finalize_eda_executed.ipynb`. If execution immediately raises a
+`notebooks/00_eda_and_preprocessing_executed.ipynb`. If execution immediately raises a
 `FileNotFoundError`, verify that `datasets/train/styles_train.csv` and
 `datasets/train/images_train/` exist.
 
