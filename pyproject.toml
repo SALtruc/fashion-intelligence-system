@@ -17,4 +17,5 @@ dependencies = [
     "torch",
     "torchvision",
     "faiss-cpu",
+    "pytorch-metric-learning",
 ]
