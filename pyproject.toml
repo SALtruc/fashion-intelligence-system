@@ -17,4 +17,5 @@ dependencies = [
     "torchvision",
     "faiss-cpu",
     "notebook>=7.6.2",
+    "scikit-image>=0.26.0",
 ]
