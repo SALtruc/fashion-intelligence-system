@@ -66,10 +66,10 @@ datasets/
 
 ### Run interactively
 
-Start JupyterLab from the repository root:
+Start Jupyter Notebook from the repository root:
 
 ```bash
-uv run jupyter lab
+uv run jupyter notebook
 ```
 
 Open `notebooks/00_eda_and_preprocessing.ipynb`, select the project's `.venv` kernel if
