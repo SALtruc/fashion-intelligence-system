@@ -16,5 +16,5 @@ dependencies = [
     "torch",
     "torchvision",
     "faiss-cpu",
-    "notebook>=7.6.2",
+    "notebook",
 ]
