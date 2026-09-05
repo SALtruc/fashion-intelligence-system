@@ -1,0 +1,534 @@
+"""Small, shared utilities for the independent Task 2 notebooks."""
+
+from __future__ import annotations
+
+from pathlib import Path
+from types import SimpleNamespace
+import hashlib
+import json
+import math
+import os
+import random
+import time
+
+import numpy as np
+import pandas as pd
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import matplotlib.pyplot as plt
+from skimage.color import rgb2gray, rgb2hsv
+from skimage.feature import hog
+from sklearn.metrics import accuracy_score, f1_score, recall_score
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+TASK2_OUTPUT_DIR = REPO_ROOT / "outputs" / "task2"
+TASK2_SPLIT_PATH = REPO_ROOT / "splits" / "task2_season_split.csv"
+TASK2_PREDICTION_PATH = REPO_ROOT / "predictions" / "task2_season_predictions.csv"
+TASK2_PREPROCESSED_DIR = REPO_ROOT / "preprocessed_datasets" / "task2"
+
+FEATURE_CONFIG = {
+    "hue_bins": 12,
+    "saturation_bins": 8,
+    "value_bins": 8,
+    "hog_orientations": 9,
+    "hog_pixels_per_cell": (8, 8),
+    "hog_cells_per_block": (2, 2),
+    "foreground_threshold": 0.95,
+}
+
+
+def ensure_task2_directories() -> None:
+    """Create only the stable directories shared by the Task 2 notebooks."""
+    for path in (
+        REPO_ROOT / "models" / "checkpoints",
+        TASK2_OUTPUT_DIR,
+        TASK2_SPLIT_PATH.parent,
+        TASK2_PREDICTION_PATH.parent,
+        TASK2_PREPROCESSED_DIR,
+    ):
+        path.mkdir(parents=True, exist_ok=True)
+
+
+def evaluate_predictions(y_true, y_pred, scores, name: str) -> dict:
+    """Return the common Task 2 metrics as one serialisable result row."""
+    y_true = np.asarray(y_true)
+    y_pred = np.asarray(y_pred)
+    labels = np.unique(y_true)
+    result = {
+        "Model": name,
+        "Top-1 accuracy": accuracy_score(y_true, y_pred),
+        "Macro-F1": f1_score(y_true, y_pred, labels=labels, average="macro", zero_division=0),
+        "Balanced accuracy": recall_score(
+            y_true, y_pred, labels=labels, average="macro", zero_division=0
+        ),
+        "Weighted F1": f1_score(y_true, y_pred, average="weighted", zero_division=0),
+    }
+    if scores is None:
+        result["Top-2 accuracy"] = np.nan
+    else:
+        scores = np.asarray(scores)
+        top = np.argpartition(scores, -min(2, scores.shape[1]), axis=1)[:, -2:]
+        result["Top-2 accuracy"] = float(
+            np.mean([truth in choices for truth, choices in zip(y_true, top)])
+        )
+    return result
+
+
+def per_class_table(y_true, y_pred, classes) -> pd.DataFrame:
+    """Return precision, recall and F1 for every represented season."""
+    y_true = np.asarray(y_true)
+    y_pred = np.asarray(y_pred)
+    rows = []
+    for index in np.unique(y_true):
+        true_binary = y_true == index
+        pred_binary = y_pred == index
+        rows.append({
+            "Season": classes[index],
+            "Support": int(true_binary.sum()),
+            "Precision": float((true_binary & pred_binary).sum() / max(pred_binary.sum(), 1)),
+            "Recall": float((true_binary & pred_binary).sum() / max(true_binary.sum(), 1)),
+            "F1": f1_score(true_binary, pred_binary, zero_division=0),
+        })
+    return pd.DataFrame(rows)
+
+
+def load_task2_prepared_data():
+    """Load notebook 1's fixed split, configuration, and preprocessed image arrays."""
+    import json
+    from src.preprocessing import load_manifest
+
+    config_path = TASK2_OUTPUT_DIR / "setup" / "config.json"
+    required = [
+        config_path,
+        TASK2_SPLIT_PATH,
+        TASK2_PREPROCESSED_DIR / "train_images.npy",
+        TASK2_PREPROCESSED_DIR / "validation_images.npy",
+    ]
+    missing = [str(path) for path in required if not path.exists()]
+    if missing:
+        raise FileNotFoundError(
+            "Run notebooks/task2/01_task2_setup.ipynb first. Missing: " + ", ".join(missing)
+        )
+
+    config = json.loads(config_path.read_text())
+    split = pd.read_csv(TASK2_SPLIT_PATH, dtype={"id": str})
+    manifest = load_manifest(config["target"]).copy()
+    manifest["id"] = manifest["id"].astype(str)
+    lookup = manifest.set_index("id", drop=False)
+    train_ids = split.loc[split["split"] == "train"].sort_values("position")["id"]
+    validation_ids = split.loc[split["split"] == "validation"].sort_values("position")["id"]
+    train_frame = lookup.loc[train_ids].reset_index(drop=True)
+    validation_frame = lookup.loc[validation_ids].reset_index(drop=True)
+    classes = config["classes"]
+    class_to_index = {label: index for index, label in enumerate(classes)}
+    return {
+        "config": config,
+        "classes": classes,
+        "train_frame": train_frame,
+        "validation_frame": validation_frame,
+        "y_train": train_frame[config["target"]].map(class_to_index).to_numpy(),
+        "y_validation": validation_frame[config["target"]].map(class_to_index).to_numpy(),
+        "train_images": np.load(TASK2_PREPROCESSED_DIR / "train_images.npy", mmap_mode="r"),
+        "validation_images": np.load(
+            TASK2_PREPROCESSED_DIR / "validation_images.npy", mmap_mode="r"
+        ),
+    }
+
+
+def prepared_namespace():
+    """Load Notebook 1 outputs and expose the commonly used derived values."""
+    data = load_task2_prepared_data()
+    classes = data["classes"]
+    y_train = data["y_train"]
+    y_validation = data["y_validation"]
+    return SimpleNamespace(
+        **data,
+        target=data["config"]["target"],
+        class_to_index={label: index for index, label in enumerate(classes)},
+        n_classes=len(classes),
+        y_val=y_validation,
+        x_train=data["train_images"],
+        x_val=data["validation_images"],
+        norm_mean=np.asarray(data["config"]["normalisation_mean"], dtype=np.float32),
+        norm_std=np.asarray(data["config"]["normalisation_std"], dtype=np.float32),
+        train_support=pd.Series(np.bincount(y_train, minlength=len(classes)), index=classes),
+        validation_support=pd.Series(
+            np.bincount(y_validation, minlength=len(classes)), index=classes
+        ),
+        scoreable=np.flatnonzero(np.bincount(y_validation, minlength=len(classes)) > 0),
+    )
+
+
+def result_frame(y_true, y_pred, scores, name: str) -> pd.DataFrame:
+    """Return the standard metrics in the one-row format used by the notebooks."""
+    return pd.DataFrame([evaluate_predictions(y_true, y_pred, scores, name)])
+
+
+def export_model_results(
+    group: str, name: str, prepared, logits, history: pd.DataFrame | None = None,
+    *, scores_are_logits: bool = False,
+) -> Path:
+    """Write one model's metrics, history, and validation predictions together."""
+    output_dir = TASK2_OUTPUT_DIR / group
+    output_dir.mkdir(parents=True, exist_ok=True)
+    predictions = np.asarray(logits).argmax(axis=1)
+    result_frame(prepared.y_val, predictions, logits, name).to_json(
+        output_dir / "results.json", orient="records", indent=2
+    )
+    if history is not None:
+        history.to_csv(output_dir / "training_history.csv", index=False)
+    export_validation_predictions(
+        output_dir / "validation_predictions.csv", prepared.validation_frame,
+        prepared.y_val, predictions, logits, prepared.classes,
+        scores_are_logits=scores_are_logits,
+    )
+    return output_dir
+
+
+def neural_training_config(
+    *, quick_run: bool = True, random_state: int = 42,
+    resume: bool = False, allow_cpu: bool = False,
+) -> dict:
+    """Return the single shared CNN recipe, with only run controls exposed per notebook."""
+    return {
+        "random_state": random_state,
+        "quick_run": quick_run,
+        "resume": resume,
+        "allow_cpu": True if quick_run else allow_cpu,
+        "epochs": 3 if quick_run else 30,
+        "warmup_epochs": 1 if quick_run else 3,
+        "batch_size": 128,
+        "patience": 6,
+        "learning_rate": 1e-3,
+        "weight_decay": 1e-4,
+        "label_smoothing": 0.05,
+        "flip_probability": 0.5,
+        "rotation_degrees": 8.0,
+        "translate_fraction": 0.06,
+        "jitter_strength": 0.05,
+        "use_amp": True,
+        "channels_last": True,
+        "cache_on_device": True,
+        "use_compile": False,
+        "deterministic": False,
+        "keep_epoch_checkpoints": False,
+    }
+
+
+class NeuralTrainer:
+    """Shared augmentation, batching, training, and checkpoint recovery for Task 2 CNNs."""
+
+    def __init__(self, prepared, config: dict):
+        self.data = prepared
+        self.cfg = dict(config)
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        if self.device.type != "cuda" and not self.cfg["allow_cpu"]:
+            raise RuntimeError(
+                "No CUDA device is available. Install a CUDA-enabled PyTorch build, or set "
+                "ALLOW_CPU = True (preferably with QUICK_RUN = True)."
+            )
+        if self.device.type == "cuda":
+            try:
+                (torch.zeros(8, device=self.device) + 1).sum().item()
+            except RuntimeError as error:
+                raise RuntimeError(f"CUDA is visible but cannot execute a kernel: {error}") from error
+            torch.backends.cuda.matmul.allow_tf32 = True
+            torch.backends.cudnn.allow_tf32 = True
+        self.amp_enabled = self.cfg["use_amp"] and self.device.type == "cuda"
+        self.amp_dtype = (torch.bfloat16 if self.amp_enabled and torch.cuda.is_bf16_supported()
+                          else torch.float16)
+        self.channels_last = self.cfg["channels_last"] and self.device.type == "cuda"
+        self.cache_on_device = self.cfg["cache_on_device"] and self.device.type == "cuda"
+        self.use_compile = self.cfg["use_compile"] and hasattr(torch, "compile")
+        torch.backends.cudnn.benchmark = not self.cfg["deterministic"] and self.device.type == "cuda"
+        self._set_seed(self.cfg["random_state"])
+        self.mean = torch.tensor(prepared.norm_mean, device=self.device).view(1, 3, 1, 1)
+        self.std = torch.tensor(prepared.norm_std, device=self.device).view(1, 3, 1, 1)
+        self.luma = torch.tensor([.299, .587, .114], device=self.device).view(1, 3, 1, 1)
+        self.train_loader = self.BatchStream(
+            self, prepared.x_train, prepared.y_train, self.cfg["batch_size"], True, True
+        )
+        self.val_loader = self.BatchStream(
+            self, prepared.x_val, prepared.y_val, 512, False, False
+        )
+        identity = {
+            "target": prepared.target, "classes": prepared.n_classes,
+            "train_rows": len(prepared.y_train), "val_rows": len(prepared.y_val),
+            **self.cfg, "norm": [prepared.norm_mean.round(5).tolist(),
+                                  prepared.norm_std.round(5).tolist()],
+        }
+        self.fingerprint = hashlib.sha1(
+            json.dumps(identity, sort_keys=True).encode()
+        ).hexdigest()[:12]
+        print(f"Device: {self.device} | mixed precision: {self.amp_enabled} "
+              f"| run fingerprint: {self.fingerprint}")
+
+    @staticmethod
+    def _set_seed(seed):
+        random.seed(seed); np.random.seed(seed); torch.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+
+    def _capture_rng(self):
+        state = {"python": random.getstate(), "numpy": np.random.get_state(),
+                 "torch": torch.get_rng_state()}
+        if torch.cuda.is_available():
+            state["cuda"] = torch.cuda.get_rng_state_all()
+        return state
+
+    def _restore_rng(self, state):
+        random.setstate(state["python"]); np.random.set_state(state["numpy"])
+        torch.set_rng_state(state["torch"].cpu())
+        if "cuda" in state and torch.cuda.is_available():
+            torch.cuda.set_rng_state_all([item.cpu() for item in state["cuda"]])
+
+    def augment(self, x):
+        n, _, height, width = x.shape
+        flip = torch.rand(n, device=x.device) < self.cfg["flip_probability"]
+        x = torch.where(flip.view(-1, 1, 1, 1), x.flip(-1), x)
+        angle = (torch.rand(n, device=x.device) * 2 - 1) * math.radians(self.cfg["rotation_degrees"])
+        shift = self.cfg["translate_fraction"] * 2
+        shift_x = (torch.rand(n, device=x.device) * 2 - 1) * shift
+        shift_y = (torch.rand(n, device=x.device) * 2 - 1) * shift
+        cos, sin = torch.cos(angle), torch.sin(angle)
+        theta = torch.zeros(n, 2, 3, device=x.device)
+        theta[:, 0, 0], theta[:, 0, 1], theta[:, 0, 2] = cos, -sin * height / width, shift_x
+        theta[:, 1, 0], theta[:, 1, 1], theta[:, 1, 2] = sin * width / height, cos, shift_y
+        grid = F.affine_grid(theta, list(x.shape), align_corners=False)
+        x = F.grid_sample(x - 1, grid, mode="bilinear", padding_mode="zeros",
+                          align_corners=False) + 1
+        strength = self.cfg["jitter_strength"]
+        factor = lambda: 1 + (torch.rand(n, 1, 1, 1, device=x.device) * 2 - 1) * strength
+        x = x * factor()
+        grey = (x * self.luma).sum(1, keepdim=True)
+        x = (x - grey) * factor() + grey
+        x = (x - grey.mean((2, 3), keepdim=True)) * factor() + grey.mean((2, 3), keepdim=True)
+        return x.clamp_(0, 1)
+
+    class BatchStream:
+        def __init__(self, owner, images, labels, batch_size, augment, shuffle):
+            self.owner, self.batch_size, self.augment, self.shuffle = owner, batch_size, augment, shuffle
+            self.images = torch.from_numpy(np.ascontiguousarray(images))
+            if owner.cache_on_device:
+                self.images = self.images.to(owner.device)
+            self.labels = torch.as_tensor(labels, dtype=torch.long, device=owner.device)
+
+        def __len__(self):
+            return math.ceil(len(self.labels) / self.batch_size)
+
+        def __iter__(self):
+            order = (torch.randperm(len(self.labels), device=self.images.device) if self.shuffle
+                     else torch.arange(len(self.labels), device=self.images.device))
+            for start in range(0, len(order), self.batch_size):
+                index = order[start:start + self.batch_size]
+                x = self.images[index].to(self.owner.device).permute(0, 3, 1, 2).float().div_(255)
+                if self.augment:
+                    x = self.owner.augment(x)
+                x = (x - self.owner.mean) / self.owner.std
+                if self.owner.channels_last:
+                    x = x.contiguous(memory_format=torch.channels_last)
+                yield x, self.labels[index.to(self.labels.device)]
+
+    def _path(self, name, checkpoint=False):
+        slug = "".join(c if c.isalnum() else "_" for c in name.lower()).strip("_")
+        return (REPO_ROOT / "models" / "checkpoints" / f"task2_{slug}_checkpoint.pt"
+                if checkpoint else REPO_ROOT / "models" / f"task2_{slug}.pt")
+
+    @staticmethod
+    def _state(model):
+        return {k.replace("_orig_mod.", ""): v.detach().cpu().clone()
+                for k, v in model.state_dict().items()}
+
+    @staticmethod
+    def _load_state(model, state):
+        if any(k.startswith("_orig_mod.") for k in model.state_dict()):
+            state = {f"_orig_mod.{k}": v for k, v in state.items()}
+        model.load_state_dict(state)
+
+    @staticmethod
+    def _load(path):
+        try:
+            return torch.load(path, map_location="cpu", weights_only=False)
+        except TypeError:
+            return torch.load(path, map_location="cpu")
+
+    @staticmethod
+    def _save(payload, path):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_suffix(path.suffix + ".tmp")
+        torch.save(payload, temporary); os.replace(temporary, path)
+
+    def _prepare(self, model):
+        model = model.to(self.device)
+        if self.channels_last:
+            model = model.to(memory_format=torch.channels_last)
+        if self.use_compile:
+            model = torch.compile(model)
+        return model
+
+    def _epoch(self, model, criterion, optimiser=None, scaler=None):
+        training = optimiser is not None
+        model.train(training); collected = []; loss_sum = torch.zeros((), device=self.device)
+        loader = self.train_loader if training else self.val_loader
+        with torch.set_grad_enabled(training):
+            for images, labels in loader:
+                with torch.autocast(self.device.type, dtype=self.amp_dtype, enabled=self.amp_enabled):
+                    logits = model(images); loss = criterion(logits, labels)
+                if training:
+                    optimiser.zero_grad(set_to_none=True)
+                    if scaler.is_enabled():
+                        scaler.scale(loss).backward(); scaler.step(optimiser); scaler.update()
+                    else:
+                        loss.backward(); optimiser.step()
+                else:
+                    collected.append(logits.detach().float())
+                loss_sum += loss.detach().float() * len(labels)
+        logits = torch.cat(collected).cpu().numpy() if collected else None
+        return (loss_sum / len(loader.labels)).item(), logits
+
+    def train_or_restore(self, name, build, label):
+        model = self._prepare(build())
+        final_path, checkpoint = self._path(name), self._path(name, True)
+        if self.cfg["resume"] and final_path.exists():
+            blob = self._load(final_path)
+            if blob.get("fingerprint") == self.fingerprint:
+                self._load_state(model, blob["state_dict"])
+                history = pd.DataFrame(blob["history"])
+                print(f"{label}: restored finished model; training skipped")
+                return model, history, blob["val_logits"]
+        criterion = nn.CrossEntropyLoss(label_smoothing=self.cfg["label_smoothing"])
+        optimiser = torch.optim.AdamW(model.parameters(), lr=self.cfg["learning_rate"],
+                                      weight_decay=self.cfg["weight_decay"])
+        def schedule(epoch):
+            warmup = self.cfg["warmup_epochs"]
+            if epoch < warmup:
+                return (epoch + 1) / max(warmup, 1)
+            progress = (epoch - warmup) / max(self.cfg["epochs"] - warmup, 1)
+            return 0.5 * (1 + np.cos(np.pi * progress))
+        scheduler = torch.optim.lr_scheduler.LambdaLR(optimiser, schedule)
+        enabled = self.amp_enabled and self.amp_dtype == torch.float16
+        try:
+            scaler = torch.amp.GradScaler(self.device.type, enabled=enabled)
+        except (AttributeError, TypeError):
+            scaler = torch.cuda.amp.GradScaler(enabled=enabled)
+        history, best, first = [], {"macro_f1": -1., "epoch": -1}, 0
+        if self.cfg["resume"] and checkpoint.exists():
+            blob = self._load(checkpoint)
+            if blob.get("fingerprint") == self.fingerprint:
+                self._load_state(model, blob["model"]); optimiser.load_state_dict(blob["optimiser"])
+                scheduler.load_state_dict(blob["scheduler"])
+                self._restore_rng(blob["rng"]); history, best, first = blob["history"], blob["best"], blob["epoch"]
+        start_time = time.time()
+        for epoch in range(first, self.cfg["epochs"]):
+            epoch_time = time.time()
+            train_loss, _ = self._epoch(model, criterion, optimiser, scaler)
+            val_loss, logits = self._epoch(model, criterion)
+            scheduler.step()
+            pred = logits.argmax(1)
+            macro = f1_score(self.data.y_val, pred, labels=self.data.scoreable,
+                             average="macro", zero_division=0)
+            history.append({"epoch": epoch + 1, "train loss": train_loss, "val loss": val_loss,
+                            "val accuracy": accuracy_score(self.data.y_val, pred),
+                            "val macro-F1": macro, "seconds": time.time() - epoch_time})
+            if macro > best["macro_f1"]:
+                best = {"macro_f1": macro, "epoch": epoch + 1,
+                        "state": self._state(model), "logits": logits}
+            stopping = epoch + 1 - best["epoch"] >= self.cfg["patience"]
+            print(f"[{label}] epoch {epoch + 1}/{self.cfg['epochs']} | macro-F1 {macro:.4f}")
+            if not stopping:
+                self._save({"fingerprint": self.fingerprint, "epoch": epoch + 1,
+                            "model": self._state(model), "optimiser": optimiser.state_dict(),
+                            "scheduler": scheduler.state_dict(),
+                            "rng": self._capture_rng(), "history": history, "best": best}, checkpoint)
+            if stopping:
+                break
+        self._load_state(model, best["state"])
+        history_frame = pd.DataFrame(history)
+        payload = {"name": name, "fingerprint": self.fingerprint,
+                   "state_dict": self._state(model), "val_logits": best["logits"],
+                   "history": history, "classes": self.data.classes,
+                   "normalisation_mean": self.data.norm_mean.tolist(),
+                   "normalisation_std": self.data.norm_std.tolist()}
+        self._save(payload, final_path)
+        if checkpoint.exists() and not self.cfg["keep_epoch_checkpoints"]:
+            checkpoint.unlink()
+        print(f"{label}: best macro-F1 {best['macro_f1']:.4f} in {time.time()-start_time:.0f}s")
+        return model, history_frame, best["logits"]
+
+    @staticmethod
+    def plot_history(history, title):
+        fig, axes = plt.subplots(1, 2, figsize=(12, 3.8))
+        axes[0].plot(history["epoch"], history["train loss"], label="train")
+        axes[0].plot(history["epoch"], history["val loss"], "--", label="validation")
+        axes[1].plot(history["epoch"], history["val macro-F1"])
+        axes[0].set(title="Loss", xlabel="Epoch"); axes[0].legend()
+        axes[1].set(title="Validation macro-F1", xlabel="Epoch")
+        fig.suptitle(title); plt.tight_layout(); plt.show()
+
+
+def export_validation_predictions(
+    path: Path,
+    validation_frame: pd.DataFrame,
+    y_true,
+    y_pred,
+    scores,
+    classes,
+    *,
+    scores_are_logits: bool = False,
+) -> None:
+    """Export readable per-image validation labels and comparable class probabilities."""
+    scores = np.asarray(scores)
+    if scores_are_logits:
+        scores = torch.softmax(torch.from_numpy(scores), dim=1).numpy()
+    output = pd.DataFrame({
+        "id": validation_frame["id"].astype(str).to_numpy(),
+        "true_index": np.asarray(y_true, dtype=int),
+        "predicted_index": np.asarray(y_pred, dtype=int),
+        "true_season": [classes[index] for index in y_true],
+        "predicted_season": [classes[index] for index in y_pred],
+    })
+    for index, label in enumerate(classes):
+        output[f"score_{label}"] = scores[:, index]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    output.to_csv(path, index=False)
+
+
+def load_validation_predictions(path: Path, classes) -> pd.DataFrame:
+    """Load and validate one model's exported validation predictions."""
+    frame = pd.read_csv(path, dtype={"id": str})
+    required = {"id", "true_index", "predicted_index", *[f"score_{c}" for c in classes]}
+    missing = required - set(frame.columns)
+    if missing:
+        raise ValueError(f"{path} is missing columns: {sorted(missing)}")
+    return frame
+
+
+def extract_visual_features(image_uint8) -> np.ndarray:
+    """Create the colour, shape and foreground features used by Random Forest."""
+    rgb = image_uint8.astype(np.float32) / 255.0
+    hsv = rgb2hsv(rgb)
+    gray = rgb2gray(rgb)
+    values = []
+    for image in (rgb, hsv):
+        for channel in range(3):
+            x = image[:, :, channel]
+            values.extend([x.mean(), x.std(), *np.percentile(x, [25, 50, 75])])
+    for channel, key in enumerate(("hue_bins", "saturation_bins", "value_bins")):
+        histogram, _ = np.histogram(hsv[:, :, channel], bins=FEATURE_CONFIG[key], range=(0, 1))
+        values.extend(histogram / max(histogram.sum(), 1))
+    values.extend(hog(
+        gray,
+        orientations=FEATURE_CONFIG["hog_orientations"],
+        pixels_per_cell=FEATURE_CONFIG["hog_pixels_per_cell"],
+        cells_per_block=FEATURE_CONFIG["hog_cells_per_block"],
+        block_norm="L2-Hys",
+        feature_vector=True,
+    ))
+    foreground = np.any(rgb < FEATURE_CONFIG["foreground_threshold"], axis=2)
+    height, width = foreground.shape
+    values.extend([
+        foreground.mean(), foreground[: height // 2].mean(), foreground[height // 2 :].mean(),
+        foreground[:, : width // 2].mean(), foreground[:, width // 2 :].mean(),
+    ])
+    return np.asarray(values, dtype=np.float32)
