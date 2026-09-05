@@ -7,9 +7,11 @@ COSC2753 Machine Learning · Assignment 2 (2026B) · RMIT
 
 ```
 datasets/         # FashionDataset (train 38,617 rows / test 5,829 images) — share via Drive
+Dataset/          # externally collected images (gitignored) — share via Drive
 models/           # model weights (gitignored) — share via Drive
 notebooks/        # eda.ipynb, task1_*.ipynb ... task4_*.ipynb
-src/              # shared code: data loading, split, metrics
+src/              # shared code: data loading, split, metrics, external data
+tests/            # self-tests for the shared code
 splits/           # fixed stratified train/val split — EVERYONE evaluates on this
 predictions/      # prediction CSVs in styles_prediction.csv format
 ```
@@ -23,6 +25,25 @@ predictions/      # prediction CSVs in styles_prediction.csv format
 5. **Model weights are NOT committed** (gitignored) — share via Drive.
 6. Log every experiment in the shared experiments sheet so it can go in the report comparison table.
 7. Prediction files must keep the exact `styles_prediction.csv` format: `id,gender,articleType,season,usage`.
+
+## Externally collected data
+
+The brief asks for extra-collecting (§ preprocessing) and for an **independent
+evaluation** on data from outside the provided scope (§3.3, required from CR up).
+Both exist and are distributed through the Drive folder `A2_ExternalData`:
+
+| set | role | images | licence |
+|---|---|---|---|
+| `ExternalCosmetics` | extra **training** rows | 1,200 | CC0 |
+| `ExternalCosmetics2` | extra **training** rows | 699 | CC BY 4.0 |
+| `ExternalEval` | **independent evaluation — never train on it** | 261 | CC BY / CC0 / PDM |
+
+All three are gated to **zero overlap** with the provided train and test sets.
+
+Adding them to a training run is one line, and it is a **per-target** decision — the
+rows help `articleType` and `season`, do nothing for `gender`, and actively hurt
+`usage`. Read **[docs/EXTERNAL_DATA_USAGE.md](docs/EXTERNAL_DATA_USAGE.md)** before
+using them; provenance for each set is in [docs/external_sets/](docs/external_sets/).
 
 ## Setup
 

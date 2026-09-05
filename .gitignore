@@ -21,3 +21,12 @@ __pycache__/
 .venv/
 venv/
 .mypy_cache/
+
+# externally collected data — share via Drive, never git.
+# The provided dataset is licensed for this assignment only ("Any use beyond this
+# scope is not permitted"), and the collected sets are large. Both are distributed
+# through the team Drive folder A2_ExternalData; only the code lives here.
+# Provenance for each set is in docs/external_sets/.
+Dataset/
+external_datasets/
+_UPLOAD_*/
