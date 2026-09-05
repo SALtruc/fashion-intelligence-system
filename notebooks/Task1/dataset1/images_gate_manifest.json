@@ -1,0 +1,16 @@
+{
+  "candidate_folder": "D:\\g2\\Dataset\\ExternalCosmetics\\images",
+  "images_found": 1200,
+  "images_readable": 1200,
+  "images_unreadable": [],
+  "matches_provided_TEST_exact": 0,
+  "matches_provided_TEST_near": 0,
+  "matches_provided_TEST_total": 0,
+  "matches_provided_train": 0,
+  "clean_and_usable": 1200,
+  "ids_colliding_with_provided_ranges": [],
+  "articleTypes_not_in_the_124": [],
+  "dhash_hamming_radius": 2,
+  "verdict": "PASS",
+  "per_image_report": "D:\\g2\\Dataset\\ExternalCosmetics\\images_leakage_report.csv"
+}

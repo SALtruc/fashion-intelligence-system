@@ -1,0 +1,43 @@
+{
+  "audit_date": "2026-09-05",
+  "scope": "All 1200 dataset1 JPEGs received visual contact-sheet screening. Flagged candidates were rechecked using larger source views and 60x80 aspect-preserving white-padded inputs.",
+  "reviewer": "AI-assisted visual screening; original annotations and product identities were not independently authenticated.",
+  "labels_sha256": "9e2a7050f66c9cc9f4dbefab5f99a5007c3a9c488fb37357aa53599bb3f1e004",
+  "image_set_sha256": "f4241705c154a998f7cc3625c98b5dfaf9eceb39d68411eb4db6194aa5ebf12e",
+  "reviewed_images": 1200,
+  "flagged_images": 42,
+  "flagged_percent": 3.5,
+  "review_status_counts": {
+    "no_obvious_issue": 1158,
+    "wrong_target_visible": 6,
+    "poor_crop": 4,
+    "limited_view": 2,
+    "ambiguous_target": 30
+  },
+  "by_class": {
+    "Eyeshadow": {
+      "reviewed": 400,
+      "flagged": 3,
+      "no_obvious_issue": 397
+    },
+    "Lipstick": {
+      "reviewed": 400,
+      "flagged": 16,
+      "no_obvious_issue": 384
+    },
+    "Nail Polish": {
+      "reviewed": 400,
+      "flagged": 23,
+      "no_obvious_issue": 377
+    }
+  },
+  "review_register": "visual_review.csv",
+  "actions_applied_to_images_or_labels": false,
+  "limitations": [
+    "Flags are provisional review decisions, not independently confirmed label errors.",
+    "No obvious issue is a screening result, not a guarantee of a correct label or an independent product.",
+    "Repeated products and related source photographs are not reliably detected by narrow perceptual-hash thresholds.",
+    "The source archive, bounding boxes, per-crop source-image IDs, and exact upstream version are missing.",
+    "This register applies only to the image and label hashes above; source changes require renewed review."
+  ]
+}

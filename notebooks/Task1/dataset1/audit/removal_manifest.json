@@ -1,0 +1,357 @@
+{
+  "date": "2026-09-05",
+  "user_approved": true,
+  "removed_images": 42,
+  "removed_label_rows": 42,
+  "remaining_images": 1158,
+  "remaining_label_rows": 1158,
+  "remaining_class_counts": {
+    "Eyeshadow": 397,
+    "Lipstick": 384,
+    "Nail Polish": 377
+  },
+  "labels_sha256": "93237e131e8cee49523bb8d92545c06cb640d4e36e678b0c65677462f9abcb06",
+  "image_set_sha256": "9e9e69fb52753ca0fd5a27bff7ee9c132af59219039dcc8cc91efa267570ca98",
+  "recovery_archive": null,
+  "backup_status": "Redundant local archive removed at user request; user maintains source elsewhere.",
+  "verification": "Before backup deletion, retained rows were verified equal to original minus approved IDs in original order, all retained image bytes unchanged, and removed images and original CSV verified in the then-existing recovery archive.",
+  "historical_records": "visual_review.csv and visual_summary.json preserve the original 1200-image screening; proposed actions are historical, not pending.",
+  "removed": [
+    {
+      "id": "900181",
+      "filename": "900181.jpg",
+      "review": [
+        "limited_view",
+        "Only a narrow edge and overlapping packaging remain; the assigned palette is hard to identify after padding."
+      ]
+    },
+    {
+      "id": "900206",
+      "filename": "900206.jpg",
+      "review": [
+        "poor_crop",
+        "12x39 dark blurred fragment; no recognizable eyeshadow palette."
+      ]
+    },
+    {
+      "id": "900297",
+      "filename": "900297.jpg",
+      "review": [
+        "limited_view",
+        "Almost entirely an edge-on closed case; very little class-specific detail survives at 60x80."
+      ]
+    },
+    {
+      "id": "900455",
+      "filename": "900455.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow palette dominates; only part of the labelled lipstick is visible behind it."
+      ]
+    },
+    {
+      "id": "900475",
+      "filename": "900475.jpg",
+      "review": [
+        "ambiguous_target",
+        "Palette occludes the lipstick in a narrow crop; the target is difficult to isolate."
+      ]
+    },
+    {
+      "id": "900495",
+      "filename": "900495.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow palette fills most of the crop; only a small lipstick fragment remains."
+      ]
+    },
+    {
+      "id": "900521",
+      "filename": "900521.jpg",
+      "review": [
+        "ambiguous_target",
+        "Lipstick case is partly concealed by another object's packaging; product identity is uncertain."
+      ]
+    },
+    {
+      "id": "900528",
+      "filename": "900528.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow palette dominates with only a red lipstick end visible behind it."
+      ]
+    },
+    {
+      "id": "900539",
+      "filename": "900539.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow pans dominate; a partial lipstick is visible along the upper edge."
+      ]
+    },
+    {
+      "id": "900564",
+      "filename": "900564.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow palette covers the middle of the lipstick; heavily occluded narrow training view."
+      ]
+    },
+    {
+      "id": "900583",
+      "filename": "900583.jpg",
+      "review": [
+        "ambiguous_target",
+        "Multicolour eyeshadow palette dominates; the lipstick is peripheral and partly hidden."
+      ]
+    },
+    {
+      "id": "900607",
+      "filename": "900607.jpg",
+      "review": [
+        "ambiguous_target",
+        "Green nail-polish bottle dominates and obscures most of the blue lipstick behind it."
+      ]
+    },
+    {
+      "id": "900646",
+      "filename": "900646.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow palette obscures the lipstick; little target detail survives in the narrow crop."
+      ]
+    },
+    {
+      "id": "900649",
+      "filename": "900649.jpg",
+      "review": [
+        "ambiguous_target",
+        "Palette and packaging dominate; the intended lipstick is not clearly identifiable."
+      ]
+    },
+    {
+      "id": "900669",
+      "filename": "900669.jpg",
+      "review": [
+        "ambiguous_target",
+        "Nail-polish bottles dominate; only a small red lipstick fragment appears at the edge."
+      ]
+    },
+    {
+      "id": "900741",
+      "filename": "900741.jpg",
+      "review": [
+        "ambiguous_target",
+        "Palette covers much of a pale lipstick case; the class-defining lipstick is obscured."
+      ]
+    },
+    {
+      "id": "900751",
+      "filename": "900751.jpg",
+      "review": [
+        "ambiguous_target",
+        "Overlapping lipstick and nail-polish bottle make the intended object ambiguous."
+      ]
+    },
+    {
+      "id": "900769",
+      "filename": "900769.jpg",
+      "review": [
+        "ambiguous_target",
+        "Large nail-polish cap dominates and obscures a partial pink lip product."
+      ]
+    },
+    {
+      "id": "900795",
+      "filename": "900795.jpg",
+      "review": [
+        "ambiguous_target",
+        "Green nail-polish bottle obscures much of the lipstick and its packaging."
+      ]
+    },
+    {
+      "id": "900802",
+      "filename": "900802.jpg",
+      "review": [
+        "wrong_target_visible",
+        "Crop shows a multicolour eyeshadow palette; no clearly identifiable nail-polish bottle."
+      ]
+    },
+    {
+      "id": "900818",
+      "filename": "900818.jpg",
+      "review": [
+        "ambiguous_target",
+        "Palette blocks much of the peach nail-polish bottle."
+      ]
+    },
+    {
+      "id": "900868",
+      "filename": "900868.jpg",
+      "review": [
+        "ambiguous_target",
+        "Narrow overlapping-product fragment; nail-polish bottle body and identity are difficult to establish."
+      ]
+    },
+    {
+      "id": "900883",
+      "filename": "900883.jpg",
+      "review": [
+        "wrong_target_visible",
+        "Eyeshadow palette dominates; no clearly identifiable nail-polish bottle."
+      ]
+    },
+    {
+      "id": "900886",
+      "filename": "900886.jpg",
+      "review": [
+        "ambiguous_target",
+        "Large lipstick occludes the nail-polish bottle behind it."
+      ]
+    },
+    {
+      "id": "900925",
+      "filename": "900925.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow case obscures much of the brown nail-polish bottle."
+      ]
+    },
+    {
+      "id": "900946",
+      "filename": "900946.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow palette covers most of the nail-polish bottle; partial body and cap remain."
+      ]
+    },
+    {
+      "id": "900958",
+      "filename": "900958.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow palette covers most of the nail-polish bottle."
+      ]
+    },
+    {
+      "id": "900968",
+      "filename": "900968.jpg",
+      "review": [
+        "wrong_target_visible",
+        "Tiny blurred crop shows an eyeshadow-case fragment; no recognizable nail-polish bottle."
+      ]
+    },
+    {
+      "id": "900973",
+      "filename": "900973.jpg",
+      "review": [
+        "ambiguous_target",
+        "Palette obscures the nail-polish bottle; mostly a dark cap remains visible."
+      ]
+    },
+    {
+      "id": "900987",
+      "filename": "900987.jpg",
+      "review": [
+        "ambiguous_target",
+        "Makeup brush dominates and obscures much of the nail-polish bottle."
+      ]
+    },
+    {
+      "id": "901004",
+      "filename": "901004.jpg",
+      "review": [
+        "wrong_target_visible",
+        "Crop shows an eyeshadow palette; no clearly identifiable nail-polish bottle."
+      ]
+    },
+    {
+      "id": "901035",
+      "filename": "901035.jpg",
+      "review": [
+        "ambiguous_target",
+        "Overlapping palette and nail-polish bottle make the intended target ambiguous."
+      ]
+    },
+    {
+      "id": "901051",
+      "filename": "901051.jpg",
+      "review": [
+        "poor_crop",
+        "30x42 blurred fragment; insufficient visible bottle structure at the model input size."
+      ]
+    },
+    {
+      "id": "901052",
+      "filename": "901052.jpg",
+      "review": [
+        "poor_crop",
+        "25x23 blurred bottle fragment; almost no class-specific detail remains."
+      ]
+    },
+    {
+      "id": "901061",
+      "filename": "901061.jpg",
+      "review": [
+        "poor_crop",
+        "65x51 blurred packaging/cap fragment; no clearly identifiable nail-polish bottle."
+      ]
+    },
+    {
+      "id": "901067",
+      "filename": "901067.jpg",
+      "review": [
+        "wrong_target_visible",
+        "Eyeshadow palette fills the crop; no clearly identifiable nail-polish bottle."
+      ]
+    },
+    {
+      "id": "901083",
+      "filename": "901083.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow case obscures the bottle body; mostly a long cap is visible below it."
+      ]
+    },
+    {
+      "id": "901114",
+      "filename": "901114.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow palette covers much of the nail-polish bottle; target is ambiguous."
+      ]
+    },
+    {
+      "id": "901126",
+      "filename": "901126.jpg",
+      "review": [
+        "wrong_target_visible",
+        "Lipstick and other packaging dominate; no clearly identifiable nail-polish bottle."
+      ]
+    },
+    {
+      "id": "901138",
+      "filename": "901138.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow pans dominate; mostly a nail-polish cap remains visible at the side."
+      ]
+    },
+    {
+      "id": "901152",
+      "filename": "901152.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow palette obscures most of the nail-polish bottle."
+      ]
+    },
+    {
+      "id": "901156",
+      "filename": "901156.jpg",
+      "review": [
+        "ambiguous_target",
+        "Eyeshadow palette and brush obscure much of the green nail-polish bottle."
+      ]
+    }
+  ]
+}
