@@ -8,14 +8,20 @@ makes every machine agree on RUN_FINGERPRINT.
 
     python scripts/make_task1_workers.py              # write the workers
     python scripts/make_task1_workers.py --check      # report what would change, write nothing
-    python scripts/make_task1_workers.py --legacy --check
-                                                      # prove this reproduces the hand-derived
-                                                      # workers before trusting it
+    python scripts/make_task1_workers.py --legacy     # prove this reproduces the hand-derived
+                                                      # workers; never writes
 
 The --legacy gate is the reason to believe the cell-selection rule in task1_layout is the
-real one. In that mode the header and done cells are taken from the existing files rather
+real one. In that mode the header and done cells are taken from the hand-derived files rather
 than rendered, so the comparison tests the risky part -- which cells are kept, in what order,
 and how the mode cell is patched -- rather than prose that is trivial to eyeball.
+
+Both sides of that comparison come from layout.LEGACY_REVISION via `git show`, never from the
+working tree. Reading the workers from the tree, which is what this did originally, made the
+gate compare the generator against its own output the moment it first wrote them; reading the
+combine notebook from the tree is wrong for the same reason, since the hand-derived workers
+were cut from the notebook as it stood at that commit. --legacy therefore implies --check and
+refuses to write: its output is a proof, not a set of files anyone wants on disk.
 """
 
 from __future__ import annotations
@@ -24,7 +30,9 @@ import argparse
 import copy
 import json
 import re
+import subprocess
 import sys
+import textwrap
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -42,7 +50,7 @@ Trains **{job}** only, banks its checkpoints, and stops. Runtime {runtime} on a 
 do not regenerate it here. The split and the normalisation constants come from those files
 and feed `RUN_FINGERPRINT`; regenerating risks a different split and checkpoints that
 silently do not match the other machines'.
-
+{prerequisites}
 **After running:** copy everything in `models/task1/checkpoints/` to the combine machine's
 `models/task1/checkpoints/`, then run `01_task1_article_type.ipynb` there.
 
@@ -62,8 +70,59 @@ print(f"\\n{{_total:.0f}} MB total. Copy these to the combine machine, then run 
 print("Fingerprint:", RUN_FINGERPRINT, "-- must match on every machine.")'''
 
 
+# Lead-in per severity. The rest of the block is the file list and the explanation from
+# layout.PREREQUISITES, wrapped to the width of the surrounding header.
+PREREQUISITE_LEAD = {
+    "hard": "**This job will not start without another machine's output.** Copy {files} "
+            "into `models/task1/checkpoints/` here before running it; otherwise it stops "
+            "partway with nothing banked.",
+    "soft": "**Copy these in first if you can.** {files} into `models/task1/checkpoints/` "
+            "here. The job is correct without them and slower for it.",
+}
+
+HEADER_WIDTH = 92
+
+
+def phrase(items):
+    """`a`, `a` and `b`, `a`, `b` and `c` -- the list as it belongs in a sentence."""
+    items = list(items)
+    if len(items) == 1:
+        return items[0]
+    return ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def prerequisites(job):
+    """The header block naming the checkpoints `job` needs from other machines, or "".
+
+    Returned with a blank line on either side, since HEADER interpolates it between two
+    paragraphs; an empty string collapses back to the single blank line it replaces.
+    """
+    if job not in layout.PREREQUISITES:
+        return ""
+    severity, files, why = layout.PREREQUISITES[job]
+    named = phrase([f"`{name}` from the {producer} machine"
+                    for name, producer in files.items()])
+    block = PREREQUISITE_LEAD[severity].format(files=named) + " " + why
+    # break_long_words off: a checkpoint filename split across two lines stops being one.
+    return "\n" + textwrap.fill(block, width=HEADER_WIDTH,
+                                break_long_words=False, break_on_hyphens=False) + "\n"
+
+
 def load(path):
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_at_revision(revision, path):
+    """A notebook as it stood at `revision`, read from git rather than the working tree."""
+    relative = path.relative_to(Path(__file__).resolve().parent.parent).as_posix()
+    result = subprocess.run(["git", "show", f"{revision}:{relative}"],
+                            capture_output=True, cwd=str(NOTEBOOK_DIR.parent.parent))
+    if result.returncode != 0:
+        raise FileNotFoundError(
+            f"{relative} does not exist at {revision}: "
+            f"{result.stderr.decode('utf-8', 'replace').strip()}"
+        )
+    return json.loads(result.stdout.decode("utf-8"))
 
 
 def sources(document):
@@ -121,7 +180,8 @@ def build(document, job, runtime, subtitle, legacy_owned=None, legacy=False):
     if legacy_owned is not None:
         header_text, done_text = legacy_owned
     else:
-        header_text = HEADER.format(subtitle=subtitle, job=job, runtime=runtime)
+        header_text = HEADER.format(subtitle=subtitle, job=job, runtime=runtime,
+                                    prerequisites=prerequisites(job))
         done_text = DONE.format(job=job)
 
     body = [(mode_index, make_cell(document["cells"][mode_index], "code", mode_source))]
@@ -137,9 +197,9 @@ def build(document, job, runtime, subtitle, legacy_owned=None, legacy=False):
     return worker
 
 
-def legacy_header_and_done(path):
-    """The header and done cells of an existing worker, verbatim."""
-    cells = sources(load(path))
+def legacy_header_and_done(document):
+    """The header and done cells of a hand-derived worker, verbatim."""
+    cells = sources(document)
     return cells[0][1], cells[-1][1]
 
 
@@ -163,45 +223,77 @@ def main():
     parser.add_argument("--check", action="store_true",
                         help="compare against the files on disk, write nothing")
     parser.add_argument("--legacy", action="store_true",
-                        help="reproduce the hand-derived workers exactly")
+                        help=f"prove this reproduces the hand-derived workers at "
+                             f"{layout.LEGACY_REVISION}; implies --check, never writes")
     parser.add_argument("--jobs", nargs="*", default=None,
                         help="limit to these job names")
     args = parser.parse_args()
 
-    document = load(COMBINE)
-    jobs = args.jobs or list(layout.JOBS)
+    if args.legacy:
+        # A proof, not a build: writing these would replace the real workers with the layout
+        # they had before the generator existed.
+        args.check = True
+        document = load_at_revision(layout.LEGACY_REVISION, COMBINE)
+        default_jobs = list(layout.LEGACY_JOBS)
+        print(f"legacy gate: both sides read from {layout.LEGACY_REVISION[:12]}, "
+              f"{len(default_jobs)} hand-derived worker(s)")
+    else:
+        document = load(COMBINE)
+        default_jobs = list(layout.JOBS)
+
+    jobs = args.jobs or default_jobs
     unknown = set(jobs) - set(layout.JOBS)
     if unknown:
         sys.exit(f"unknown job(s): {sorted(unknown)}")
+    if args.legacy:
+        absent = set(jobs) - set(layout.LEGACY_JOBS)
+        if absent:
+            sys.exit(f"no hand-derived worker exists for {sorted(absent)} at "
+                     f"{layout.LEGACY_REVISION}; they were born generated")
+
+    # A missing runtime used to fall back to a "~? min" placeholder, which shipped verbatim
+    # in two committed notebooks. The number is the whole reason the job list is worth
+    # reading, so its absence is a bug in this file rather than something to paper over.
+    untimed = [job for job in jobs if job not in layout.RUNTIMES]
+    if untimed and not args.legacy:
+        sys.exit(f"no measured runtime for {sorted(untimed)}; add one to layout.RUNTIMES")
 
     differences = 0
     for job in jobs:
         subtitle, _ = layout.JOBS[job]
         path = NOTEBOOK_DIR / f"worker_{job}.ipynb"
-        runtime = layout.RUNTIMES.get(job, "~? min")
+        # Guarded above for every real build. Legacy mode is the only path that can
+        # reach the fallback, and it discards it for the recorded header; the string is
+        # deliberately not a plausible runtime, so a leak reads as a bug on sight.
+        runtime = layout.RUNTIMES.get(job, "(unused in legacy mode)")
         legacy_owned = None
+        reference = None
 
         if args.legacy:
-            if not path.exists():
-                print(f"  skip  {path.name}: no existing file to reproduce")
+            try:
+                reference = load_at_revision(layout.LEGACY_REVISION, path)
+            except FileNotFoundError as error:
+                print(f"  skip  {path.name}: {error}")
                 continue
-            legacy_owned = legacy_header_and_done(path)
+            legacy_owned = legacy_header_and_done(reference)
 
         worker = build(document, job, runtime, subtitle,
                        legacy_owned=legacy_owned, legacy=args.legacy)
 
         if args.check:
-            if not path.exists():
-                print(f"  new   {path.name}: would be created "
-                      f"({len(worker['cells'])} cells)")
-                differences += 1
-                continue
-            before, after = comparable(load(path)), comparable(worker)
+            if reference is None:
+                if not path.exists():
+                    print(f"  new   {path.name}: would be created "
+                          f"({len(worker['cells'])} cells)")
+                    differences += 1
+                    continue
+                reference = load(path)
+            before, after = comparable(reference), comparable(worker)
             if before == after:
                 print(f"  same  {path.name}: {len(worker['cells'])} cells, identical")
             else:
-                existing, produced = sources(load(path)), sources(worker)
-                print(f"  DIFF  {path.name}: {len(existing)} cells on disk, "
+                existing, produced = sources(reference), sources(worker)
+                print(f"  DIFF  {path.name}: {len(existing)} cells in the reference, "
                       f"{len(produced)} produced")
                 for index in range(max(len(existing), len(produced))):
                     a = existing[index][1] if index < len(existing) else None

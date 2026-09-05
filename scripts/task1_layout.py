@@ -82,8 +82,8 @@ JOBS = {
             "ACTIVE_SEEDS = wanted_seeds(SEEDS)",
         ],
     ),
-    # The seed study is the critical path at roughly 113 minutes, more than twice the next
-    # longest job, and its runs are independent. These two take one seed each; seed 42 is not
+    # The seed study is the longest job even with the seed-42 checkpoints copied in, and its
+    # runs are independent, so it splits by seed. These two take one seed each; seed 42 is not
     # a job at all, because the cnn and resnet workers already produce exactly those weights.
     "seeds_1337": ("Seed variance study (seed 1337)", []),
     "seeds_2024": ("Seed variance study (seed 2024)", []),
@@ -125,16 +125,84 @@ RUNTIMES = {
     "phase2": "~27 min",           # 1471 s stage 1, plus stage 2
     "sweep": "~8 min",             # 5 heads x 10 epochs, frozen backbone
     "lrsearch": "~56 min",         # never run; 6 arms x 15 epochs at the measured epoch cost
-    "seeds": "~113 min",           # 3 seeds x (CNN + ResNet + head); see the split below
+    # The seed figures are the recorded run's own per-seed lines, which is why they differ so
+    # much: seed 2024's backbone took 1850 s against seed 1337's 1249 s for the same work.
+    "seeds": "~64 min",            # 1587 s (seed 1337) + 2268 s (seed 2024), with the seed-42
+                                   # checkpoints copied in. Without them the job also retrains
+                                   # seed 42, which is the other ~49 min of the ~113 min the
+                                   # recorded run spent here. See PREREQUISITES.
+    "seeds_1337": "~27 min",       # 226 s CNN + 1249 s ResNet + 112 s stage-2 head
+    "seeds_2024": "~38 min",       # 227 s CNN + 1850 s ResNet + 191 s stage-2 head
 }
 
-# The layout the hand-derived notebooks actually have, used once to prove the generator
-# reproduces them before it is allowed to change anything. It differs from JOBS only in
-# where the P2_FINER_MAP note sits, and in the two trailing cells the workers still carry.
+
+# --- Cross-job prerequisites -------------------------------------------------------------
+# Jobs that need another job's checkpoints on the machine before they start, as
+# job -> (severity, {checkpoint filename: producing job}, why).
+#
+# "hard": the run stops on an assertion, so the machine is idle until the file arrives.
+# "soft": the run succeeds and spends the stated time producing checkpoints the combine
+#         machine will never read.
+#
+# This is rendered into the worker header by make_task1_workers, because the header is the
+# only thing the operator of that machine reads before starting an hour of work. Stating it
+# in a comment inside the cell that needs the file is too late.
+PREREQUISITES = {
+    "sweep": (
+        "hard",
+        {"model_resnet_stage1.pt": "resnet"},
+        "This job trains no backbone. It attaches five stage-2 heads to the banked Section 6 "
+        "stage-1 ResNet, so without that file it stops on `assert source_backbone is not "
+        "None` having done nothing. The alternative is to pair the sweep onto the resnet "
+        "machine instead of running it here, as `JOB_FILTER = {\"resnet\", \"sweep\"}`.",
+    ),
+    "seeds": (
+        "soft",
+        {"model_cnn.pt": "cnn", "model_resnet_decoupled.pt": "resnet"},
+        "These make seed 42 free. The seed study reuses their validation logits rather than "
+        "retraining that seed, which is exactly what the combine machine does. Without them "
+        "this job trains seed 42 under its own keys -- about 49 minutes of measured work that "
+        "the combine machine then discards, because it reuses the Section 6 logits for that "
+        "row. The run is correct either way; only the time is wasted.",
+    ),
+}
+
+# --- The legacy gate ---------------------------------------------------------------------
+# The hand-derived notebooks are what the generator had to reproduce before it was allowed
+# to change anything, and reproducing them is the only evidence that `worker_cells` encodes
+# the real cell-selection rule rather than a plausible-looking guess.
+#
+# Both sides of that comparison are read from LEGACY_REVISION, never from the working tree.
+# Reading the workers from disk (which is what this did originally) stops proving anything
+# the moment the generator rewrites them: it then compares the generator against its own
+# output. Reading the combine notebook from disk is just as wrong, because the hand-derived
+# workers were cut from the combine notebook as it stood at that commit, not as it stands
+# now. Pinning both keeps the gate meaningful for as long as the history exists.
+# Spelled in full: an abbreviation is only unique until the history grows into it.
+LEGACY_REVISION = "cd44bc8f16c5e9676edbd57b40ac86887fbb6a5d"
+
+# Only these seven existed at LEGACY_REVISION. sweep, seeds_1337 and seeds_2024 were born
+# generated, so there is no hand-derived file for them to be checked against.
+LEGACY_JOBS = ["hog_svm", "cnn", "resnet", "logit_adjusted", "seeds", "phase2", "lrsearch"]
+
+# The legacy layout differs from JOBS in where the P2_FINER_MAP note sits, in the two
+# trailing cells the workers still carry, and in one anchor: `wanted_seeds` did not exist
+# yet, so at that revision the seed cell opened with the plain `wanted` call.
 LEGACY_P2_NOTE_OWNER = "lrsearch"
 LEGACY_TRAILING = [
     "#### A Note on the Predicted Distribution",
     "## 10. Decision Log, Limitations, and What to Tune Next",
+]
+LEGACY_ANCHORS = {
+    "seeds": ["## 7. Seed Variance", 'if wanted("seeds"):'],
+}
+
+# Sections that are a job now but were combine-only then. Without these the sweep section,
+# whose job did not exist at LEGACY_REVISION, is unowned in legacy mode and falls through to
+# the spine, which would put it in all seven hand-derived workers and fail the gate.
+LEGACY_COMBINE_ONLY = [
+    "### 7.8 Sampler Strength: A Sweep Rather Than a Second Full Model",
+    "# --- Stage-2 sampler sweep on the banked Section 6 backbone",
 ]
 
 # --- Fingerprint regression --------------------------------------------------------------
@@ -142,9 +210,11 @@ LEGACY_TRAILING = [
 # disk is refused and the parallel run has to start over, so it is pinned here.
 #
 # The data-derived inputs are the ones the manifest fixes; they are taken from the recorded
-# run whose outputs are stored in the combine notebook. The normalisation constants are
-# float32 values rounded to five decimals, so they carry the float32 bit pattern rather than
-# a clean decimal, and are reproduced here exactly as `NORM_MEAN.round(5).tolist()` emits them.
+# run whose outputs are stored in the combine notebook. Their names are also the payload keys
+# that no notebook constant supplies, which is how the checker knows the expected key set is
+# complete. The normalisation constants are float32 values rounded to five decimals, so they
+# carry the float32 bit pattern rather than a clean decimal, and are reproduced here exactly
+# as `NORM_MEAN.round(5).tolist()` emits them.
 EXPECTED_FINGERPRINT = "e6b15f5c51de"
 
 RECORDED_RUN = {
@@ -156,6 +226,14 @@ RECORDED_RUN = {
         [0.2718600034713745, 0.283160001039505, 0.28692999482154846],
     ],
 }
+
+# The assignment that computes RUN_FINGERPRINT, so the checker can parse the payload's dict
+# literal instead of trusting the three lists below to still describe it. Reconstructing the
+# payload from these lists alone cannot see a key added to or removed from the notebook: the
+# real fingerprint moves, the reconstruction does not, and the check reports "unchanged"
+# while every checkpoint on disk is being refused. That is precisely the failure it exists
+# to catch, so the key set is compared against the notebook rather than assumed.
+FINGERPRINT_ASSIGNMENT = "RUN_FINGERPRINT = hashlib.sha1("
 
 # Notebook constant -> key in the fingerprint payload. Anything listed here is read out of
 # the notebook source, so editing one of these values in the notebook fails the check.
@@ -198,12 +276,18 @@ def worker_cells(cells, job, legacy=False):
     stop = resolve(cells, WORKER_STOP)
     owners = {}
     for name, (_, anchors) in JOBS.items():
+        if legacy:
+            if name not in LEGACY_JOBS:
+                continue
+            anchors = LEGACY_ANCHORS.get(name, anchors)
         for anchor in anchors:
             owners[resolve(cells, anchor)] = name
     if legacy:
         owners[resolve(cells, "#### On `P2_FINER_MAP`")] = LEGACY_P2_NOTE_OWNER
 
     combine_only = {resolve(cells, anchor) for anchor in COMBINE_ONLY}
+    if legacy:
+        combine_only |= {resolve(cells, anchor) for anchor in LEGACY_COMBINE_ONLY}
     trailing = {resolve(cells, anchor) for anchor in LEGACY_TRAILING}
     substituted = {stop, resolve(cells, JOB_FILTER_CELL)}
 
