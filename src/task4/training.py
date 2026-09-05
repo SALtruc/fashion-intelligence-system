@@ -67,7 +67,9 @@ def train_one_epoch(
     epoch: int,
 ):
     model.train()
-    loader.batch_sampler.set_epoch(epoch)
+
+    if loader.batch_sampler is not None and hasattr(loader.batch_sampler, "set_epoch"):
+        loader.batch_sampler.set_epoch(epoch)
 
     running_loss = 0.0
     example_count = 0
