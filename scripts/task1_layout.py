@@ -108,6 +108,21 @@ JOBS = {
     ),
 }
 
+# Wall time per job, measured from the recorded run stored in the combine notebook's outputs
+# (the `... this session` lines) rather than estimated. That run was throttled to a 65% duty
+# cycle, and the same work varied by up to 2x within it from contention, so these are the
+# right order of magnitude and a reliable ranking rather than precise figures.
+RUNTIMES = {
+    "hog_svm": "~4 min",           # restored in the recorded run; not measured
+    "cnn": "~7 min",               # 421 s
+    "resnet": "~41 min",           # 2356 s stage 1, plus stage 2
+    "logit_adjusted": "~35 min",   # 2122 s
+    "phase2": "~27 min",           # 1471 s stage 1, plus stage 2
+    "sweep": "~8 min",             # 5 heads x 10 epochs, frozen backbone
+    "lrsearch": "~56 min",         # never run; 6 arms x 15 epochs at the measured epoch cost
+    "seeds": "~113 min",           # 3 seeds x (CNN + ResNet + head); see the split below
+}
+
 # The layout the hand-derived notebooks actually have, used once to prove the generator
 # reproduces them before it is allowed to change anything. It differs from JOBS only in
 # where the P2_FINER_MAP note sits, and in the two trailing cells the workers still carry.
@@ -162,6 +177,39 @@ FINGERPRINT_AUG = [
 ]
 
 FINGERPRINT_STAGE2 = ["STAGE2_EPOCHS", "STAGE2_LR", "STAGE2_USE_DROPOUT"]
+
+
+def worker_cells(cells, job, legacy=False):
+    """Combine-cell indices a worker for `job` holds, in combine order.
+
+    Excludes the three cells a worker owns rather than shares (its header, its mode cell and
+    its done cell); those are substituted by the generator and cannot be compared against the
+    combine notebook. `legacy` reproduces the hand-derived layout instead of the target one.
+    """
+    stop = resolve(cells, WORKER_STOP)
+    owners = {}
+    for name, (_, anchors) in JOBS.items():
+        for anchor in anchors:
+            owners[resolve(cells, anchor)] = name
+    if legacy:
+        owners[resolve(cells, "#### On `P2_FINER_MAP`")] = LEGACY_P2_NOTE_OWNER
+
+    combine_only = {resolve(cells, anchor) for anchor in COMBINE_ONLY}
+    trailing = {resolve(cells, anchor) for anchor in LEGACY_TRAILING}
+    substituted = {stop, resolve(cells, JOB_FILTER_CELL)}
+
+    kept = []
+    for index in range(len(cells)):
+        # Everything from the worker stop onward is the combine machine's analysis, except
+        # the two trailing cells the hand-derived workers still carry.
+        if index >= stop and not (legacy and index in trailing):
+            continue
+        if index in combine_only or index in substituted:
+            continue
+        if index in owners and owners[index] != job:
+            continue
+        kept.append(index)
+    return kept
 
 
 def resolve(cells, anchor):

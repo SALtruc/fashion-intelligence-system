@@ -202,35 +202,6 @@ def check_fingerprint(combine):
 
 
 # --- 5. layout report --------------------------------------------------------------------
-def expected_layout(combine, job, legacy):
-    """Combine-cell indices a worker for `job` should hold, in order."""
-    stop = layout.resolve(combine, layout.WORKER_STOP)
-    owners = {}
-    for name, (_, anchors) in layout.JOBS.items():
-        for anchor in anchors:
-            owners[layout.resolve(combine, anchor)] = name
-    if legacy:
-        note = layout.resolve(combine, "#### On `P2_FINER_MAP`")
-        owners[note] = layout.LEGACY_P2_NOTE_OWNER
-
-    combine_only = {layout.resolve(combine, anchor) for anchor in layout.COMBINE_ONLY}
-    trailing = {layout.resolve(combine, anchor) for anchor in layout.LEGACY_TRAILING}
-    # The mode cell is rewritten per worker, so it is never one of the shared cells this
-    # comparison can see.
-    owned_by_worker = {stop, layout.resolve(combine, layout.JOB_FILTER_CELL)}
-
-    kept = []
-    for index in range(len(combine)):
-        if index >= stop and not (legacy and index in trailing):
-            continue
-        if index in combine_only or index in owned_by_worker:
-            continue
-        if index in owners and owners[index] != job:
-            continue
-        kept.append(index)
-    return kept
-
-
 def check_layout(combine, workers, strict, legacy):
     label = "legacy" if legacy else "target"
     print(f"\n[5] worker composition against the {label} layout")
@@ -241,7 +212,7 @@ def check_layout(combine, workers, strict, legacy):
             notes.append(f"{path.name}: no job named {job!r} in task1_layout.JOBS")
             continue
         held = [index_of[digest(source)] for _, source in cells if digest(source) in index_of]
-        want = expected_layout(combine, job, legacy)
+        want = layout.worker_cells(combine, job, legacy)
         extra = sorted(set(held) - set(want))
         absent = sorted(set(want) - set(held))
         if extra or absent:
