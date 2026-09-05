@@ -20,7 +20,8 @@ certain to invalidate every checkpoint on disk. 4b is skipped if 4a fails, since
 rebuilt from a payload that no longer matches proves nothing.
 
 Plus a non-fatal layout report: which cells each worker holds against what
-task1_layout.JOBS says it should. Run with --strict to make that fatal too.
+task1_layout.JOBS says it should. Run with --strict to make that fatal too, and to make
+a missing pyflakes a failure rather than a skipped check 3.
 
     python scripts/check_task1_workers.py [--strict]
 
@@ -116,14 +117,23 @@ def check_identity(combine, workers):
 
 
 # --- 3. static sanity --------------------------------------------------------------------
-def check_static(paths):
+def check_static(paths, strict):
     print("\n[3] no undefined names")
     try:
         subprocess.run([sys.executable, "-m", "pyflakes", "--version"],
                        capture_output=True, check=True)
     except (subprocess.CalledProcessError, FileNotFoundError):
-        notes.append("pyflakes is not installed; check 3 skipped (pip install pyflakes)")
-        print("  skip  pyflakes not installed")
+        # A skipped check reads almost like a passed one, and this is the check that catches
+        # a worker referring to a name defined only in a cell its job dropped. Under --strict,
+        # the gate run before notebooks go out to five machines, an absent pyflakes is a
+        # failure rather than a line of output nobody reads.
+        if strict:
+            fail("pyflakes is not installed, so check 3 could not run "
+                 "(uv sync installs it from the dev group)")
+        else:
+            notes.append("pyflakes is not installed; check 3 skipped "
+                         "(uv sync, or pip install pyflakes)")
+            print("  skip  pyflakes not installed")
         return
 
     with tempfile.TemporaryDirectory() as workspace:
@@ -312,7 +322,7 @@ def check_layout(combine, workers, strict):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--strict", action="store_true",
-                        help="treat layout deviations as failures")
+                        help="treat layout deviations, and a missing pyflakes, as failures")
     args = parser.parse_args()
 
     if not COMBINE.exists():
@@ -331,7 +341,7 @@ def main():
         return 1
 
     check_identity(combine, workers)
-    check_static([COMBINE, *worker_paths])
+    check_static([COMBINE, *worker_paths], args.strict)
     if check_payload_shape(combine):
         check_fingerprint(combine)
     else:

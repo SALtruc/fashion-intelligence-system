@@ -25,7 +25,7 @@ python scripts/make_task1_workers.py
 
 ## The short version
 
-1. One machine runs `00_eda_and_preprocessing.ipynb`.
+1. One machine runs `notebooks/00_eda_and_preprocessing.ipynb`.
 2. Copy `preprocessed_datasets/` from that machine to every other machine.
 3. Give each machine its worker notebooks from the plan below. Run All, top to bottom.
 4. Copy every machine's `models/task1/checkpoints/` back to one machine.
@@ -82,7 +82,7 @@ still accepted everywhere.
 
 ## Step 1 — the manifest, once
 
-Run `00_eda_and_preprocessing.ipynb` on one machine and copy the resulting
+Run `notebooks/00_eda_and_preprocessing.ipynb` on one machine and copy the resulting
 `preprocessed_datasets/` directory to every machine that will run a notebook, including the
 combine machine.
 
@@ -163,7 +163,9 @@ reliable ranking and the right order of magnitude rather than precise numbers.
 
 ## Verifying the setup
 
-Three gates, all of which should exit 0:
+Three gates, all of which should exit 0. Run them from the repository root, in the project
+environment (`uv sync` first: `--strict` fails if pyflakes is missing rather than quietly
+dropping the undefined-name check):
 
 ```
 python scripts/check_task1_workers.py --strict    # the notebooks as they stand
