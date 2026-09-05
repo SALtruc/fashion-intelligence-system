@@ -22,7 +22,7 @@ confused.
 
 | file | what it is |
 |---|---|
-| `images/` | 1,200 JPEGs, 60×80, named by id (900000–901199) |
+| `images/` | 1,200 JPEGs at their **native crop size** (not 60×80 — see "Image size" below), named by id (900000–901199) |
 | `external_cosmetics.csv` | one row per image: `id, gender, masterCategory, subCategory, articleType, source` |
 | `images_gate_manifest.json` | the leakage-check result (verdict PASS) |
 | `images_leakage_report.csv` | per-image leakage verdict, all 1,200 rows |
@@ -50,11 +50,39 @@ so adding it would have introduced a label the submission format cannot express.
 
 1. Read the COCO instance annotations.
 2. Crop each annotated object by its bounding box.
-3. Resize to exactly **60×80** — the provided dataset's image size. Matching this
-   matters: a different size would mean the model saw external and provided images
-   through different amounts of resampling.
-4. Assign ids from **900000** upward, chosen to sit far outside the provided id range
+3. Assign ids from **900000** upward, chosen to sit far outside the provided id range
    (1163–60000) so an external row can never be mistaken for a provided one.
+
+## Image size
+
+These 1,200 crops are stored at their **native bounding-box size** — 1,165 distinct
+sizes across 1,200 files, from 12×39 to 296×294. None is 60×80.
+
+Batch 2 and the evaluation set *are* stored at exactly 60×80, so this set is the odd
+one out. That inconsistency was found late, by an assertion that fired on the channel
+statistics, and it is recorded here rather than quietly corrected because the report
+should be able to describe the data as it actually is.
+
+**It is not a defect in the pipeline.** Every consumer resizes on read through the
+same transform (`preprocessing.standardize_image`, and `load_images` in the Task 3
+notebook): scale to fit inside 60×80 preserving aspect ratio, pad with white, centred.
+Storing at native size and standardising once on read is in fact marginally *better*
+than shipping pre-resized files, which would be resampled twice.
+
+Two consequences that do belong in the report:
+
+* the padding is white, so it lifts these crops' measured border brightness a long way
+  towards the catalogue's — see the domain-gap section below, where it changes the
+  headline number from 101.5 to **201.2**;
+* a handful of source crops are tiny (the smallest is 12×39), so they are upscaled and
+  are genuinely blurry. They were kept because a blurred lipstick is still a lipstick
+  at 60×80, but a class whose images are mostly upscaled is a fair thing to flag.
+
+Re-check at any time with:
+
+```bash
+python -c "from PIL import Image; from pathlib import Path; from collections import Counter; print(Counter(Image.open(f).size for f in Path('Dataset/ExternalCosmetics/images').glob('*.jpg')).most_common(3))"
+```
 
 ## Why these three classes specifically
 
@@ -114,17 +142,30 @@ python src/verify_external_data.py --self-test
 ## Known limitation, stated deliberately
 
 These crops come out of in-the-wild photographs, so they carry whatever background was
-behind the product. The provided catalogue images are cut out on white. Measured on a
-balanced 400 vs 400 sample:
+behind the product. The provided catalogue images are cut out on white.
 
-| | mean border brightness | share with a near-white border |
-|---|---|---|
-| these crops | **104.7** | **0.0%** |
-| provided catalogue | **248.9** | **97.8%** |
+Measured with `src/verify_external_data.py --domain-gap` (mean RGB value of the
+outermost 3-pixel frame; "near-white" is that mean above 240; catalogue sampled at
+3,000 images):
 
-A single brightness threshold separates the two sources **99.6%** of the time (50%
-would mean indistinguishable). So a model could in principle learn "dark background →
-cosmetic" instead of learning what a cosmetic looks like.
+| | mean border brightness | near-white border | separable from catalogue |
+|---|---|---|---|
+| these crops, **as stored** | 101.5 | 0.0% | 98.9% |
+| these crops, **as loaded** (60×80) | **201.2** | **3.7%** | **90.4%** |
+| provided catalogue | **247.2** | **75.7%** | — |
+
+**Read the "as loaded" row, not the "as stored" one.** These crops are shipped at
+their native size, so the standard 60×80 transform pads them with white — which is
+most of the difference between the two rows, and the padded version is the only one a
+model ever sees. An earlier version of this file reported 104.7 / 0.0% / 99.6% for
+this set, which was the "as stored" figure measured with a definition that no longer
+exists in the repo; it described a set of pixels nothing is trained on. The command
+above is now the definition.
+
+"separable" is the best single-threshold balanced accuracy at telling this set apart
+from the catalogue by border brightness alone; 50% would mean indistinguishable. At
+90% a model could in principle learn "darker border → cosmetic" instead of learning
+what a cosmetic looks like.
 
 **This does not invalidate the reported Task 1 score.** These rows are appended to
 `train` only — see `src/train_task1_condition_resnet.py`, where the external frame is

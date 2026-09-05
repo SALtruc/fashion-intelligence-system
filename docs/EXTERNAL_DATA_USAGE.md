@@ -158,8 +158,15 @@ Those three READMEs are also committed here, as
 Re-verify the images themselves with:
 
 ```bash
-python src/verify_external_data.py --check <folder>/images
+python src/verify_external_data.py --check <folder>/images     # leakage gate
+python src/verify_external_data.py --domain-gap                # background difference
 ```
+
+`--domain-gap` prints the measured difference between each external set's backgrounds
+and the catalogue's, both as stored and after the 60×80 transform. Quote the **as
+loaded** row in the report — `ExternalCosmetics` is stored at native crop size, so
+white padding moves its border brightness from 101.5 to 201.2 against the catalogue's
+247.2, and only the padded version is what a model sees.
 
 And check the loader still behaves before you trust a training run:
 

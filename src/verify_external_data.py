@@ -62,7 +62,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from PIL import Image
+from PIL import Image, ImageOps
 
 THUMB = 16
 DHASH_W, DHASH_H = 9, 8
@@ -71,6 +71,8 @@ DHASH_RADIUS = 2               # Hamming radius for the widening pass
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
 HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+from external_data import default_data_root  # noqa: E402
 CACHE = HERE / "outputs" / "cache" / "external_gate_reference.npz"
 
 
@@ -260,6 +262,89 @@ def check_folder(folder: Path, ref: dict, labels: Path | None,
     return report
 
 
+# ------------------------------------------------------------------ domain gap
+
+
+def _standardize(im: Image.Image) -> Image.Image:
+    """The transform every consumer applies, so measurements describe what a model
+    actually receives rather than what happens to be on disk."""
+    im = im.convert("RGB")
+    if im.size != TARGET_SIZE:
+        im = ImageOps.pad(im, TARGET_SIZE, method=Image.Resampling.BILINEAR,
+                          color=(255, 255, 255), centering=(0.5, 0.5))
+    return im
+
+
+def border_brightness(path: Path, standardize: bool, k: int = 3) -> float | None:
+    """Mean RGB value of the outermost `k`-pixel frame.
+
+    A crude but honest proxy for "is this a catalogue cut-out on white, or a
+    photograph with a real background". Deliberately simple: the point is that it
+    is reproducible, and a measurement nobody can re-run is not evidence.
+    """
+    try:
+        with Image.open(path) as im:
+            im = ImageOps.exif_transpose(im)
+            a = np.asarray(_standardize(im) if standardize else im.convert("RGB"),
+                           dtype=np.float32)
+    except Exception:
+        return None
+    return float(np.mean([a[:k].mean(), a[-k:].mean(), a[:, :k].mean(), a[:, -k:].mean()]))
+
+
+def _scores(folder: Path, standardize: bool, sample: int | None,
+            seed: int = 42) -> np.ndarray:
+    paths = sorted(p for p in folder.iterdir() if p.suffix.lower() in IMAGE_SUFFIXES)
+    if sample and len(paths) > sample:
+        idx = np.random.RandomState(seed).choice(len(paths), sample, replace=False)
+        paths = [paths[i] for i in idx]
+    vals = [border_brightness(p, standardize) for p in paths]
+    return np.array([v for v in vals if v is not None], dtype=np.float64)
+
+
+def _separability(a: np.ndarray, b: np.ndarray) -> tuple[float, float]:
+    """Best single-threshold balanced accuracy separating two score sets."""
+    best_t, best_acc = 0.0, 0.0
+    for t in np.linspace(0, 255, 512):
+        acc = 0.5 * ((a > t).mean() + (b <= t).mean())
+        if acc > best_acc:
+            best_t, best_acc = float(t), float(acc)
+    return best_t, best_acc
+
+
+def domain_gap(root: Path, folders: list[Path], sample: int | None = 3000) -> None:
+    """Compare each external folder's background against the provided catalogue.
+
+    Reported twice on purpose. 'as stored' is what sits in the folder; 'as loaded'
+    is after the 60x80 standardisation every consumer applies. For a set whose
+    images are already 60x80 the two are identical. For one that is not, they can
+    differ a lot -- white padding raises the border brightness -- and only the
+    'as loaded' figure describes what a model sees.
+    """
+    cat = _scores(root / "train" / "images_train", True, sample)
+    print(f"provided catalogue: {len(cat):,} images sampled\n")
+    print(f"{'set':38}{'border':>9}{'near-white':>12}{'separable':>11}")
+    print(f"{'provided catalogue':38}{cat.mean():>9.1f}{(cat > 240).mean() * 100:>11.1f}%"
+          f"{'-':>11}")
+
+    for folder in folders:
+        if not folder.is_dir():
+            print(f"{folder.name:38}{'MISSING':>9}")
+            continue
+        for standardize, tag in ((False, "as stored"), (True, "as loaded")):
+            v = _scores(folder, standardize, None)
+            if not len(v):
+                continue
+            _, acc = _separability(cat, v)
+            name = f"{folder.parent.name} ({tag})"
+            print(f"{name:38}{v.mean():>9.1f}{(v > 240).mean() * 100:>11.1f}%"
+                  f"{acc * 100:>10.1f}%")
+    print("\n'separable' = best single-threshold balanced accuracy telling that set "
+          "apart from\nthe catalogue by border brightness alone. High means a model "
+          "could learn the\nbackground instead of the product -- worth stating, though "
+          "these rows are in\ntraining only, so validation scores stay honest.")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--dataset-root")
@@ -267,10 +352,23 @@ def main() -> int:
     ap.add_argument("--check", metavar="FOLDER")
     ap.add_argument("--labels", metavar="CSV")
     ap.add_argument("--self-test", action="store_true")
+    ap.add_argument("--domain-gap", nargs="*", metavar="FOLDER",
+                    help="measure background difference vs the provided catalogue; "
+                         "with no folders, all three external sets")
     a = ap.parse_args()
 
     root = find_dataset_root(a.dataset_root)
     print(f"provided dataset: {root}\n")
+
+    if a.domain_gap is not None:
+        if a.domain_gap:
+            folders = [Path(f) for f in a.domain_gap]
+        else:
+            base = default_data_root()
+            folders = [base / n / "images" for n in
+                       ("ExternalCosmetics", "ExternalCosmetics2", "ExternalEval")]
+        domain_gap(root, folders)
+        return 0
 
     if a.build_reference:
         build_reference(root)

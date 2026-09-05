@@ -148,15 +148,23 @@ Like batch 1, these crops come out of in-the-wild photographs — here, phone ph
 products on fabric and carpet — so they carry real backgrounds while the provided
 catalogue images are cut out on white.
 
-| | mean border brightness | share with near-white border |
-|---|---|---|
-| batch 2 (this folder) | **121.3** | **0.0%** |
-| batch 1 | 104.7 | 0.0% |
-| provided catalogue | **248.9** | **97.8%** |
+Measured with `src/verify_external_data.py --domain-gap` (mean RGB value of the
+outermost 3-pixel frame; "near-white" is that mean above 240):
 
-A single brightness threshold separates batch 2 from the catalogue **99.6%** of the
-time. So a model could learn "dark background → cosmetic" instead of learning what a
-cosmetic looks like.
+| | mean border brightness | near-white border | separable from catalogue |
+|---|---|---|---|
+| batch 2 (this folder) | **120.6** | **0.0%** | **99.0%** |
+| batch 1, as loaded | 201.2 | 3.7% | 90.4% |
+| `ExternalEval` | 122.4 | 2.7% | 96.3% |
+| provided catalogue | **247.2** | **75.7%** | — |
+
+Batch 2 is stored at exactly 60×80, so "as stored" and "as loaded" are the same
+measurement here. Batch 1 is not, and its row above is the as-loaded figure — see
+`ExternalCosmetics.md`.
+
+A single brightness threshold tells batch 2 from the catalogue **99.0%** of the time
+(50% would mean indistinguishable). So a model could learn "darker border → cosmetic"
+instead of learning what a cosmetic looks like.
 
 **This does not invalidate the validation scores.** These rows go into `train` only;
 validation stays 100% provided catalogue imagery, so a model relying purely on the
