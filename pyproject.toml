@@ -13,6 +13,8 @@ dependencies = [
     "matplotlib",
     "seaborn",
     "scikit-learn",
+    "scikit-image",
+    "joblib",
     "torch",
     "torchvision",
     "faiss-cpu",
