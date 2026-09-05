@@ -76,12 +76,17 @@ JOBS = {
         ],
     ),
     "seeds": (
-        "Seed variance study",
+        "Seed variance study (all three seeds)",
         [
             "## 7. Seed Variance",
-            'if wanted("seeds"):',
+            "ACTIVE_SEEDS = wanted_seeds(SEEDS)",
         ],
     ),
+    # The seed study is the critical path at roughly 113 minutes, more than twice the next
+    # longest job, and its runs are independent. These two take one seed each; seed 42 is not
+    # a job at all, because the cnn and resnet workers already produce exactly those weights.
+    "seeds_1337": ("Seed variance study (seed 1337)", []),
+    "seeds_2024": ("Seed variance study (seed 2024)", []),
     "phase2": (
         "Phase 2 - multi-task ResNet",
         [
@@ -179,6 +184,10 @@ FINGERPRINT_AUG = [
 FINGERPRINT_STAGE2 = ["STAGE2_EPOCHS", "STAGE2_LR", "STAGE2_USE_DROPOUT"]
 
 
+# Jobs that run another job's cells and differ only in what JOB_FILTER makes those cells do.
+CELL_ALIASES = {"seeds_1337": "seeds", "seeds_2024": "seeds"}
+
+
 def worker_cells(cells, job, legacy=False):
     """Combine-cell indices a worker for `job` holds, in combine order.
 
@@ -206,7 +215,7 @@ def worker_cells(cells, job, legacy=False):
             continue
         if index in combine_only or index in substituted:
             continue
-        if index in owners and owners[index] != job:
+        if index in owners and owners[index] != CELL_ALIASES.get(job, job):
             continue
         kept.append(index)
     return kept
