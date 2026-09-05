@@ -105,6 +105,8 @@ def load_task2_prepared_data():
         TASK2_SPLIT_PATH,
         TASK2_PREPROCESSED_DIR / "train_images.npy",
         TASK2_PREPROCESSED_DIR / "validation_images.npy",
+        TASK2_PREPROCESSED_DIR / "train_features.npy",
+        TASK2_PREPROCESSED_DIR / "validation_features.npy",
     ]
     missing = [str(path) for path in required if not path.exists()]
     if missing:
@@ -134,6 +136,12 @@ def load_task2_prepared_data():
         "validation_images": np.load(
             TASK2_PREPROCESSED_DIR / "validation_images.npy", mmap_mode="r"
         ),
+        "train_features": np.load(
+            TASK2_PREPROCESSED_DIR / "train_features.npy", mmap_mode="r"
+        ),
+        "validation_features": np.load(
+            TASK2_PREPROCESSED_DIR / "validation_features.npy", mmap_mode="r"
+        ),
     }
 
 
@@ -151,6 +159,8 @@ def prepared_namespace():
         y_val=y_validation,
         x_train=data["train_images"],
         x_val=data["validation_images"],
+        x_train_features=data["train_features"],
+        x_val_features=data["validation_features"],
         norm_mean=np.asarray(data["config"]["normalisation_mean"], dtype=np.float32),
         norm_std=np.asarray(data["config"]["normalisation_std"], dtype=np.float32),
         train_support=pd.Series(np.bincount(y_train, minlength=len(classes)), index=classes),
@@ -418,6 +428,8 @@ class NeuralTrainer:
             if blob.get("fingerprint") == self.fingerprint:
                 self._load_state(model, blob["model"]); optimiser.load_state_dict(blob["optimiser"])
                 scheduler.load_state_dict(blob["scheduler"])
+                if blob.get("scaler") is not None:
+                    scaler.load_state_dict(blob["scaler"])
                 self._restore_rng(blob["rng"]); history, best, first = blob["history"], blob["best"], blob["epoch"]
         start_time = time.time()
         for epoch in range(first, self.cfg["epochs"]):
@@ -430,7 +442,8 @@ class NeuralTrainer:
                              average="macro", zero_division=0)
             history.append({"epoch": epoch + 1, "train loss": train_loss, "val loss": val_loss,
                             "val accuracy": accuracy_score(self.data.y_val, pred),
-                            "val macro-F1": macro, "seconds": time.time() - epoch_time})
+                            "val macro-F1": macro, "lr": optimiser.param_groups[0]["lr"],
+                            "seconds": time.time() - epoch_time})
             if macro > best["macro_f1"]:
                 best = {"macro_f1": macro, "epoch": epoch + 1,
                         "state": self._state(model), "logits": logits}
@@ -440,6 +453,7 @@ class NeuralTrainer:
                 self._save({"fingerprint": self.fingerprint, "epoch": epoch + 1,
                             "model": self._state(model), "optimiser": optimiser.state_dict(),
                             "scheduler": scheduler.state_dict(),
+                            "scaler": scaler.state_dict() if scaler.is_enabled() else None,
                             "rng": self._capture_rng(), "history": history, "best": best}, checkpoint)
             if stopping:
                 break
