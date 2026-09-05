@@ -137,10 +137,11 @@ instead, so a worker that failed or never ran costs time, not correctness. It pr
 3. **Never set `QUICK_RUN = True` on a machine whose work you intend to keep.** It changes
    the epoch count, the seed list and the row count, so it changes the fingerprint and
    orphans that machine's output. It is for a structural smoke test only.
-4. Everything in Section 1.0 — `CPU_BUDGET_FRACTION`, `GPU_BUDGET_FRACTION`, `THROTTLE_GPU`,
-   `PIN_CPU_AFFINITY` — plus `ALLOW_CPU`, `RESUME`, `USE_COMPILE` and `DETERMINISTIC` is
-   deliberately outside the fingerprint. Set those per machine as you like; a throttled run
-   and an unthrottled one share checkpoints freely.
+4. **Every machine runs at full capacity, and there is no knob for that.** The resource
+   budget and the duty-cycle throttle have been removed: thread pools take every visible
+   core, VRAM is uncapped, and compute is never paced. `ALLOW_CPU`, `RESUME`, `USE_COMPILE`
+   and `DETERMINISTIC` remain outside the fingerprint, so set those per machine as you like;
+   machines with different core counts share checkpoints freely.
 
 ## Job reference
 
@@ -158,8 +159,10 @@ instead, so a worker that failed or never ran costs time, not correctness. It pr
 | `seeds` | ~64 min | `model_cnn.pt`, `model_resnet_decoupled.pt` (soft) | all six of the above; replaces the two split jobs |
 
 Runtimes are the recorded run's own measured figures. That run was throttled to a 65% duty
-cycle and the same work varied by up to 2x within it from contention, so treat them as a
-reliable ranking and the right order of magnitude rather than precise numbers.
+cycle — the throttle has since been removed and every machine now runs flat out — and the same
+work varied by up to 2x within it from contention. Treat them as a reliable ranking and the
+right order of magnitude rather than precise numbers, and expect an unthrottled machine to
+come in under them.
 
 ## Verifying the setup
 

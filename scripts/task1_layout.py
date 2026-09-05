@@ -115,8 +115,9 @@ JOBS = {
 
 # Wall time per job, measured from the recorded run stored in the combine notebook's outputs
 # (the `... this session` lines) rather than estimated. That run was throttled to a 65% duty
-# cycle, and the same work varied by up to 2x within it from contention, so these are the
-# right order of magnitude and a reliable ranking rather than precise figures.
+# cycle -- the throttle has since been removed and every machine now runs flat out -- and the
+# same work varied by up to 2x within it from contention, so these are the right order of
+# magnitude and a reliable ranking rather than precise figures.
 RUNTIMES = {
     "hog_svm": "~4 min",           # restored in the recorded run; not measured
     "cnn": "~7 min",               # 421 s
