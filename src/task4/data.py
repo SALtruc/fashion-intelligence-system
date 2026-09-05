@@ -17,6 +17,7 @@ from src.task4.config import (
     IMAGES_PER_CLASS,
     LABEL_ID_COLUMN,
     NUM_WORKERS,
+    PREFETCH_FACTOR,
     SEED,
 )
 from src.task4.training import PIN_MEMORY
@@ -99,17 +100,34 @@ def seed_worker(worker_id: int):
     np.random.seed(worker_seed)
 
 
-def standard_loader(dataset: Dataset, batch_size: int, shuffle: bool = False):
+def _loader_options(
+    generator: torch.Generator | None = None, persistent_workers: bool = False
+):
+    options = {
+        "num_workers": NUM_WORKERS,
+        "pin_memory": PIN_MEMORY,
+        "worker_init_fn": seed_worker,
+        "persistent_workers": persistent_workers and NUM_WORKERS > 0,
+    }
+    if generator is not None:
+        options["generator"] = generator
+    if NUM_WORKERS > 0:
+        options["prefetch_factor"] = PREFETCH_FACTOR
+    return options
+
+
+def standard_loader(
+    dataset: Dataset,
+    batch_size: int,
+    shuffle: bool = False,
+    persistent_workers: bool = False,
+):
     generator = torch.Generator().manual_seed(SEED)
     return DataLoader(
         dataset,
         batch_size=batch_size,
         shuffle=shuffle,
-        num_workers=NUM_WORKERS,
-        pin_memory=PIN_MEMORY,
-        worker_init_fn=seed_worker,
-        generator=generator,
-        persistent_workers=NUM_WORKERS > 0,
+        **_loader_options(generator, persistent_workers),
     )
 
 
@@ -132,7 +150,12 @@ def make_training_loader(
         transform = make_two_view_transform(transform)
     dataset = FashionImageDataset(train_df, image_dir, transform)
     if model_name == "cae":
-        return standard_loader(dataset, CAE_BATCH_SIZE, shuffle=True)
+        return standard_loader(
+            dataset,
+            CAE_BATCH_SIZE,
+            shuffle=True,
+            persistent_workers=True,
+        )
 
     sampler = PKBatchSampler(
         train_df[LABEL_ID_COLUMN],
@@ -144,10 +167,7 @@ def make_training_loader(
     return DataLoader(
         dataset,
         batch_sampler=sampler,
-        num_workers=NUM_WORKERS,
-        pin_memory=PIN_MEMORY,
-        worker_init_fn=seed_worker,
-        persistent_workers=NUM_WORKERS > 0,
+        **_loader_options(persistent_workers=True),
     )
 
 

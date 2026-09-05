@@ -18,8 +18,14 @@ def set_seed(seed: int = SEED):
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
-    torch.backends.cudnn.deterministic = True
-    torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.deterministic = False
+        torch.backends.cudnn.benchmark = True
+        torch.backends.cuda.matmul.allow_tf32 = True
+        torch.backends.cudnn.allow_tf32 = True
+        torch.set_float32_matmul_precision("high")
+    else:
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
 
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -27,12 +33,16 @@ AMP_ENABLED = DEVICE.type == "cuda"
 PIN_MEMORY = AMP_ENABLED
 
 
-def compute_training_loss(model_name: str, model: nn.Module, loss_function: nn.Module, batch: dict[str, Any]):
+def compute_training_loss(
+    model_name: str, model: nn.Module, loss_function: nn.Module, batch: dict[str, Any]
+):
     labels = batch["label"].to(DEVICE, non_blocking=True)
 
     if model_name == "supcon":
         first_view, second_view = batch["image"]
-        images = torch.cat([first_view, second_view], dim=0).to(DEVICE)
+        images = torch.cat([first_view, second_view], dim=0).to(
+            DEVICE, non_blocking=True
+        )
         embeddings = model(images)
         return loss_function(embeddings, labels.repeat(2))
 
@@ -47,10 +57,17 @@ def compute_training_loss(model_name: str, model: nn.Module, loss_function: nn.M
     return loss_function(embeddings, labels)
 
 
-def train_one_epoch(model_name: str, model: nn.Module, loss_function: nn.Module, loader: DataLoader, optimizer: torch.optim.Optimizer, scaler: torch.amp.GradScaler, epoch: int):
+def train_one_epoch(
+    model_name: str,
+    model: nn.Module,
+    loss_function: nn.Module,
+    loader: DataLoader,
+    optimizer: torch.optim.Optimizer,
+    scaler: torch.amp.GradScaler,
+    epoch: int,
+):
     model.train()
-    if hasattr(loader.batch_sampler, "set_epoch"):
-        loader.batch_sampler.set_epoch(epoch)
+    loader.batch_sampler.set_epoch(epoch)
 
     running_loss = 0.0
     example_count = 0
@@ -91,8 +108,7 @@ class EarlyStopping:
 
 def cpu_state_dict(model: nn.Module):
     return {
-        name: value.detach().cpu().clone()
-        for name, value in model.state_dict().items()
+        name: value.detach().cpu().clone() for name, value in model.state_dict().items()
     }
 
 

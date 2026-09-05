@@ -1,4 +1,7 @@
+import os
 from pathlib import Path
+
+import torch
 
 SEED = 42
 RESNET_INPUT_SIZE = (128, 128)
@@ -13,7 +16,10 @@ CLASSES_PER_BATCH = 16
 IMAGES_PER_CLASS = 4
 CAE_BATCH_SIZE = 128
 EVAL_BATCH_SIZE = 256
-NUM_WORKERS = 0
+NUM_WORKERS = (
+    min(8, max(2, (os.cpu_count() or 2) // 2)) if torch.cuda.is_available() else 0
+)
+PREFETCH_FACTOR = 4
 
 N_TRIALS = 20
 TUNING_EPOCHS = 15

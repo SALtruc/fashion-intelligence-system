@@ -20,7 +20,7 @@ def extract_embeddings(model: nn.Module, loader: DataLoader):
     model.eval()
     embeddings, identifiers, labels = [], [], []
 
-    with torch.no_grad():
+    with torch.inference_mode():
         for batch in loader:
             images = batch["image"].to(DEVICE, non_blocking=True)
             with torch.amp.autocast(device_type=DEVICE.type, enabled=AMP_ENABLED):
@@ -40,6 +40,15 @@ def build_faiss_index(gallery_embeddings: np.ndarray):
     embeddings = np.ascontiguousarray(gallery_embeddings, dtype="float32")
     index = faiss.IndexFlatIP(embeddings.shape[1])
     index.add(embeddings)
+    if DEVICE.type == "cuda":
+        try:
+            if faiss.get_num_gpus() > 0:
+                resources = faiss.StandardGpuResources()
+                return faiss.index_cpu_to_gpu(resources, 0, index)
+
+        except RuntimeError:
+            pass
+
     return index
 
 
