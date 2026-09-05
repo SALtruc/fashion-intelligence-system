@@ -61,10 +61,14 @@ DONE = '''# --- Done -----------------------------------------------------------
 print("Worker complete: {job}")
 print("\\nCheckpoints in", CHECKPOINT_DIR.resolve())
 _total = 0
-for _path in sorted(CHECKPOINT_DIR.glob("*.pt")) + sorted(CHECKPOINT_DIR.glob("*.joblib")):
-    _size = _path.stat().st_size / 1e6
-    _total += _size
-    print(f"  {{_path.name}}  ({{_size:.1f}} MB)")
+# .npz and .joblib included, matching the worker-stop cell this replaces:
+# model_hog_svm_scores.npz is what the SVM restore actually reads, and listing only .pt
+# sends the reader to the combine machine without it.
+for _pattern in ("*.pt", "*.joblib", "*.npz"):
+    for _path in sorted(CHECKPOINT_DIR.glob(_pattern)):
+        _size = _path.stat().st_size / 1e6
+        _total += _size
+        print(f"  {{_path.name}}  ({{_size:.1f}} MB)")
 print(f"\\n{{_total:.0f}} MB total. Copy these to the combine machine, then run the "
       f"final notebook there with JOB_FILTER = None.")
 print("Fingerprint:", RUN_FINGERPRINT, "-- must match on every machine.")'''
