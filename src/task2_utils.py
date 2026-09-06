@@ -262,13 +262,14 @@ def neural_training_config(
         "quick_run": quick_run,
         "resume": resume,
         "allow_cpu": True if quick_run else allow_cpu,
-        "epochs": 3 if quick_run else 30,
+        "epochs": 3 if quick_run else 10,
         "warmup_epochs": 1 if quick_run else 3,
         "batch_size": 128,
         "patience": 6,
         "learning_rate": 1e-3,
         "weight_decay": 1e-4,
         "label_smoothing": 0.05,
+        "history_metrics": ["loss", "accuracy"],
         "flip_probability": 0.5,
         "rotation_degrees": 8.0,
         "translate_fraction": 0.06,
@@ -441,6 +442,7 @@ class NeuralTrainer:
     def _epoch(self, model, criterion, optimiser=None, scaler=None):
         training = optimiser is not None
         model.train(training); collected = []; loss_sum = torch.zeros((), device=self.device)
+        correct = torch.zeros((), dtype=torch.long, device=self.device)
         loader = self.train_loader if training else self.val_loader
         with torch.set_grad_enabled(training):
             for images, labels in loader:
@@ -455,8 +457,10 @@ class NeuralTrainer:
                 else:
                     collected.append(logits.detach().float())
                 loss_sum += loss.detach().float() * len(labels)
+                correct += (logits.detach().argmax(dim=1) == labels).sum()
         logits = torch.cat(collected).cpu().numpy() if collected else None
-        return (loss_sum / len(loader.labels)).item(), logits
+        sample_count = len(loader.labels)
+        return (loss_sum / sample_count).item(), (correct.float() / sample_count).item(), logits
 
     def train_or_restore(self, name, build, label, model_config):
         model = self._prepare(build())
@@ -517,15 +521,14 @@ class NeuralTrainer:
                 f"({len(self.train_loader)} train + {len(self.val_loader)} validation batches)",
                 flush=True,
             )
-            train_loss, _ = self._epoch(model, criterion, optimiser, scaler)
-            val_loss, logits = self._epoch(model, criterion)
+            train_loss, train_accuracy, _ = self._epoch(model, criterion, optimiser, scaler)
+            val_loss, val_accuracy, logits = self._epoch(model, criterion)
             scheduler.step()
             pred = logits.argmax(1)
-            val_accuracy = accuracy_score(self.data.y_val, pred)
             macro = f1_score(self.data.y_val, pred, labels=self.data.scoreable,
                              average="macro", zero_division=0)
             history.append({"epoch": epoch_number, "train loss": train_loss, "val loss": val_loss,
-                            "val accuracy": val_accuracy,
+                            "train accuracy": train_accuracy, "val accuracy": val_accuracy,
                             "val macro-F1": macro, "lr": optimiser.param_groups[0]["lr"],
                             "seconds": time.time() - epoch_time})
             if macro > best["macro_f1"]:
@@ -535,7 +538,8 @@ class NeuralTrainer:
             print(
                 f"[{label}] finished epoch {epoch_number}/{self.cfg['epochs']} | "
                 f"train loss {train_loss:.4f} | val loss {val_loss:.4f} | "
-                f"val accuracy {val_accuracy:.4f} | macro-F1 {macro:.4f} | "
+                f"train accuracy {train_accuracy:.4f} | val accuracy {val_accuracy:.4f} | "
+                f"macro-F1 {macro:.4f} | "
                 f"best {best['macro_f1']:.4f} (epoch {best['epoch']}) | "
                 f"lr {optimiser.param_groups[0]['lr']:.2e} | {history[-1]['seconds']:.0f}s",
                 flush=True,
@@ -572,12 +576,23 @@ class NeuralTrainer:
 
     @staticmethod
     def plot_history(history, title):
+        required = {"epoch", "train loss", "val loss", "train accuracy", "val accuracy"}
+        missing = required.difference(history.columns)
+        if missing:
+            raise ValueError(
+                "Training history is missing " + ", ".join(sorted(missing))
+                + ". Retrain the model with the current training configuration."
+            )
         fig, axes = plt.subplots(1, 2, figsize=(12, 3.8))
-        axes[0].plot(history["epoch"], history["train loss"], label="train")
-        axes[0].plot(history["epoch"], history["val loss"], "--", label="validation")
-        axes[1].plot(history["epoch"], history["val macro-F1"])
-        axes[0].set(title="Loss", xlabel="Epoch"); axes[0].legend()
-        axes[1].set(title="Validation macro-F1", xlabel="Epoch")
+        axes[0].plot(history["epoch"], history["train loss"], label="Train")
+        axes[0].plot(history["epoch"], history["val loss"], label="Validation")
+        axes[1].plot(history["epoch"], history["train accuracy"], label="Train")
+        axes[1].plot(history["epoch"], history["val accuracy"], label="Validation")
+        axes[0].set(title="Training and validation loss", xlabel="Epoch", ylabel="Loss")
+        axes[1].set(title="Training and validation accuracy", xlabel="Epoch", ylabel="Accuracy", ylim=(0, 1))
+        for axis in axes:
+            axis.grid(alpha=0.25)
+            axis.legend()
         fig.suptitle(title); plt.tight_layout(); plt.show()
 
 
@@ -637,7 +652,7 @@ def save_random_forest_checkpoint(model, scores, prepared, model_config):
         np.savez_compressed(
             handle, fingerprint=prepared.fingerprint,
             model_config_json=deterministic_json(model_config),
-            validation_ids=prepared.validation_ids,
+            validation_ids=np.asarray(prepared.validation_ids, dtype=str),
             true_indices=prepared.y_val, scores=np.asarray(scores),
             classes=np.asarray(prepared.classes),
         )
