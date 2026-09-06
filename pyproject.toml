@@ -3,7 +3,7 @@ name = "Machine-Learning-Assignment-2"
 version = "0.1.0"
 description = "Assignment 2 for COSC2753 - Machine Learning"
 readme = "README.md"
-requires-python = "==3.12.0"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "numpy",
     "pandas",
@@ -13,10 +13,35 @@ dependencies = [
     "matplotlib",
     "seaborn",
     "scikit-learn",
-    "scikit-image",
-    "joblib",
     "torch",
     "torchvision",
     "faiss-cpu",
-    "notebook",
+    "notebook>=7.6.2",
+    "scikit-image>=0.26.0",
+    "joblib",
+    "pillow",
 ]
+
+# pyflakes backs check 3 of scripts/check_task1_workers.py, which fails under --strict when it
+# is absent rather than distributing worker notebooks it could not check. `uv sync` installs
+# this group by default.
+[dependency-groups]
+dev = [
+    "pyflakes>=3.4.0",
+]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cu128", marker = "sys_platform == 'win32' or sys_platform == 'linux'" },
+]
+torchvision = [
+    { index = "pytorch-cu128", marker = "sys_platform == 'win32' or sys_platform == 'linux'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+# Used only for the packages that name it in [tool.uv.sources]. Without this uv resolves every
+# package against this index first, and it carries an old `requests` that nothing else can
+# satisfy, so any change to the dependencies fails to re-resolve.
+explicit = true

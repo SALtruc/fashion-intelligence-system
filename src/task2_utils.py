@@ -23,7 +23,10 @@ from sklearn.metrics import accuracy_score, f1_score, recall_score
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+TASK2_MODEL_DIR = REPO_ROOT / "models" / "task2"
+TASK2_CHECKPOINT_DIR = TASK2_MODEL_DIR / "checkpoints"
 TASK2_OUTPUT_DIR = REPO_ROOT / "outputs" / "task2"
+TASK2_FIGURE_DIR = TASK2_OUTPUT_DIR / "figures"
 TASK2_SPLIT_PATH = REPO_ROOT / "splits" / "task2_season_split.csv"
 TASK2_PREDICTION_PATH = REPO_ROOT / "predictions" / "task2_season_predictions.csv"
 TASK2_PREPROCESSED_DIR = REPO_ROOT / "preprocessed_datasets" / "task2"
@@ -42,13 +45,65 @@ FEATURE_CONFIG = {
 def ensure_task2_directories() -> None:
     """Create only the stable directories shared by the Task 2 notebooks."""
     for path in (
-        REPO_ROOT / "models" / "checkpoints",
+        TASK2_MODEL_DIR,
+        TASK2_CHECKPOINT_DIR,
         TASK2_OUTPUT_DIR,
+        TASK2_FIGURE_DIR,
         TASK2_SPLIT_PATH.parent,
         TASK2_PREDICTION_PATH.parent,
         TASK2_PREPROCESSED_DIR,
     ):
         path.mkdir(parents=True, exist_ok=True)
+
+
+def deterministic_json(value) -> str:
+    """Encode checkpoint identity metadata deterministically."""
+    return json.dumps(value, sort_keys=True, separators=(",", ":"))
+
+
+def calculate_run_fingerprint(*, target, classes, train_ids, validation_ids,
+                              random_state, image_target_size,
+                              normalisation_mean, normalisation_std,
+                              feature_version) -> str:
+    """Identify only the shared Task 2 data and preprocessing contract."""
+    identity = {
+        "target": target,
+        "classes": list(classes),
+        "train_ids": [str(value) for value in train_ids],
+        "validation_ids": [str(value) for value in validation_ids],
+        "random_state": int(random_state),
+        "image_target_size": list(image_target_size),
+        "normalisation_mean": np.asarray(normalisation_mean).tolist(),
+        "normalisation_std": np.asarray(normalisation_std).tolist(),
+        "feature_version": feature_version,
+    }
+    return hashlib.sha1(deterministic_json(identity).encode()).hexdigest()[:12]
+
+
+def model_checkpoint_path(name: str) -> Path:
+    slug = "".join(c if c.isalnum() else "_" for c in name.lower()).strip("_")
+    return TASK2_CHECKPOINT_DIR / f"model_{slug}.pt"
+
+
+def epoch_checkpoint_path(name: str) -> Path:
+    slug = "".join(c if c.isalnum() else "_" for c in name.lower()).strip("_")
+    return TASK2_CHECKPOINT_DIR / f"epoch_{slug}.pt"
+
+
+def _validate_candidate(blob, *, fingerprint, model_config=None, classes=None,
+                        validation_ids=None, path=None) -> None:
+    label = str(path or "checkpoint")
+    if blob.get("fingerprint") != fingerprint:
+        raise ValueError(f"{label} has an incompatible run fingerprint")
+    if model_config is not None and blob.get("model_config") != model_config:
+        raise ValueError(f"{label} has an incompatible model configuration")
+    if classes is not None and list(blob.get("classes", [])) != list(classes):
+        raise ValueError(f"{label} has an incompatible class ordering")
+    if validation_ids is not None and not np.array_equal(
+        np.asarray(blob.get("validation_ids", []), dtype=str),
+        np.asarray(validation_ids, dtype=str),
+    ):
+        raise ValueError(f"{label} has an incompatible validation-ID ordering")
 
 
 def evaluate_predictions(y_true, y_pred, scores, name: str) -> dict:
@@ -103,10 +158,10 @@ def load_task2_prepared_data():
     required = [
         config_path,
         TASK2_SPLIT_PATH,
-        TASK2_PREPROCESSED_DIR / "train_images.npy",
-        TASK2_PREPROCESSED_DIR / "validation_images.npy",
-        TASK2_PREPROCESSED_DIR / "train_features.npy",
-        TASK2_PREPROCESSED_DIR / "validation_features.npy",
+        TASK2_PREPROCESSED_DIR / "task2_deep_learning_train_images.npy",
+        TASK2_PREPROCESSED_DIR / "task2_deep_learning_validation_images.npy",
+        TASK2_PREPROCESSED_DIR / "task2_random_forest_train_features.npy",
+        TASK2_PREPROCESSED_DIR / "task2_random_forest_validation_features.npy",
     ]
     missing = [str(path) for path in required if not path.exists()]
     if missing:
@@ -132,15 +187,17 @@ def load_task2_prepared_data():
         "validation_frame": validation_frame,
         "y_train": train_frame[config["target"]].map(class_to_index).to_numpy(),
         "y_validation": validation_frame[config["target"]].map(class_to_index).to_numpy(),
-        "train_images": np.load(TASK2_PREPROCESSED_DIR / "train_images.npy", mmap_mode="r"),
+        "train_images": np.load(
+            TASK2_PREPROCESSED_DIR / "task2_deep_learning_train_images.npy", mmap_mode="r"
+        ),
         "validation_images": np.load(
-            TASK2_PREPROCESSED_DIR / "validation_images.npy", mmap_mode="r"
+            TASK2_PREPROCESSED_DIR / "task2_deep_learning_validation_images.npy", mmap_mode="r"
         ),
         "train_features": np.load(
-            TASK2_PREPROCESSED_DIR / "train_features.npy", mmap_mode="r"
+            TASK2_PREPROCESSED_DIR / "task2_random_forest_train_features.npy", mmap_mode="r"
         ),
         "validation_features": np.load(
-            TASK2_PREPROCESSED_DIR / "validation_features.npy", mmap_mode="r"
+            TASK2_PREPROCESSED_DIR / "task2_random_forest_validation_features.npy", mmap_mode="r"
         ),
     }
 
@@ -168,6 +225,8 @@ def prepared_namespace():
             np.bincount(y_validation, minlength=len(classes)), index=classes
         ),
         scoreable=np.flatnonzero(np.bincount(y_validation, minlength=len(classes)) > 0),
+        fingerprint=data["config"]["fingerprint"],
+        validation_ids=data["validation_frame"]["id"].astype(str).to_numpy(),
     )
 
 
@@ -233,11 +292,17 @@ class NeuralTrainer:
     def __init__(self, prepared, config: dict):
         self.data = prepared
         self.cfg = dict(config)
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        if self.device.type != "cuda" and not self.cfg["allow_cpu"]:
+        if torch.cuda.is_available():
+            self.device = torch.device("cuda")
+        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            self.device = torch.device("mps")
+        else:
+            self.device = torch.device("cpu")
+        if self.device.type == "cpu" and not self.cfg["allow_cpu"]:
             raise RuntimeError(
-                "No CUDA device is available. Install a CUDA-enabled PyTorch build, or set "
-                "ALLOW_CPU = True (preferably with QUICK_RUN = True)."
+                "No supported GPU is available. Install a CUDA-enabled PyTorch build, use "
+                "Apple Silicon with an MPS-enabled PyTorch build, or set ALLOW_CPU = True "
+                "(preferably with QUICK_RUN = True)."
             )
         if self.device.type == "cuda":
             try:
@@ -246,6 +311,8 @@ class NeuralTrainer:
                 raise RuntimeError(f"CUDA is visible but cannot execute a kernel: {error}") from error
             torch.backends.cuda.matmul.allow_tf32 = True
             torch.backends.cudnn.allow_tf32 = True
+        elif self.device.type == "mps":
+            print("Apple Metal GPU detected; using the PyTorch MPS backend.")
         self.amp_enabled = self.cfg["use_amp"] and self.device.type == "cuda"
         self.amp_dtype = (torch.bfloat16 if self.amp_enabled and torch.cuda.is_bf16_supported()
                           else torch.float16)
@@ -263,15 +330,7 @@ class NeuralTrainer:
         self.val_loader = self.BatchStream(
             self, prepared.x_val, prepared.y_val, 512, False, False
         )
-        identity = {
-            "target": prepared.target, "classes": prepared.n_classes,
-            "train_rows": len(prepared.y_train), "val_rows": len(prepared.y_val),
-            **self.cfg, "norm": [prepared.norm_mean.round(5).tolist(),
-                                  prepared.norm_std.round(5).tolist()],
-        }
-        self.fingerprint = hashlib.sha1(
-            json.dumps(identity, sort_keys=True).encode()
-        ).hexdigest()[:12]
+        self.fingerprint = prepared.fingerprint
         print(f"Device: {self.device} | mixed precision: {self.amp_enabled} "
               f"| run fingerprint: {self.fingerprint}")
 
@@ -319,10 +378,18 @@ class NeuralTrainer:
     class BatchStream:
         def __init__(self, owner, images, labels, batch_size, augment, shuffle):
             self.owner, self.batch_size, self.augment, self.shuffle = owner, batch_size, augment, shuffle
-            self.images = torch.from_numpy(np.ascontiguousarray(images))
+            # Prepared arrays are commonly read through a read-only NumPy memmap.
+            # ascontiguousarray() may return that same non-writable buffer, which
+            # PyTorch rejects because tensors are assumed to have writable storage.
+            self.images = torch.from_numpy(np.array(images, copy=True, order="C"))
             if owner.cache_on_device:
                 self.images = self.images.to(owner.device)
-            self.labels = torch.as_tensor(labels, dtype=torch.long, device=owner.device)
+            # Labels may also be a read-only pandas/NumPy view.  Make the small
+            # one-dimensional array explicitly writable before sharing its storage
+            # with Torch; otherwise torch.as_tensor emits a non-writable-buffer
+            # warning and any accidental in-place write would be undefined.
+            writable_labels = np.array(labels, dtype=np.int64, copy=True, order="C")
+            self.labels = torch.from_numpy(writable_labels).to(owner.device)
 
         def __len__(self):
             return math.ceil(len(self.labels) / self.batch_size)
@@ -341,9 +408,7 @@ class NeuralTrainer:
                 yield x, self.labels[index.to(self.labels.device)]
 
     def _path(self, name, checkpoint=False):
-        slug = "".join(c if c.isalnum() else "_" for c in name.lower()).strip("_")
-        return (REPO_ROOT / "models" / "checkpoints" / f"task2_{slug}_checkpoint.pt"
-                if checkpoint else REPO_ROOT / "models" / f"task2_{slug}.pt")
+        return epoch_checkpoint_path(name) if checkpoint else model_checkpoint_path(name)
 
     @staticmethod
     def _state(model):
@@ -397,16 +462,23 @@ class NeuralTrainer:
         logits = torch.cat(collected).cpu().numpy() if collected else None
         return (loss_sum / len(loader.labels)).item(), logits
 
-    def train_or_restore(self, name, build, label):
+    def train_or_restore(self, name, build, label, model_config):
         model = self._prepare(build())
         final_path, checkpoint = self._path(name), self._path(name, True)
-        if self.cfg["resume"] and final_path.exists():
+        if final_path.exists():
             blob = self._load(final_path)
-            if blob.get("fingerprint") == self.fingerprint:
+            try:
+                _validate_candidate(
+                    blob, fingerprint=self.fingerprint, model_config=model_config,
+                    classes=self.data.classes, validation_ids=self.data.validation_ids,
+                    path=final_path,
+                )
                 self._load_state(model, blob["state_dict"])
                 history = pd.DataFrame(blob["history"])
                 print(f"{label}: restored finished model; training skipped")
                 return model, history, blob["val_logits"]
+            except ValueError as error:
+                print(f"{label}: {error}; training a compatible checkpoint")
         criterion = nn.CrossEntropyLoss(label_smoothing=self.cfg["label_smoothing"])
         optimiser = torch.optim.AdamW(model.parameters(), lr=self.cfg["learning_rate"],
                                       weight_decay=self.cfg["weight_decay"])
@@ -425,45 +497,77 @@ class NeuralTrainer:
         history, best, first = [], {"macro_f1": -1., "epoch": -1}, 0
         if self.cfg["resume"] and checkpoint.exists():
             blob = self._load(checkpoint)
-            if blob.get("fingerprint") == self.fingerprint:
+            try:
+                _validate_candidate(blob, fingerprint=self.fingerprint,
+                                    model_config=model_config, path=checkpoint)
                 self._load_state(model, blob["model"]); optimiser.load_state_dict(blob["optimiser"])
                 scheduler.load_state_dict(blob["scheduler"])
                 if blob.get("scaler") is not None:
                     scaler.load_state_dict(blob["scaler"])
                 self._restore_rng(blob["rng"]); history, best, first = blob["history"], blob["best"], blob["epoch"]
+                print(
+                    f"{label}: resumed after epoch {first}/{self.cfg['epochs']} "
+                    f"(best macro-F1 {best['macro_f1']:.4f} at epoch {best['epoch']})",
+                    flush=True,
+                )
+            except ValueError as error:
+                print(f"{label}: {error}; starting from epoch 1")
         start_time = time.time()
         for epoch in range(first, self.cfg["epochs"]):
             epoch_time = time.time()
+            epoch_number = epoch + 1
+            print(
+                f"[{label}] starting epoch {epoch_number}/{self.cfg['epochs']} "
+                f"({len(self.train_loader)} train + {len(self.val_loader)} validation batches)",
+                flush=True,
+            )
             train_loss, _ = self._epoch(model, criterion, optimiser, scaler)
             val_loss, logits = self._epoch(model, criterion)
             scheduler.step()
             pred = logits.argmax(1)
+            val_accuracy = accuracy_score(self.data.y_val, pred)
             macro = f1_score(self.data.y_val, pred, labels=self.data.scoreable,
                              average="macro", zero_division=0)
-            history.append({"epoch": epoch + 1, "train loss": train_loss, "val loss": val_loss,
-                            "val accuracy": accuracy_score(self.data.y_val, pred),
+            history.append({"epoch": epoch_number, "train loss": train_loss, "val loss": val_loss,
+                            "val accuracy": val_accuracy,
                             "val macro-F1": macro, "lr": optimiser.param_groups[0]["lr"],
                             "seconds": time.time() - epoch_time})
             if macro > best["macro_f1"]:
-                best = {"macro_f1": macro, "epoch": epoch + 1,
+                best = {"macro_f1": macro, "epoch": epoch_number,
                         "state": self._state(model), "logits": logits}
-            stopping = epoch + 1 - best["epoch"] >= self.cfg["patience"]
-            print(f"[{label}] epoch {epoch + 1}/{self.cfg['epochs']} | macro-F1 {macro:.4f}")
+            stopping = epoch_number - best["epoch"] >= self.cfg["patience"]
+            print(
+                f"[{label}] finished epoch {epoch_number}/{self.cfg['epochs']} | "
+                f"train loss {train_loss:.4f} | val loss {val_loss:.4f} | "
+                f"val accuracy {val_accuracy:.4f} | macro-F1 {macro:.4f} | "
+                f"best {best['macro_f1']:.4f} (epoch {best['epoch']}) | "
+                f"lr {optimiser.param_groups[0]['lr']:.2e} | {history[-1]['seconds']:.0f}s",
+                flush=True,
+            )
             if not stopping:
-                self._save({"fingerprint": self.fingerprint, "epoch": epoch + 1,
+                self._save({"fingerprint": self.fingerprint, "model_config": model_config,
+                            "epoch": epoch_number,
                             "model": self._state(model), "optimiser": optimiser.state_dict(),
                             "scheduler": scheduler.state_dict(),
                             "scaler": scaler.state_dict() if scaler.is_enabled() else None,
                             "rng": self._capture_rng(), "history": history, "best": best}, checkpoint)
             if stopping:
+                print(
+                    f"[{label}] early stopping after epoch {epoch_number}; "
+                    f"no macro-F1 improvement for {self.cfg['patience']} epochs",
+                    flush=True,
+                )
                 break
         self._load_state(model, best["state"])
         history_frame = pd.DataFrame(history)
         payload = {"name": name, "fingerprint": self.fingerprint,
+                   "model_config": model_config,
                    "state_dict": self._state(model), "val_logits": best["logits"],
+                   "validation_ids": self.data.validation_ids.tolist(),
                    "history": history, "classes": self.data.classes,
                    "normalisation_mean": self.data.norm_mean.tolist(),
-                   "normalisation_std": self.data.norm_std.tolist()}
+                   "normalisation_std": self.data.norm_std.tolist(),
+                   "image_target_size": self.data.config["image_target_size"]}
         self._save(payload, final_path)
         if checkpoint.exists() and not self.cfg["keep_epoch_checkpoints"]:
             checkpoint.unlink()
@@ -516,6 +620,86 @@ def load_validation_predictions(path: Path, classes) -> pd.DataFrame:
     if missing:
         raise ValueError(f"{path} is missing columns: {sorted(missing)}")
     return frame
+
+
+def random_forest_paths():
+    return (
+        TASK2_CHECKPOINT_DIR / "model_random_forest.joblib",
+        TASK2_CHECKPOINT_DIR / "model_random_forest_scores.npz",
+    )
+
+
+def save_random_forest_checkpoint(model, scores, prepared, model_config):
+    """Atomically bank an RF estimator and its aligned validation evidence."""
+    import joblib
+
+    model_path, scores_path = random_forest_paths()
+    model_tmp = model_path.with_suffix(model_path.suffix + ".tmp")
+    scores_tmp = scores_path.with_suffix(scores_path.suffix + ".tmp")
+    joblib.dump(model, model_tmp)
+    with scores_tmp.open("wb") as handle:
+        np.savez_compressed(
+            handle, fingerprint=prepared.fingerprint,
+            model_config_json=deterministic_json(model_config),
+            validation_ids=prepared.validation_ids,
+            true_indices=prepared.y_val, scores=np.asarray(scores),
+            classes=np.asarray(prepared.classes),
+        )
+    os.replace(model_tmp, model_path)
+    os.replace(scores_tmp, scores_path)
+    return model_path, scores_path
+
+
+def restore_random_forest_checkpoint(prepared, model_config):
+    """Return a compatible RF estimator and validation scores, or ``None``."""
+    import joblib
+
+    model_path, scores_path = random_forest_paths()
+    if not (model_path.exists() and scores_path.exists()):
+        return None
+    with np.load(scores_path, allow_pickle=False) as saved:
+        blob = {key: saved[key] for key in saved.files}
+    actual_config = str(np.asarray(blob.get("model_config_json", "")).item())
+    metadata = {
+        "fingerprint": str(np.asarray(blob.get("fingerprint", "")).item()),
+        "model_config": json.loads(actual_config) if actual_config else None,
+        "classes": np.asarray(blob.get("classes", [])).astype(str).tolist(),
+        "validation_ids": np.asarray(blob.get("validation_ids", [])).astype(str).tolist(),
+    }
+    try:
+        _validate_candidate(
+            metadata, fingerprint=prepared.fingerprint, model_config=model_config,
+            classes=prepared.classes, validation_ids=prepared.validation_ids,
+            path=scores_path,
+        )
+    except ValueError as error:
+        print(f"Random Forest: {error}; refitting")
+        return None
+    scores = np.asarray(blob["scores"])
+    if scores.shape != (len(prepared.y_val), len(prepared.classes)) or not np.isfinite(scores).all():
+        print("Random Forest: score checkpoint has invalid dimensions or values; refitting")
+        return None
+    return joblib.load(model_path), scores
+
+
+def load_checkpoint_candidate(name, *, fingerprint, classes, validation_ids):
+    """Normalize one completed neural checkpoint for final analysis."""
+    path = model_checkpoint_path(name)
+    if not path.exists():
+        raise FileNotFoundError(f"Missing {path}. Run its model notebook first.")
+    blob = NeuralTrainer._load(path)
+    _validate_candidate(blob, fingerprint=fingerprint, classes=classes,
+                        validation_ids=validation_ids, path=path)
+    scores = np.asarray(blob["val_logits"])
+    if scores.shape != (len(validation_ids), len(classes)) or not np.isfinite(scores).all():
+        raise ValueError(f"{path} contains invalid validation logits")
+    return {
+        "name": blob["name"], "scores": scores,
+        "validation_ids": np.asarray(blob["validation_ids"], dtype=str),
+        "classes": list(blob["classes"]), "history": blob.get("history", []),
+        "model_config": blob["model_config"], "checkpoint_path": path,
+        "scores_are_logits": True, "blob": blob,
+    }
 
 
 def extract_visual_features(image_uint8) -> np.ndarray:
