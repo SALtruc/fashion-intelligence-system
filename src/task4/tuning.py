@@ -1,6 +1,6 @@
 import optuna
 
-from src.task4.config import ARTIFACT_DIR, SEED
+from src.task4.config import HISTORY_DIR, SEED
 
 
 def suggest_parameters(trial: optuna.Trial, model_name: str):
@@ -30,7 +30,7 @@ def create_study(study_name: str):
     pruner = optuna.pruners.MedianPruner(n_startup_trials=5, n_warmup_steps=3)
     return optuna.create_study(
         study_name=study_name,
-        storage=f"sqlite:///{ARTIFACT_DIR.resolve().as_posix()}/{study_name}_optuna.db",
+        storage=f"sqlite:///{HISTORY_DIR.resolve().as_posix()}/{study_name}_optuna.db",
         direction="maximize",
         sampler=sampler,
         pruner=pruner,
