@@ -30,6 +30,8 @@ TASK2_FIGURE_DIR = TASK2_OUTPUT_DIR / "figures"
 TASK2_SPLIT_PATH = REPO_ROOT / "splits" / "task2_season_split.csv"
 TASK2_PREDICTION_PATH = REPO_ROOT / "predictions" / "task2_season_predictions.csv"
 TASK2_PREPROCESSED_DIR = REPO_ROOT / "preprocessed_datasets" / "task2"
+TASK2_METADATA_PATH = TASK2_PREPROCESSED_DIR / "task2_metadata.json"
+TASK2_BASELINE_SCORES_PATH = TASK2_PREPROCESSED_DIR / "task2_baseline_validation_scores.npz"
 
 FEATURE_CONFIG = {
     "hue_bins": 12,
@@ -150,14 +152,9 @@ def per_class_table(y_true, y_pred, classes) -> pd.DataFrame:
 
 
 def load_task2_prepared_data():
-    """Load notebook 1's fixed split, configuration, and preprocessed image arrays."""
-    import json
-    from src.preprocessing import load_manifest
-
-    config_path = TASK2_OUTPUT_DIR / "setup" / "config.json"
+    """Load Notebook 1's self-contained metadata and preprocessed arrays."""
     required = [
-        config_path,
-        TASK2_SPLIT_PATH,
+        TASK2_METADATA_PATH,
         TASK2_PREPROCESSED_DIR / "task2_deep_learning_train_images.npy",
         TASK2_PREPROCESSED_DIR / "task2_deep_learning_validation_images.npy",
         TASK2_PREPROCESSED_DIR / "task2_random_forest_train_features.npy",
@@ -169,24 +166,17 @@ def load_task2_prepared_data():
             "Run notebooks/task2/01_task2_setup.ipynb first. Missing: " + ", ".join(missing)
         )
 
-    config = json.loads(config_path.read_text())
-    split = pd.read_csv(TASK2_SPLIT_PATH, dtype={"id": str})
-    manifest = load_manifest(config["target"]).copy()
-    manifest["id"] = manifest["id"].astype(str)
-    lookup = manifest.set_index("id", drop=False)
-    train_ids = split.loc[split["split"] == "train"].sort_values("position")["id"]
-    validation_ids = split.loc[split["split"] == "validation"].sort_values("position")["id"]
-    train_frame = lookup.loc[train_ids].reset_index(drop=True)
-    validation_frame = lookup.loc[validation_ids].reset_index(drop=True)
+    config = json.loads(TASK2_METADATA_PATH.read_text())
     classes = config["classes"]
-    class_to_index = {label: index for index, label in enumerate(classes)}
+    train_frame = pd.DataFrame({"id": config["train_ids"]})
+    validation_frame = pd.DataFrame({"id": config["validation_ids"]})
     return {
         "config": config,
         "classes": classes,
         "train_frame": train_frame,
         "validation_frame": validation_frame,
-        "y_train": train_frame[config["target"]].map(class_to_index).to_numpy(),
-        "y_validation": validation_frame[config["target"]].map(class_to_index).to_numpy(),
+        "y_train": np.asarray(config["y_train"], dtype=np.int64),
+        "y_validation": np.asarray(config["y_validation"], dtype=np.int64),
         "train_images": np.load(
             TASK2_PREPROCESSED_DIR / "task2_deep_learning_train_images.npy", mmap_mode="r"
         ),
