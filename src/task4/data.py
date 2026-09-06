@@ -1,21 +1,21 @@
 import random
-from collections.abc import Iterable
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import torch
 from PIL import Image
-from torch.utils.data import BatchSampler, DataLoader, Dataset
+from pytorch_metric_learning.samplers import MPerClassSampler
+from torch.utils.data import DataLoader, Dataset
 from torchvision.transforms import Compose
 
 from src.task4.config import (
     CAE_BATCH_SIZE,
-    CLASSES_PER_BATCH,
     EVAL_BATCH_SIZE,
     IMAGE_DIR,
     IMAGES_PER_CLASS,
     LABEL_ID_COLUMN,
+    METRIC_BATCH_SIZE,
     NUM_WORKERS,
     PREFETCH_FACTOR,
     SEED,
@@ -49,49 +49,21 @@ class FashionImageDataset(Dataset):
         return {"image": output, "label": label, "id": int(row["id"])}
 
 
-class PKBatchSampler(BatchSampler):
-    def __init__(
-        self,
-        labels: Iterable[int],
-        classes_per_batch: int,
-        images_per_class: int,
-        seed: int,
-    ):
-        self.labels = np.asarray(labels, dtype=np.int64)
-        self.classes_per_batch = classes_per_batch
-        self.images_per_class = images_per_class
-        self.seed = seed
-        self.epoch = 0
-        self.class_indices = {
-            label: np.flatnonzero(self.labels == label)
-            for label in np.unique(self.labels)
-        }
-        self.batch_size = classes_per_batch * images_per_class
-        self.batch_count = max(1, len(self.labels) // self.batch_size)
+def metric_sampler(labels: pd.Series) -> MPerClassSampler:
+    """Create metric-learning batches with a fixed number of examples per class."""
+    labels_array = labels.to_numpy(dtype=np.int64)
 
-    def set_epoch(self, epoch: int):
-        self.epoch = epoch
+    samples_per_epoch = max(
+        METRIC_BATCH_SIZE,
+        (len(labels_array) // METRIC_BATCH_SIZE) * METRIC_BATCH_SIZE,
+    )
 
-    def __len__(self):
-        return self.batch_count
-
-    def __iter__(self):
-        rng = np.random.default_rng(self.seed + self.epoch)
-        available_classes = np.array(sorted(self.class_indices))
-
-        for _ in range(self.batch_count):
-            chosen_classes = rng.choice(
-                available_classes,
-                size=self.classes_per_batch,
-                replace=False,
-            )
-            batch = []
-            for label in chosen_classes:
-                choices = self.class_indices[label]
-                selected = rng.choice(choices, self.images_per_class, replace=False)
-                batch.extend(selected.tolist())
-            rng.shuffle(batch)
-            yield batch
+    return MPerClassSampler(
+        labels,
+        m=IMAGES_PER_CLASS,
+        batch_size=METRIC_BATCH_SIZE,
+        length_before_new_iter=samples_per_epoch,
+    )
 
 
 def seed_worker(worker_id: int):
@@ -148,6 +120,7 @@ def make_training_loader(
     transform = cae_transform if model_name == "cae" else metric_train_transform
     if model_name == "supcon":
         transform = make_two_view_transform(transform)
+
     dataset = FashionImageDataset(frame, image_dir, transform)
     if model_name == "cae":
         return standard_loader(
@@ -157,16 +130,12 @@ def make_training_loader(
             persistent_workers=True,
         )
 
-    sampler = PKBatchSampler(
-        frame[LABEL_ID_COLUMN],
-        CLASSES_PER_BATCH,
-        IMAGES_PER_CLASS,
-        SEED,
-    )
+    sampler = metric_sampler(frame[LABEL_ID_COLUMN])
 
     return DataLoader(
         dataset,
-        batch_sampler=sampler,
+        batch_size=METRIC_BATCH_SIZE,
+        sampler=sampler,
         **_loader_options(persistent_workers=True),
     )
 
@@ -191,34 +160,29 @@ def make_validation_loss_loader(
     metric_eval_transform: Compose,
     image_dir: str | Path = IMAGE_DIR,
 ):
-    """Build a deterministic validation loader for the model's optimization loss."""
+    """Build a P-K validation loader for the model's optimization loss."""
     if model_name == "cae":
         return make_evaluation_loader(
             model_name, frame, cae_transform, metric_eval_transform, image_dir
         )
 
-    ordered_frame = frame.sort_values("id").reset_index(drop=True)
-    eligible_frame = ordered_frame.groupby(LABEL_ID_COLUMN).filter(
+    eligible_frame = frame.groupby(LABEL_ID_COLUMN).filter(
         lambda group: len(group) >= IMAGES_PER_CLASS
     )
-    class_count = eligible_frame[LABEL_ID_COLUMN].nunique()
-    classes_per_batch = min(CLASSES_PER_BATCH, class_count)
-    if classes_per_batch < 2:
-        raise ValueError(
-            "Validation split needs at least two classes with enough images."
-        )
 
     transform = metric_eval_transform
     if model_name == "supcon":
         transform = make_two_view_transform(transform)
+
     dataset = FashionImageDataset(eligible_frame, image_dir, transform)
-    sampler = PKBatchSampler(
-        eligible_frame[LABEL_ID_COLUMN],
-        classes_per_batch,
-        IMAGES_PER_CLASS,
-        SEED,
+    sampler = metric_sampler(eligible_frame[LABEL_ID_COLUMN])
+
+    return DataLoader(
+        dataset,
+        batch_size=METRIC_BATCH_SIZE,
+        sampler=sampler,
+        **_loader_options(),
     )
-    return DataLoader(dataset, batch_sampler=sampler, **_loader_options())
 
 
 def make_model_loaders(
