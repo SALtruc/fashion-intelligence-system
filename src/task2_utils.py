@@ -45,7 +45,7 @@ FEATURE_CONFIG = {
 
 
 def ensure_task2_directories() -> None:
-    """Create only the stable directories shared by the Task 2 notebooks."""
+    """Create result directories, but never fabricate the prepared-data input folder."""
     for path in (
         TASK2_MODEL_DIR,
         TASK2_CHECKPOINT_DIR,
@@ -53,7 +53,6 @@ def ensure_task2_directories() -> None:
         TASK2_FIGURE_DIR,
         TASK2_SPLIT_PATH.parent,
         TASK2_PREDICTION_PATH.parent,
-        TASK2_PREPROCESSED_DIR,
     ):
         path.mkdir(parents=True, exist_ok=True)
 
@@ -153,6 +152,13 @@ def per_class_table(y_true, y_pred, classes) -> pd.DataFrame:
 
 def load_task2_prepared_data():
     """Load Notebook 1's self-contained metadata and preprocessed arrays."""
+    if not TASK2_PREPROCESSED_DIR.is_dir():
+        raise FileNotFoundError(
+            "Required Task 2 prepared-data folder was not found: "
+            f"{TASK2_PREPROCESSED_DIR}. Run notebooks/task2/01_task2_setup.ipynb "
+            "in this repository first, or copy the complete prepared-data folder here."
+        )
+
     required = [
         TASK2_METADATA_PATH,
         TASK2_PREPROCESSED_DIR / "task2_deep_learning_train_images.npy",
