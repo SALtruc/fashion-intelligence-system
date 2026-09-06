@@ -3,8 +3,9 @@
 Audited on 2026-09-05. After approved cleanup, this folder contains 1,158 candidate training crops
 for Task 1: 397 Eyeshadow, 384 Lipstick, and 377 Nail Polish.
 
-**Status: all 42 flags removed. Provenance and integration checks remain;
-this dataset is not yet integrated into Task 1.**
+**Status checked 6 September 2026: all 42 flags removed; versioned training manifests
+are prepared, but the current Task 1 training loader still uses supplied data only.
+Upstream provenance remains unresolved.**
 All 1,200 images received visual contact-sheet screening; flagged images were
 rechecked at larger source size and alongside the actual 60x80 padded input.
 The user-approved cleanup subsequently removed all 42 flagged images and their
@@ -133,8 +134,11 @@ details before describing the extraction as reproducible.
 
 ## Task 1 use
 
-Keep the existing supplied-only split fixed, and append accepted external rows
-to training only. No external row belongs in validation or independent evaluation.
+For an enriched model, keep the existing supplied-only split fixed and append accepted
+external rows to training only. Those rows must then be excluded from held-out evaluation.
+The recorded supplied-only model has not trained on dataset1, so the existing external
+evaluation can use it as a robustness probe for that model; see
+[the evaluation scope](../../../docs/INDEPENDENT_EVALUATION_DATA.md).
 Do not append these rows to the global manifest before calling `make_split`.
 
 | Class | Current supplied train | Current validation | Retained external candidates | Potential combined train |
@@ -145,8 +149,12 @@ Do not append these rows to the global manifest before calling `make_split`.
 
 Counts use the current audited manifest and Task 1's seed-42, 80/20 split.
 Removing all 42 flags leaves 1,158 candidates: training would increase from
-30,278 to 31,436 rows, with 7,568 validation rows unchanged. This is a proposed
-experiment; the dataset is not currently integrated.
+30,278 to 31,436 rows, with 7,568 validation rows unchanged. The preparation notebook has exported this split to
+`preprocessed_datasets/task1_dataset1/c447dd49cbcb349c/`, with ordered train/validation
+manifests, class support and hash metadata. Training adoption and measured enrichment
+results remain pending. Run [00_prepare_dataset1.ipynb](../00_prepare_dataset1.ipynb)
+for validation/export and its source-aware loading example; do not split its training
+export again or replace the global EDA manifest.
 
 The three classes have only eight validation examples combined. Report their
 support and individual scores; a change on one image can substantially move

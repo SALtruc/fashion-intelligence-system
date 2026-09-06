@@ -40,8 +40,6 @@ COMBINE_ONLY = [
     TITLE,
     'ablation = pd.concat([r for r in RESULTS if r["Model"].iloc[0].startswith("3")]',
     "single_plain = predict_probabilities(",
-    "### 7.7 Reading Run A: The Localised-Detail Pairs",
-    "READOUT_PAIRS = [",
     "# --- Reproduction check ---",
     "progress = pd.concat(RESULTS, ignore_index=True)",
 ]
@@ -68,13 +66,6 @@ JOBS = {
             "decoupled = build_decoupled(resnet)",
         ],
     ),
-    "logit_adjusted": (
-        "Ablation - logit-adjusted ResNet",
-        [
-            "### 6.3 Ablation: Which Change Paid?",
-            'if wanted("logit_adjusted"):',
-        ],
-    ),
     "seeds": (
         "Seed variance study (all three seeds)",
         [
@@ -87,15 +78,6 @@ JOBS = {
     # a job at all, because the cnn and resnet workers already produce exactly those weights.
     "seeds_1337": ("Seed variance study (seed 1337)", []),
     "seeds_2024": ("Seed variance study (seed 2024)", []),
-    "phase2": (
-        "Phase 2 - multi-task ResNet",
-        [
-            'if RUN_PHASE2 and wanted("phase2"):',
-            # Phase-2 commentary. The hand-derived workers filed this with lrsearch, which
-            # is how it reached the machine that cannot act on it and not the one that can.
-            "#### On `P2_FINER_MAP`, and What It Would and Would Not Show",
-        ],
-    ),
     "sweep": (
         "Stage-2 sampler sweep",
         [
@@ -103,37 +85,58 @@ JOBS = {
             "RUN_SAMPLER_SWEEP = True",
         ],
     ),
+    "hogsearch": (
+        "HOG + SVM regularisation grid",
+        ["# --- Grid 1: HOG + linear SVM, regularisation x class weighting"],
+    ),
+    "cnnsearch": (
+        "CNN learning-rate x weight-decay grid",
+        ["# --- CNN: learning rate x weight decay"],
+    ),
+    "stage2grid": (
+        "Stage-2 learning-rate x sampler grid",
+        ["# --- Grid 4: stage-2 learning rate x sampler strength"],
+    ),
     "lrsearch": (
         "Learning-rate search (CNN + ResNet)",
         [
-            "## 7.9 Learning-Rate Search",
-            "# --- Learning-rate search over the two non-baseline models",
-            "if RUN_LR_SEARCH and (COMBINE or wanted(",
+            "## 7.9 Hyper-parameter Search",
+            "# --- ResNet: learning rate x weight decay",
         ],
     ),
 }
 
-# Wall time per job, measured from the recorded run stored in the combine notebook's outputs
-# (the `... this session` lines) rather than estimated. That run was throttled to a 65% duty
-# cycle -- the throttle has since been removed and every machine now runs flat out -- and the
-# same work varied by up to 2x within it from contention, so these are the right order of
-# magnitude and a reliable ranking rather than precise figures.
+# Wall time per job, derived from the one executed run this repository still holds:
+# notebooks/Task1/executed_run_2026-09-06/. Those notebooks ran on Apple Silicon (MPS, fp32,
+# no AMP and no on-device cache), so read these as a reliable *ranking* and an order of
+# magnitude, not as CUDA figures -- a mid-range CUDA card with AMP is materially faster.
+# Re-measure on the target hardware before scheduling against them.
+#
+# The three measured per-epoch costs everything below is built from:
+#     CNN backbone     14 s/epoch      ResNet backbone   96 s/epoch
+#     stage-2 head     28 s/epoch      liblinear SVM    159 s/fit
+# The HOG descriptor itself is 3 s for the whole training set and is not worth modelling.
+#
+# Nothing here is hashed. Throttling with `hardware` changes wall time, not the recipe.
 RUNTIMES = {
-    "hog_svm": "~4 min",           # restored in the recorded run; not measured
-    "cnn": "~7 min",               # 421 s
-    "resnet": "~41 min",           # 2356 s stage 1, plus stage 2
-    "logit_adjusted": "~35 min",   # 2122 s
-    "phase2": "~27 min",           # 1471 s stage 1, plus stage 2
-    "sweep": "~8 min",             # 5 heads x 10 epochs, frozen backbone
-    "lrsearch": "~56 min",         # never run; 6 arms x 15 epochs at the measured epoch cost
-    # The seed figures are the recorded run's own per-seed lines, which is why they differ so
-    # much: seed 2024's backbone took 1850 s against seed 1337's 1249 s for the same work.
-    "seeds": "~64 min",            # 1587 s (seed 1337) + 2268 s (seed 2024), with the seed-42
-                                   # checkpoints copied in. Without them the job also retrains
-                                   # seed 42, which is the other ~49 min of the ~113 min the
-                                   # recorded run spent here. See PREREQUISITES.
-    "seeds_1337": "~27 min",       # 226 s CNN + 1249 s ResNet + 112 s stage-2 head
-    "seeds_2024": "~38 min",       # 227 s CNN + 1850 s ResNet + 191 s stage-2 head
+    "hog_svm": "~3 min",           # 3 s descriptor + 159 s liblinear
+    "cnn": "~9 min",               # 552 s measured
+    "resnet": "~64 min",           # 3580 s stage 1 measured + 10 x 28 s stage-2 head
+    "sweep": "~23 min",            # 5 heads x 10 epochs x 28 s, frozen backbone
+    "lrsearch": "~115 min",        # 6 arms x 12 epochs x 96 s
+    # The seed figures are the recorded run's own per-seed lines. seed 1337's backbone took
+    # 3859 s against seed 2024's 3577 s for the same work, which is contention, not the seed.
+    "seeds": "~152 min",           # the two jobs below, with the seed-42 checkpoints copied
+                                   # in. Without them this job also retrains seed 42, which is
+                                   # a further ~64 min the combine machine then discards.
+                                   # See PREREQUISITES.
+    "seeds_1337": "~78 min",       # 552 s CNN + 3859 s ResNet + 280 s stage-2 head
+    "seeds_2024": "~73 min",       # 552 s CNN + 3577 s ResNet + 280 s stage-2 head
+    # The four tuning grids, 6 arms each. The two backbone grids run a reduced 12-epoch
+    # budget, so their cost is 6 x 12 x the per-epoch time of the architecture under test.
+    "hogsearch": "~16 min",        # 6 liblinear fits; the descriptor is computed once
+    "cnnsearch": "~17 min",        # 6 arms x 12 epochs x 14 s
+    "stage2grid": "~28 min",       # 6 arms x 10 epochs x 28 s, frozen backbone
 }
 
 
@@ -149,6 +152,14 @@ RUNTIMES = {
 # only thing the operator of that machine reads before starting an hour of work. Stating it
 # in a comment inside the cell that needs the file is too late.
 PREREQUISITES = {
+    "stage2grid": (
+        "hard",
+        {"model_resnet_stage1.pt": "resnet"},
+        "This job trains no backbone. Each of its six arms attaches a fresh stage-2 head to the "
+        "banked Section 6 stage-1 ResNet, so without that file it stops on an assertion having "
+        "done nothing. Pair it onto the resnet machine as JOB_FILTER = {\"resnet\", "
+        "\"stage2grid\"} if copying the checkpoint in first is inconvenient.",
+    ),
     "sweep": (
         "hard",
         {"model_resnet_stage1.pt": "resnet"},
@@ -182,26 +193,45 @@ PREREQUISITES = {
 # Spelled in full: an abbreviation is only unique until the history grows into it.
 LEGACY_REVISION = "cd44bc8f16c5e9676edbd57b40ac86887fbb6a5d"
 
-# Only these seven existed at LEGACY_REVISION. sweep, seeds_1337 and seeds_2024 were born
-# generated, so there is no hand-derived file for them to be checked against.
-LEGACY_JOBS = ["hog_svm", "cnn", "resnet", "logit_adjusted", "seeds", "phase2", "lrsearch"]
+# Only these five existed at LEGACY_REVISION. sweep, seeds_1337, seeds_2024, hogsearch,
+# cnnsearch and stage2grid were born generated, so there is no hand-derived file to check
+# them against.
+LEGACY_JOBS = ["hog_svm", "cnn", "resnet", "seeds", "lrsearch"]
 
-# The legacy layout differs from JOBS in where the P2_FINER_MAP note sits, in the two
-# trailing cells the workers still carry, and in one anchor: `wanted_seeds` did not exist
-# yet, so at that revision the seed cell opened with the plain `wanted` call.
-LEGACY_P2_NOTE_OWNER = "lrsearch"
+# The legacy layout differs from JOBS in the two trailing cells the workers still carry, and
+# in two jobs' anchors. `wanted_seeds` did not exist yet, so the seed cell opened with the
+# plain `wanted` call; and Section 7.9 was a learning-rate search over both architectures in
+# one cell rather than the four separate grids it is now.
 LEGACY_TRAILING = [
     "#### A Note on the Predicted Distribution",
     "## 10. Decision Log, Limitations, and What to Tune Next",
 ]
 LEGACY_ANCHORS = {
     "seeds": ["## 7. Seed Variance", 'if wanted("seeds"):'],
+    "lrsearch": [
+        "## 7.9 Learning-Rate Search",
+        "# --- Learning-rate search over the two non-baseline models",
+        'if RUN_LR_SEARCH and (COMBINE or wanted("lrsearch")):',
+    ],
 }
 
-# Sections that are a job now but were combine-only then. Without these the sweep section,
-# whose job did not exist at LEGACY_REVISION, is unowned in legacy mode and falls through to
-# the spine, which would put it in all seven hand-derived workers and fail the gate.
+# The hand-derived worker_lrsearch carried the P2_FINER_MAP note, which sits immediately above
+# Section 7.9 and was cut along with it. Naming the owner here rather than leaving the note
+# unowned is what keeps it out of the other four workers.
+LEGACY_P2_NOTE_OWNER = "lrsearch"
+
+# Sections that were combine-only at LEGACY_REVISION and are a job, or gone, now. Without
+# these they are unowned in legacy mode and fall through to the spine, which would put them
+# in all five hand-derived workers and fail the gate.
+#
+# The 6.3 ablation and the whole of Phase 2 (7.6/7.7) have since been removed from the
+# notebook, so they exist only here; the sampler sweep became the `sweep` job.
 LEGACY_COMBINE_ONLY = [
+    "### 6.3 Ablation: Which Change Paid?",
+    'if wanted("logit_adjusted"):',
+    'if RUN_PHASE2 and wanted("phase2"):',
+    "### 7.7 Reading Run A: The Localised-Detail Pairs",
+    "# --- Run A readout: the pairs the hypothesis is about",
     "### 7.8 Sampler Strength: A Sweep Rather Than a Second Full Model",
     "# --- Stage-2 sampler sweep on the banked Section 6 backbone",
 ]

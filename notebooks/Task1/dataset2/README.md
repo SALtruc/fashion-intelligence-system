@@ -1,6 +1,6 @@
 # Dataset2: external cosmetics training candidates
 
-## Current review status (2026-09-05)
+## Review status (audited 2026-09-05; documentation checked 2026-09-06)
 
 **Not ready for direct integration.** Visual screening of all 699 images flagged
 148 candidates (21.2%): 105 questionable labels and 43 poor crops. These are
@@ -86,8 +86,12 @@ and 7,568 validation rows. The previous README's 27,596-row training denominator
 29,495-row combined total, and macro-F1 ceiling figures describe another setup
 and should not be reused for this repository.
 
-Both batches remain external training candidates. They are not independent
-evaluation sets, and no `ExternalEval/` directory is supplied here.
+Dataset2 remains a training candidate requiring curation and is currently used by
+[02_independent_evaluation.ipynb](../02_independent_evaluation.ipynb) as a robustness
+probe for the supplied-only ensemble. Dataset1 has prepared enriched training manifests,
+but the current training loader uses neither collection. Held-out status is model-specific:
+exclude any collection used to train the model being evaluated. No `ExternalEval/`
+directory is supplied here. See [evaluation scope](../../../docs/INDEPENDENT_EVALUATION_DATA.md).
 Additional support can help rare classes but does not prove improved accuracy.
 Compare against a supplied-only baseline using the same validation rows.
 

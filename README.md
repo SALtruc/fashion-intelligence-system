@@ -1,112 +1,133 @@
 # Machine Learning Assignment 2 — Fashion Intelligence System
 
 COSC2753 Machine Learning · Assignment 2 (2026B) · RMIT
-**Due: Sat 12 Sep 2026, 23:59 (Canvas)** — worth 40% of the course.
 
-## Repo structure
+Documentation checked against the local source and artifacts on **6 September 2026**.
+Submission requirements and outstanding deliverables are in [SUBMISSION.md](SUBMISSION.md).
 
-```
-datasets/         # FashionDataset (train 38,617 rows / test 5,829 images) — share via Drive
-models/           # model weights (gitignored) — share via Drive
-notebooks/        # eda.ipynb, task1_*.ipynb ... task4_*.ipynb
-src/              # shared code: data loading, split, metrics
-splits/           # fixed stratified train/val split — EVERYONE evaluates on this
-predictions/      # prediction CSVs in styles_prediction.csv format
-```
+## Current state
 
-## Ground rules
+| Component | Entry point | Status |
+|---|---|---|
+| EDA and preprocessing | [00_eda_and_preprocessing.ipynb](notebooks/00_eda_and_preprocessing.ipynb) | Audits raw data and exports the shared manifest |
+| Task 1: article type | [01_task1_article_type.ipynb](notebooks/Task1/01_task1_article_type.ipynb) | Current training, comparison, ensemble and prediction workflow |
+| Dataset1 preparation | [00_prepare_dataset1.ipynb](notebooks/Task1/00_prepare_dataset1.ipynb) | Versioned enriched manifests prepared; training still uses supplied data only |
+| External evaluation | [02_independent_evaluation.ipynb](notebooks/Task1/02_independent_evaluation.ipynb) | Evaluates the recorded supplied-only three-seed ensemble |
+| Tasks 2–4 and final prediction | `notebooks/02_*`, `03_*`, `04_*`, `05_*` | Empty placeholder files; not runnable |
 
-1. **Datasets are NOT committed** (gitignored) — share via Drive.
-2. **Evaluate on the shared split in `splits/`** — never make your own val split, or results aren't comparable.
-3. **Metrics: macro-F1 + accuracy + confusion matrix** (data is heavily imbalanced — accuracy alone lies).
-4. **No pretrained weights** in submitted models (ImageNet etc. only allowed for comparison).
-5. **Model weights are NOT committed** (gitignored) — share via Drive.
-6. Log every experiment in the shared experiments sheet so it can go in the report comparison table.
-7. Prediction files must keep the exact `styles_prediction.csv` format: `id,gender,articleType,season,usage`.
+`notebooks/01_task1_article_type_classification.ipynb` is also empty. The older Colab
+edition has been removed: it carried a separate upload workflow and mirrored neither the
+current combine notebook nor the worker layout.
 
-## Setup
+The saved Task 1 results report **0.8010 macro-F1** and **0.8936 accuracy** for the
+three-seed ensemble with horizontal-flip TTA. These are recorded supplied-only results,
+not results from dataset1 enrichment or the newer tuning grids. The
+[Task 1 report draft](docs/REPORT_TASK1.md) explains the evidence and its limits.
 
-Clone the repository and change into the project directory:
+## Setup and data
 
-```bash
-git clone https://github.com/SALtruc/Machine-Learning-Assignment-2.git
-
-cd Machine-Learning-Assignment-2
-```
-
-Before setting up the project, make sure [`uv`](https://docs.astral.sh/uv/getting-started/installation/) is installed globally and available on your `PATH`:
+From the project root, with `uv` installed:
 
 ```bash
-# macOS/Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Windows PowerShell
-irm https://astral.sh/uv/install.ps1 | iex
-```
-
-Verify the installation, then run the following from the repository root. This creates `.venv` and installs the locked dependencies:
-
-```bash
-uv --version
 uv sync --frozen
-```
-
-## Run the finalized EDA
-
-Before running the notebook, confirm the training dataset has this structure:
-
-```text
-datasets/
-└── train/
-    ├── styles_train.csv
-    └── images_train/
-        ├── 1163.jpg
-        └── ...
-```
-
-### Run interactively
-
-Start Jupyter Notebook from the repository root:
-
-```bash
 uv run jupyter notebook
 ```
 
-Open `notebooks/00_eda_and_preprocessing.ipynb`, select the project's `.venv` kernel if
-prompted, then choose **Kernel → Restart Kernel and Run All Cells**. Press
-`Ctrl+S` to save the cell outputs in the notebook.
+`pyproject.toml` requires **Python 3.12.0**. The lockfile selects dependencies; the default
+dev group includes `pyflakes` for worker checks. Linux and Windows use the explicit
+PyTorch CUDA 12.8 index; macOS uses the default package source. The training notebook
+selects CUDA, then Apple Silicon MPS, then CPU.
+Full training requires CUDA or MPS under the default `ALLOW_CPU = False`.
+AMP, channels-last layout and the on-device image cache are CUDA-only paths. `QUICK_RUN = True`
+enables a reduced CPU smoke run, whose metrics must not be used in the report.
 
-The image validation and duplicate-detection sections process approximately
-38,000 images, so a complete run may take several minutes.
+Place the course-provided data as follows; retain the raw files unchanged:
 
-### Run from the command line
-
-To execute every cell in a fresh kernel and save the outputs to a separate
-notebook, run the following from the repository root.
-
-Windows PowerShell:
-
-```powershell
-uv run jupyter nbconvert `
-  --to notebook `
-  --execute "notebooks\00_eda_and_preprocessing.ipynb" `
-  --output "00_eda_and_preprocessing_executed.ipynb" `
-  --ExecutePreprocessor.timeout=-1
+```text
+datasets/train/styles_train.csv
+datasets/train/images_train/<id>.jpg
+datasets/test/styles_prediction.csv
+datasets/test/images_test/<id>.jpg
 ```
 
-macOS or Linux:
+See [datasets/README.md](datasets/README.md) for counts and path details.
+
+## Run order
+
+1. Run `notebooks/00_eda_and_preprocessing.ipynb` top to bottom. It writes
+   `preprocessed_datasets/train_manifest.csv`; share this exact manifest across machines.
+2. Run `notebooks/Task1/01_task1_article_type.ipynb` top to bottom on the training machine.
+   That is ~7 hours of training on one machine. To split it, follow the
+   [worker guide](notebooks/Task1/PARALLEL_RUN.md) — it carries machine setup, a per-job
+   resource profile and ready-made schedules for two to five machines (four machines reaches
+   the ~115-minute floor; a fifth adds nothing) — then run this notebook in combine mode
+   (`JOB_FILTER = None`, `RESUME = True`). Missing compatible checkpoints cause training to
+   run again.
+3. Run `notebooks/Task1/02_independent_evaluation.ipynb` with the three supplied-only
+   ensemble checkpoints present. Its fixed ensemble must match the model being reported.
+4. Complete Tasks 2–4 and the final prediction workflow before submission.
+
+To execute EDA from a shell and retain a separate executed notebook:
 
 ```bash
-uv run jupyter nbconvert \
-  --to notebook \
-  --execute notebooks/00_eda_and_preprocessing.ipynb \
-  --output 00_eda_and_preprocessing_executed.ipynb \
-  --ExecutePreprocessor.timeout=-1
+uv run jupyter nbconvert --to notebook --execute notebooks/00_eda_and_preprocessing.ipynb --output 00_eda_and_preprocessing_executed.ipynb --ExecutePreprocessor.timeout=-1
 ```
 
-The executed notebook is saved as
-`notebooks/00_eda_and_preprocessing_executed.ipynb`. If execution immediately raises a
-`FileNotFoundError`, verify that `datasets/train/styles_train.csv` and
-`datasets/train/images_train/` exist.
+The output is written beside the source notebook. A complete audit decodes about 38,000 images.
 
-> Dataset is for educational use in this course only. Keep this repo **private**.
+## Data and result contract
+
+- Shared code is in [src/preprocessing.py](src/preprocessing.py). Images are converted to RGB,
+  resized with preserved aspect ratio and white padding to **60 × 80 (width × height)**.
+- EDA does not create a universal split. Each task filters its target and calls `make_split`;
+  all models for that target must use the same seed, eligible rows and group-aware split.
+  Task 1 uses 30,278 training and 7,568 validation rows; 110 of 124 classes are scoreable.
+  `splits/` is currently a placeholder.
+- Fit normalization and class weights on training rows; augment training only. Use macro-F1,
+  accuracy and class-level diagnostics. Submitted models use no pretrained weights.
+- Dataset1's prepared export has 31,436 training rows and the same 7,568 validation rows.
+  Adoption requires loader and checkpoint-identity changes; see the
+  [pipeline guide](docs/SUGGESTED_PIPELINE.md). It must then be excluded from held-out evaluation.
+
+## Files to retain
+
+| Location | Contents |
+|---|---|
+| `models/task1/` | Exported model, classes, config, results and checkpoints |
+| `models/task1/runs/` | Historical worker result CSVs |
+| `models/task1/checkpoints_invalid/` | Quarantined invalid sweep checkpoints; never use for inference |
+| `predictions/` | Task 1 prediction CSV and test logits — the submission deliverable |
+| `outputs/figures/` | Report figures |
+| `preprocessed_datasets/` | Global EDA manifest and optional versioned dataset1 exports |
+| `artifacts/`, `splits/` | Reserved locations; current Task 1 uses the paths above |
+
+The combine notebook writes `predictions/task1_predictions.csv`: 5,829 rows with only
+`articleType` filled. The final file must preserve the template's IDs, order and header
+`id,gender,articleType,season,usage`, with all four targets completed. An older copy from a
+superseded notebook revision is still present at `outputs/task1_predictions.csv`; it is not
+the current output path.
+
+The current `.gitignore` excludes raw dataset CSV/JPEG files, preprocessed CSV/JPEG files
+and artifact contents (except README and `.gitkeep` files). **It does not exclude `models/`,
+`outputs/`, `predictions/`, or the external image collections.** Not being excluded is not the
+same as being committed: the external image collections are tracked, while `models/` and
+`outputs/` are not. Run `git status` before assuming an archive contains them. Keep the course
+data private and supply required files through the agreed submission route.
+
+## Documentation and checks
+
+- [Current models and remaining candidates](docs/SUGGESTED_MODEL.md)
+- [Pipeline and reproduction contract](docs/SUGGESTED_PIPELINE.md)
+- [External data audit](docs/EXTERNAL_DATA_AUDIT.md)
+- [Independent evaluation scope and provenance](docs/INDEPENDENT_EVALUATION_DATA.md)
+- [Artifact handover](artifacts/README.md)
+
+```bash
+uv run python scripts/check_task1_workers.py --strict
+uv run python scripts/make_task1_workers.py --check
+```
+
+Both commands validate the current workers without training. `--strict` also runs the
+optional `--legacy` gate, which reproduces the five hand-derived workers from the pinned
+revision `cd44bc8f16c5` and so needs repository history. It is skipped, not failed, where
+that history is absent.

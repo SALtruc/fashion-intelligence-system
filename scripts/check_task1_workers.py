@@ -19,17 +19,22 @@ report "unchanged" for a notebook that had gained or lost a key -- the one chang
 certain to invalidate every checkpoint on disk. 4b is skipped if 4a fails, since a hash
 rebuilt from a payload that no longer matches proves nothing.
 
+  6. legacy      the derivation rule still reproduces the hand-derived workers from the
+                  pinned revision, byte for byte
+
+Checks 1 to 5 test the notebooks as they stand; check 6 tests the rule that produced them.
+It is delegated to `make_task1_workers.py --legacy` rather than reimplemented, so there is
+one implementation of the gate. It needs the repository history and is skipped, with a note,
+where that is unavailable -- under --strict a skip is a failure, because a gate that silently
+does not run is worse than no gate. That is not hypothetical: this gate sat broken for
+several notebook revisions precisely because nothing invoked it.
+
 Plus a non-fatal layout report: which cells each worker holds against what
-task1_layout.JOBS says it should. Run with --strict to make that fatal too, and to make
-a missing pyflakes a failure rather than a skipped check 3.
+task1_layout.JOBS says it should. Run with --strict to make that fatal too, to make
+a missing pyflakes a failure rather than a skipped check 3, and to make a skipped check 6
+a failure.
 
     python scripts/check_task1_workers.py [--strict]
-
-This checks the notebooks as they stand. The separate question of whether the derivation
-rule in task1_layout is the right one is answered by the generator's own gate, which
-reproduces the hand-derived workers from a pinned revision:
-
-    python scripts/make_task1_workers.py --legacy
 
 Exit status is 0 when every check passes.
 """
@@ -319,6 +324,42 @@ def check_layout(combine, workers, strict):
             ok(f"{path.name}: {len(held)} cells match")
 
 
+# --- 6. legacy gate ----------------------------------------------------------------------
+def check_legacy(strict):
+    """Run the generator's own gate: does the derivation rule reproduce the hand-derived files?
+
+    Delegated rather than reimplemented. Checks 1-5 all read task1_layout, so a rule that had
+    quietly drifted would be confirmed by every one of them; this is the only check that
+    compares it against something written before it existed.
+    """
+    print("\n[6] derivation rule against the hand-derived workers")
+    generator = Path(__file__).resolve().parent / "make_task1_workers.py"
+    result = subprocess.run([sys.executable, str(generator), "--legacy"],
+                            capture_output=True, text=True,
+                            cwd=str(Path(__file__).resolve().parent.parent))
+    output = (result.stdout + result.stderr).strip()
+
+    if result.returncode == 0:
+        same = sum(1 for line in result.stdout.splitlines() if line.strip().startswith("same"))
+        ok(f"{same} hand-derived worker(s) reproduced byte for byte "
+           f"from {layout.LEGACY_REVISION[:12]}")
+        return
+
+    # A missing revision is an unavailable gate, not a broken rule: a source-only archive has
+    # no history to compare against. Anything else is the gate reporting what it exists for.
+    unavailable = "does not exist at" in output or "not a git repository" in output
+    tail = output.splitlines()[-1] if output else f"exit {result.returncode}"
+    if unavailable:
+        message = f"legacy gate could not run (no history for {layout.LEGACY_REVISION[:12]})"
+        if strict:
+            fail(message)
+        else:
+            print(f"  skip  {message}")
+            notes.append(message + "; rerun from a full checkout")
+    else:
+        fail(f"legacy gate failed: {tail}")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--strict", action="store_true",
@@ -347,6 +388,7 @@ def main():
     else:
         print("  skip  a hash rebuilt from a drifted payload proves nothing")
     check_layout(combine, workers, args.strict)
+    check_legacy(args.strict)
 
     print()
     for note in notes:

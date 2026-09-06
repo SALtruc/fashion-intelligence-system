@@ -4,6 +4,19 @@ Audit date: 2026-09-05. This report covers the actual files in
 `notebooks/Task1/dataset1/` and records the earlier dataset2 visual screening.
 It does not report a training experiment or measured improvement in accuracy.
 
+## Status update — 6 September 2026
+
+The visual and technical findings below remain the 5 September audit record.
+[00_prepare_dataset1.ipynb](../notebooks/Task1/00_prepare_dataset1.ipynb) has since produced
+version `c447dd49cbcb349c` with 31,436 training rows and 7,568 unchanged validation rows.
+The current training notebook and workers still use the supplied-only manifest; prepared
+exports do not establish a trained enriched model or an accuracy improvement.
+
+Both collections appear in the recorded supplied-only model's external evaluation.
+If dataset1 is adopted for training, it must be removed from that model's held-out evaluation.
+See [the evaluation scope](INDEPENDENT_EVALUATION_DATA.md) and
+[the current pipeline](SUGGESTED_PIPELINE.md).
+
 ## Current cleanup status
 
 On 2026-09-05, all 42 flagged dataset1 images and their CSV rows were removed
@@ -168,11 +181,11 @@ After removing the 42 flags, these dataset1 candidate additions remain:
 | Lipstick | 12 | 3 | 384 | 396 |
 | Nail Polish | 15 | 4 | 377 | 392 |
 
-This would give 31,436 training rows. No integration or training has been
-performed. Only eight validation examples cover these three classes, limiting
+The prepared export contains 31,436 training rows. Integration into the training
+loader and an enriched training experiment remain pending. Only eight validation examples cover these three classes, limiting
 the strength of any per-class improvement claim.
 
-Before integration:
+Before adopting the prepared manifests for training:
 
 - Preserve the supplied dataset and audited manifest. Append accepted external
   rows only after the original Task 1 split is frozen.
@@ -200,7 +213,7 @@ The updated dataset1 README replaces inaccurate size/schema claims and totals
 from another split, removes commands for absent scripts, and distinguishes old
 leakage PASS records from current visual quality. Its source/licence claims are
 identified as inherited and unverified. No independent ExternalEval directory
-or successful integration is claimed.
+or completed enriched training run is claimed.
 
 The original provenance notes and leakage files do not demonstrate 1,200 unique
 products, fully reproducible extraction, current model gains, or suitable labels

@@ -1,96 +1,56 @@
-# Artifacts
+# Artifact locations and handover
 
-This folder holds **generated, reproducible-by-reference files** that are needed
-to run, evaluate, or hand over a model, but are normally too large or too
-frequently replaced to store in Git. The folder contents are ignored by Git;
-share the actual files through the team's agreed Drive location instead.
+Checked 6 September 2026. This directory is reserved for task artifacts. Current Task 1
+writes to **`models/task1/`, `predictions/` and `outputs/figures/`**, so copying `artifacts/`
+alone is insufficient.
 
-Keep artifacts separated by task:
+| Location | What to retain |
+|---|---|
+| `models/task1/task1_model.pt` | Exported model, ensemble member weights, class order, normalization, configuration and inference settings |
+| `models/task1/task1_classes.json` | Readable class-index mapping |
+| `models/task1/task1_config.json` | Recorded training and runtime configuration |
+| `models/task1/task1_results.csv` | Saved comparison table; includes historical experiments |
+| `models/task1/task1_seed_study.csv` | Saved seed study |
+| `models/task1/task1_lr_search.csv` | Historical learning-rate search, distinct from current grid outputs |
+| `models/task1/checkpoints/` | Per-job model banks and resumable epoch files |
+| `models/task1/runs/` | Historical per-machine result tables |
+| `predictions/task1_predictions.csv` | Partial submission: articleType only |
+| `predictions/task1_test_logits.npy` | Stored test scores |
+| `outputs/figures/` | Exported report figures |
+| `preprocessed_datasets/train_manifest.csv` | Shared EDA input to target-specific splits |
 
-```text
-artifacts/
-├── task1/
-├── task2/
-├── task3/
-└── task4/
-```
+The combine notebook exports every ensemble member. Its representative `state_dict` alone
+is not the ensemble: inference averages member/view softmax probabilities, including the
+horizontal mirror when enabled, before selecting a class. Keep the recorded class order,
+normalization, image size and inference settings with the weights.
 
-## What belongs here
+The independent evaluation notebook loads three files from `models/task1/checkpoints/`:
+`model_resnet_decoupled.pt`, `model_seed_resnet___decoupled_1337.pt`, and
+`model_seed_resnet___decoupled_2024.pt`. It does not load the export as a generic selected model.
+Do not copy files from `checkpoints_invalid/` into the active directory.
 
-Examples include:
+## Reproducible handover
 
-- preprocessing/tokeniser/label-encoder configs and fitted transformers
-- exported inference pipelines (`.json`, `.pkl`, `.joblib`)
-- trained model checkpoints and weights (`.pt`, `.pth`, `.keras`, `.h5`)
-- NumPy arrays such as embeddings, feature matrices, or cached predictions (`.npy`, `.npz`)
-- experiment metadata, training history, and evaluation results (`.json`, `.csv`, `.yaml`)
+Include the source notebooks/scripts, `pyproject.toml`, `uv.lock`, the exact audited manifest,
+raw-data access, model files and their companion metadata. Record the source revision,
+hardware/runtime settings, seed, split parameters, class mapping and measured scores. The
+revision is recoverable: this is a Git working tree, so record the commit the run was made
+from rather than an invented identifier, and note whether the tree was dirty.
 
-Do **not** put source code, raw datasets, notebooks, or final prediction CSVs
-here; those have their own repository locations.
+Task 1's supplied-only fingerprint is `e6b15f5c51de` for the recorded data and recipe.
+It hashes selected configuration/data summaries, not every image byte or runtime option.
+Matching fingerprints are necessary for reuse but do not prove full data identity or valid
+training; the quarantined sweep files demonstrate that limitation.
 
-## Naming and versioning
+Prepared dataset1 exports are a different data contract. Retain their versioned manifests,
+metadata and external images, and establish a separate enriched-run identity before training.
+See [the pipeline guide](../docs/SUGGESTED_PIPELINE.md).
 
-Use descriptive, lowercase names. Include the task, model/preprocessing name,
-split or dataset version, and a version or timestamp when it helps distinguish
-experiments.
+## Ignore rules
 
-```text
-task2/resnet18_v3_best.pth
-task2/resnet18_v3_preprocessing.json
-task2/resnet18_v3_label_encoder.joblib
-task2/resnet18_v3_metrics.json
-task3/tfidf_word_1-2gram_v1.joblib
-```
-
-Use `best` only for the checkpoint selected by the agreed validation metric.
-Avoid vague names such as `model_final.pth`, `new.pkl`, or `test.npy`.
-
-## Required handover information
-
-For every model or pipeline shared in Drive, add a small matching metadata file
-(for example, `resnet18_v3_metadata.json`). At minimum record:
-
-```json
-{
-  "artifact": "resnet18_v3_best.pth",
-  "task": "task2",
-  "created_at": "2026-09-02",
-  "git_commit": "<commit SHA>",
-  "dataset_version": "<dataset/checksum or description>",
-  "split": "splits/<shared split file>",
-  "preprocessing": "resnet18_v3_preprocessing.json",
-  "labels": "resnet18_v3_label_encoder.joblib",
-  "framework": "PyTorch <version>",
-  "validation_metrics": {"macro_f1": 0.0, "accuracy": 0.0},
-  "notes": "Training command, seed, and any important assumptions."
-}
-```
-
-The `git_commit`, split, preprocessing configuration, and label mapping are
-essential: weights alone are not a reproducible model. Use the shared
-stratified split in `splits/` when reporting validation results.
-
-## Sharing checklist
-
-Before asking another teammate to use an artifact:
-
-1. Upload the artifact and its metadata to the matching Drive/task folder.
-2. Confirm the metadata names every required companion file.
-3. Test loading it in a clean session using the recorded preprocessing and
-   labels.
-4. Record macro-F1 and accuracy, plus the experiment details, in the shared
-   experiments sheet.
-5. Tell the team which file is the current recommended checkpoint; do not
-   delete older files until the replacement has been verified.
-
-## Safety and size
-
-- Never commit artifact binaries to this repository; `.gitignore` deliberately
-  excludes them.
-- Do not open `.pkl` or `.joblib` files from untrusted sources: they can execute
-  code during loading. Only load files created by the team or a trusted source.
-- Prefer portable formats where practical: JSON for configuration and label
-  mappings, and framework-native state dictionaries/weights over a pickled
-  whole model.
-- Keep secrets (API keys, tokens, personal paths, credentials) out of configs,
-  notebooks, metadata, and artifacts.
+`.gitignore` excludes `artifacts/**` except directories, `.gitkeep` and README files. It also
+excludes raw/preprocessed dataset CSV/JPEG files. It does **not** currently exclude `models/`
+or `outputs/`, and does not exclude `predictions/`. Check actual inclusion before sharing an
+archive; a path's presence here does
+not establish its Git tracking status. Keep large files in the agreed private handover and
+include the final models required by the assignment submission.
