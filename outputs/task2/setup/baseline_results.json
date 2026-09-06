@@ -1,0 +1,18 @@
+[
+  {
+    "Model":"Baseline: majority class",
+    "Top-1 accuracy":0.493259318,
+    "Macro-F1":0.1651619756,
+    "Balanced accuracy":0.25,
+    "Weighted F1":0.3258707337,
+    "Top-2 accuracy":0.6875495638
+  },
+  {
+    "Model":"Baseline: stratified random",
+    "Top-1 accuracy":0.35395189,
+    "Macro-F1":0.2506576999,
+    "Balanced accuracy":0.2506410234,
+    "Weighted F1":0.3541768882,
+    "Top-2 accuracy":0.7644726408
+  }
+]
