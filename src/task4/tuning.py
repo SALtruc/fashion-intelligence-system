@@ -1,16 +1,12 @@
 import optuna
 
-from src.task4.config import OPTUNA_DB, SEED
+from src.task4.config import ARTIFACT_DIR, SEED
 
 
 def suggest_parameters(trial: optuna.Trial, model_name: str):
     parameters = {
-        "learning_rate": trial.suggest_float(
-            "learning_rate", 1e-5, 3e-3, log=True
-        ),
-        "weight_decay": trial.suggest_float(
-            "weight_decay", 1e-6, 1e-3, log=True
-        ),
+        "learning_rate": trial.suggest_float("learning_rate", 1e-5, 3e-3, log=True),
+        "weight_decay": trial.suggest_float("weight_decay", 1e-6, 1e-3, log=True),
     }
 
     if model_name == "triplet":
@@ -25,9 +21,7 @@ def suggest_parameters(trial: optuna.Trial, model_name: str):
         parameters["base"] = trial.suggest_float("base", 0.3, 0.7)
     elif model_name == "arcface":
         parameters["margin"] = trial.suggest_float("margin", 0.1, 0.5)
-        parameters["scale"] = trial.suggest_categorical(
-            "scale", [16, 32, 48, 64]
-        )
+        parameters["scale"] = trial.suggest_categorical("scale", [16, 32, 48, 64])
     return parameters
 
 
@@ -36,7 +30,7 @@ def create_study(study_name: str):
     pruner = optuna.pruners.MedianPruner(n_startup_trials=5, n_warmup_steps=3)
     return optuna.create_study(
         study_name=study_name,
-        storage=f"sqlite:///{OPTUNA_DB.resolve().as_posix()}",
+        storage=f"sqlite:///{ARTIFACT_DIR.resolve().as_posix()}/{study_name}_optuna.db",
         direction="maximize",
         sampler=sampler,
         pruner=pruner,

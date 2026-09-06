@@ -90,6 +90,29 @@ def train_one_epoch(
     return running_loss / max(1, example_count)
 
 
+def evaluate_loss(
+    model_name: str,
+    model: nn.Module,
+    loss_function: nn.Module,
+    loader: DataLoader,
+):
+    """Return the mean validation loss without updating model parameters."""
+    model.eval()
+    running_loss = 0.0
+    example_count = 0
+
+    with torch.inference_mode():
+        for batch in loader:
+            with torch.amp.autocast(device_type=DEVICE.type, enabled=AMP_ENABLED):
+                loss = compute_training_loss(model_name, model, loss_function, batch)
+
+            batch_size = len(batch["label"])
+            running_loss += loss.detach().item() * batch_size
+            example_count += batch_size
+
+    return running_loss / max(1, example_count)
+
+
 class EarlyStopping:
     def __init__(self, patience: int, minimum_delta: float):
         self.patience = patience

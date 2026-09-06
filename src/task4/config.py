@@ -36,5 +36,6 @@ SPLIT_DIR = PROJECT_ROOT / "splits" / "task4"
 ARTIFACT_DIR = PROJECT_ROOT / "artifacts" / "task4"
 
 CONFIG_DIR = ARTIFACT_DIR / "configs"
+HISTORY_DIR = ARTIFACT_DIR / "history"
+PLOT_DIR = ARTIFACT_DIR / "images"
 MODEL_DIR = ARTIFACT_DIR / "models"
-OPTUNA_DB = ARTIFACT_DIR / "optuna.db"

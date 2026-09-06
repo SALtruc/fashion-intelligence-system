@@ -140,7 +140,7 @@ def make_two_view_transform(transform: Compose):
 
 def make_training_loader(
     model_name: str,
-    train_df: pd.DataFrame,
+    frame: pd.DataFrame,
     cae_transform: Compose,
     metric_train_transform: Compose,
     image_dir: str | Path = IMAGE_DIR,
@@ -148,7 +148,7 @@ def make_training_loader(
     transform = cae_transform if model_name == "cae" else metric_train_transform
     if model_name == "supcon":
         transform = make_two_view_transform(transform)
-    dataset = FashionImageDataset(train_df, image_dir, transform)
+    dataset = FashionImageDataset(frame, image_dir, transform)
     if model_name == "cae":
         return standard_loader(
             dataset,
@@ -158,7 +158,7 @@ def make_training_loader(
         )
 
     sampler = PKBatchSampler(
-        train_df[LABEL_ID_COLUMN],
+        frame[LABEL_ID_COLUMN],
         CLASSES_PER_BATCH,
         IMAGES_PER_CLASS,
         SEED,
@@ -172,8 +172,8 @@ def make_training_loader(
 
 
 def make_evaluation_loader(
-    frame: pd.DataFrame,
     model_name: str,
+    frame: pd.DataFrame,
     cae_transform: Compose,
     metric_eval_transform: Compose,
     image_dir: str | Path = IMAGE_DIR,
@@ -182,6 +182,43 @@ def make_evaluation_loader(
     ordered_frame = frame.sort_values("id").reset_index(drop=True)
     dataset = FashionImageDataset(ordered_frame, image_dir, transform)
     return standard_loader(dataset, EVAL_BATCH_SIZE, shuffle=False)
+
+
+def make_validation_loss_loader(
+    model_name: str,
+    frame: pd.DataFrame,
+    cae_transform: Compose,
+    metric_eval_transform: Compose,
+    image_dir: str | Path = IMAGE_DIR,
+):
+    """Build a deterministic validation loader for the model's optimization loss."""
+    if model_name == "cae":
+        return make_evaluation_loader(
+            model_name, frame, cae_transform, metric_eval_transform, image_dir
+        )
+
+    ordered_frame = frame.sort_values("id").reset_index(drop=True)
+    eligible_frame = ordered_frame.groupby(LABEL_ID_COLUMN).filter(
+        lambda group: len(group) >= IMAGES_PER_CLASS
+    )
+    class_count = eligible_frame[LABEL_ID_COLUMN].nunique()
+    classes_per_batch = min(CLASSES_PER_BATCH, class_count)
+    if classes_per_batch < 2:
+        raise ValueError(
+            "Validation split needs at least two classes with enough images."
+        )
+
+    transform = metric_eval_transform
+    if model_name == "supcon":
+        transform = make_two_view_transform(transform)
+    dataset = FashionImageDataset(eligible_frame, image_dir, transform)
+    sampler = PKBatchSampler(
+        eligible_frame[LABEL_ID_COLUMN],
+        classes_per_batch,
+        IMAGES_PER_CLASS,
+        SEED,
+    )
+    return DataLoader(dataset, batch_sampler=sampler, **_loader_options())
 
 
 def make_model_loaders(
@@ -199,13 +236,13 @@ def make_model_loaders(
             model_name, train_df, cae_transform, metric_train_transform, image_dir
         ),
         "gallery": make_evaluation_loader(
-            tuning_gallery_df,
             model_name,
+            tuning_gallery_df,
             cae_transform,
             metric_eval_transform,
             image_dir,
         ),
         "query": make_evaluation_loader(
-            val_df, model_name, cae_transform, metric_eval_transform, image_dir
+            model_name, val_df, cae_transform, metric_eval_transform, image_dir
         ),
     }
