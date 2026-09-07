@@ -1750,6 +1750,20 @@ ORACLE_FEATURES = {
                      "baseColour", "season", "year"],
 }
 
+# The notebook only ever touched articleType and subCategory before this section, so
+# whether the de-duplicated CSV still carries the other four fields is unverified here.
+# Degrade to a smaller table rather than crashing seventy minutes into a run.
+_have = set(frame.columns)
+_want = sorted({c for cols in ORACLE_FEATURES.values() for c in cols})
+_missing = [c for c in _want if c not in _have]
+if _missing:
+    print(f"  columns absent from this CSV, dropped from the oracles: {_missing}")
+    ORACLE_FEATURES = {k: [c for c in v if c in _have] for k, v in ORACLE_FEATURES.items()}
+    ORACLE_FEATURES = {k: v for k, v in ORACLE_FEATURES.items() if v}
+    print("  NOTE: the figures quoted in the 10.5 prose below were measured with all six")
+    print("  metadata fields present. This run has fewer, so read the table, not the prose.")
+assert "articleType" in _have, "articleType is the load-bearing oracle and is missing"
+
 oracle_tables = {}
 for t in TARGETS:
     fallback = _tr_o[t].mode().iloc[0]

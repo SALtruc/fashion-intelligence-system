@@ -127,7 +127,7 @@ also stamps `BUILD` with a hash of the source and prints the value — see below
 The notebook's **first cell** prints something like
 
 ```
-colab=True  quick=False  epochs=20  BUILD=6ce96524
+colab=True  quick=False  epochs=20  BUILD=a4afd728
 ```
 
 If that hash is not the one the handover note quotes, **you are running an old
@@ -136,4 +136,4 @@ once the notebook failed ten minutes in with a stale data path, and once a 70-mi
 run wrote its results to `/content` instead of Drive because the uploaded copy was one
 regeneration behind. Both would have been caught in five seconds by this line.
 
-Current: **`BUILD=6ce96524`**, 78 cells.
+Current: **`BUILD=a4afd728`**, 78 cells.
