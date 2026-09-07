@@ -306,8 +306,8 @@ def check_layout(combine, workers, strict):
     index_of = {digest(source): i for i, (_, source) in enumerate(combine)}
     for path, cells in workers.items():
         job = path.stem.replace("worker_", "")
-        if job not in layout.JOBS:
-            notes.append(f"{path.name}: no job named {job!r} in task1_layout.JOBS")
+        if job not in layout.WORKER_JOBS:
+            fail(f"{path.name}: not an active worker job")
             continue
         held = [index_of[digest(source)] for _, source in cells if digest(source) in index_of]
         want = layout.worker_cells(combine, job)
@@ -372,6 +372,9 @@ def main():
     combine = read_cells(COMBINE)
     worker_paths = sorted(NOTEBOOK_DIR.glob("worker_*.ipynb"))
     workers = {path: read_cells(path) for path in worker_paths}
+    for job in layout.WORKER_JOBS:
+        if NOTEBOOK_DIR / f"worker_{job}.ipynb" not in workers:
+            fail(f"missing worker_{job}.ipynb")
 
     print(f"combine: {COMBINE.name} ({len(combine)} cells)")
     print(f"workers: {len(workers)}")

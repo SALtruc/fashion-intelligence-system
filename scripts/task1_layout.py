@@ -39,10 +39,22 @@ WORKER_STOP = "# --- Worker stop ---"
 COMBINE_ONLY = [
     TITLE,
     'ablation = pd.concat([r for r in RESULTS if r["Model"].iloc[0].startswith("3")]',
-    "single_plain = predict_probabilities(",
+    'evaluate_predictions(y_val, plain.argmax(axis=1), plain,',
+    "intervals, BOOTSTRAP_DRAWS = bootstrap_macro_f1(contenders)",
     "# --- Reproduction check ---",
     "progress = pd.concat(RESULTS, ignore_index=True)",
 ]
+
+# COMBINE_ONLY anchors are resolved against whichever notebook is being read, and the legacy
+# gate reads the one at LEGACY_REVISION. Where a combine-only cell has since been rewritten,
+# the anchor that finds it *there* is recorded here rather than kept in the list above, which
+# has to keep finding it in the notebook as it stands now. A cell that did not exist at all at
+# that revision -- the Section 7.2 bootstrap -- is dropped from the legacy list instead.
+LEGACY_RENAMED = {
+    'evaluate_predictions(y_val, plain.argmax(axis=1), plain,':
+        "single_plain = predict_probabilities(",
+}
+LEGACY_ABSENT = ["intervals, BOOTSTRAP_DRAWS = bootstrap_macro_f1(contenders)"]
 
 # --- Jobs --------------------------------------------------------------------------------
 # job name -> (subtitle for the worker header, [anchors of the cells only this job runs])
@@ -66,22 +78,10 @@ JOBS = {
             "decoupled = build_decoupled(resnet)",
         ],
     ),
-    "seeds": (
-        "Seed variance study (all three seeds)",
-        [
-            "## 7. Seed Variance",
-            "ACTIVE_SEEDS = wanted_seeds(SEEDS)",
-        ],
-    ),
-    # The seed study is the longest job even with the seed-42 checkpoints copied in, and its
-    # runs are independent, so it splits by seed. These two take one seed each; seed 42 is not
-    # a job at all, because the cnn and resnet workers already produce exactly those weights.
-    "seeds_1337": ("Seed variance study (seed 1337)", []),
-    "seeds_2024": ("Seed variance study (seed 2024)", []),
     "sweep": (
         "Stage-2 sampler sweep",
         [
-            "### 7.8 Sampler Strength: A Sweep Rather Than a Second Full Model",
+            "### 7.3 Sampler Strength: A Sweep Rather Than a Second Full Model",
             "RUN_SAMPLER_SWEEP = True",
         ],
     ),
@@ -100,7 +100,7 @@ JOBS = {
     "lrsearch": (
         "Learning-rate search (CNN + ResNet)",
         [
-            "## 7.9 Hyper-parameter Search",
+            "### 7.4 Hyper-parameter Search",
             "# --- ResNet: learning rate x weight decay",
         ],
     ),
@@ -117,21 +117,14 @@ JOBS = {
 #     stage-2 head     28 s/epoch      liblinear SVM    159 s/fit
 # The HOG descriptor itself is 3 s for the whole training set and is not worth modelling.
 #
-# Nothing here is hashed. Throttling with `hardware` changes wall time, not the recipe.
+# Nothing here is hashed, and Task 1 runs at full machine capacity, so these are the times a
+# machine gives when it is not sharing itself with anything else.
 RUNTIMES = {
     "hog_svm": "~3 min",           # 3 s descriptor + 159 s liblinear
     "cnn": "~9 min",               # 552 s measured
     "resnet": "~64 min",           # 3580 s stage 1 measured + 10 x 28 s stage-2 head
     "sweep": "~23 min",            # 5 heads x 10 epochs x 28 s, frozen backbone
     "lrsearch": "~115 min",        # 6 arms x 12 epochs x 96 s
-    # The seed figures are the recorded run's own per-seed lines. seed 1337's backbone took
-    # 3859 s against seed 2024's 3577 s for the same work, which is contention, not the seed.
-    "seeds": "~152 min",           # the two jobs below, with the seed-42 checkpoints copied
-                                   # in. Without them this job also retrains seed 42, which is
-                                   # a further ~64 min the combine machine then discards.
-                                   # See PREREQUISITES.
-    "seeds_1337": "~78 min",       # 552 s CNN + 3859 s ResNet + 280 s stage-2 head
-    "seeds_2024": "~73 min",       # 552 s CNN + 3577 s ResNet + 280 s stage-2 head
     # The four tuning grids, 6 arms each. The two backbone grids run a reduced 12-epoch
     # budget, so their cost is 6 x 12 x the per-epoch time of the architecture under test.
     "hogsearch": "~16 min",        # 6 liblinear fits; the descriptor is computed once
@@ -168,15 +161,6 @@ PREREQUISITES = {
         "None` having done nothing. The alternative is to pair the sweep onto the resnet "
         "machine instead of running it here, as `JOB_FILTER = {\"resnet\", \"sweep\"}`.",
     ),
-    "seeds": (
-        "soft",
-        {"model_cnn.pt": "cnn", "model_resnet_decoupled.pt": "resnet"},
-        "These make seed 42 free. The seed study reuses their validation logits rather than "
-        "retraining that seed, which is exactly what the combine machine does. Without them "
-        "this job trains seed 42 under its own keys -- about 49 minutes of measured work that "
-        "the combine machine then discards, because it reuses the Section 6 logits for that "
-        "row. The run is correct either way; only the time is wasted.",
-    ),
 }
 
 # --- The legacy gate ---------------------------------------------------------------------
@@ -193,21 +177,20 @@ PREREQUISITES = {
 # Spelled in full: an abbreviation is only unique until the history grows into it.
 LEGACY_REVISION = "cd44bc8f16c5e9676edbd57b40ac86887fbb6a5d"
 
-# Only these five existed at LEGACY_REVISION. sweep, seeds_1337, seeds_2024, hogsearch,
-# cnnsearch and stage2grid were born generated, so there is no hand-derived file to check
-# them against.
-LEGACY_JOBS = ["hog_svm", "cnn", "resnet", "seeds", "lrsearch"]
+# Only these existed at LEGACY_REVISION as hand-derived files. sweep, hogsearch, cnnsearch and
+# stage2grid were born generated, so there is nothing to check them against; `seeds` had one
+# and is no longer a job, so its cells are listed under LEGACY_COMBINE_ONLY instead and the
+# gate now proves the rule on four workers rather than five.
+LEGACY_JOBS = ["hog_svm", "cnn", "resnet", "lrsearch"]
 
-# The legacy layout differs from JOBS in the two trailing cells the workers still carry, and
-# in two jobs' anchors. `wanted_seeds` did not exist yet, so the seed cell opened with the
-# plain `wanted` call; and Section 7.9 was a learning-rate search over both architectures in
-# one cell rather than the four separate grids it is now.
+# The legacy layout differs from JOBS in the two trailing cells the workers still carry, and in
+# one job's anchors: the hyper-parameter search was a learning-rate search over both
+# architectures in one cell rather than the four separate grids it is now.
 LEGACY_TRAILING = [
     "#### A Note on the Predicted Distribution",
     "## 10. Decision Log, Limitations, and What to Tune Next",
 ]
 LEGACY_ANCHORS = {
-    "seeds": ["## 7. Seed Variance", 'if wanted("seeds"):'],
     "lrsearch": [
         "## 7.9 Learning-Rate Search",
         "# --- Learning-rate search over the two non-baseline models",
@@ -224,9 +207,11 @@ LEGACY_P2_NOTE_OWNER = "lrsearch"
 # these they are unowned in legacy mode and fall through to the spine, which would put them
 # in all five hand-derived workers and fail the gate.
 #
-# The 6.3 ablation and the whole of Phase 2 (7.6/7.7) have since been removed from the
-# notebook, so they exist only here; the sampler sweep became the `sweep` job.
+# The 6.3 ablation, the whole of Phase 2 and the seed-variance study have since been removed
+# from the notebook, so they exist only here; the sampler sweep became the `sweep` job.
 LEGACY_COMBINE_ONLY = [
+    "## 7. Seed Variance",
+    'if wanted("seeds"):',
     "### 6.3 Ablation: Which Change Paid?",
     'if wanted("logit_adjusted"):',
     'if RUN_PHASE2 and wanted("phase2"):',
@@ -294,7 +279,11 @@ FINGERPRINT_STAGE2 = ["STAGE2_EPOCHS", "STAGE2_LR", "STAGE2_USE_DROPOUT"]
 
 
 # Jobs that run another job's cells and differ only in what JOB_FILTER makes those cells do.
-CELL_ALIASES = {"seeds_1337": "seeds", "seeds_2024": "seeds"}
+# Empty since the seed jobs were retired; kept because the mechanism is what lets one set of
+# cells be shared by several JOB_FILTER values without duplicating anchors.
+CELL_ALIASES = {}
+
+WORKER_JOBS = tuple(JOBS)
 
 
 def worker_cells(cells, job, legacy=False):
@@ -316,9 +305,11 @@ def worker_cells(cells, job, legacy=False):
     if legacy:
         owners[resolve(cells, "#### On `P2_FINER_MAP`")] = LEGACY_P2_NOTE_OWNER
 
-    combine_only = {resolve(cells, anchor) for anchor in COMBINE_ONLY}
+    anchors = list(COMBINE_ONLY)
     if legacy:
-        combine_only |= {resolve(cells, anchor) for anchor in LEGACY_COMBINE_ONLY}
+        anchors = [LEGACY_RENAMED.get(anchor, anchor) for anchor in anchors
+                   if anchor not in LEGACY_ABSENT] + list(LEGACY_COMBINE_ONLY)
+    combine_only = {resolve(cells, anchor) for anchor in anchors}
     trailing = {resolve(cells, anchor) for anchor in LEGACY_TRAILING}
     substituted = {stop, resolve(cells, JOB_FILTER_CELL)}
 

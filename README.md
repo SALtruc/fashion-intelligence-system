@@ -10,19 +10,21 @@ Submission requirements and outstanding deliverables are in [SUBMISSION.md](SUBM
 | Component | Entry point | Status |
 |---|---|---|
 | EDA and preprocessing | [00_eda_and_preprocessing.ipynb](notebooks/00_eda_and_preprocessing.ipynb) | Audits raw data and exports the shared manifest |
-| Task 1: article type | [01_task1_article_type.ipynb](notebooks/Task1/01_task1_article_type.ipynb) | Current training, comparison, ensemble and prediction workflow |
+| Task 1: article type | [01_task1_article_type.ipynb](notebooks/Task1/01_task1_article_type.ipynb) | Current training, comparison, tuning and prediction workflow |
 | Dataset1 preparation | [00_prepare_dataset1.ipynb](notebooks/Task1/00_prepare_dataset1.ipynb) | Versioned enriched manifests prepared; training still uses supplied data only |
-| External evaluation | [02_independent_evaluation.ipynb](notebooks/Task1/02_independent_evaluation.ipynb) | Evaluates the recorded supplied-only three-seed ensemble |
+| External evaluation | [02_independent_evaluation.ipynb](notebooks/Task1/02_independent_evaluation.ipynb) | Evaluates the deployed supplied-only model on external imagery |
 | Tasks 2–4 and final prediction | `notebooks/02_*`, `03_*`, `04_*`, `05_*` | Empty placeholder files; not runnable |
 
 `notebooks/01_task1_article_type_classification.ipynb` is also empty. The older Colab
 edition has been removed: it carried a separate upload workflow and mirrored neither the
 current combine notebook nor the worker layout.
 
-The saved Task 1 results report **0.8010 macro-F1** and **0.8936 accuracy** for the
-three-seed ensemble with horizontal-flip TTA. These are recorded supplied-only results,
-not results from dataset1 enrichment or the newer tuning grids. The
-[Task 1 report draft](docs/REPORT_TASK1.md) explains the evidence and its limits.
+The saved Task 1 results report **0.7693 macro-F1** and **0.8774 accuracy** for the ResNet
+with decoupled classifier retraining, the model Section 8.7 now recommends and which the
+notebook scores again under horizontal-flip TTA. These are recorded supplied-only results,
+not results from dataset1 enrichment or the newer tuning grids, and they predate the removal
+of the seed-variance study. The [Task 1 report draft](docs/REPORT_TASK1.md) still describes
+the superseded three-seed ensemble and has to be rewritten against a fresh run.
 
 ## Setup and data
 
@@ -59,12 +61,12 @@ See [datasets/README.md](datasets/README.md) for counts and path details.
 2. Run `notebooks/Task1/01_task1_article_type.ipynb` top to bottom on the training machine.
    That is ~7 hours of training on one machine. To split it, follow the
    [worker guide](notebooks/Task1/PARALLEL_RUN.md) — it carries machine setup, a per-job
-   resource profile and ready-made schedules for two to five machines (four machines reaches
-   the ~115-minute floor; a fifth adds nothing) — then run this notebook in combine mode
+   resource profile and ready-made schedules for two and three machines (three machines reaches
+   the ~115-minute floor; a fourth adds nothing) — then run this notebook in combine mode
    (`JOB_FILTER = None`, `RESUME = True`). Missing compatible checkpoints cause training to
    run again.
-3. Run `notebooks/Task1/02_independent_evaluation.ipynb` with the three supplied-only
-   ensemble checkpoints present. Its fixed ensemble must match the model being reported.
+3. Run `notebooks/Task1/02_independent_evaluation.ipynb` with `model_resnet_decoupled.pt`
+   present. The checkpoint it loads must be the one being reported.
 4. Complete Tasks 2–4 and the final prediction workflow before submission.
 
 To execute EDA from a shell and retain a separate executed notebook:

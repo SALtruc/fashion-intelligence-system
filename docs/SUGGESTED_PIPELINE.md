@@ -66,7 +66,7 @@ A partial epoch checkpoint does not establish a completed grid result.
 
 Report macro-F1, accuracy, balanced accuracy, weighted F1, top-5 and support buckets, then
 inspect errors, calibration and inference cost. The current final-selection candidates are
-the decoupled ResNet, the ensemble and any qualifying sampler-sweep winner. Historical
+the decoupled ResNet, its flip-TTA variant and any qualifying sampler-sweep winner. Historical
 logit-adjusted and multi-task results remain in saved CSVs but their jobs were removed.
 
 ## 4. Optional dataset1 enrichment: preparation is complete, adoption is pending
@@ -114,7 +114,7 @@ label-quality limitations and the model-specific interpretation of those results
 The combine notebook writes `models/task1/task1_model.pt`, class/config JSON files, result
 CSVs, `predictions/task1_predictions.csv`, `predictions/task1_test_logits.npy` and the figures
 under `outputs/figures/`. The export
-includes all selected ensemble members and inference settings. The independent evaluation
+includes the selected weights and the inference settings that reproduce them. The independent evaluation
 notebook instead requires the individual checkpoint files.
 
 Current predictions contain 5,829 articleType values; gender, season and usage are blank.

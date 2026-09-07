@@ -22,11 +22,11 @@ The combine notebook additionally writes:
 
 | Path | Purpose |
 |---|---|
-| `models/task1/task1_model.pt` | Selected Task1 model export, including ensemble members and inference settings |
+| `models/task1/task1_model.pt` | Selected Task1 model export, including the inference settings that reproduce its predictions |
+| `models/task1/task1_ood_gate.pt` | Section 8.6 out-of-distribution gate: class centroids, shared precision and the rejection threshold |
 | `models/task1/task1_classes.json` | Class order used by the model |
 | `models/task1/task1_config.json` | Run configuration and normalization metadata |
 | `models/task1/task1_results.csv` | Current validation comparison table |
-| `models/task1/task1_seed_study.csv` | Fixed-split seed study |
 | `models/task1/task1_hog_search.csv` | HOG C × class-weight search results |
 | `models/task1/task1_cnnsearch.csv` | CNN learning-rate × weight-decay search results |
 | `models/task1/task1_lrsearch.csv` | ResNet learning-rate × weight-decay search results |

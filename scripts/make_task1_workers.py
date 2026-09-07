@@ -46,9 +46,6 @@ HEADER = """# Worker notebook — {subtitle}
 
 Trains **{job}** only, banks its checkpoints, and stops. Runtime {runtime} on a mid-range CUDA GPU.
 
-**Capacity:** set `hardware` in Section 1.0 to a value from `0.1` to `1.0`; it scales this
-process's CPU parallelism and CUDA compute duty cycle without changing the training recipe.
-
 **Before running:** copy `preprocessed_datasets/` from the machine that ran notebook 00 —
 do not regenerate it here. The split and the normalisation constants come from those files
 and feed `RUN_FINGERPRINT`; regenerating risks a different split and checkpoints that
@@ -246,10 +243,11 @@ def main():
               f"{len(default_jobs)} hand-derived worker(s)")
     else:
         document = load(COMBINE)
-        default_jobs = list(layout.JOBS)
+        default_jobs = list(layout.WORKER_JOBS)
 
     jobs = args.jobs or default_jobs
-    unknown = set(jobs) - set(layout.JOBS)
+    allowed_jobs = layout.LEGACY_JOBS if args.legacy else layout.WORKER_JOBS
+    unknown = set(jobs) - set(allowed_jobs)
     if unknown:
         sys.exit(f"unknown job(s): {sorted(unknown)}")
     if args.legacy:

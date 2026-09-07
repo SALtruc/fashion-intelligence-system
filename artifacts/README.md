@@ -6,11 +6,11 @@ alone is insufficient.
 
 | Location | What to retain |
 |---|---|
-| `models/task1/task1_model.pt` | Exported model, ensemble member weights, class order, normalization, configuration and inference settings |
+| `models/task1/task1_model.pt` | Exported model weights, class order, normalization, configuration and inference settings |
+| `models/task1/task1_ood_gate.pt` | Out-of-distribution gate fitted on the training split; applied unchanged by `02_independent_evaluation.ipynb` |
 | `models/task1/task1_classes.json` | Readable class-index mapping |
 | `models/task1/task1_config.json` | Recorded training and runtime configuration |
 | `models/task1/task1_results.csv` | Saved comparison table; includes historical experiments |
-| `models/task1/task1_seed_study.csv` | Saved seed study |
 | `models/task1/task1_lr_search.csv` | Historical learning-rate search, distinct from current grid outputs |
 | `models/task1/checkpoints/` | Per-job model banks and resumable epoch files |
 | `models/task1/runs/` | Historical per-machine result tables |
@@ -19,10 +19,9 @@ alone is insufficient.
 | `outputs/figures/` | Exported report figures |
 | `preprocessed_datasets/train_manifest.csv` | Shared EDA input to target-specific splits |
 
-The combine notebook exports every ensemble member. Its representative `state_dict` alone
-is not the ensemble: inference averages member/view softmax probabilities, including the
-horizontal mirror when enabled, before selecting a class. Keep the recorded class order,
-normalization, image size and inference settings with the weights.
+The `state_dict` alone does not reproduce a prediction: inference averages the softmax of the
+image and of its horizontal mirror when flip TTA is enabled, before selecting a class. Keep the
+recorded class order, normalization, image size and inference settings with the weights.
 
 The independent evaluation notebook loads three files from `models/task1/checkpoints/`:
 `model_resnet_decoupled.pt`, `model_seed_resnet___decoupled_1337.pt`, and

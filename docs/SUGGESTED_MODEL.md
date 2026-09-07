@@ -17,15 +17,15 @@ aspect-preserving, white-padded 60×80 transform.
 | PlainCNN | Neural baseline; learning-rate × weight-decay grid available |
 | SmallResNet, plain cross-entropy | Stage-1 learned representation |
 | SmallResNet with decoupled classifier | Frozen-backbone, class-balanced stage-2 finalist |
-| Seeds 42, 1337, 2024 | CNN and decoupled ResNet variability with the split fixed |
-| Three-seed ResNet ensemble + horizontal-flip TTA | Recorded selected model: 0.8010 macro-F1, 0.8936 top-1 |
+| Decoupled ResNet + horizontal-flip TTA | The selected model; the TTA row is scored in Section 7.1 |
+| Paired bootstrap over validation rows | Section 7.2's noise band; the bar every later comparison is read against |
 | Stage-2 sampler sweep and learning-rate × sampler grid | Investigate retraining strength; a qualifying sweep model can enter final selection |
 | Logit-adjusted and multi-task ResNet | Historical results retained; removed from the current worker job set |
 
-The current `FINAL_CHOICE = "auto"` compares the available decoupled ResNet, ensemble and
-qualifying sweep candidate by validation macro-F1. It does not automatically promote every
-tuning-grid winner. Review class-level errors, seed variability and cost before finalizing.
-The ensemble uses six forward passes per image (three members × two views).
+The current `FINAL_CHOICE = "auto"` compares the available decoupled ResNet, its flip-TTA
+variant and any qualifying sweep candidate by validation macro-F1. It does not automatically
+promote every tuning-grid winner. Review class-level errors, the Section 7.2 bootstrap band and
+cost before finalizing. Flip TTA uses two forward passes per image.
 
 The saved result table predates the current four tuning grids. Existing historical rows are
 not evidence that the current grids completed. Dataset1 preparation has produced manifests,

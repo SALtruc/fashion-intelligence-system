@@ -1,9 +1,9 @@
 # External evaluation: data, provenance and scope
 
 Checked 6 September 2026. [02_independent_evaluation.ipynb](../notebooks/Task1/02_independent_evaluation.ipynb)
-evaluates a fixed three-seed **supplied-only** ResNet ensemble with horizontal-flip TTA.
+evaluates the fixed **supplied-only** decoupled ResNet with horizontal-flip TTA.
 It loads individual checkpoint banks, not the selected export generically. Its findings
-apply to that ensemble and data snapshot; changing the training population or selected model
+apply to that model and data snapshot; changing the training population or selected model
 requires revisiting the evaluation.
 
 ## Available collections
@@ -31,7 +31,7 @@ the current training population, subject to the quality and provenance limits be
 Repeatedly using either collection to guide development also weakens a final-test claim.
 
 The evaluation notebook checks SHA-256 intersections against the eligible supplied manifest
-and verifies ensemble fingerprints. The recorded intersection is zero. This rules out exact
+and verifies the checkpoint fingerprint. The recorded intersection is zero. This rules out exact
 file matches to that manifest, not all related products, all raw excluded files or future
 external training rows. The dataset1 technical audit additionally checked supplied raw
 train/test and dataset2 with several image representations and a dHash radius of two.
@@ -65,7 +65,7 @@ No new provenance verification is claimed by this documentation refresh.
 The retained evaluation reports **0.0000 top-1 and top-5** across 1,857 external images.
 Dataset1 alone also scores zero across its 1,158 images. The recorded comparison on supplied
 imagery of dataset1's three article types is **0.9744 top-1**. These observations indicate
-poor transfer to these external crops under the supplied-only ensemble.
+poor transfer to these external crops under the supplied-only model.
 
 They do not isolate a single cause: backgrounds, framing, crop quality, label mapping and
 source uncertainty can all contribute. The flag rate is not a measured annotation-error
