@@ -1,13 +1,109 @@
 from collections import Counter
+from collections.abc import Iterable
+from pathlib import Path
 
 import faiss
 import numpy as np
 import torch
 import torch.nn.functional as F
+from PIL import Image
 from torch import nn
 from torch.utils.data import DataLoader
 
 from src.task4.training import AMP_ENABLED, DEVICE
+
+
+def _rgb_to_hsv(rgb: np.ndarray) -> np.ndarray:
+    """Convert an RGB image in the [0, 1] range to HSV without OpenCV."""
+    maximum = rgb.max(axis=-1)
+    minimum = rgb.min(axis=-1)
+    chroma = maximum - minimum
+
+    hue = np.zeros_like(maximum)
+    non_zero = chroma > 1e-8
+    red = non_zero & (maximum == rgb[..., 0])
+    green = non_zero & (maximum == rgb[..., 1])
+    blue = non_zero & (maximum == rgb[..., 2])
+    hue[red] = ((rgb[..., 1][red] - rgb[..., 2][red]) / chroma[red]) % 6
+    hue[green] = (rgb[..., 2][green] - rgb[..., 0][green]) / chroma[green] + 2
+    hue[blue] = (rgb[..., 0][blue] - rgb[..., 1][blue]) / chroma[blue] + 4
+    hue /= 6
+
+    saturation = np.divide(
+        chroma, maximum, out=np.zeros_like(chroma), where=maximum > 1e-8
+    )
+    return np.stack((hue, saturation, maximum), axis=-1)
+
+
+def color_descriptor(
+    image: Image.Image | np.ndarray,
+    hue_bins: int = 12,
+    saturation_bins: int = 3,
+    value_bins: int = 3,
+    white_background_value: float = 0.92,
+    white_background_saturation: float = 0.12,
+) -> np.ndarray:
+    """Return a unit-normalized HSV histogram for a product image.
+
+    Near-white, low-saturation pixels are excluded to reduce the influence of
+    catalogue backgrounds.  When that would discard an almost entirely white
+    item, the central image area is used as a safe fallback.
+    """
+    if isinstance(image, Image.Image):
+        rgb = np.asarray(image.convert("RGB"), dtype=np.float32) / 255.0
+    else:
+        rgb = np.asarray(image, dtype=np.float32)
+        if rgb.ndim != 3 or rgb.shape[-1] != 3:
+            raise ValueError("image must have shape (height, width, 3)")
+        if rgb.max(initial=0.0) > 1.0:
+            rgb = rgb / 255.0
+        rgb = np.clip(rgb, 0.0, 1.0)
+
+    hsv = _rgb_to_hsv(rgb)
+    saturation, value = hsv[..., 1], hsv[..., 2]
+    foreground = ~(
+        (value >= white_background_value)
+        & (saturation <= white_background_saturation)
+    )
+
+    # White garments can be visually indistinguishable from a white backdrop.
+    # A centre crop is a better fallback than an empty descriptor in that case.
+    if foreground.sum() < max(32, int(foreground.size * 0.01)):
+        height, width = foreground.shape
+        margin_h, margin_w = height // 8, width // 8
+        foreground = np.zeros_like(foreground, dtype=bool)
+        foreground[margin_h : height - margin_h, margin_w : width - margin_w] = True
+
+    histogram, _ = np.histogramdd(
+        hsv[foreground],
+        bins=(hue_bins, saturation_bins, value_bins),
+        range=((0.0, 1.0), (0.0, 1.0), (0.0, 1.0)),
+    )
+    descriptor = histogram.astype("float32", copy=False).ravel()
+    norm = np.linalg.norm(descriptor)
+    return descriptor / norm if norm > 0 else descriptor
+
+
+def extract_color_descriptors(image_paths: Iterable[str | Path]) -> np.ndarray:
+    """Extract colour descriptors for query or gallery images in the given order."""
+    descriptors = []
+    for path in image_paths:
+        with Image.open(path) as image:
+            descriptors.append(color_descriptor(image))
+    if not descriptors:
+        raise ValueError("image_paths must contain at least one image")
+    return np.stack(descriptors).astype("float32", copy=False)
+
+
+def color_similarities(
+    query_descriptor: np.ndarray, gallery_descriptors: np.ndarray
+) -> np.ndarray:
+    """Cosine colour similarities for already-normalized HSV descriptors."""
+    query = np.asarray(query_descriptor, dtype="float32")
+    gallery = np.asarray(gallery_descriptors, dtype="float32")
+    if query.ndim != 1 or gallery.ndim != 2 or query.shape[0] != gallery.shape[1]:
+        raise ValueError("colour descriptor dimensions do not match")
+    return np.clip(gallery @ query, 0.0, 1.0)
 
 
 def retrieval_embeddings(model: nn.Module, images: torch.Tensor):
@@ -186,7 +282,52 @@ def k_reciprocal_rerank(
     blend: float = 0.3,
     maximum_k: int = 10,
     candidate_depth: int = 100,
+    query_color_descriptors: np.ndarray | None = None,
+    gallery_color_descriptors: np.ndarray | None = None,
+    color_weight: float = 0.15,
 ):
+    """Rerank visual candidates with k-reciprocal and optional image colour.
+
+    Colour descriptors are image-derived HSV histograms, so query images do
+    not need labels or metadata.  They only affect the candidate pool returned
+    by FAISS; retrieval remains driven primarily by the learned embedding.
+    """
+    if not 0.0 <= blend <= 1.0:
+        raise ValueError("blend must be between 0 and 1")
+    if not 0.0 <= color_weight <= 1.0:
+        raise ValueError("color_weight must be between 0 and 1")
+
+    use_color = (
+        query_color_descriptors is not None or gallery_color_descriptors is not None
+    )
+    if use_color and (
+        query_color_descriptors is None or gallery_color_descriptors is None
+    ):
+        raise ValueError(
+            "query_color_descriptors and gallery_color_descriptors must be provided together"
+        )
+    if use_color:
+        query_color_descriptors = np.asarray(
+            query_color_descriptors, dtype="float32"
+        )
+        gallery_color_descriptors = np.asarray(
+            gallery_color_descriptors, dtype="float32"
+        )
+        if query_color_descriptors.ndim != 2:
+            raise ValueError(
+                "query_color_descriptors must have shape (queries, features)"
+            )
+        if query_color_descriptors.shape[0] != len(query_embeddings):
+            raise ValueError(
+                "query embeddings and colour descriptors must have equal length"
+            )
+        if gallery_color_descriptors.shape[0] != len(gallery_embeddings):
+            raise ValueError(
+                "gallery embeddings and colour descriptors must have equal length"
+            )
+        if query_color_descriptors.shape[1] != gallery_color_descriptors.shape[1]:
+            raise ValueError("query and gallery colour descriptor dimensions do not match")
+
     search_depth = min(candidate_depth, len(gallery_embeddings))
     initial_scores, candidates = index.search(query_embeddings, search_depth)
     gallery_sets, gallery_thresholds = gallery_reciprocal_sets(
@@ -194,7 +335,7 @@ def k_reciprocal_rerank(
     )
     reranked_rows = []
 
-    for scores, row in zip(initial_scores, candidates):
+    for query_index, (scores, row) in enumerate(zip(initial_scores, candidates)):
         forward_count = min(k1, len(row))
         forward = row[:forward_count]
         query_set = {
@@ -206,13 +347,24 @@ def k_reciprocal_rerank(
             query_set.update(gallery_sets[int(candidate)])
 
         combined_distances = []
+        if use_color:
+            candidate_color_similarities = color_similarities(
+                query_color_descriptors[query_index], gallery_color_descriptors[row]
+            )
         for score, candidate in zip(scores, row):
             gallery_set = gallery_sets[int(candidate)]
             union = query_set | gallery_set
             intersection = query_set & gallery_set
             jaccard = 1.0 - len(intersection) / max(1, len(union))
             original_distance = 1.0 - float(score)
-            distance = blend * original_distance + (1.0 - blend) * jaccard
+            non_color_distance = blend * original_distance + (1.0 - blend) * jaccard
+            if use_color:
+                color_similarity = candidate_color_similarities[len(combined_distances)]
+                distance = (1.0 - color_weight) * non_color_distance + color_weight * (
+                    1.0 - float(color_similarity)
+                )
+            else:
+                distance = non_color_distance
             combined_distances.append(distance)
 
         ordering = np.argsort(combined_distances)[:maximum_k]
