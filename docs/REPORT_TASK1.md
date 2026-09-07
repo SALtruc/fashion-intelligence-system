@@ -237,13 +237,13 @@ not cite them in the report unless the code that draws them is restored.
 
 ## Appendix B — reproduction
 
-**No result table is present in this repository.** `models/` does not exist, so
-`task1_results.csv`, `task1_seed_study.csv` and every grid CSV including `task1_stage2_grid.csv`
-are all absent and must be produced by a run. The only recorded numerical evidence is the cell
-output retained in the executed workers under `notebooks/Task1/executed_run_2026-09-06/`, and
-those notebooks are a superseded revision — they still carry the `logit_adjusted` and `phase2`
-jobs that the current notebook no longer has. Every figure quoted in this report traces back to
-them and must be re-derived before submission.
+**No result table is present in this repository, and no recorded output survives.** `models/`
+does not exist, so `task1_results.csv` and every grid CSV including `task1_stage2_grid.csv`
+are absent and must be produced by a run. The executed workers that once held the cell output
+behind these numbers have been deleted, along with the stale figures under `outputs/figures/`.
+**Every figure quoted in this report is therefore unsourced within this repository** and must
+be re-derived from a fresh run before submission; the numbers below stand only as a record of
+what a superseded revision reported.
 
 The supplied-only `RUN_FINGERPRINT` is `e6b15f5c51de`. It checks selected recipe/data summaries,
 not complete image identity or every runtime setting. The current code enables CUDA AMP;

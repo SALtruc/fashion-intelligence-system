@@ -106,11 +106,12 @@ JOBS = {
     ),
 }
 
-# Wall time per job, derived from the one executed run this repository still holds:
-# notebooks/Task1/executed_run_2026-09-06/. Those notebooks ran on Apple Silicon (MPS, fp32,
-# no AMP and no on-device cache), so read these as a reliable *ranking* and an order of
-# magnitude, not as CUDA figures -- a mid-range CUDA card with AMP is materially faster.
-# Re-measure on the target hardware before scheduling against them.
+# Wall time per job. These were measured on Apple Silicon (MPS, fp32, no AMP and no
+# on-device cache) by a run whose notebooks are no longer kept, so nothing in this
+# repository reproduces them and they cannot be re-derived from it. Read them as a
+# reliable *ranking* and an order of magnitude, not as CUDA figures -- a mid-range CUDA
+# card with AMP is materially faster. Re-measure on the target hardware and update this
+# table before scheduling against it.
 #
 # The three measured per-epoch costs everything below is built from:
 #     CNN backbone     14 s/epoch      ResNet backbone   96 s/epoch

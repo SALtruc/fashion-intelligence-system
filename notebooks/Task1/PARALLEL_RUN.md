@@ -3,8 +3,7 @@
 Checked 6 September 2026. The source of truth is
 [01_task1_article_type.ipynb](01_task1_article_type.ipynb) and
 [the layout module](../../scripts/task1_layout.py). There are **8 generated worker files**.
-The seed-variance jobs have been retired along with the study itself; their archived copies
-under `executed_run_2026-09-06/` are historical only.
+The seed-variance jobs have been retired along with the study itself.
 
 ## Run order
 
@@ -20,8 +19,8 @@ under `executed_run_2026-09-06/` are historical only.
    checkpoints may trigger training. Completed HOG grid arms restore from their fingerprinted
    score/model checkpoints; only missing or incompatible arms are fitted again.
 
-Do not copy `checkpoints_invalid/`. Do not use notebooks under `executed_run_2026-09-06/`
-as current workers: they retain historical jobs and outputs.
+Do not copy `checkpoints_invalid/`. The eight files listed below are the only current
+workers; anything else claiming to be one is from a superseded revision.
 
 ## Setting a machine up
 
@@ -92,9 +91,10 @@ anything: give each its own machine or run them back to back.
 | `stage2grid` | Six stage-2 LR × sampler-strength arms | ~28 min | `model_resnet_stage1.pt` |
 
 The estimates are `RUNTIMES` in [the layout module](../../scripts/task1_layout.py) and are
-derived from the per-epoch costs the archived run under `executed_run_2026-09-06/` measured on
-Apple Silicon MPS at fp32: 14 s per CNN epoch, 96 s per stage-1 ResNet epoch, 28 s per stage-2
-head epoch and 159 s per liblinear fit. Scale them to your own hardware before scheduling.
+derived from per-epoch costs measured on Apple Silicon MPS at fp32: 14 s per CNN epoch, 96 s
+per stage-1 ResNet epoch, 28 s per stage-2 head epoch and 159 s per liblinear fit. The run
+that produced them is no longer kept in this repository, so treat them as an order of
+magnitude and scale them to your own hardware before scheduling.
 The eight jobs total ~275 minutes.
 
 Each filename is `worker_<suffix>.ipynb`. `logit_adjusted` and `phase2` are historical jobs,
@@ -140,9 +140,8 @@ already the make-span.
 Machine C finishes early and is the natural place to run the combine notebook from once the
 other two return their checkpoints.
 
-The estimates come from the archived run under `executed_run_2026-09-06/`, which used Apple
-Silicon MPS at fp32. Measure actual runtimes on your own hardware and re-balance if the ratios
-between jobs move.
+The estimates come from a run on Apple Silicon MPS at fp32 that is no longer kept here.
+Measure actual runtimes on your own hardware and re-balance if the ratios between jobs move.
 
 ## What comes back from each machine
 
