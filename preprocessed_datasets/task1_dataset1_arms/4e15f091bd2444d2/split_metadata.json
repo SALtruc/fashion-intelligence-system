@@ -1,0 +1,26 @@
+{
+  "train_share": 0.6,
+  "seed": 42,
+  "radius": 2,
+  "rows": 1158,
+  "clusters": 1158,
+  "version": "4e15f091bd2444d2",
+  "train_rows": 697,
+  "heldout_rows": 461,
+  "straddling_clusters": 0,
+  "per_class": {
+    "Eyeshadow": {
+      "train": 239,
+      "heldout": 158
+    },
+    "Lipstick": {
+      "train": 231,
+      "heldout": 153
+    },
+    "Nail Polish": {
+      "train": 227,
+      "heldout": 150
+    }
+  },
+  "note": "external_train.csv is added to Arm B's training set only. external_heldout.csv is trained on by neither arm and is scored by both."
+}

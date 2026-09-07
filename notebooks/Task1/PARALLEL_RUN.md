@@ -12,7 +12,7 @@ The seed-variance jobs have been retired along with the study itself.
    and source files to every machine. Current workers use supplied data only; the prepared
    dataset1 export is not connected to their loader.
 3. Run assigned workers top to bottom. Keep model/data settings consistent.
-4. Return all files from each `models/task1/checkpoints/`, including `.joblib` and `.npz`,
+4. Return all files from each `models/task1/checkpoints/<arm>/`, including `.joblib` and `.npz`,
    to the combine machine. Retain per-machine result CSVs separately for provenance.
 5. Run the combine notebook with `JOB_FILTER = None` and `RESUME = True`. It restores model
    banks, computes comparisons and inference, and exports results. Missing or incompatible
@@ -32,7 +32,8 @@ Same on every machine. Nothing here is per-job; the job is chosen by which file 
 | 2 | Install the environment | `uv sync --frozen` | `--frozen` pins `uv.lock`; a resolved-fresh environment is a different environment |
 | 3 | Place the supplied data | `datasets/` | Workers read only supplied data |
 | 4 | Place the EDA manifest | `preprocessed_datasets/train_manifest.csv` | Copy the **one** file produced by a single EDA run; regenerating it per machine risks a different split |
-| 5 | Confirm the fingerprint | first cells print `Fingerprint: e6b15f5c51de` | A different value means step 3 or 4 diverged — stop and fix it before training |
+| 5 | Set the arm | `ARM` in Section 1.0 | `"supplied"` for the ordinary run, `"enriched"` for the external-data comparison. Every machine in one pass must agree |
+| 6 | Confirm the fingerprint | first cells print `Fingerprint: e6b15f5c51de` | That value is the **supplied** arm. The enriched arm prints a different one, which is correct — it trains on 697 more rows. Any other difference means step 3 or 4 diverged |
 
 There is no capacity setting to choose. Task 1 sizes its CPU pools to every visible core and
 does not pace the CUDA stream, so a worker takes the machine it is given.
@@ -106,47 +107,116 @@ starting either. They train heads only and assert that a trained backbone exists
 
 ## Schedules by machine count
 
-Eight jobs total ~275 minutes of work. Two floors bound any schedule: the total divided by the
-machine count, and `lrsearch` at ~115 minutes, which no amount of hardware splits. A third
-block is effectively indivisible too — `resnet`, `sweep` and `stage2grid` sum to 115 minutes
-and stay together so the stage-1 checkpoint dependency is satisfied locally, with nothing to
-copy mid-run.
+The supplied arm is eight jobs totalling ~275 minutes. Adding the enriched arm of the
+Section 11 experiment brings **~351 minutes** in total, because that arm repeats only the
+three jobs that produce a model: `hog_svm`, `cnn` and `resnet`.
 
-| Machines | Wall clock | Against the floor | Note |
+Three floors bound any schedule, and the last two are what actually bind:
+
+- the total divided by the machine count;
+- **`lrsearch` at ~115 minutes**, which no amount of hardware splits;
+- **`resnet` + `sweep` + `stage2grid` at ~115 minutes**, which stay on one machine so the
+  stage-1 checkpoint dependency is satisfied locally with nothing to copy mid-run.
+
+| Machines | Wall clock | Arms covered | Note |
 |---:|---:|---|---|
-| 1 | ~256 min (4 h 16) | 275 min sequential | Overlapping the CPU-only HOG jobs with GPU work saves the 19 minutes |
-| 2 | ~132 min (2 h 12) | 128 = 256/2 | Within four minutes of the floor; the two 115-minute blocks cannot be split |
-| 3 | ~115 min (1 h 55) | 115 = `lrsearch` | Optimal |
-| 4 | ~115 min (1 h 55) | 115 = `lrsearch` | **No gain over three.** `lrsearch` is the floor |
+| 1 | ~256 min | supplied only | Overlapping the CPU-only HOG jobs with GPU work saves 19 minutes |
+| 2 | ~132 min | supplied only | Within four minutes of the floor; the two 115-minute blocks cannot be split |
+| 3 | ~115 min | supplied only | Optimal for one arm |
+| **4** | **~115 min** | **both** | **The fourth machine runs the entire enriched arm for free** |
 
-**Three machines saturates this workload.** A fourth cannot help, because `lrsearch` alone is
-already the make-span.
+**This is what changes with four machines.** Against one arm a fourth machine bought nothing,
+because `lrsearch` alone was already the make-span. The enriched arm is 76 minutes of work
+that depends on none of it, so it drops onto a fourth machine inside the same 115-minute
+window. Four machines give you the whole experiment in the time three machines needed for
+half of it.
 
-### Two machines — 132 min
+### Two machines — 132 min (supplied arm only)
 
-| Machine | Jobs, in order | Total |
-|---|---|---:|
-| A | `lrsearch`, `cnnsearch`, and `hogsearch` + `hog_svm` alongside on the CPU | 132 min |
-| B | `resnet`, `sweep`, `stage2grid`, `cnn` | 124 min |
+| Machine | `ARM` | Jobs, in order | Total |
+|---|---|---|---:|
+| A | supplied | `lrsearch`, `cnnsearch`, and `hogsearch` + `hog_svm` alongside on the CPU | 132 min |
+| B | supplied | `resnet`, `sweep`, `stage2grid`, `cnn` | 124 min |
 
-### Three machines — 115 min (recommended)
+### Three machines — 115 min (supplied arm only)
 
-| Machine | Jobs, in order | Total |
-|---|---|---:|
-| A | `lrsearch` | 115 min |
-| B | `resnet`, `sweep`, `stage2grid` | 115 min |
-| C | `cnnsearch`, `cnn`, `hogsearch`, `hog_svm` | 45 min |
+| Machine | `ARM` | Jobs, in order | Total |
+|---|---|---|---:|
+| A | supplied | `lrsearch` | 115 min |
+| B | supplied | `resnet`, `sweep`, `stage2grid` | 115 min |
+| C | supplied | `cnnsearch`, `cnn`, `hogsearch`, `hog_svm` | 45 min |
 
-Machine C finishes early and is the natural place to run the combine notebook from once the
-other two return their checkpoints.
+### Four machines — 115 min, both arms (recommended)
+
+| Machine | `ARM` | Jobs, in order | Total |
+|---|---|---|---:|
+| A | `"supplied"` | `lrsearch` | 115 min |
+| B | `"supplied"` | `resnet`, `sweep`, `stage2grid` | 115 min |
+| C | `"supplied"` | `cnnsearch`, `cnn`, `hogsearch`, `hog_svm` | 45 min |
+| D | `"enriched"` | `resnet`, `cnn`, `hog_svm` | 76 min |
+
+The split is deliberately clean along the arm boundary: **machine D is the entire enriched
+arm and no machine changes `ARM` part-way through a pass.** Machine D writes to
+`models/task1/checkpoints/enriched/` and cannot collide with the others, which write to
+`.../supplied/`.
+
+Machine D needs `preprocessed_datasets/task1_dataset1_arms/` present before it starts. Produce
+it once with `python scripts/make_dataset1_arms.py` and copy it alongside the manifest at
+setup step 4, or regenerate it there — it is seeded, so both give the same split.
+
+Machine C finishes first and is the natural place to run the combine notebook from.
+
+### Combining, with two arms
+
+Run the combine notebook **twice**, once per arm, after the checkpoints are back:
+
+1. `ARM = "supplied"`, `JOB_FILTER = None`. Scores the supplied arm and writes
+   `models/task1/arm_results_supplied.json`.
+2. `ARM = "enriched"`, `JOB_FILTER = None`. Same for the enriched arm, then prints the
+   Section 11 comparison table because both files now exist.
+
+The second pass automatically skips the four Section 7.4 grids — the notebook forces them off
+for any arm but the supplied one, so the enriched arm reuses the supplied arm's tuning rather
+than retuning against its own data. Set `RUN_SAMPLER_SWEEP = False` on that pass too if you do
+not want the 23-minute sampler sweep repeated; it is an analysis of where Section 6's gain
+comes from, not an input to the experiment.
 
 The estimates come from a run on Apple Silicon MPS at fp32 that is no longer kept here.
 Measure actual runtimes on your own hardware and re-balance if the ratios between jobs move.
 
+## The second arm: the external-data comparison
+
+Section 11 of the combine notebook asks whether adding 697 external crops to training helps.
+It needs the same models trained twice, once per arm, and the arms differ only in `ARM`.
+
+| Arm | `ARM` | Jobs to run | Time |
+|---|---|---|---:|
+| supplied | `"supplied"` | all eight, the ordinary pass | ~275 min |
+| enriched | `"enriched"` | `hog_svm`, `cnn`, `resnet` only | **~76 min** |
+
+The enriched arm re-runs only the three jobs that produce a *model*. The four tuning grids and
+the sampler sweep are not repeated, and must not be: hyper-parameters are tuned once on the
+supplied arm and applied to both, because retuning per arm would move the data and the recipe
+together and leave the difference unattributable.
+
+On two machines the enriched arm is ~64 minutes — `resnet` alone on one, `hog_svm` and `cnn`
+together on the other.
+
+Prerequisite: run `python scripts/make_dataset1_arms.py` once, on any machine, and copy
+`preprocessed_datasets/task1_dataset1_arms/` alongside the manifest at setup step 4. It splits
+dataset1 into the 697 crops the enriched arm trains on and the 461 that neither arm trains on
+and both are scored against. Every machine in a pass must hold the same split; regenerating it
+per machine is safe (it is seeded) but copying is one less thing to verify.
+
+Whichever arm runs second prints the comparison table. Neither arm can overwrite the other.
+
 ## What comes back from each machine
 
-Copy the whole of `models/task1/checkpoints/` from every worker machine into the combine
-machine's `models/task1/checkpoints/`, preserving filenames. Files are keyed by name, so
+Copy the whole of `models/task1/checkpoints/<arm>/` from every worker machine into the combine
+machine's `models/task1/checkpoints/<arm>/`, preserving filenames and the arm directory. The
+two arms never mix: they write to separate directories and carry different fingerprints, so a
+checkpoint copied into the wrong one is refused rather than silently used. Files are keyed by
+name, so
 copies from different machines merge into one directory without collisions.
 
 | Job | Files it banks | Prefix |
