@@ -262,7 +262,7 @@ def neural_training_config(
         "quick_run": quick_run,
         "resume": resume,
         "allow_cpu": True if quick_run else allow_cpu,
-        "epochs": 3 if quick_run else 10,
+        "epochs": 3 if quick_run else 30,
         "warmup_epochs": 1 if quick_run else 3,
         "batch_size": 128,
         "patience": 6,

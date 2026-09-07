@@ -2,8 +2,13 @@
 datasets/**/*.csv
 datasets/**/*.jpg
 
+# Local Task 2 datasets
+/notebooks/task2/dataset1/
+/notebooks/task2/dataset2/
+
 preprocessed_datasets/**/*.csv
 preprocessed_datasets/**/*.jpg
+/preprocessed_datasets/task2/*.npy
 
 # artifacts — share via Drive, too big for git
 artifacts/**
