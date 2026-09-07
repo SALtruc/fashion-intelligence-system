@@ -5,6 +5,8 @@ datasets/**/*.jpg
 # Local Task 2 datasets
 /notebooks/task2/dataset1/
 /notebooks/task2/dataset2/
+/notebooks/task2/dataset3/
+
 
 preprocessed_datasets/**/*.csv
 preprocessed_datasets/**/*.jpg

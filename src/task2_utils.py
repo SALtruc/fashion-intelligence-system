@@ -479,7 +479,23 @@ class NeuralTrainer:
                 return model, history, blob["val_logits"]
             except ValueError as error:
                 print(f"{label}: {error}; training a compatible checkpoint")
-        criterion = nn.CrossEntropyLoss(label_smoothing=self.cfg["label_smoothing"])
+        power = float(self.cfg.get("class_weight_power", 0.0))
+        if not np.isfinite(power) or not 0.0 <= power <= 1.0:
+            raise ValueError("class_weight_power must be between 0 and 1")
+        class_weights = None
+        if power > 0:
+            counts = np.bincount(self.data.y_train, minlength=self.data.n_classes)
+            if np.any(counts == 0):
+                raise ValueError("Every class must have training examples for class weighting")
+            weights = counts.astype(np.float64) ** (-power)
+            weights /= weights.mean()
+            class_weights = torch.tensor(weights, dtype=torch.float32, device=self.device)
+            print("Training class weights:", dict(zip(self.data.classes, weights.round(3))))
+        criterion = nn.CrossEntropyLoss(
+            weight=class_weights, label_smoothing=self.cfg["label_smoothing"]
+        )
+        # Keep validation loss comparable to the original unweighted runs.
+        validation_criterion = nn.CrossEntropyLoss(label_smoothing=self.cfg["label_smoothing"])
         optimiser = torch.optim.AdamW(model.parameters(), lr=self.cfg["learning_rate"],
                                       weight_decay=self.cfg["weight_decay"])
         def schedule(epoch):
@@ -522,7 +538,7 @@ class NeuralTrainer:
                 flush=True,
             )
             train_loss, train_accuracy, _ = self._epoch(model, criterion, optimiser, scaler)
-            val_loss, val_accuracy, logits = self._epoch(model, criterion)
+            val_loss, val_accuracy, logits = self._epoch(model, validation_criterion)
             scheduler.step()
             pred = logits.argmax(1)
             macro = f1_score(self.data.y_val, pred, labels=self.data.scoreable,
