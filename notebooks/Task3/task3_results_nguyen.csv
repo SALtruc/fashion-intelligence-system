@@ -1,27 +1,27 @@
 model,target,split,macro_f1,macro_f1_in_val,n_classes,n_in_val,accuracy,weighted_f1
-C shared body,gender,forward split,0.5696,0.5696,5,5,0.865,0.8647
-C shared body,gender,independent eval,0.1468,0.1468,5,5,0.2874,0.259
-C shared body,gender,random split,0.6686,0.6686,5,5,0.8883,0.883
-C weighted,gender,random val,0.6976,0.6976,5,5,0.8739,0.8749
-A two models,gender,random val,0.6897,0.6897,5,5,0.8912,0.889
-B joint label,gender,random val,0.6814,0.6814,5,5,0.8908,0.8868
-C with external,gender,random val,0.6778,0.6778,5,5,0.8889,0.8835
-C shared body,gender,random val,0.6686,0.6686,5,5,0.8883,0.883
-C unweighted,gender,random val,0.6686,0.6686,5,5,0.8883,0.883
-C without external,gender,random val,0.6686,0.6686,5,5,0.8883,0.883
-1-NN pixels,gender,random val,0.5388,0.5388,5,5,0.7662,0.7677
-majority,gender,random val,0.141,0.141,5,5,0.5446,0.384
-C shared body,gender,team split,0.6752,0.6752,5,5,0.8891,0.884
-C shared body,usage,forward split,0.3576,0.4768,8,6,0.8955,0.8934
-C shared body,usage,independent eval,0.138,0.138,7,7,0.5441,0.474
-C shared body,usage,random split,0.411,0.4697,8,7,0.901,0.8963
-C weighted,usage,random val,0.5088,0.5815,8,7,0.8693,0.8727
-A two models,usage,random val,0.4145,0.4737,8,7,0.8992,0.8978
-B joint label,usage,random val,0.4123,0.4712,8,7,0.9017,0.8973
-C shared body,usage,random val,0.411,0.4697,8,7,0.901,0.8963
-C unweighted,usage,random val,0.411,0.4697,8,7,0.901,0.8963
-C without external,usage,random val,0.411,0.4697,8,7,0.901,0.8963
-C with external,usage,random val,0.4047,0.4625,8,7,0.8969,0.8908
-1-NN pixels,usage,random val,0.3318,0.3792,8,7,0.7944,0.7958
-majority,usage,random val,0.1086,0.1241,8,7,0.7677,0.6667
-C shared body,usage,team split,0.4038,0.4615,8,7,0.8956,0.8897
+C shared body,gender,forward split,0.5815,0.5815,5,5,0.8679,0.8672
+C shared body,gender,independent eval,0.1345,0.1345,5,5,0.2644,0.2328
+C shared body,gender,per-target split,0.6755,0.6755,5,5,0.8908,0.8852
+A two models,gender,shared val,0.7542,0.7542,5,5,0.9067,0.9038
+C weighted,gender,shared val,0.7332,0.7332,5,5,0.8799,0.8822
+B joint label,gender,shared val,0.7237,0.7237,5,5,0.8804,0.8813
+C shared body,gender,shared val,0.7169,0.7169,5,5,0.8974,0.8938
+C unweighted,gender,shared val,0.7169,0.7169,5,5,0.8974,0.8938
+C without external,gender,shared val,0.7169,0.7169,5,5,0.8974,0.8938
+C shared body,gender,shared val,0.7169,0.7169,5,5,0.8974,0.8938
+C with external,gender,shared val,0.7153,0.7153,5,5,0.8954,0.8911
+1-NN pixels,gender,shared val,0.5335,0.5335,5,5,0.7707,0.7718
+majority,gender,shared val,0.1412,0.1412,5,5,0.5458,0.3855
+C shared body,usage,forward split,0.3562,0.475,8,6,0.8932,0.8916
+C shared body,usage,independent eval,0.1146,0.1146,7,7,0.5709,0.4717
+C shared body,usage,per-target split,0.4051,0.463,8,7,0.8967,0.8909
+C weighted,usage,shared val,0.4657,0.5323,8,7,0.873,0.8737
+A two models,usage,shared val,0.4092,0.4677,8,7,0.8915,0.8886
+C with external,usage,shared val,0.4088,0.4672,8,7,0.891,0.8878
+B joint label,usage,shared val,0.406,0.464,8,7,0.8891,0.8856
+C shared body,usage,shared val,0.4038,0.4615,8,7,0.893,0.8871
+C unweighted,usage,shared val,0.4038,0.4615,8,7,0.893,0.8871
+C without external,usage,shared val,0.4038,0.4615,8,7,0.893,0.8871
+C shared body,usage,shared val,0.4038,0.4615,8,7,0.893,0.8871
+1-NN pixels,usage,shared val,0.3265,0.3732,8,7,0.7765,0.7788
+majority,usage,shared val,0.108,0.1234,8,7,0.7606,0.6572

@@ -35,6 +35,24 @@ Drive → **Add shortcut to Drive** first.
 |---|---|---|
 | `ColabDataset.zip` | the provided catalogue, zipped | 43,577 separate Drive reads take ~30 min *per session*; one zip takes ~1 min |
 | `A2_ExternalData/` | the collected images (folder, 20 MB) | small enough to read straight from Drive |
+| `train_val_grouped_sha256.csv` | **the team's frozen split** (430 KB) | put it inside `A2_ExternalData/`; without it the notebook generates its own split and the numbers stop being comparable |
+
+### Getting the split file
+
+It lives on branch `Truc`, not yet on `main`, and is deliberately not duplicated here
+so it keeps a single owner. Extract it with:
+
+```bash
+git show origin/Truc:splits/train_val_grouped_sha256.csv > splits/train_val_grouped_sha256.csv
+```
+
+Then upload that file into the Drive folder `A2_ExternalData/`, next to the images —
+section 0.1 looks for it there.
+
+The split file is not optional if the numbers are going to sit beside a teammate's.
+A split generated here from seed 42 overlapped the team's frozen file by **15.6%** —
+same seed, same function, different scikit-learn version. Section 3.0 loads the file
+when it can find one and says loudly when it cannot.
 
 Then:
 

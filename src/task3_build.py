@@ -504,35 +504,86 @@ def record(name, target, split, y_true, y_pred, labels=None, **extra):
     return s
 
 # %% [markdown]
-# ### 3.0 One split, used everywhere
+# ### 3.0 The split — the team's frozen file, not one generated here
 #
-# Designs A, B and C can only be compared if they see the *same rows*. Stratifying
-# separately on `gender` and on `usage` produces two different draws, so the whole
-# notebook uses a single split stratified on the **joint** `gender × usage` label —
-# the only draw that is balanced for both targets at once.
+# The repo's rule 2 is that everyone evaluates on the same split. That split is a
+# **file**, `splits/train_val_grouped_sha256.csv`, not a function call — and the
+# difference matters more than it looks. Regenerating a stratified split from a seed
+# reproduces it only if everyone runs the same scikit-learn version; the split this
+# notebook generated for itself overlapped the team's by **15.6%**, so every number
+# produced against it was incomparable with a teammate's despite both being "seed 42".
 #
-# The team's rule is to stratify per target (`make_split(frame, target)`). Those
-# splits are built too, under the key `"team"`, and §8 reports the final model on
-# them as well so the numbers stay comparable with everyone else's.
+# So the file wins whenever it is present, and the generated split is only a fallback
+# for running without it.
+#
+# Its shape, which differs from `preprocessing.make_split` in two ways worth knowing:
+# **15% validation**, not 20%, and **one split shared by both targets** rather than a
+# separate stratified draw per target. `Home` (1 training image) lands in train and is
+# absent from validation, so `usage` averages over 7 of 8 classes unless the
+# denominator is stated — see §1.3.
+
+# %%
+SHARED_SPLIT_NAME = "train_val_grouped_sha256.csv"
+
+def find_shared_split():
+    cands = [os.environ.get("A2_SHARED_SPLIT", ""),
+             f"/content/drive/MyDrive/A2_ExternalData/{SHARED_SPLIT_NAME}",
+             f"/content/{SHARED_SPLIT_NAME}",
+             f"/content/splits/{SHARED_SPLIT_NAME}",
+             str(Path.cwd() / SHARED_SPLIT_NAME),
+             str(Path.cwd().parent / "splits" / SHARED_SPLIT_NAME),
+             f"D:/g2/splits/{SHARED_SPLIT_NAME}",
+             str(Path.cwd() / "task3" / SHARED_SPLIT_NAME)]
+    for c in cands:
+        if c and Path(c).is_file():
+            return Path(c)
+    print("shared split file NOT found - falling back to a locally generated split.\n"
+          "Numbers will NOT be comparable with teammates'. Tried:\n  "
+          + "\n  ".join(str(c) for c in cands if c))
+    return None
+
+
+SHARED = find_shared_split()
+if SHARED is not None:
+    _s = pd.read_csv(SHARED)
+    SHARED_VAL = set(_s.loc[_s["split"] == "val", "id"])
+    covered = frame["id"].isin(set(_s["id"])).mean()
+    print(f"shared split: {SHARED}")
+    print(f"  {len(_s):,} rows, val {len(SHARED_VAL):,} ({len(SHARED_VAL)/len(_s):.1%}), "
+          f"covers {covered:.1%} of the frame")
+    assert covered > 0.99, (
+        f"the shared split only covers {covered:.1%} of the loaded frame - it was built "
+        "on a different row set, so aligning to it would be meaningless")
+
+
+def make_split_shared(frame, target):
+    """Split by the team's frozen file. Rows outside the file go to training."""
+    f = frame.loc[frame[target].notna()].reset_index(drop=True)
+    is_val = f["id"].isin(SHARED_VAL)
+    return f.loc[~is_val].reset_index(drop=True), f.loc[is_val].reset_index(drop=True)
 
 # %%
 frame["pair"] = frame["gender"].astype(str) + " x " + frame["usage"].astype(str)
+PRIMARY = "shared val" if SHARED is not None else "generated val"
 
 splits = {}
-tr, va = make_split(frame, "pair")
+if SHARED is not None:
+    tr, va = make_split_shared(frame, "gender")     # one file, both targets
+else:
+    tr, va = make_split(frame, "pair")              # fallback: stratify on the pair
 for t in TARGETS:
-    splits[(t, "random")] = (tr, va)                       # shared, pair-stratified
-    splits[(t, "forward")] = make_split_forward(frame, t)  # highest ids held out
-    splits[(t, "team")] = make_split(frame, t)             # the team's per-target rule
+    splits[(t, "primary")] = (tr, va)
+    splits[(t, "forward")] = make_split_forward(frame, t)
+    splits[(t, "perTarget")] = make_split(frame, t)   # preprocessing.make_split's rule
 
-print(f"shared random split : train {len(tr):,}  val {len(va):,}")
+print(f"primary split ({PRIMARY}): train {len(tr):,}  val {len(va):,} "
+      f"({len(va)/(len(tr)+len(va)):.1%})")
 for t in TARGETS:
     a, b = splits[(t, "forward")]
-    c, d = splits[(t, "team")]
+    c, d = splits[(t, "perTarget")]
     print(f"{t:7} forward train {len(a):,} val {len(b):,}   "
-          f"| team train {len(c):,} val {len(d):,}")
+          f"| per-target train {len(c):,} val {len(d):,}")
 
-# Classes held entirely out of validation because they have too few groups to split.
 for t in TARGETS:
     held = sorted(set(frame[t].dropna()) - set(va[t]))
     if held:
@@ -544,9 +595,9 @@ for t in TARGETS:
 # %%
 print("=== baseline 1: majority class ===")
 for t in TARGETS:
-    tr, va = splits[(t, "random")]
+    tr, va = splits[(t, "primary")]
     guess = tr[t].value_counts().index[0]
-    record("majority", t, "random val", va[t], [guess] * len(va),
+    record("majority", t, PRIMARY, va[t], [guess] * len(va),
            labels=sorted(frame[t].dropna().unique()))
 
 # %%
@@ -568,8 +619,8 @@ def one_nn(tr, va, target, chunk=512):
     return pred
 
 for t in TARGETS:
-    tr, va = splits[(t, "random")]
-    record("1-NN pixels", t, "random val", va[t], one_nn(tr, va, t),
+    tr, va = splits[(t, "primary")]
+    record("1-NN pixels", t, PRIMARY, va[t], one_nn(tr, va, t),
            labels=sorted(frame[t].dropna().unique()))
 
 # %% [markdown]
@@ -584,7 +635,7 @@ for t in TARGETS:
 
 # %%
 for t in TARGETS:
-    tr, va = splits[(t, "random")]
+    tr, va = splits[(t, "primary")]
     pred = one_nn(tr, va, t)
     rep = pd.DataFrame(classification_report(
         va[t], pred, output_dict=True, zero_division=0)).T
@@ -675,7 +726,7 @@ def encode(series, key):
 
 # Normalisation from the TRAINING rows only — using all rows would leak validation
 # statistics into the model's input scaling.
-_tr, _va = splits[("gender", "random")]
+_tr, _va = splits[("gender", "primary")]
 # A 5,000-row sample, not all 30,196: the full float32 copy would be ~1.7 GB and the
 # channel means are identical to three decimals either way.
 _rows = _tr["_row"].values
@@ -800,7 +851,7 @@ def train_model(name, heads, tr, va, epochs=EPOCHS, weighted=False, lr=1e-3,
 # labels attach.
 
 # %%
-tr, va = splits[("gender", "random")]
+tr, va = splits[("gender", "primary")]
 MODELS, HIST = {}, {}
 
 print("A · two independent models")
@@ -841,7 +892,7 @@ for design in DESIGNS:
         s = score(va[t], pred[t], labels=CLASSES[t])
         r[f"{t} macro-F1"] = round(s["macro_f1"], 4)
         r[f"{t} acc"] = round(s["accuracy"], 4)
-        record(design, t, "random val", va[t], pred[t], labels=CLASSES[t])
+        record(design, t, PRIMARY, va[t], pred[t], labels=CLASSES[t])
     rows.append(r)
 
 comparison = pd.DataFrame(rows)
@@ -849,37 +900,45 @@ print()
 print(comparison.to_string(index=False))
 
 # %% [markdown]
-# ### 5.1 What the comparison showed — the prediction was wrong
+# ### 5.1 What the comparison showed — and what changed on the second split
 #
-# §2 registered **C ≈ A > B, with B losing most on `usage`**. Measured:
+# §2 registered **C ≈ A > B, with B losing most on `usage`**. It was wrong, and it was
+# wrong the same way twice, which is what makes the result usable.
 #
-# | design | params | gender macro-F1 | usage macro-F1 | both correct |
+# | design | params | gender | usage | both correct |
 # |---|---|---|---|---|
-# | A — two models | 576,589 | **0.6897** | **0.4145** | 0.8049 |
-# | B — joint label | 290,552 | 0.6814 | 0.4123 | **0.8070** |
-# | C — shared body | 289,133 | 0.6686 | 0.4110 | 0.8032 |
+# | A — two models | 576,589 | **0.7542** | **0.4092** | **0.8087** |
+# | B — joint label | 290,552 | 0.7237 | 0.4060 | 0.7859 |
+# | C — shared body | 289,133 | 0.7169 | 0.4038 | 0.8013 |
 #
-# Both halves of the prediction failed. **B did not collapse** — it sits within 0.002
-# of A on `usage`, despite turning one sparse class into six. And **C, the design the
-# entropy argument favoured, came last on both targets.**
+# This notebook was run twice — once on a split it generated for itself (20% validation)
+# and once on the team's frozen file (15%). The macro-F1 ordering came out **A > B > C
+# on both splits and both targets, 4 out of 4**:
 #
-# The conclusion is still not "A wins". The spread on `usage` is **0.0035**, and the
-# three rank differently depending on which column you read: macro-F1 puts A first,
-# `both correct` puts B first. At a single seed that is noise, not an ordering.
-# Claiming a winner would need several seeds and a variance estimate — §9.3.
+# | | generated split | team split |
+# |---|---|---|
+# | A / B / C — gender | 0.6897 / 0.6814 / 0.6686 | 0.7542 / 0.7237 / 0.7169 |
+# | A / B / C — usage | 0.4145 / 0.4123 / 0.4110 | 0.4092 / 0.4060 / 0.4038 |
 #
-# What does survive the noise is a **cost** argument. A spends 576,589 parameters, two
-# full backbones, to land inside the noise band of a design using 289,133. When three
-# designs are indistinguishable on the metric, the one that trains one backbone
-# instead of two is the better choice, and that is a defensible reason to prefer B or
-# C without pretending the accuracy difference is real.
+# A strict three-way ordering reproducing across a change of validation partition is
+# weak-but-real evidence. **B did not collapse**, and **C — the design §2's entropy
+# argument favoured — came last every time.** On `gender` the A–C gap widened to
+# **0.037** on the team split, which is large enough to act on; on `usage` it is 0.005,
+# which is not.
 #
-# **Why the entropy reasoning was wrong about B.** It predicted a sparsity cost from
-# the joint label, and that cost is real — six joint classes under 10 examples. But it
-# lands on classes that were **already unlearnable in the marginal problem**: `Home`,
-# `Party` and `Travel` score zero for A and C as well (§6). Splitting a class that is
-# already dead costs nothing measurable. The argument was sound; its premise — that
-# the extra sparsity would bind — was false.
+# Two honest limits on that claim. `both correct` does **not** reproduce the ordering
+# (B was first on the generated split, third here), so only the macro-F1 result
+# replicated. And two splits at one seed each is not a variance estimate — §9.3 still
+# asks for the multi-seed run.
+#
+# **Why §2's reasoning came out backwards.** It measured that `gender` and `usage` share
+# only ~10% of each other's entropy, and concluded a *joint label* would pay sparsity
+# for nothing. That was half the implication. Near-independence argues against sharing
+# the **features** too: if two tasks have little in common, one backbone serving both
+# mostly suffers interference, and A's two separate backbones avoid it entirely at the
+# cost of 2× the parameters. The measurement was right and the inference from it was
+# incomplete — which is a more useful thing to report than a prediction that happened
+# to land.
 
 # %%
 fig_hist = pd.concat([h.assign(run=f"{k[0]} {k[1]}") for k, h in HIST.items()])
@@ -942,7 +1001,7 @@ for tag, model in [("C unweighted", MODELS[("C", "multi")]),
                          va[t], pred[t], labels=[head], average="macro", zero_division=0), 4),
                      "mean F1 on the rest": round(f1_score(
                          va[t], pred[t], labels=tail, average="macro", zero_division=0), 4)})
-        record(tag, t, "random val", va[t], pred[t], labels=CLASSES[t])
+        record(tag, t, PRIMARY, va[t], pred[t], labels=CLASSES[t])
 print()
 print(pd.DataFrame(rows).to_string(index=False))
 
@@ -1050,13 +1109,28 @@ if EXT_OK:
             rows.append({"model": tag, "target": t,
                          "macro-F1": round(s["macro_f1"], 4),
                          "accuracy": round(s["accuracy"], 4)})
-            record(tag, t, "random val", va[t], pred[t], labels=CLASSES[t])
+            record(tag, t, PRIMARY, va[t], pred[t], labels=CLASSES[t])
     ablation = pd.DataFrame(rows).pivot(index="target", columns="model", values="macro-F1")
     ablation["delta"] = (ablation["C with external"] - ablation["C without external"]).round(4)
     print()
     print(ablation.to_string())
-    print("\nA negative delta on `usage` confirms the §7 prediction and belongs in the "
-          "report exactly as measured.")
+    # Do NOT hardcode the direction. The first run measured usage -0.0063 and this
+    # sentence asserted "a negative delta confirms the prediction". The second run,
+    # on the team's split, measured +0.0050 and the same sentence printed anyway.
+    # A conclusion that survives its own data changing sign is not a conclusion.
+    print()
+    for _tgt, _v in ablation["delta"].items():
+        _verdict = ('worse with external data' if _v < -0.002 else
+                    'better with external data' if _v > 0.002 else
+                    'indistinguishable from zero at this scale')
+        print(f'    {_tgt}: delta {_v:+.4f}  ({_verdict})')
+    print()
+    print('    Section 7 predicted no gain on usage, because every external row',
+          'carries the majority class.')
+    print('    A |delta| under 0.006 on both targets is consistent with that -- but it',
+          'is NOT evidence of harm.')
+    print('    Re-run on a second split before claiming a sign. The sign DID flip',
+          'between the two splits tried here; see section 9.2.')
 
 # %% [markdown]
 # ## 8 · Two harder tests than the random validation split
@@ -1092,7 +1166,7 @@ MODELS[("C", "forward")], HIST[("C", "forward")] = train_model(
 
 print("\n=== the same design, scored two ways ===")
 rows = []
-for tag, model, vv in [("random split", MODELS[("C", "multi")], va),
+for tag, model, vv in [(PRIMARY, MODELS[("C", "multi")], va),
                        ("forward split", MODELS[("C", "forward")], va_f)]:
     pred = predict(model, vv, heads_multi)
     for t in TARGETS:
@@ -1121,6 +1195,29 @@ print(pd.DataFrame(rows).pivot(index="target", columns="evaluated on",
 # Two limits to carry into the report: the labels come from a single annotator, and
 # `usage=Home` has 4 images here against **1** in the entire provided training set —
 # so this set can measure a class the provided data cannot teach.
+#
+# > **The label distribution of this set is very different from the catalogue's, and
+# > that is partly deliberate.** Rare classes were over-collected on purpose, because
+# > a class with one training image cannot be measured otherwise:
+# >
+# > | | catalogue train | this set | ratio |
+# > |---|---|---|---|
+# > | `gender=Unisex` | 5.4% | **32.6%** | 6.0x |
+# > | `gender=Men` | 54.4% | 16.9% | 0.3x |
+# > | `usage=Party` | 0.03% | **9.2%** | 267x |
+# > | `usage=Home` | 0.003% | **1.5%** | 578x |
+# >
+# > So a macro-F1 measured here mixes two different effects: the **image** domain gap
+# > (background, framing, lighting) and a **label prior** shift, much of it created by
+# > the annotation choices above. A model trained on 5% `Unisex` will rarely predict
+# > `Unisex`, and would score badly on a set that is a third `Unisex` even if the
+# > photographs were perfect catalogue cut-outs.
+# >
+# > The two can be partly separated. `usage=Casual` is the one class whose share
+# > barely moves (76.7% -> 63.6%), and its F1 falls **0.932 -> 0.731** — that drop is
+# > attributable to the images, not the prior. Quote that number when the claim is
+# > about domain gap, and the macro-F1 when the claim is about the long tail. Do not
+# > use the macro-F1 collapse alone as a measure of generalisation.
 
 # %%
 EVAL_OK = EXT_OK and (Path(EXTERNAL_ROOT) / "ExternalEval" / "external_eval.csv").exists()
@@ -1170,19 +1267,24 @@ if EVAL_OK:
 # %% [markdown]
 # ## 9 · Results, and what they say
 #
-# ### 9.1 On the team's per-target split, for comparability
+# ### 9.1 On the per-target split, as a robustness check
 #
-# Everything above used one split stratified on the joint label, because comparing
-# three designs requires identical rows. The team's rule is to stratify per target,
-# so the chosen design is retrained under that rule too — otherwise these numbers
-# cannot be put next to anyone else's.
+# Everything above used the team's frozen split file, so the numbers sit directly
+# beside a teammate's. This section retrains the chosen design under
+# `preprocessing.make_split(frame, target)` instead — a 20% validation share drawn
+# separately per target, rather than 15% shared by both.
+#
+# It is a robustness check, not a second headline. If a conclusion from §5–§7 flips
+# when the split changes, that conclusion was an artefact of one draw and the report
+# should say so; if the numbers move but the ordering holds, the finding survives a
+# change that touches every row.
 
 # %%
 for t in TARGETS:
-    tr_t, va_t = splits[(t, "team")]
-    m, _ = train_model(f"C_team_{t}", heads_multi, tr_t, va_t, verbose=False)
+    tr_t, va_t = splits[(t, "perTarget")]
+    m, _ = train_model(f"C_perTarget_{t}", heads_multi, tr_t, va_t, verbose=False)
     pred = predict(m, va_t, heads_multi)
-    record("C shared body", t, "team split", va_t[t], pred[t], labels=CLASSES[t])
+    record("C shared body", t, "per-target split", va_t[t], pred[t], labels=CLASSES[t])
     MODELS[("C", f"team_{t}")] = m
 
 # %%
@@ -1221,88 +1323,102 @@ print(f"\nsaved -> {OUT}")
 # %% [markdown]
 # ### 9.2 What this notebook found
 #
-# **1. `gender` and `usage` are not one task.** `gender` has five classes and a
-# smallest class of 483; `usage` has eight and a smallest of **1**. The results carry
-# that asymmetry straight through: best `gender` macro-F1 **0.6976**, best `usage`
-# **0.5088**. The gap is not model quality — it is that half of `usage`'s classes have
+# Every number below is on the team's frozen split, `train_val_grouped_sha256.csv`
+# (37,745 rows, 15% validation), so it sits directly beside a teammate's. Where a
+# finding was checked against the second split this notebook also ran, that is said.
+#
+# **1. `gender` and `usage` are not one task.** `gender` has five classes, smallest 483;
+# `usage` has eight, smallest **1**. Best `gender` macro-F1 **0.7542**, best `usage`
+# **0.4657**. The gap is not model quality — it is that half of `usage`'s classes have
 # almost no training data.
 #
-# **2. Accuracy is unusable here.** Predicting `Casual` everywhere scores **76.8%**
-# accuracy and **0.109** macro-F1. The best `usage` model reaches **86.9%** accuracy —
-# ten points above a model that has learned nothing at all. Every claim below is
-# macro-F1 for that reason, with the class count it was averaged over.
+# **2. Accuracy is unusable here.** Predicting `Casual` everywhere scores **76.1%**
+# accuracy and **0.108** macro-F1. The best `usage` model reaches **87.3%** accuracy,
+# eleven points above a model that has learned nothing.
 #
-# **3. The design question the brief leaves open does not matter — that is the answer.**
-# A 0.4145 / B 0.4123 / C 0.4110 on `usage`: a spread of **0.0035**, with the three
-# ranking differently under `both correct`. At one seed that is noise. What survives is
-# cost: A spends **2× the parameters** (576,589 vs 289,133) for no measurable gain, so
-# B or C is the better engineering choice. Reported as "indistinguishable, prefer the
-# cheaper", not as a winner.
+# **3. Two separate models beat a shared backbone — the opposite of the prediction, and
+# it replicated.** A > B > C on macro-F1, on both splits and both targets, 4 out of 4.
+# On `gender` the A–C gap is **0.037**, large enough to act on; on `usage` it is 0.005,
+# which is not. A pays **2× the parameters** for it. §2's entropy measurement was right
+# and the inference drawn from it was incomplete: near-independent targets argue against
+# sharing features, not only against merging labels.
 #
-# **4. Class weighting is worth far more than the architecture choice.** `usage`
-# macro-F1 **0.4110 → 0.5088**, +24% relative, against ±0.021 for the entire A/B/C
-# question. §6 shows what it bought and what it cost:
+# **4. Class weighting is the largest lever tested, but which class it rescues is not
+# stable.** `usage` macro-F1 **0.4038 → 0.4657** here, and 0.4110 → 0.5088 on the other
+# split: same direction twice, so the effect is real. What it buys is not:
 #
-# | usage class | train n | unweighted | weighted |
-# |---|---|---|---|
-# | `Party` | 10 | 0.000 | **0.500** |
-# | `Travel` | 20 | 0.000 | **0.400** |
-# | `Smart Casual` | 44 | 0.000 | 0.000 |
-# | `Home` | 1 | 0.000 | 0.000 |
-# | `Casual` | 23,173 | 0.938 | 0.915 |
-# | `Formal` | 1,763 | 0.793 | 0.734 |
-# | `Sports` | 3,132 | 0.689 | 0.670 |
+# | usage class | train n | val n | unweighted | weighted | on the other split |
+# |---|---|---|---|---|---|
+# | `Party` | 10 | 3 | 0.000 | **0.000** | 0.000 → **0.500** |
+# | `Travel` | 22 | 3 | 0.000 | **0.333** | 0.000 → 0.400 |
+# | `Smart Casual` | 46 | 9 | 0.000 | **0.200** | 0.000 → 0.000 |
+# | `Home` | 1 | 0 | 0.000 | 0.000 | 0.000 |
+# | `Casual` | 24,662 | 4,306 | 0.932 | 0.917 | 0.938 → 0.915 |
+# | `Sports` | 3,300 | 614 | 0.679 | 0.662 | 0.689 → 0.670 |
 #
-# Two dead classes revived, three head classes degraded, accuracy 0.9010 → 0.8693.
-# Both halves belong in the report. And `Party` needs a caveat: F1 0.500 is precision
-# 1.000 at recall 0.333 **on three validation items** — a real gain measured on almost
-# nothing.
+# Weighting reliably lifts macro-F1 by rescuing *some* tail class while degrading the
+# head — but `Party` was rescued on one split and not the other, and `Smart Casual` the
+# reverse. With **3 to 9 validation items** per class, which one gets rescued is a coin
+# flip. Report the aggregate effect as real and the per-class rescues as unstable.
 #
-# **5. §1.1's ceiling was exceeded, and the reason is the useful part.** That section
-# put `usage` macro-F1 at **0.500** if the four classes under 100 images stayed
-# unlearnable. The weighted model reached **0.5088**. The arithmetic was right; the
-# assumption was not — weighting rescued two of the four, moving the ceiling to
-# 6/8 = **0.750**. The ceiling correctly identified the binding constraint; the
-# experiment showed that constraint was soft, which is more informative than either
-# number alone.
+# **5. §1.1's ceiling logic held, and its assumption did not.** That section put `usage`
+# macro-F1 at **0.500** if the four classes under 100 images stayed unlearnable. Both
+# runs landed near it — 0.4657 here, 0.5088 on the other split, the latter slightly
+# above because weighting revived two of the four. The arithmetic identified the binding
+# constraint correctly; the constraint turned out to be soft.
 #
-# **6. The external data behaved as predicted, and it is a negative result.**
-# `usage` **0.4110 → 0.4047 (−0.0063)**; `gender` 0.6686 → 0.6778 (+0.0092). The sign
-# on `usage` is what §7 predicted from where the labels land — 1,899 rows of the
-# majority class into a problem whose whole difficulty is its tail. Both deltas are
-# small enough to be noise, so the honest claim is not "it hurt" but **"it did not
-# help, and the direction matches the prediction made before the run"**.
+# **6. The external data has no measurable effect on this task — the sign flipped
+# between splits.**
 #
-# **7. The random split flatters the model. The catalogue flatters it enormously.**
+# | | generated split | team split |
+# |---|---|---|
+# | `gender` delta | +0.0092 | −0.0016 |
+# | `usage` delta | −0.0063 | **+0.0050** |
+#
+# §7 predicted **no gain**, because all 1,899 rows carry the majority class, and that is
+# confirmed: |delta| ≤ 0.006 everywhere. But the first run's negative `usage` delta was
+# reported as evidence the data *hurt*, and the second run reversed it. **One split is
+# not enough to establish a sign.** The defensible claim is "collected, tested, no
+# effect on Task 3" — which is still worth reporting, and is why §7 records the
+# prediction before the measurement.
+#
+# **7. The random split flatters the model; the catalogue flatters it far more — but the
+# second half of that is confounded.**
 #
 # | | `gender` | `usage` |
 # |---|---|---|
-# | random split | 0.6686 | 0.4110 |
-# | forward split (highest ids, like the graded test) | 0.5696 | 0.3576 |
-# | **261 independent photographs** | **0.1468** | **0.1380** |
+# | team split (15% val) | 0.7169 | 0.4038 |
+# | per-target split (20% val) | 0.6755 | 0.4051 |
+# | forward split (highest ids, like the graded test) | 0.5815 | 0.3562 |
+# | **261 independent photographs** | **0.1345** | **0.1146** |
 #
-# The forward split costs **0.099** on `gender`. The independent set costs **0.522** —
-# five times as much. It puts the model at **0.1468 against a majority baseline of
-# 0.1410**, with accuracy collapsing from 0.8883 to **0.2874**.
+# The forward split costs **0.135** on `gender` — the honest estimate of what the graded
+# test set will do, since it *is* the high-id region.
 #
-# Off the catalogue, this model is not meaningfully better than guessing. Almost all of
-# its apparent skill was Myntra's photography convention — white background, one
-# centred product, consistent framing — rather than anything about clothing. No
-# validation number in this project would have revealed that, which is the argument for
-# §3.3 existing at all.
+# The independent set costs **0.582**, putting `gender` **below** its majority baseline
+# (0.1345 vs 0.1412) with accuracy falling 0.8974 → **0.2644**. That collapse is real
+# but it is **not purely a domain gap**: this set is 32.6% `Unisex` against the
+# catalogue's 5.4%, and 9.2% `Party` against 0.03%, because rare classes were
+# deliberately over-collected so they could be measured at all. A model trained on 5%
+# `Unisex` will rarely predict it, and would score badly here on label prior alone.
+#
+# The cleanest single number separating the two: `usage=Casual`, the one class whose
+# share barely moves (76.7% → 63.6%), falls **0.932 → 0.731**. That 0.20 is
+# attributable to the photographs. Use it for claims about generalisation, and the
+# macro-F1 for claims about the long tail — not the other way round.
 #
 # ### 9.3 What would be worth doing next
 #
-# * **Repeat A/B/C over 3–5 seeds.** Every design conclusion here rests on differences
-#   of 0.003–0.02 at a single seed. Without a variance estimate the ranking cannot be
-#   defended, and with one the "indistinguishable" claim becomes measured rather than
-#   asserted.
-# * **`Home` and `Smart Casual` are still zero.** Weighting reached `Party` and
-#   `Travel` but not these. Either collect images, merge them into a documented
-#   "other" class, or report them as a known floor — choosing openly beats a quiet 0.
-# * **Fine-tune a Task 1 backbone here.** §2 measured that `articleType` explains
-#   66.8% of `usage`'s entropy and 43.1% of `gender`'s — far more than either target
-#   explains about the other. That is the transfer this notebook did not test.
-# * **Explain the independent-evaluation collapse.** Is it the background, the framing,
-#   or the label definitions? Re-scoring the 261 images after masking backgrounds to
-#   white would separate the first from the rest, and costs one run.
+# * **Multi-seed A/B/C.** The ordering replicated across two splits, but at one seed
+#   each. Three to five seeds turns "reproduced twice" into a variance estimate, and
+#   the `gender` A–C gap of 0.037 is the specific claim that needs it.
+# * **Re-score the independent set with matched label priors**, by reweighting or by
+#   sampling a subset with the catalogue's distribution. That separates the image domain
+#   gap from the annotation prior and would settle how much of the 0.582 is real.
+# * **`Home` and `Party` are still zero.** Either collect images, merge them into a
+#   documented "other" class, or report them as a known floor. Choosing openly beats a
+#   quiet 0.
+# * **Fine-tune a Task 1 backbone here.** §2 measured `articleType` explaining 66.8% of
+#   `usage`'s entropy and 43.1% of `gender`'s — far more than either target explains
+#   about the other. Given that sharing between these two targets *hurt* (finding 3),
+#   sharing with `articleType` instead is the transfer worth testing.
