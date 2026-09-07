@@ -39,15 +39,13 @@ Drive → **Add shortcut to Drive** first.
 
 ### Getting the split file
 
-It lives on branch `Truc`, not yet on `main`, and is deliberately not duplicated here
-so it keeps a single owner. Extract it with:
+It is in this branch at `splits/train_val_grouped_sha256.csv`, byte-identical to the
+copy on branch `Truc` (git blob `3d2e22b`), so if that branch merges to `main`
+separately git resolves it as the same object — verified with a test merge, not
+assumed.
 
-```bash
-git show origin/Truc:splits/train_val_grouped_sha256.csv > splits/train_val_grouped_sha256.csv
-```
-
-Then upload that file into the Drive folder `A2_ExternalData/`, next to the images —
-section 0.1 looks for it there.
+Upload it into the Drive folder `A2_ExternalData/`, next to the images. Section 0.1
+looks for it there.
 
 The split file is not optional if the numbers are going to sit beside a teammate's.
 A split generated here from seed 42 overlapped the team's frozen file by **15.6%** —
