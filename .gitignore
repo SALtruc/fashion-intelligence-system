@@ -2,8 +2,9 @@
 datasets/**/*.csv
 datasets/**/*.jpg
 
-preprocessed_datasets/**/*.csv
-preprocessed_datasets/**/*.jpg
+# preprocessed_datasets is tracked on purpose. The manifests define the splits every
+# notebook reads, so a fresh checkout has to land on the same rows without re-running
+# the EDA notebook first. 16 MB of text, and no images are written here.
 
 # artifacts — share via Drive, too big for git
 artifacts/**

@@ -1,0 +1,698 @@
+id,gender,masterCategory,subCategory,articleType,season,usage,source,label_source,cluster,relative_path
+900000,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900000,notebooks/Task1/dataset1/images/900000.jpg
+900002,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900002,notebooks/Task1/dataset1/images/900002.jpg
+900003,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900003,notebooks/Task1/dataset1/images/900003.jpg
+900007,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900007,notebooks/Task1/dataset1/images/900007.jpg
+900008,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900008,notebooks/Task1/dataset1/images/900008.jpg
+900012,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900012,notebooks/Task1/dataset1/images/900012.jpg
+900019,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900019,notebooks/Task1/dataset1/images/900019.jpg
+900020,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900020,notebooks/Task1/dataset1/images/900020.jpg
+900024,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900024,notebooks/Task1/dataset1/images/900024.jpg
+900025,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900025,notebooks/Task1/dataset1/images/900025.jpg
+900026,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900026,notebooks/Task1/dataset1/images/900026.jpg
+900027,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900027,notebooks/Task1/dataset1/images/900027.jpg
+900029,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900029,notebooks/Task1/dataset1/images/900029.jpg
+900030,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900030,notebooks/Task1/dataset1/images/900030.jpg
+900033,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900033,notebooks/Task1/dataset1/images/900033.jpg
+900037,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900037,notebooks/Task1/dataset1/images/900037.jpg
+900038,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900038,notebooks/Task1/dataset1/images/900038.jpg
+900040,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900040,notebooks/Task1/dataset1/images/900040.jpg
+900044,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900044,notebooks/Task1/dataset1/images/900044.jpg
+900045,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900045,notebooks/Task1/dataset1/images/900045.jpg
+900046,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900046,notebooks/Task1/dataset1/images/900046.jpg
+900047,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900047,notebooks/Task1/dataset1/images/900047.jpg
+900050,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900050,notebooks/Task1/dataset1/images/900050.jpg
+900051,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900051,notebooks/Task1/dataset1/images/900051.jpg
+900053,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900053,notebooks/Task1/dataset1/images/900053.jpg
+900054,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900054,notebooks/Task1/dataset1/images/900054.jpg
+900055,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900055,notebooks/Task1/dataset1/images/900055.jpg
+900056,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900056,notebooks/Task1/dataset1/images/900056.jpg
+900058,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900058,notebooks/Task1/dataset1/images/900058.jpg
+900060,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900060,notebooks/Task1/dataset1/images/900060.jpg
+900061,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900061,notebooks/Task1/dataset1/images/900061.jpg
+900062,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900062,notebooks/Task1/dataset1/images/900062.jpg
+900064,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900064,notebooks/Task1/dataset1/images/900064.jpg
+900067,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900067,notebooks/Task1/dataset1/images/900067.jpg
+900068,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900068,notebooks/Task1/dataset1/images/900068.jpg
+900070,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900070,notebooks/Task1/dataset1/images/900070.jpg
+900072,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900072,notebooks/Task1/dataset1/images/900072.jpg
+900073,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900073,notebooks/Task1/dataset1/images/900073.jpg
+900075,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900075,notebooks/Task1/dataset1/images/900075.jpg
+900077,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900077,notebooks/Task1/dataset1/images/900077.jpg
+900080,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900080,notebooks/Task1/dataset1/images/900080.jpg
+900082,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900082,notebooks/Task1/dataset1/images/900082.jpg
+900083,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900083,notebooks/Task1/dataset1/images/900083.jpg
+900084,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900084,notebooks/Task1/dataset1/images/900084.jpg
+900086,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900086,notebooks/Task1/dataset1/images/900086.jpg
+900088,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900088,notebooks/Task1/dataset1/images/900088.jpg
+900089,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900089,notebooks/Task1/dataset1/images/900089.jpg
+900091,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900091,notebooks/Task1/dataset1/images/900091.jpg
+900092,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900092,notebooks/Task1/dataset1/images/900092.jpg
+900095,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900095,notebooks/Task1/dataset1/images/900095.jpg
+900096,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900096,notebooks/Task1/dataset1/images/900096.jpg
+900098,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900098,notebooks/Task1/dataset1/images/900098.jpg
+900100,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900100,notebooks/Task1/dataset1/images/900100.jpg
+900101,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900101,notebooks/Task1/dataset1/images/900101.jpg
+900104,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900104,notebooks/Task1/dataset1/images/900104.jpg
+900107,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900107,notebooks/Task1/dataset1/images/900107.jpg
+900108,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900108,notebooks/Task1/dataset1/images/900108.jpg
+900115,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900115,notebooks/Task1/dataset1/images/900115.jpg
+900118,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900118,notebooks/Task1/dataset1/images/900118.jpg
+900119,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900119,notebooks/Task1/dataset1/images/900119.jpg
+900120,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900120,notebooks/Task1/dataset1/images/900120.jpg
+900124,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900124,notebooks/Task1/dataset1/images/900124.jpg
+900126,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900126,notebooks/Task1/dataset1/images/900126.jpg
+900127,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900127,notebooks/Task1/dataset1/images/900127.jpg
+900131,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900131,notebooks/Task1/dataset1/images/900131.jpg
+900132,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900132,notebooks/Task1/dataset1/images/900132.jpg
+900133,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900133,notebooks/Task1/dataset1/images/900133.jpg
+900134,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900134,notebooks/Task1/dataset1/images/900134.jpg
+900135,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900135,notebooks/Task1/dataset1/images/900135.jpg
+900138,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900138,notebooks/Task1/dataset1/images/900138.jpg
+900140,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900140,notebooks/Task1/dataset1/images/900140.jpg
+900143,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900143,notebooks/Task1/dataset1/images/900143.jpg
+900144,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900144,notebooks/Task1/dataset1/images/900144.jpg
+900145,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900145,notebooks/Task1/dataset1/images/900145.jpg
+900146,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900146,notebooks/Task1/dataset1/images/900146.jpg
+900147,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900147,notebooks/Task1/dataset1/images/900147.jpg
+900148,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900148,notebooks/Task1/dataset1/images/900148.jpg
+900149,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900149,notebooks/Task1/dataset1/images/900149.jpg
+900150,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900150,notebooks/Task1/dataset1/images/900150.jpg
+900151,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900151,notebooks/Task1/dataset1/images/900151.jpg
+900152,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900152,notebooks/Task1/dataset1/images/900152.jpg
+900154,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900154,notebooks/Task1/dataset1/images/900154.jpg
+900156,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900156,notebooks/Task1/dataset1/images/900156.jpg
+900158,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900158,notebooks/Task1/dataset1/images/900158.jpg
+900159,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900159,notebooks/Task1/dataset1/images/900159.jpg
+900161,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900161,notebooks/Task1/dataset1/images/900161.jpg
+900162,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900162,notebooks/Task1/dataset1/images/900162.jpg
+900164,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900164,notebooks/Task1/dataset1/images/900164.jpg
+900165,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900165,notebooks/Task1/dataset1/images/900165.jpg
+900166,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900166,notebooks/Task1/dataset1/images/900166.jpg
+900168,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900168,notebooks/Task1/dataset1/images/900168.jpg
+900169,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900169,notebooks/Task1/dataset1/images/900169.jpg
+900171,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900171,notebooks/Task1/dataset1/images/900171.jpg
+900172,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900172,notebooks/Task1/dataset1/images/900172.jpg
+900173,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900173,notebooks/Task1/dataset1/images/900173.jpg
+900174,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900174,notebooks/Task1/dataset1/images/900174.jpg
+900176,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900176,notebooks/Task1/dataset1/images/900176.jpg
+900178,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900178,notebooks/Task1/dataset1/images/900178.jpg
+900179,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900179,notebooks/Task1/dataset1/images/900179.jpg
+900180,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900180,notebooks/Task1/dataset1/images/900180.jpg
+900182,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900182,notebooks/Task1/dataset1/images/900182.jpg
+900184,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900184,notebooks/Task1/dataset1/images/900184.jpg
+900185,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900185,notebooks/Task1/dataset1/images/900185.jpg
+900186,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900186,notebooks/Task1/dataset1/images/900186.jpg
+900187,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900187,notebooks/Task1/dataset1/images/900187.jpg
+900192,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900192,notebooks/Task1/dataset1/images/900192.jpg
+900193,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900193,notebooks/Task1/dataset1/images/900193.jpg
+900194,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900194,notebooks/Task1/dataset1/images/900194.jpg
+900197,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900197,notebooks/Task1/dataset1/images/900197.jpg
+900198,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900198,notebooks/Task1/dataset1/images/900198.jpg
+900199,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900199,notebooks/Task1/dataset1/images/900199.jpg
+900201,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900201,notebooks/Task1/dataset1/images/900201.jpg
+900202,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900202,notebooks/Task1/dataset1/images/900202.jpg
+900204,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900204,notebooks/Task1/dataset1/images/900204.jpg
+900205,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900205,notebooks/Task1/dataset1/images/900205.jpg
+900209,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900209,notebooks/Task1/dataset1/images/900209.jpg
+900212,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900212,notebooks/Task1/dataset1/images/900212.jpg
+900213,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900213,notebooks/Task1/dataset1/images/900213.jpg
+900215,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900215,notebooks/Task1/dataset1/images/900215.jpg
+900216,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900216,notebooks/Task1/dataset1/images/900216.jpg
+900217,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900217,notebooks/Task1/dataset1/images/900217.jpg
+900218,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900218,notebooks/Task1/dataset1/images/900218.jpg
+900219,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900219,notebooks/Task1/dataset1/images/900219.jpg
+900221,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900221,notebooks/Task1/dataset1/images/900221.jpg
+900224,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900224,notebooks/Task1/dataset1/images/900224.jpg
+900227,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900227,notebooks/Task1/dataset1/images/900227.jpg
+900228,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900228,notebooks/Task1/dataset1/images/900228.jpg
+900230,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900230,notebooks/Task1/dataset1/images/900230.jpg
+900231,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900231,notebooks/Task1/dataset1/images/900231.jpg
+900232,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900232,notebooks/Task1/dataset1/images/900232.jpg
+900233,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900233,notebooks/Task1/dataset1/images/900233.jpg
+900234,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900234,notebooks/Task1/dataset1/images/900234.jpg
+900235,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900235,notebooks/Task1/dataset1/images/900235.jpg
+900236,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900236,notebooks/Task1/dataset1/images/900236.jpg
+900238,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900238,notebooks/Task1/dataset1/images/900238.jpg
+900240,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900240,notebooks/Task1/dataset1/images/900240.jpg
+900241,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900241,notebooks/Task1/dataset1/images/900241.jpg
+900243,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900243,notebooks/Task1/dataset1/images/900243.jpg
+900244,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900244,notebooks/Task1/dataset1/images/900244.jpg
+900245,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900245,notebooks/Task1/dataset1/images/900245.jpg
+900246,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900246,notebooks/Task1/dataset1/images/900246.jpg
+900247,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900247,notebooks/Task1/dataset1/images/900247.jpg
+900248,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900248,notebooks/Task1/dataset1/images/900248.jpg
+900249,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900249,notebooks/Task1/dataset1/images/900249.jpg
+900250,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900250,notebooks/Task1/dataset1/images/900250.jpg
+900251,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900251,notebooks/Task1/dataset1/images/900251.jpg
+900252,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900252,notebooks/Task1/dataset1/images/900252.jpg
+900254,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900254,notebooks/Task1/dataset1/images/900254.jpg
+900255,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900255,notebooks/Task1/dataset1/images/900255.jpg
+900257,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900257,notebooks/Task1/dataset1/images/900257.jpg
+900258,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900258,notebooks/Task1/dataset1/images/900258.jpg
+900260,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900260,notebooks/Task1/dataset1/images/900260.jpg
+900261,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900261,notebooks/Task1/dataset1/images/900261.jpg
+900262,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900262,notebooks/Task1/dataset1/images/900262.jpg
+900263,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900263,notebooks/Task1/dataset1/images/900263.jpg
+900264,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900264,notebooks/Task1/dataset1/images/900264.jpg
+900265,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900265,notebooks/Task1/dataset1/images/900265.jpg
+900266,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900266,notebooks/Task1/dataset1/images/900266.jpg
+900267,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900267,notebooks/Task1/dataset1/images/900267.jpg
+900270,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900270,notebooks/Task1/dataset1/images/900270.jpg
+900271,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900271,notebooks/Task1/dataset1/images/900271.jpg
+900272,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900272,notebooks/Task1/dataset1/images/900272.jpg
+900275,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900275,notebooks/Task1/dataset1/images/900275.jpg
+900282,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900282,notebooks/Task1/dataset1/images/900282.jpg
+900283,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900283,notebooks/Task1/dataset1/images/900283.jpg
+900284,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900284,notebooks/Task1/dataset1/images/900284.jpg
+900285,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900285,notebooks/Task1/dataset1/images/900285.jpg
+900286,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900286,notebooks/Task1/dataset1/images/900286.jpg
+900290,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900290,notebooks/Task1/dataset1/images/900290.jpg
+900291,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900291,notebooks/Task1/dataset1/images/900291.jpg
+900293,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900293,notebooks/Task1/dataset1/images/900293.jpg
+900294,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900294,notebooks/Task1/dataset1/images/900294.jpg
+900295,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900295,notebooks/Task1/dataset1/images/900295.jpg
+900296,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900296,notebooks/Task1/dataset1/images/900296.jpg
+900298,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900298,notebooks/Task1/dataset1/images/900298.jpg
+900301,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900301,notebooks/Task1/dataset1/images/900301.jpg
+900302,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900302,notebooks/Task1/dataset1/images/900302.jpg
+900304,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900304,notebooks/Task1/dataset1/images/900304.jpg
+900305,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900305,notebooks/Task1/dataset1/images/900305.jpg
+900307,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900307,notebooks/Task1/dataset1/images/900307.jpg
+900309,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900309,notebooks/Task1/dataset1/images/900309.jpg
+900310,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900310,notebooks/Task1/dataset1/images/900310.jpg
+900311,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900311,notebooks/Task1/dataset1/images/900311.jpg
+900313,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900313,notebooks/Task1/dataset1/images/900313.jpg
+900314,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900314,notebooks/Task1/dataset1/images/900314.jpg
+900318,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900318,notebooks/Task1/dataset1/images/900318.jpg
+900321,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900321,notebooks/Task1/dataset1/images/900321.jpg
+900322,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900322,notebooks/Task1/dataset1/images/900322.jpg
+900325,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900325,notebooks/Task1/dataset1/images/900325.jpg
+900326,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900326,notebooks/Task1/dataset1/images/900326.jpg
+900327,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900327,notebooks/Task1/dataset1/images/900327.jpg
+900329,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900329,notebooks/Task1/dataset1/images/900329.jpg
+900330,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900330,notebooks/Task1/dataset1/images/900330.jpg
+900335,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900335,notebooks/Task1/dataset1/images/900335.jpg
+900338,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900338,notebooks/Task1/dataset1/images/900338.jpg
+900339,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900339,notebooks/Task1/dataset1/images/900339.jpg
+900340,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900340,notebooks/Task1/dataset1/images/900340.jpg
+900343,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900343,notebooks/Task1/dataset1/images/900343.jpg
+900344,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900344,notebooks/Task1/dataset1/images/900344.jpg
+900345,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900345,notebooks/Task1/dataset1/images/900345.jpg
+900347,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900347,notebooks/Task1/dataset1/images/900347.jpg
+900348,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900348,notebooks/Task1/dataset1/images/900348.jpg
+900349,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900349,notebooks/Task1/dataset1/images/900349.jpg
+900353,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900353,notebooks/Task1/dataset1/images/900353.jpg
+900354,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900354,notebooks/Task1/dataset1/images/900354.jpg
+900355,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900355,notebooks/Task1/dataset1/images/900355.jpg
+900356,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900356,notebooks/Task1/dataset1/images/900356.jpg
+900358,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900358,notebooks/Task1/dataset1/images/900358.jpg
+900360,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900360,notebooks/Task1/dataset1/images/900360.jpg
+900361,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900361,notebooks/Task1/dataset1/images/900361.jpg
+900362,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900362,notebooks/Task1/dataset1/images/900362.jpg
+900363,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900363,notebooks/Task1/dataset1/images/900363.jpg
+900365,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900365,notebooks/Task1/dataset1/images/900365.jpg
+900367,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900367,notebooks/Task1/dataset1/images/900367.jpg
+900368,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900368,notebooks/Task1/dataset1/images/900368.jpg
+900370,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900370,notebooks/Task1/dataset1/images/900370.jpg
+900371,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900371,notebooks/Task1/dataset1/images/900371.jpg
+900372,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900372,notebooks/Task1/dataset1/images/900372.jpg
+900374,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900374,notebooks/Task1/dataset1/images/900374.jpg
+900375,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900375,notebooks/Task1/dataset1/images/900375.jpg
+900376,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900376,notebooks/Task1/dataset1/images/900376.jpg
+900377,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900377,notebooks/Task1/dataset1/images/900377.jpg
+900378,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900378,notebooks/Task1/dataset1/images/900378.jpg
+900380,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900380,notebooks/Task1/dataset1/images/900380.jpg
+900381,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900381,notebooks/Task1/dataset1/images/900381.jpg
+900382,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900382,notebooks/Task1/dataset1/images/900382.jpg
+900383,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900383,notebooks/Task1/dataset1/images/900383.jpg
+900384,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900384,notebooks/Task1/dataset1/images/900384.jpg
+900386,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900386,notebooks/Task1/dataset1/images/900386.jpg
+900388,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900388,notebooks/Task1/dataset1/images/900388.jpg
+900389,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900389,notebooks/Task1/dataset1/images/900389.jpg
+900391,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900391,notebooks/Task1/dataset1/images/900391.jpg
+900392,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900392,notebooks/Task1/dataset1/images/900392.jpg
+900393,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900393,notebooks/Task1/dataset1/images/900393.jpg
+900395,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900395,notebooks/Task1/dataset1/images/900395.jpg
+900396,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900396,notebooks/Task1/dataset1/images/900396.jpg
+900397,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900397,notebooks/Task1/dataset1/images/900397.jpg
+900398,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900398,notebooks/Task1/dataset1/images/900398.jpg
+900399,Women,Personal Care,Eyes,Eyeshadow,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900399,notebooks/Task1/dataset1/images/900399.jpg
+900400,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900400,notebooks/Task1/dataset1/images/900400.jpg
+900401,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900401,notebooks/Task1/dataset1/images/900401.jpg
+900402,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900402,notebooks/Task1/dataset1/images/900402.jpg
+900405,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900405,notebooks/Task1/dataset1/images/900405.jpg
+900406,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900406,notebooks/Task1/dataset1/images/900406.jpg
+900407,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900407,notebooks/Task1/dataset1/images/900407.jpg
+900408,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900408,notebooks/Task1/dataset1/images/900408.jpg
+900409,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900409,notebooks/Task1/dataset1/images/900409.jpg
+900410,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900410,notebooks/Task1/dataset1/images/900410.jpg
+900411,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900411,notebooks/Task1/dataset1/images/900411.jpg
+900412,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900412,notebooks/Task1/dataset1/images/900412.jpg
+900414,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900414,notebooks/Task1/dataset1/images/900414.jpg
+900416,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900416,notebooks/Task1/dataset1/images/900416.jpg
+900418,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900418,notebooks/Task1/dataset1/images/900418.jpg
+900419,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900419,notebooks/Task1/dataset1/images/900419.jpg
+900420,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900420,notebooks/Task1/dataset1/images/900420.jpg
+900421,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900421,notebooks/Task1/dataset1/images/900421.jpg
+900422,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900422,notebooks/Task1/dataset1/images/900422.jpg
+900423,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900423,notebooks/Task1/dataset1/images/900423.jpg
+900424,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900424,notebooks/Task1/dataset1/images/900424.jpg
+900425,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900425,notebooks/Task1/dataset1/images/900425.jpg
+900427,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900427,notebooks/Task1/dataset1/images/900427.jpg
+900428,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900428,notebooks/Task1/dataset1/images/900428.jpg
+900429,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900429,notebooks/Task1/dataset1/images/900429.jpg
+900430,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900430,notebooks/Task1/dataset1/images/900430.jpg
+900431,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900431,notebooks/Task1/dataset1/images/900431.jpg
+900434,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900434,notebooks/Task1/dataset1/images/900434.jpg
+900435,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900435,notebooks/Task1/dataset1/images/900435.jpg
+900436,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900436,notebooks/Task1/dataset1/images/900436.jpg
+900438,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900438,notebooks/Task1/dataset1/images/900438.jpg
+900439,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900439,notebooks/Task1/dataset1/images/900439.jpg
+900441,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900441,notebooks/Task1/dataset1/images/900441.jpg
+900445,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900445,notebooks/Task1/dataset1/images/900445.jpg
+900448,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900448,notebooks/Task1/dataset1/images/900448.jpg
+900451,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900451,notebooks/Task1/dataset1/images/900451.jpg
+900452,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900452,notebooks/Task1/dataset1/images/900452.jpg
+900454,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900454,notebooks/Task1/dataset1/images/900454.jpg
+900456,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900456,notebooks/Task1/dataset1/images/900456.jpg
+900457,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900457,notebooks/Task1/dataset1/images/900457.jpg
+900458,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900458,notebooks/Task1/dataset1/images/900458.jpg
+900460,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900460,notebooks/Task1/dataset1/images/900460.jpg
+900461,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900461,notebooks/Task1/dataset1/images/900461.jpg
+900462,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900462,notebooks/Task1/dataset1/images/900462.jpg
+900466,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900466,notebooks/Task1/dataset1/images/900466.jpg
+900467,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900467,notebooks/Task1/dataset1/images/900467.jpg
+900470,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900470,notebooks/Task1/dataset1/images/900470.jpg
+900472,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900472,notebooks/Task1/dataset1/images/900472.jpg
+900474,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900474,notebooks/Task1/dataset1/images/900474.jpg
+900476,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900476,notebooks/Task1/dataset1/images/900476.jpg
+900477,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900477,notebooks/Task1/dataset1/images/900477.jpg
+900478,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900478,notebooks/Task1/dataset1/images/900478.jpg
+900479,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900479,notebooks/Task1/dataset1/images/900479.jpg
+900480,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900480,notebooks/Task1/dataset1/images/900480.jpg
+900481,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900481,notebooks/Task1/dataset1/images/900481.jpg
+900483,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900483,notebooks/Task1/dataset1/images/900483.jpg
+900484,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900484,notebooks/Task1/dataset1/images/900484.jpg
+900485,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900485,notebooks/Task1/dataset1/images/900485.jpg
+900488,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900488,notebooks/Task1/dataset1/images/900488.jpg
+900489,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900489,notebooks/Task1/dataset1/images/900489.jpg
+900490,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900490,notebooks/Task1/dataset1/images/900490.jpg
+900491,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900491,notebooks/Task1/dataset1/images/900491.jpg
+900493,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900493,notebooks/Task1/dataset1/images/900493.jpg
+900494,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900494,notebooks/Task1/dataset1/images/900494.jpg
+900496,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900496,notebooks/Task1/dataset1/images/900496.jpg
+900497,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900497,notebooks/Task1/dataset1/images/900497.jpg
+900499,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900499,notebooks/Task1/dataset1/images/900499.jpg
+900501,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900501,notebooks/Task1/dataset1/images/900501.jpg
+900503,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900503,notebooks/Task1/dataset1/images/900503.jpg
+900504,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900504,notebooks/Task1/dataset1/images/900504.jpg
+900505,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900505,notebooks/Task1/dataset1/images/900505.jpg
+900506,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900506,notebooks/Task1/dataset1/images/900506.jpg
+900509,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900509,notebooks/Task1/dataset1/images/900509.jpg
+900510,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900510,notebooks/Task1/dataset1/images/900510.jpg
+900512,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900512,notebooks/Task1/dataset1/images/900512.jpg
+900514,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900514,notebooks/Task1/dataset1/images/900514.jpg
+900516,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900516,notebooks/Task1/dataset1/images/900516.jpg
+900517,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900517,notebooks/Task1/dataset1/images/900517.jpg
+900518,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900518,notebooks/Task1/dataset1/images/900518.jpg
+900519,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900519,notebooks/Task1/dataset1/images/900519.jpg
+900520,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900520,notebooks/Task1/dataset1/images/900520.jpg
+900522,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900522,notebooks/Task1/dataset1/images/900522.jpg
+900523,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900523,notebooks/Task1/dataset1/images/900523.jpg
+900524,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900524,notebooks/Task1/dataset1/images/900524.jpg
+900526,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900526,notebooks/Task1/dataset1/images/900526.jpg
+900527,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900527,notebooks/Task1/dataset1/images/900527.jpg
+900529,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900529,notebooks/Task1/dataset1/images/900529.jpg
+900531,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900531,notebooks/Task1/dataset1/images/900531.jpg
+900532,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900532,notebooks/Task1/dataset1/images/900532.jpg
+900533,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900533,notebooks/Task1/dataset1/images/900533.jpg
+900534,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900534,notebooks/Task1/dataset1/images/900534.jpg
+900536,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900536,notebooks/Task1/dataset1/images/900536.jpg
+900540,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900540,notebooks/Task1/dataset1/images/900540.jpg
+900542,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900542,notebooks/Task1/dataset1/images/900542.jpg
+900545,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900545,notebooks/Task1/dataset1/images/900545.jpg
+900546,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900546,notebooks/Task1/dataset1/images/900546.jpg
+900547,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900547,notebooks/Task1/dataset1/images/900547.jpg
+900548,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900548,notebooks/Task1/dataset1/images/900548.jpg
+900549,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900549,notebooks/Task1/dataset1/images/900549.jpg
+900552,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900552,notebooks/Task1/dataset1/images/900552.jpg
+900553,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900553,notebooks/Task1/dataset1/images/900553.jpg
+900556,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900556,notebooks/Task1/dataset1/images/900556.jpg
+900557,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900557,notebooks/Task1/dataset1/images/900557.jpg
+900558,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900558,notebooks/Task1/dataset1/images/900558.jpg
+900560,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900560,notebooks/Task1/dataset1/images/900560.jpg
+900562,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900562,notebooks/Task1/dataset1/images/900562.jpg
+900563,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900563,notebooks/Task1/dataset1/images/900563.jpg
+900566,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900566,notebooks/Task1/dataset1/images/900566.jpg
+900570,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900570,notebooks/Task1/dataset1/images/900570.jpg
+900571,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900571,notebooks/Task1/dataset1/images/900571.jpg
+900572,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900572,notebooks/Task1/dataset1/images/900572.jpg
+900573,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900573,notebooks/Task1/dataset1/images/900573.jpg
+900576,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900576,notebooks/Task1/dataset1/images/900576.jpg
+900577,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900577,notebooks/Task1/dataset1/images/900577.jpg
+900578,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900578,notebooks/Task1/dataset1/images/900578.jpg
+900580,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900580,notebooks/Task1/dataset1/images/900580.jpg
+900584,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900584,notebooks/Task1/dataset1/images/900584.jpg
+900587,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900587,notebooks/Task1/dataset1/images/900587.jpg
+900588,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900588,notebooks/Task1/dataset1/images/900588.jpg
+900590,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900590,notebooks/Task1/dataset1/images/900590.jpg
+900591,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900591,notebooks/Task1/dataset1/images/900591.jpg
+900593,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900593,notebooks/Task1/dataset1/images/900593.jpg
+900594,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900594,notebooks/Task1/dataset1/images/900594.jpg
+900595,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900595,notebooks/Task1/dataset1/images/900595.jpg
+900601,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900601,notebooks/Task1/dataset1/images/900601.jpg
+900606,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900606,notebooks/Task1/dataset1/images/900606.jpg
+900608,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900608,notebooks/Task1/dataset1/images/900608.jpg
+900610,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900610,notebooks/Task1/dataset1/images/900610.jpg
+900612,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900612,notebooks/Task1/dataset1/images/900612.jpg
+900613,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900613,notebooks/Task1/dataset1/images/900613.jpg
+900615,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900615,notebooks/Task1/dataset1/images/900615.jpg
+900616,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900616,notebooks/Task1/dataset1/images/900616.jpg
+900625,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900625,notebooks/Task1/dataset1/images/900625.jpg
+900626,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900626,notebooks/Task1/dataset1/images/900626.jpg
+900627,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900627,notebooks/Task1/dataset1/images/900627.jpg
+900628,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900628,notebooks/Task1/dataset1/images/900628.jpg
+900630,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900630,notebooks/Task1/dataset1/images/900630.jpg
+900631,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900631,notebooks/Task1/dataset1/images/900631.jpg
+900632,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900632,notebooks/Task1/dataset1/images/900632.jpg
+900634,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900634,notebooks/Task1/dataset1/images/900634.jpg
+900637,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900637,notebooks/Task1/dataset1/images/900637.jpg
+900639,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900639,notebooks/Task1/dataset1/images/900639.jpg
+900640,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900640,notebooks/Task1/dataset1/images/900640.jpg
+900641,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900641,notebooks/Task1/dataset1/images/900641.jpg
+900642,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900642,notebooks/Task1/dataset1/images/900642.jpg
+900645,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900645,notebooks/Task1/dataset1/images/900645.jpg
+900647,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900647,notebooks/Task1/dataset1/images/900647.jpg
+900648,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900648,notebooks/Task1/dataset1/images/900648.jpg
+900650,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900650,notebooks/Task1/dataset1/images/900650.jpg
+900651,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900651,notebooks/Task1/dataset1/images/900651.jpg
+900652,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900652,notebooks/Task1/dataset1/images/900652.jpg
+900653,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900653,notebooks/Task1/dataset1/images/900653.jpg
+900654,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900654,notebooks/Task1/dataset1/images/900654.jpg
+900655,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900655,notebooks/Task1/dataset1/images/900655.jpg
+900656,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900656,notebooks/Task1/dataset1/images/900656.jpg
+900659,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900659,notebooks/Task1/dataset1/images/900659.jpg
+900660,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900660,notebooks/Task1/dataset1/images/900660.jpg
+900661,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900661,notebooks/Task1/dataset1/images/900661.jpg
+900664,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900664,notebooks/Task1/dataset1/images/900664.jpg
+900665,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900665,notebooks/Task1/dataset1/images/900665.jpg
+900666,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900666,notebooks/Task1/dataset1/images/900666.jpg
+900671,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900671,notebooks/Task1/dataset1/images/900671.jpg
+900672,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900672,notebooks/Task1/dataset1/images/900672.jpg
+900675,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900675,notebooks/Task1/dataset1/images/900675.jpg
+900676,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900676,notebooks/Task1/dataset1/images/900676.jpg
+900679,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900679,notebooks/Task1/dataset1/images/900679.jpg
+900680,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900680,notebooks/Task1/dataset1/images/900680.jpg
+900682,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900682,notebooks/Task1/dataset1/images/900682.jpg
+900683,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900683,notebooks/Task1/dataset1/images/900683.jpg
+900684,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900684,notebooks/Task1/dataset1/images/900684.jpg
+900686,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900686,notebooks/Task1/dataset1/images/900686.jpg
+900688,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900688,notebooks/Task1/dataset1/images/900688.jpg
+900690,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900690,notebooks/Task1/dataset1/images/900690.jpg
+900695,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900695,notebooks/Task1/dataset1/images/900695.jpg
+900696,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900696,notebooks/Task1/dataset1/images/900696.jpg
+900697,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900697,notebooks/Task1/dataset1/images/900697.jpg
+900700,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900700,notebooks/Task1/dataset1/images/900700.jpg
+900702,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900702,notebooks/Task1/dataset1/images/900702.jpg
+900703,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900703,notebooks/Task1/dataset1/images/900703.jpg
+900708,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900708,notebooks/Task1/dataset1/images/900708.jpg
+900710,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900710,notebooks/Task1/dataset1/images/900710.jpg
+900711,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900711,notebooks/Task1/dataset1/images/900711.jpg
+900713,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900713,notebooks/Task1/dataset1/images/900713.jpg
+900714,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900714,notebooks/Task1/dataset1/images/900714.jpg
+900715,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900715,notebooks/Task1/dataset1/images/900715.jpg
+900716,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900716,notebooks/Task1/dataset1/images/900716.jpg
+900717,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900717,notebooks/Task1/dataset1/images/900717.jpg
+900718,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900718,notebooks/Task1/dataset1/images/900718.jpg
+900719,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900719,notebooks/Task1/dataset1/images/900719.jpg
+900721,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900721,notebooks/Task1/dataset1/images/900721.jpg
+900722,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900722,notebooks/Task1/dataset1/images/900722.jpg
+900723,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900723,notebooks/Task1/dataset1/images/900723.jpg
+900724,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900724,notebooks/Task1/dataset1/images/900724.jpg
+900725,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900725,notebooks/Task1/dataset1/images/900725.jpg
+900727,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900727,notebooks/Task1/dataset1/images/900727.jpg
+900728,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900728,notebooks/Task1/dataset1/images/900728.jpg
+900729,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900729,notebooks/Task1/dataset1/images/900729.jpg
+900730,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900730,notebooks/Task1/dataset1/images/900730.jpg
+900731,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900731,notebooks/Task1/dataset1/images/900731.jpg
+900732,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900732,notebooks/Task1/dataset1/images/900732.jpg
+900738,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900738,notebooks/Task1/dataset1/images/900738.jpg
+900740,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900740,notebooks/Task1/dataset1/images/900740.jpg
+900742,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900742,notebooks/Task1/dataset1/images/900742.jpg
+900745,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900745,notebooks/Task1/dataset1/images/900745.jpg
+900746,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900746,notebooks/Task1/dataset1/images/900746.jpg
+900747,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900747,notebooks/Task1/dataset1/images/900747.jpg
+900749,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900749,notebooks/Task1/dataset1/images/900749.jpg
+900753,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900753,notebooks/Task1/dataset1/images/900753.jpg
+900754,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900754,notebooks/Task1/dataset1/images/900754.jpg
+900755,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900755,notebooks/Task1/dataset1/images/900755.jpg
+900758,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900758,notebooks/Task1/dataset1/images/900758.jpg
+900760,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900760,notebooks/Task1/dataset1/images/900760.jpg
+900763,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900763,notebooks/Task1/dataset1/images/900763.jpg
+900764,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900764,notebooks/Task1/dataset1/images/900764.jpg
+900765,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900765,notebooks/Task1/dataset1/images/900765.jpg
+900766,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900766,notebooks/Task1/dataset1/images/900766.jpg
+900768,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900768,notebooks/Task1/dataset1/images/900768.jpg
+900770,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900770,notebooks/Task1/dataset1/images/900770.jpg
+900773,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900773,notebooks/Task1/dataset1/images/900773.jpg
+900774,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900774,notebooks/Task1/dataset1/images/900774.jpg
+900775,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900775,notebooks/Task1/dataset1/images/900775.jpg
+900777,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900777,notebooks/Task1/dataset1/images/900777.jpg
+900778,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900778,notebooks/Task1/dataset1/images/900778.jpg
+900783,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900783,notebooks/Task1/dataset1/images/900783.jpg
+900785,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900785,notebooks/Task1/dataset1/images/900785.jpg
+900787,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900787,notebooks/Task1/dataset1/images/900787.jpg
+900788,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900788,notebooks/Task1/dataset1/images/900788.jpg
+900789,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900789,notebooks/Task1/dataset1/images/900789.jpg
+900790,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900790,notebooks/Task1/dataset1/images/900790.jpg
+900792,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900792,notebooks/Task1/dataset1/images/900792.jpg
+900793,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900793,notebooks/Task1/dataset1/images/900793.jpg
+900797,Women,Personal Care,Lips,Lipstick,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900797,notebooks/Task1/dataset1/images/900797.jpg
+900800,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900800,notebooks/Task1/dataset1/images/900800.jpg
+900801,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900801,notebooks/Task1/dataset1/images/900801.jpg
+900803,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900803,notebooks/Task1/dataset1/images/900803.jpg
+900805,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900805,notebooks/Task1/dataset1/images/900805.jpg
+900809,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900809,notebooks/Task1/dataset1/images/900809.jpg
+900811,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900811,notebooks/Task1/dataset1/images/900811.jpg
+900812,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900812,notebooks/Task1/dataset1/images/900812.jpg
+900815,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900815,notebooks/Task1/dataset1/images/900815.jpg
+900817,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900817,notebooks/Task1/dataset1/images/900817.jpg
+900820,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900820,notebooks/Task1/dataset1/images/900820.jpg
+900821,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900821,notebooks/Task1/dataset1/images/900821.jpg
+900822,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900822,notebooks/Task1/dataset1/images/900822.jpg
+900823,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900823,notebooks/Task1/dataset1/images/900823.jpg
+900825,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900825,notebooks/Task1/dataset1/images/900825.jpg
+900827,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900827,notebooks/Task1/dataset1/images/900827.jpg
+900831,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900831,notebooks/Task1/dataset1/images/900831.jpg
+900832,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900832,notebooks/Task1/dataset1/images/900832.jpg
+900834,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900834,notebooks/Task1/dataset1/images/900834.jpg
+900835,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900835,notebooks/Task1/dataset1/images/900835.jpg
+900838,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900838,notebooks/Task1/dataset1/images/900838.jpg
+900839,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900839,notebooks/Task1/dataset1/images/900839.jpg
+900840,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900840,notebooks/Task1/dataset1/images/900840.jpg
+900842,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900842,notebooks/Task1/dataset1/images/900842.jpg
+900843,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900843,notebooks/Task1/dataset1/images/900843.jpg
+900845,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900845,notebooks/Task1/dataset1/images/900845.jpg
+900847,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900847,notebooks/Task1/dataset1/images/900847.jpg
+900848,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900848,notebooks/Task1/dataset1/images/900848.jpg
+900849,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900849,notebooks/Task1/dataset1/images/900849.jpg
+900853,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900853,notebooks/Task1/dataset1/images/900853.jpg
+900858,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900858,notebooks/Task1/dataset1/images/900858.jpg
+900859,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900859,notebooks/Task1/dataset1/images/900859.jpg
+900861,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900861,notebooks/Task1/dataset1/images/900861.jpg
+900862,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900862,notebooks/Task1/dataset1/images/900862.jpg
+900869,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900869,notebooks/Task1/dataset1/images/900869.jpg
+900870,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900870,notebooks/Task1/dataset1/images/900870.jpg
+900871,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900871,notebooks/Task1/dataset1/images/900871.jpg
+900872,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900872,notebooks/Task1/dataset1/images/900872.jpg
+900874,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900874,notebooks/Task1/dataset1/images/900874.jpg
+900875,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900875,notebooks/Task1/dataset1/images/900875.jpg
+900876,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900876,notebooks/Task1/dataset1/images/900876.jpg
+900878,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900878,notebooks/Task1/dataset1/images/900878.jpg
+900880,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900880,notebooks/Task1/dataset1/images/900880.jpg
+900881,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900881,notebooks/Task1/dataset1/images/900881.jpg
+900884,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900884,notebooks/Task1/dataset1/images/900884.jpg
+900887,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900887,notebooks/Task1/dataset1/images/900887.jpg
+900888,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900888,notebooks/Task1/dataset1/images/900888.jpg
+900889,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900889,notebooks/Task1/dataset1/images/900889.jpg
+900890,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900890,notebooks/Task1/dataset1/images/900890.jpg
+900894,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900894,notebooks/Task1/dataset1/images/900894.jpg
+900899,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900899,notebooks/Task1/dataset1/images/900899.jpg
+900902,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900902,notebooks/Task1/dataset1/images/900902.jpg
+900905,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900905,notebooks/Task1/dataset1/images/900905.jpg
+900908,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900908,notebooks/Task1/dataset1/images/900908.jpg
+900909,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900909,notebooks/Task1/dataset1/images/900909.jpg
+900912,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900912,notebooks/Task1/dataset1/images/900912.jpg
+900913,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900913,notebooks/Task1/dataset1/images/900913.jpg
+900914,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900914,notebooks/Task1/dataset1/images/900914.jpg
+900915,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900915,notebooks/Task1/dataset1/images/900915.jpg
+900916,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900916,notebooks/Task1/dataset1/images/900916.jpg
+900917,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900917,notebooks/Task1/dataset1/images/900917.jpg
+900921,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900921,notebooks/Task1/dataset1/images/900921.jpg
+900924,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900924,notebooks/Task1/dataset1/images/900924.jpg
+900926,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900926,notebooks/Task1/dataset1/images/900926.jpg
+900928,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900928,notebooks/Task1/dataset1/images/900928.jpg
+900930,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900930,notebooks/Task1/dataset1/images/900930.jpg
+900933,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900933,notebooks/Task1/dataset1/images/900933.jpg
+900934,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900934,notebooks/Task1/dataset1/images/900934.jpg
+900935,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900935,notebooks/Task1/dataset1/images/900935.jpg
+900936,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900936,notebooks/Task1/dataset1/images/900936.jpg
+900937,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900937,notebooks/Task1/dataset1/images/900937.jpg
+900938,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900938,notebooks/Task1/dataset1/images/900938.jpg
+900939,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900939,notebooks/Task1/dataset1/images/900939.jpg
+900940,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900940,notebooks/Task1/dataset1/images/900940.jpg
+900941,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900941,notebooks/Task1/dataset1/images/900941.jpg
+900942,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900942,notebooks/Task1/dataset1/images/900942.jpg
+900948,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900948,notebooks/Task1/dataset1/images/900948.jpg
+900949,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900949,notebooks/Task1/dataset1/images/900949.jpg
+900950,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900950,notebooks/Task1/dataset1/images/900950.jpg
+900951,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900951,notebooks/Task1/dataset1/images/900951.jpg
+900952,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900952,notebooks/Task1/dataset1/images/900952.jpg
+900953,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900953,notebooks/Task1/dataset1/images/900953.jpg
+900954,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900954,notebooks/Task1/dataset1/images/900954.jpg
+900956,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900956,notebooks/Task1/dataset1/images/900956.jpg
+900957,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900957,notebooks/Task1/dataset1/images/900957.jpg
+900959,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900959,notebooks/Task1/dataset1/images/900959.jpg
+900960,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900960,notebooks/Task1/dataset1/images/900960.jpg
+900961,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900961,notebooks/Task1/dataset1/images/900961.jpg
+900963,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900963,notebooks/Task1/dataset1/images/900963.jpg
+900964,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900964,notebooks/Task1/dataset1/images/900964.jpg
+900965,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900965,notebooks/Task1/dataset1/images/900965.jpg
+900966,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900966,notebooks/Task1/dataset1/images/900966.jpg
+900971,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900971,notebooks/Task1/dataset1/images/900971.jpg
+900972,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900972,notebooks/Task1/dataset1/images/900972.jpg
+900974,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900974,notebooks/Task1/dataset1/images/900974.jpg
+900975,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900975,notebooks/Task1/dataset1/images/900975.jpg
+900977,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900977,notebooks/Task1/dataset1/images/900977.jpg
+900978,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900978,notebooks/Task1/dataset1/images/900978.jpg
+900979,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900979,notebooks/Task1/dataset1/images/900979.jpg
+900980,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900980,notebooks/Task1/dataset1/images/900980.jpg
+900981,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900981,notebooks/Task1/dataset1/images/900981.jpg
+900982,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900982,notebooks/Task1/dataset1/images/900982.jpg
+900983,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900983,notebooks/Task1/dataset1/images/900983.jpg
+900984,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900984,notebooks/Task1/dataset1/images/900984.jpg
+900986,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900986,notebooks/Task1/dataset1/images/900986.jpg
+900989,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900989,notebooks/Task1/dataset1/images/900989.jpg
+900990,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900990,notebooks/Task1/dataset1/images/900990.jpg
+900991,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900991,notebooks/Task1/dataset1/images/900991.jpg
+900992,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900992,notebooks/Task1/dataset1/images/900992.jpg
+900993,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900993,notebooks/Task1/dataset1/images/900993.jpg
+900996,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900996,notebooks/Task1/dataset1/images/900996.jpg
+900997,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900997,notebooks/Task1/dataset1/images/900997.jpg
+900998,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,900998,notebooks/Task1/dataset1/images/900998.jpg
+901000,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901000,notebooks/Task1/dataset1/images/901000.jpg
+901001,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901001,notebooks/Task1/dataset1/images/901001.jpg
+901006,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901006,notebooks/Task1/dataset1/images/901006.jpg
+901008,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901008,notebooks/Task1/dataset1/images/901008.jpg
+901010,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901010,notebooks/Task1/dataset1/images/901010.jpg
+901012,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901012,notebooks/Task1/dataset1/images/901012.jpg
+901015,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901015,notebooks/Task1/dataset1/images/901015.jpg
+901016,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901016,notebooks/Task1/dataset1/images/901016.jpg
+901017,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901017,notebooks/Task1/dataset1/images/901017.jpg
+901018,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901018,notebooks/Task1/dataset1/images/901018.jpg
+901019,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901019,notebooks/Task1/dataset1/images/901019.jpg
+901020,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901020,notebooks/Task1/dataset1/images/901020.jpg
+901021,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901021,notebooks/Task1/dataset1/images/901021.jpg
+901025,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901025,notebooks/Task1/dataset1/images/901025.jpg
+901026,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901026,notebooks/Task1/dataset1/images/901026.jpg
+901027,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901027,notebooks/Task1/dataset1/images/901027.jpg
+901028,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901028,notebooks/Task1/dataset1/images/901028.jpg
+901030,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901030,notebooks/Task1/dataset1/images/901030.jpg
+901032,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901032,notebooks/Task1/dataset1/images/901032.jpg
+901034,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901034,notebooks/Task1/dataset1/images/901034.jpg
+901036,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901036,notebooks/Task1/dataset1/images/901036.jpg
+901039,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901039,notebooks/Task1/dataset1/images/901039.jpg
+901040,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901040,notebooks/Task1/dataset1/images/901040.jpg
+901042,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901042,notebooks/Task1/dataset1/images/901042.jpg
+901044,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901044,notebooks/Task1/dataset1/images/901044.jpg
+901045,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901045,notebooks/Task1/dataset1/images/901045.jpg
+901046,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901046,notebooks/Task1/dataset1/images/901046.jpg
+901048,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901048,notebooks/Task1/dataset1/images/901048.jpg
+901049,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901049,notebooks/Task1/dataset1/images/901049.jpg
+901050,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901050,notebooks/Task1/dataset1/images/901050.jpg
+901053,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901053,notebooks/Task1/dataset1/images/901053.jpg
+901056,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901056,notebooks/Task1/dataset1/images/901056.jpg
+901057,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901057,notebooks/Task1/dataset1/images/901057.jpg
+901058,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901058,notebooks/Task1/dataset1/images/901058.jpg
+901059,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901059,notebooks/Task1/dataset1/images/901059.jpg
+901062,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901062,notebooks/Task1/dataset1/images/901062.jpg
+901063,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901063,notebooks/Task1/dataset1/images/901063.jpg
+901064,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901064,notebooks/Task1/dataset1/images/901064.jpg
+901065,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901065,notebooks/Task1/dataset1/images/901065.jpg
+901069,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901069,notebooks/Task1/dataset1/images/901069.jpg
+901070,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901070,notebooks/Task1/dataset1/images/901070.jpg
+901074,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901074,notebooks/Task1/dataset1/images/901074.jpg
+901075,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901075,notebooks/Task1/dataset1/images/901075.jpg
+901076,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901076,notebooks/Task1/dataset1/images/901076.jpg
+901078,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901078,notebooks/Task1/dataset1/images/901078.jpg
+901079,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901079,notebooks/Task1/dataset1/images/901079.jpg
+901080,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901080,notebooks/Task1/dataset1/images/901080.jpg
+901081,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901081,notebooks/Task1/dataset1/images/901081.jpg
+901084,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901084,notebooks/Task1/dataset1/images/901084.jpg
+901087,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901087,notebooks/Task1/dataset1/images/901087.jpg
+901089,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901089,notebooks/Task1/dataset1/images/901089.jpg
+901090,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901090,notebooks/Task1/dataset1/images/901090.jpg
+901092,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901092,notebooks/Task1/dataset1/images/901092.jpg
+901093,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901093,notebooks/Task1/dataset1/images/901093.jpg
+901096,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901096,notebooks/Task1/dataset1/images/901096.jpg
+901098,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901098,notebooks/Task1/dataset1/images/901098.jpg
+901099,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901099,notebooks/Task1/dataset1/images/901099.jpg
+901100,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901100,notebooks/Task1/dataset1/images/901100.jpg
+901101,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901101,notebooks/Task1/dataset1/images/901101.jpg
+901102,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901102,notebooks/Task1/dataset1/images/901102.jpg
+901105,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901105,notebooks/Task1/dataset1/images/901105.jpg
+901107,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901107,notebooks/Task1/dataset1/images/901107.jpg
+901108,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901108,notebooks/Task1/dataset1/images/901108.jpg
+901111,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901111,notebooks/Task1/dataset1/images/901111.jpg
+901112,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901112,notebooks/Task1/dataset1/images/901112.jpg
+901113,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901113,notebooks/Task1/dataset1/images/901113.jpg
+901116,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901116,notebooks/Task1/dataset1/images/901116.jpg
+901117,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901117,notebooks/Task1/dataset1/images/901117.jpg
+901119,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901119,notebooks/Task1/dataset1/images/901119.jpg
+901122,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901122,notebooks/Task1/dataset1/images/901122.jpg
+901123,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901123,notebooks/Task1/dataset1/images/901123.jpg
+901124,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901124,notebooks/Task1/dataset1/images/901124.jpg
+901125,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901125,notebooks/Task1/dataset1/images/901125.jpg
+901127,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901127,notebooks/Task1/dataset1/images/901127.jpg
+901128,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901128,notebooks/Task1/dataset1/images/901128.jpg
+901129,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901129,notebooks/Task1/dataset1/images/901129.jpg
+901131,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901131,notebooks/Task1/dataset1/images/901131.jpg
+901133,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901133,notebooks/Task1/dataset1/images/901133.jpg
+901134,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901134,notebooks/Task1/dataset1/images/901134.jpg
+901137,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901137,notebooks/Task1/dataset1/images/901137.jpg
+901140,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901140,notebooks/Task1/dataset1/images/901140.jpg
+901141,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901141,notebooks/Task1/dataset1/images/901141.jpg
+901145,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901145,notebooks/Task1/dataset1/images/901145.jpg
+901146,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901146,notebooks/Task1/dataset1/images/901146.jpg
+901147,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901147,notebooks/Task1/dataset1/images/901147.jpg
+901148,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901148,notebooks/Task1/dataset1/images/901148.jpg
+901149,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901149,notebooks/Task1/dataset1/images/901149.jpg
+901150,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901150,notebooks/Task1/dataset1/images/901150.jpg
+901154,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901154,notebooks/Task1/dataset1/images/901154.jpg
+901155,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901155,notebooks/Task1/dataset1/images/901155.jpg
+901158,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901158,notebooks/Task1/dataset1/images/901158.jpg
+901159,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901159,notebooks/Task1/dataset1/images/901159.jpg
+901160,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901160,notebooks/Task1/dataset1/images/901160.jpg
+901161,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901161,notebooks/Task1/dataset1/images/901161.jpg
+901162,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901162,notebooks/Task1/dataset1/images/901162.jpg
+901164,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901164,notebooks/Task1/dataset1/images/901164.jpg
+901166,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901166,notebooks/Task1/dataset1/images/901166.jpg
+901168,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901168,notebooks/Task1/dataset1/images/901168.jpg
+901170,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901170,notebooks/Task1/dataset1/images/901170.jpg
+901172,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901172,notebooks/Task1/dataset1/images/901172.jpg
+901173,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901173,notebooks/Task1/dataset1/images/901173.jpg
+901174,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901174,notebooks/Task1/dataset1/images/901174.jpg
+901177,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901177,notebooks/Task1/dataset1/images/901177.jpg
+901178,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901178,notebooks/Task1/dataset1/images/901178.jpg
+901179,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901179,notebooks/Task1/dataset1/images/901179.jpg
+901182,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901182,notebooks/Task1/dataset1/images/901182.jpg
+901183,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901183,notebooks/Task1/dataset1/images/901183.jpg
+901186,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901186,notebooks/Task1/dataset1/images/901186.jpg
+901187,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901187,notebooks/Task1/dataset1/images/901187.jpg
+901190,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901190,notebooks/Task1/dataset1/images/901190.jpg
+901193,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901193,notebooks/Task1/dataset1/images/901193.jpg
+901194,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901194,notebooks/Task1/dataset1/images/901194.jpg
+901195,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901195,notebooks/Task1/dataset1/images/901195.jpg
+901196,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901196,notebooks/Task1/dataset1/images/901196.jpg
+901197,Women,Personal Care,Nails,Nail Polish,Spring,Casual,external_cosmetics_coco_v1,season+usage propagated per articleType from provided train,901197,notebooks/Task1/dataset1/images/901197.jpg

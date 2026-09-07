@@ -149,8 +149,12 @@ def build():
 
     train = frame[frame["arm_role"] == "train"].drop(columns=["arm_role"])
     heldout = frame[frame["arm_role"] == "heldout"].drop(columns=["arm_role"])
-    train.to_csv(target_dir / "external_train.csv", index=False)
-    heldout.to_csv(target_dir / "external_heldout.csv", index=False)
+    # LF explicitly, on every platform. PARALLEL_RUN.md tells the operator this split can
+    # be regenerated per machine instead of copied because it is seeded; that is only true
+    # byte for byte if the line endings do not follow the OS. pandas and write_text both
+    # emit CRLF on Windows, and files under preprocessed_datasets/ are hashed by byte.
+    train.to_csv(target_dir / "external_train.csv", index=False, lineterminator="\n")
+    heldout.to_csv(target_dir / "external_heldout.csv", index=False, lineterminator="\n")
 
     # A cluster that appears on both sides would be the one failure that matters, so it is
     # recorded as a checked fact rather than a claim in a comment.
@@ -168,7 +172,7 @@ def build():
                  "external_heldout.csv is trained on by neither arm and is scored by both."),
     }
     (target_dir / "split_metadata.json").write_text(json.dumps(metadata, indent=2) + "\n",
-                                                    encoding="utf-8")
+                                                    encoding="utf-8", newline="\n")
 
     assert not straddling, f"{len(straddling)} clusters straddle the split"
     print(f"\nWrote {target_dir.relative_to(REPO_ROOT)}")

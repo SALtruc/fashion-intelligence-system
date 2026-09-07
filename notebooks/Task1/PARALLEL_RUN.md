@@ -8,9 +8,10 @@ The seed-variance jobs have been retired along with the study itself.
 ## Run order
 
 1. Install the locked environment with `uv sync --frozen` on every machine.
-2. Run EDA once and copy the exact `preprocessed_datasets/train_manifest.csv`, supplied data
-   and source files to every machine. Current workers use supplied data only; the prepared
-   dataset1 export is not connected to their loader.
+2. Copy the supplied data and source files to every machine. The manifests under
+   `preprocessed_datasets/` are tracked, so they arrive with the clone and no EDA run is
+   needed per machine. Current workers use supplied data only; the prepared dataset1 export
+   is not connected to their loader.
 3. Run assigned workers top to bottom. Keep model/data settings consistent.
 4. Return all files from each `models/task1/checkpoints/<arm>/`, including `.joblib` and `.npz`,
    to the combine machine. Retain per-machine result CSVs separately for provenance.
@@ -31,9 +32,9 @@ Same on every machine. Nothing here is per-job; the job is chosen by which file 
 | 1 | Clone or copy the repository | — | Source must be byte-identical across machines |
 | 2 | Install the environment | `uv sync --frozen` | `--frozen` pins `uv.lock`; a resolved-fresh environment is a different environment |
 | 3 | Place the supplied data | `datasets/` | Workers read only supplied data |
-| 4 | Place the EDA manifest | `preprocessed_datasets/train_manifest.csv` | Copy the **one** file produced by a single EDA run; regenerating it per machine risks a different split |
+| 4 | Check the manifests are present | `preprocessed_datasets/` | Tracked, so a clone already has them. Do **not** regenerate: `train_manifest.csv` is hashed by byte into the `task1_dataset1/<version>/` directory name, and a re-run would rename it |
 | 5 | Set the arm | `ARM` in Section 1.0 | `"supplied"` for the ordinary run, `"enriched"` for the external-data comparison. Every machine in one pass must agree |
-| 6 | Confirm the fingerprint | first cells print `Fingerprint: e6b15f5c51de` | That value is the **supplied** arm. The enriched arm prints a different one, which is correct — it trains on 697 more rows. Any other difference means step 3 or 4 diverged |
+| 6 | Confirm the fingerprint | first cells print `Fingerprint: e6b15f5c51de` | That value is the **supplied** arm. The enriched arm prints a different one, which is correct — it trains on 697 more rows. Any other difference means step 3 diverged |
 
 There is no capacity setting to choose. Task 1 sizes its CPU pools to every visible core and
 does not pace the CUDA stream, so a worker takes the machine it is given.
@@ -160,9 +161,8 @@ arm and no machine changes `ARM` part-way through a pass.** Machine D writes to
 `models/task1/checkpoints/enriched/` and cannot collide with the others, which write to
 `.../supplied/`.
 
-Machine D needs `preprocessed_datasets/task1_dataset1_arms/` present before it starts. Produce
-it once with `python scripts/make_dataset1_arms.py` and copy it alongside the manifest at
-setup step 4, or regenerate it there — it is seeded, so both give the same split.
+Machine D needs `preprocessed_datasets/task1_dataset1_arms/`, which is tracked and arrives
+with the clone. `python scripts/make_dataset1_arms.py --check` re-verifies it in seconds.
 
 Machine C finishes first and is the natural place to run the combine notebook from.
 
@@ -202,11 +202,12 @@ together and leave the difference unattributable.
 On two machines the enriched arm is ~64 minutes — `resnet` alone on one, `hog_svm` and `cnn`
 together on the other.
 
-Prerequisite: run `python scripts/make_dataset1_arms.py` once, on any machine, and copy
-`preprocessed_datasets/task1_dataset1_arms/` alongside the manifest at setup step 4. It splits
+Prerequisite: `preprocessed_datasets/task1_dataset1_arms/`, which is tracked. It splits
 dataset1 into the 697 crops the enriched arm trains on and the 461 that neither arm trains on
-and both are scored against. Every machine in a pass must hold the same split; regenerating it
-per machine is safe (it is seeded) but copying is one less thing to verify.
+and both are scored against. Every machine in a pass must hold the same split; the clone
+guarantees that. `scripts/make_dataset1_arms.py` regenerates it byte for byte on any platform
+if you ever need to — it is seeded and writes LF unconditionally — and `--check` verifies an
+existing one.
 
 Whichever arm runs second prints the comparison table. Neither arm can overwrite the other.
 
