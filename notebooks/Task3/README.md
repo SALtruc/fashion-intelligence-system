@@ -37,16 +37,6 @@ Drive → **Add shortcut to Drive** first.
 | `A2_ExternalData/` | the collected images (folder, 20 MB) | small enough to read straight from Drive |
 | `train_val_grouped_sha256.csv` | **the team's frozen split** (430 KB) | put it inside `A2_ExternalData/`; without it the notebook generates its own split and the numbers stop being comparable |
 
-### Getting the split file
-
-It is in this branch at `splits/train_val_grouped_sha256.csv`, byte-identical to the
-copy on branch `Truc` (git blob `3d2e22b`), so if that branch merges to `main`
-separately git resolves it as the same object — verified with a test merge, not
-assumed.
-
-Upload it into the Drive folder `A2_ExternalData/`, next to the images. Section 0.1
-looks for it there.
-
 The split file is not optional if the numbers are going to sit beside a teammate's.
 A split generated here from seed 42 overlapped the team's frozen file by **15.6%** —
 same seed, same function, different scikit-learn version. Section 3.0 loads the file
@@ -56,7 +46,8 @@ Then:
 
 1. **Runtime → Change runtime type → T4 GPU.** It runs on CPU, but many times slower.
 2. Upload the notebook (`File → Upload notebook`) or open it from Drive.
-3. If your zip has a different name or location, edit `COLAB_ZIP` in section 0.1.
+3. If your zip lives somewhere else, add the path to `COLAB_ZIP_CANDIDATES` in
+   section 0.1. Both places it has lived so far are already in the list.
 4. **Set `QUICK = True`** in section 0, then **Runtime → Run all**.
 
 `QUICK` runs the whole notebook on 4,000 rows and 6 epochs in a few minutes. Its
@@ -64,16 +55,24 @@ Then:
 You are looking for one line at the very bottom:
 
 ```
-saved -> task3_results.csv
+results will be written to: /content/drive/MyDrive/A2_ExternalData/task3_results.csv
+saved -> /content/drive/MyDrive/A2_ExternalData/task3_results.csv
 ```
+
+It must say **Drive**, not `/content`. `/content` dies with the VM, and a run that
+finishes while the laptop is asleep then leaves nothing behind — which has happened.
 
 5. Got that? Set `QUICK = False`, then **Runtime → Restart session and run all**.
 
 ### Expected cost
 
 Decoding 37,745 JPEGs takes ~10 minutes and is cached to `/content/train_images.npy`,
-so a re-run inside the same session skips it. Eight training runs of 20 epochs on a
-T4 is roughly 30–45 minutes.
+so a re-run inside the same session skips it. Ten training runs of 20 epochs on a T4
+(the §10 additions include an `articleType` pretraining pass) put the measured total
+at **70–75 minutes** end to end, twice. Budget 90.
+
+Section 10.5 needs no GPU at all — it is pandas over the metadata — but it reads
+results the trained models produced, so it cannot be run on its own.
 
 ### If something goes wrong
 
@@ -87,13 +86,19 @@ T4 is roughly 30–45 minutes.
 ## Reading the output
 
 Everything is **macro-F1**. Accuracy appears only next to it as evidence of why it
-cannot be the metric: predicting `Casual` for every row scores **76.7%** accuracy on
-`usage` and **0.109** macro-F1.
+cannot be the metric: predicting `Casual` for every row scores **76.1%** accuracy on
+`usage` and **0.108** macro-F1.
 
 The three numbers worth carrying into the report:
 
-* `usage` macro-F1 has a **hard ceiling of 0.500** if the four classes under 100
-  images stay unlearnable (`Home` has **1** training image).
+* `usage` macro-F1 has a **ceiling of 0.500** while the four classes under 100 images
+  stay unlearnable (`Home` has **1** training image). §1.1 predicted it; the best
+  model measured **0.5020**. Two of those four classes cost 0.125 each and no model
+  recovers them.
+* §10.5 measures the other ceiling: an oracle handed the true `articleType` reaches
+  **0.8945** accuracy on `usage`, and the CNN reaches 0.8917–0.8979 from pixels alone.
+  `usage` accuracy is finished. `gender` is not — the CNN beats the best metadata
+  oracle by **+10.6 points**, so that is where the remaining headroom is.
 * the **forward split** (§8.1) is a better estimate of the graded score than the
   random one, because the test set is the highest ids and the label distribution
   drifts along that axis — `Women` goes 33% → 53%.
@@ -102,29 +107,33 @@ The three numbers worth carrying into the report:
 
 ## Regenerating the notebook from the script
 
+The `.py` is the source of truth; the `.ipynb` is a build artefact.
+
 ```bash
-python -c "
-import json
-from pathlib import Path
-src = Path('task3_build.py').read_text(encoding='utf-8')
-cells, cur, kind = [], [], 'code'
-def flush():
-    global cur
-    body = '\n'.join(cur).strip('\n')
-    if body.strip():
-        if kind == 'markdown':
-            txt = '\n'.join(l[2:] if l.startswith('# ') else l.lstrip('#') for l in body.split('\n'))
-            cells.append({'cell_type':'markdown','metadata':{},'source':txt.split('\n')})
-        else:
-            cells.append({'cell_type':'code','metadata':{},'outputs':[],'execution_count':None,'source':body.split('\n')})
-    cur = []
-for line in src.split('\n'):
-    if line.startswith('# %%'):
-        flush(); kind = 'markdown' if '[markdown]' in line else 'code'; continue
-    cur.append(line)
-flush()
-for c in cells: c['source'] = [l+'\n' for l in c['source'][:-1]] + [c['source'][-1]]
-Path('03_task3_gender_usage_nguyen.ipynb').write_text(json.dumps({'cells':cells,'metadata':{'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'},'language_info':{'name':'python','version':'3.12.0'},'colab':{'provenance':[],'toc_visible':True}},'nbformat':4,'nbformat_minor':5}, indent=1, ensure_ascii=False), encoding='utf-8')
-print(len(cells), 'cells')
-"
+python build_notebook.py                       # rebuild, keep the outputs already there
+python build_notebook.py path/to/fresh_run.ipynb   # take outputs from a completed run
+python check_notebook.py                       # gate it before anyone uploads it
 ```
+
+`build_notebook.py` transplants outputs from the donor by matching the exact text of
+each code cell, so a cell whose code changed loses its stale output on purpose. It
+also stamps `BUILD` with a hash of the source and prints the value — see below.
+
+`check_notebook.py` refuses to pass a notebook whose code differs from
+`task3_build.py`, and tells you how many code cells are missing output.
+
+## The BUILD stamp — check this first, every time
+
+The notebook's **first cell** prints something like
+
+```
+colab=True  quick=False  epochs=20  BUILD=6ce96524
+```
+
+If that hash is not the one the handover note quotes, **you are running an old
+upload** — stop and re-upload. This exists because it has already gone wrong twice:
+once the notebook failed ten minutes in with a stale data path, and once a 70-minute
+run wrote its results to `/content` instead of Drive because the uploaded copy was one
+regeneration behind. Both would have been caught in five seconds by this line.
+
+Current: **`BUILD=6ce96524`**, 78 cells.
