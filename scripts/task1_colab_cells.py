@@ -17,7 +17,7 @@ you drag into a Colab session, an already-extracted read-only Dataset on Kaggle.
 
 # --- Markdown headers ----------------------------------------------------------------------
 
-HEADER_COMBINE = """# Task 1 on Google Colab -- combine
+HEADER_COMBINE = """# Task 1 on Colab / Kaggle -- combine
 
 Runs the **whole** notebook: restores every banked checkpoint, trains anything still
 missing, then all of Section 7-11's analysis, the diagnostics, the model export and the
@@ -37,7 +37,7 @@ pass prints the Section 11 comparison table.
 See `README.md` in this folder for the file manifest and the session schedule.
 """
 
-HEADER_WORKER = """# Task 1 on Google Colab -- worker: {subtitle}
+HEADER_WORKER = """# Task 1 on Colab / Kaggle -- worker: {subtitle}
 
 Trains **{job}** only, banks its checkpoints, and stops. Nothing here analyses, scores
 against other models or writes predictions -- that is the combine notebook's job. Every
@@ -45,7 +45,7 @@ cell below the setup block is byte-identical to the combine notebook, which is w
 the checkpoints interchangeable between sessions.
 
 **Runtime:** {runtime_type}. **Estimated wall time:** {runtime} (measured on Apple Silicon
-MPS at fp32; re-measure on your Colab card before scheduling against it).
+MPS at fp32; re-measure on your own GPU before scheduling against it).
 {prerequisites}
 **Before running:** get `task1_colab_data.zip` into the session -- on Colab drag it onto
 `/content` with the sidebar file browser, on Kaggle add it as a Dataset with + Add Input --
@@ -59,7 +59,7 @@ the notebook output. Either way that zip is how you hand this job to the next se
 See `README.md` in this folder for the file manifest and the session schedule.
 """
 
-HEADER_EVAL = """# Task 1 on Google Colab -- independent evaluation
+HEADER_EVAL = """# Task 1 on Colab / Kaggle -- independent evaluation
 
 Scores the deployed model against the external cosmetics collections in `dataset1/` and
 `dataset2/`. Trains nothing, takes a few minutes, writes figures 10 and 11.
@@ -85,7 +85,7 @@ both. Everything after them is the repository notebook, unchanged.
 # --- Code cells ------------------------------------------------------------------------------
 
 CONTROL_PANEL = r'''# =========================================================================================
-# Colab control panel -- the only cell in this notebook you edit
+# Control panel -- the only cell in this notebook you edit
 # =========================================================================================
 # Everything below this cell is the assignment notebook as it stands in the repository.
 # Nothing here enters RUN_FINGERPRINT, so a checkpoint trained under these settings is
@@ -236,19 +236,54 @@ def extracted_bundle():
     """The bundle's flat tree, if the platform has already unpacked it for us.
 
     Kaggle unzips an added Dataset itself and mounts the result at /kaggle/input/<slug>/,
-    read-only. So on that platform there is no archive to unpack -- the tree is simply
+    read-only. So on that platform there is often no archive to unpack -- the tree is simply
     already there, on a filesystem this notebook cannot write to. Finding it here is what
     lets the staging step link it into the writable root instead of copying 590 MB into the
     working quota.
+
+    The tree is located by its marker rather than by an assumed shape, because how deeply a
+    Dataset nests depends on how it was built -- uploading the zip, a folder, or a folder of
+    folders all give different answers.
     """
     for dataset in input_datasets():
         if (dataset / "src" / "preprocessing.py").is_file():
             return dataset
-        # A Dataset built by uploading the zip can end up one directory deeper.
-        for nested in sorted(path for path in dataset.iterdir() if path.is_dir()):
-            if (nested / "src" / "preprocessing.py").is_file():
-                return nested
+        for marker in sorted(dataset.rglob("src/preprocessing.py")):
+            return marker.parent.parent
     return None
+
+
+def bundle_archive():
+    """The bundle still archived, wherever it is: the working root or a mounted Dataset.
+
+    Kaggle usually extracts an uploaded archive, but not always -- a Dataset can carry the
+    zip itself, and then /kaggle/input holds a file rather than a tree. Unpacking it into the
+    writable root costs a minute and is better than failing.
+    """
+    explicit = Path(DATA_ZIP) if Path(DATA_ZIP).is_absolute() else (PROJECT / DATA_ZIP)
+    if explicit.is_file():
+        return explicit
+    for dataset in input_datasets():
+        for candidate in sorted(dataset.rglob(Path(DATA_ZIP).name)):
+            return candidate
+    # Any other archive that is plainly not a checkpoint hand-over.
+    for dataset in input_datasets():
+        for candidate in sorted(dataset.rglob("*.zip")):
+            if not candidate.name.startswith("checkpoints_"):
+                return candidate
+    return None
+
+
+def describe_inputs():
+    """What is actually mounted, for an error message that ends the guessing."""
+    lines = []
+    for dataset in input_datasets():
+        entries = sorted(dataset.iterdir())
+        shown = ", ".join(entry.name for entry in entries[:8])
+        if len(entries) > 8:
+            shown += f", ... (+{len(entries) - 8} more)"
+        lines.append(f"            {dataset.name}/  ->  {shown or '<empty>'}")
+    return "\n".join(lines) or "            none"
 
 
 # --- Stage the data, once per session ----------------------------------------------------
@@ -285,27 +320,32 @@ elif extracted_bundle() is not None:
               "is\n  correct but slower, and it spends the working quota.")
 
 else:
-    _zip = Path(DATA_ZIP) if Path(DATA_ZIP).is_absolute() else (PROJECT / DATA_ZIP)
+    _zip = bundle_archive()
 
-    if not _zip.is_file() and UPLOAD_IF_MISSING and IN_COLAB:
+    if _zip is None and UPLOAD_IF_MISSING and IN_COLAB:
         from google.colab import files
-        print(f"{_zip.name} is not in this session. Choose it in the picker below.")
+        print(f"{DATA_ZIP} is not in this session. Choose it in the picker below.")
         _uploaded = files.upload()
         _zip = PROJECT / next(iter(_uploaded))
 
-    if not _zip.is_file():
-        _mounted = ", ".join(path.name for path in input_datasets()) or "none"
+    if _zip is None:
         raise FileNotFoundError(
-            f"No data found. Build the bundle from a checkout with "
-            f"`python scripts/make_colab_bundle.py`, then:\n\n"
-            f"  Colab   drag task1_colab_data.zip onto {PROJECT} using the sidebar file "
+            "No data found. This notebook needs the bundle built by "
+            "`python scripts/make_colab_bundle.py`\n"
+            "from a checkout -- it is ~590 MB and contains src/, preprocessed_datasets/, "
+            "datasets/,\ndataset1/ and dataset2/ at its top level.\n\n"
+            f"  Colab   drag {Path(DATA_ZIP).name} onto {PROJECT} with the sidebar file "
             f"browser.\n"
-            f"          Looked for it at {_zip}. Set UPLOAD_IF_MISSING = True for a picker "
-            f"instead,\n"
-            f"          or point DATA_ZIP at wherever you put it.\n\n"
-            f"  Kaggle  add it as a Dataset (+ Add Input), which extracts it under "
-            f"/kaggle/input/.\n"
-            f"          Datasets mounted right now: {_mounted}.\n\n"
+            f"          Set UPLOAD_IF_MISSING = True for a picker instead, or point DATA_ZIP "
+            f"at it.\n\n"
+            "  Kaggle  add the bundle as a Dataset (+ Add Input in the right-hand panel).\n"
+            "          Upload the ZIP ITSELF when creating the Dataset -- not the datasets/ "
+            "folder,\n"
+            "          and not the repository. Kaggle extracts it for you.\n\n"
+            "          Looked for src/preprocessing.py at any depth, and for a bundle zip, "
+            "in each\n"
+            "          of these. What is mounted right now:\n\n"
+            f"{describe_inputs()}\n\n"
             "See README.md in the task1-collab folder."
         )
 

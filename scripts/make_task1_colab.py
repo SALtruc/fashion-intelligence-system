@@ -113,12 +113,30 @@ def substitute(text, pattern, replacement, description, expected=1, flags=0):
     return new
 
 
+CELL_KEY_ORDER = ("cell_type", "execution_count", "id", "metadata", "outputs", "source")
+
+
 def strip_outputs(document):
-    """Colab renders its own run; a stored one is 500 KB of noise in a file people re-upload."""
-    for cell in document["cells"]:
+    """Reduce each cell to the part that is actually derived from the source.
+
+    Three things are removed, all for the same reason: the Colab edition has to be a pure
+    function of the source notebook, or `--check` reports drift that is not drift and the
+    committed files churn every time somebody merely *runs* the originals.
+
+      * Stored outputs. Colab renders its own run, and a stored one is 500 KB of noise in a
+        file people re-upload.
+      * `metadata.execution`. Jupyter records per-run iopub timestamps there, so a source
+        notebook that has been executed produces a different derivation every time.
+      * Key order. Jupyter rewrites cells in its own order on save, which changes the JSON
+        text without changing the notebook, so the keys are re-emitted canonically.
+    """
+    for index, cell in enumerate(document["cells"]):
         if cell["cell_type"] == "code":
             cell["execution_count"] = None
             cell["outputs"] = []
+        # Timing metadata is the run's, not the notebook's.
+        cell.get("metadata", {}).pop("execution", None)
+        document["cells"][index] = {key: cell[key] for key in CELL_KEY_ORDER if key in cell}
     return document
 
 
