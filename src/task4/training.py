@@ -1,6 +1,7 @@
 import math
 import random
-from collections.abc import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 import numpy as np
 import torch

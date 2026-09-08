@@ -1,5 +1,7 @@
 import random
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -7,10 +9,8 @@ import torch
 from PIL import Image
 from pytorch_metric_learning.samplers import MPerClassSampler
 from torch.utils.data import DataLoader, Dataset
-from torchvision.transforms import Compose
 
 from src.task4.config import (
-    CAE_BATCH_SIZE,
     EVAL_BATCH_SIZE,
     IMAGE_DIR,
     IMAGES_PER_CLASS,
@@ -22,17 +22,19 @@ from src.task4.config import (
 )
 from src.task4.training import PIN_MEMORY
 
+ImageTransform = Callable[[Image.Image], Any]
+
 
 class FashionImageDataset(Dataset):
     def __init__(
         self,
         frame: pd.DataFrame,
+        transform: ImageTransform,
         image_dir: str | Path,
-        transform: Compose,
     ):
         self.frame = frame.reset_index(drop=True)
-        self.image_dir = Path(image_dir)
         self.transform = transform
+        self.image_dir = Path(image_dir)
 
     def __len__(self):
         return len(self.frame)
@@ -88,22 +90,7 @@ def _loader_options(
     return options
 
 
-def standard_loader(
-    dataset: Dataset,
-    batch_size: int,
-    shuffle: bool = False,
-    persistent_workers: bool = False,
-):
-    generator = torch.Generator().manual_seed(SEED)
-    return DataLoader(
-        dataset,
-        batch_size=batch_size,
-        shuffle=shuffle,
-        **_loader_options(generator, persistent_workers),
-    )
-
-
-def make_two_view_transform(transform: Compose):
+def make_two_view_transform(transform: ImageTransform) -> ImageTransform:
     def apply(image: Image.Image):
         return transform(image), transform(image)
 
@@ -111,25 +98,27 @@ def make_two_view_transform(transform: Compose):
 
 
 def make_training_loader(
-    model_name: str,
     frame: pd.DataFrame,
-    cae_transform: Compose,
-    metric_train_transform: Compose,
+    transform: ImageTransform,
+    batch_size: int,
     image_dir: str | Path = IMAGE_DIR,
 ):
-    transform = cae_transform if model_name == "cae" else metric_train_transform
-    if model_name == "supcon":
-        transform = make_two_view_transform(transform)
+    dataset = FashionImageDataset(frame, transform, image_dir)
+    generator = torch.Generator().manual_seed(SEED)
+    return DataLoader(
+        dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        **_loader_options(generator, persistent_workers=True),
+    )
 
-    dataset = FashionImageDataset(frame, image_dir, transform)
-    if model_name == "cae":
-        return standard_loader(
-            dataset,
-            CAE_BATCH_SIZE,
-            shuffle=True,
-            persistent_workers=True,
-        )
 
+def make_metric_training_loader(
+    frame: pd.DataFrame,
+    transform: ImageTransform,
+    image_dir: str | Path = IMAGE_DIR,
+):
+    dataset = FashionImageDataset(frame, transform, image_dir)
     sampler = metric_sampler(frame[LABEL_ID_COLUMN])
 
     return DataLoader(
@@ -141,72 +130,37 @@ def make_training_loader(
 
 
 def make_evaluation_loader(
-    model_name: str,
     frame: pd.DataFrame,
-    cae_transform: Compose,
-    metric_eval_transform: Compose,
+    transform: ImageTransform,
     image_dir: str | Path = IMAGE_DIR,
 ):
-    transform = cae_transform if model_name == "cae" else metric_eval_transform
     ordered_frame = frame.sort_values("id").reset_index(drop=True)
-    dataset = FashionImageDataset(ordered_frame, image_dir, transform)
-    return standard_loader(dataset, EVAL_BATCH_SIZE, shuffle=False)
+    dataset = FashionImageDataset(ordered_frame, transform, image_dir)
+    generator = torch.Generator().manual_seed(SEED)
+
+    return DataLoader(
+        dataset,
+        batch_size=EVAL_BATCH_SIZE,
+        shuffle=False,
+        **_loader_options(generator, persistent_workers=False),
+    )
 
 
-def make_validation_loss_loader(
-    model_name: str,
+def make_metric_validation_loss_loader(
     frame: pd.DataFrame,
-    cae_transform: Compose,
-    metric_eval_transform: Compose,
+    transform: ImageTransform,
     image_dir: str | Path = IMAGE_DIR,
 ):
-    """Build a P-K validation loader for the model's optimization loss."""
-    if model_name == "cae":
-        return make_evaluation_loader(
-            model_name, frame, cae_transform, metric_eval_transform, image_dir
-        )
-
+    """Build a P-K validation loader for a metric-learning loss."""
     eligible_frame = frame.groupby(LABEL_ID_COLUMN).filter(
         lambda group: len(group) >= IMAGES_PER_CLASS
     )
-
-    transform = metric_eval_transform
-    if model_name == "supcon":
-        transform = make_two_view_transform(transform)
-
-    dataset = FashionImageDataset(eligible_frame, image_dir, transform)
+    dataset = FashionImageDataset(eligible_frame, transform, image_dir)
     sampler = metric_sampler(eligible_frame[LABEL_ID_COLUMN])
 
     return DataLoader(
         dataset,
         batch_size=METRIC_BATCH_SIZE,
         sampler=sampler,
-        **_loader_options(),
+        **_loader_options(persistent_workers=False),
     )
-
-
-def make_model_loaders(
-    model_name: str,
-    train_df: pd.DataFrame,
-    tuning_gallery_df: pd.DataFrame,
-    val_df: pd.DataFrame,
-    cae_transform: Compose,
-    metric_train_transform: Compose,
-    metric_eval_transform: Compose,
-    image_dir: str | Path = IMAGE_DIR,
-):
-    return {
-        "train": make_training_loader(
-            model_name, train_df, cae_transform, metric_train_transform, image_dir
-        ),
-        "gallery": make_evaluation_loader(
-            model_name,
-            tuning_gallery_df,
-            cae_transform,
-            metric_eval_transform,
-            image_dir,
-        ),
-        "query": make_evaluation_loader(
-            model_name, val_df, cae_transform, metric_eval_transform, image_dir
-        ),
-    }
