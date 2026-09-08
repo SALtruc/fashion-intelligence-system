@@ -1,15 +1,13 @@
 import math
 import random
-from typing import Any
+from collections.abc import Any, Callable
 
 import numpy as np
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
 
-from src.task4.config import (
-    SEED,
-)
+from src.task4.config import SEED
 
 
 def set_seed(seed: int = SEED):
@@ -33,34 +31,10 @@ AMP_ENABLED = DEVICE.type == "cuda"
 PIN_MEMORY = AMP_ENABLED
 
 
-def compute_training_loss(
-    model_name: str, model: nn.Module, loss_function: nn.Module, batch: dict[str, Any]
-):
-    labels = batch["label"].to(DEVICE, non_blocking=True)
-
-    if model_name == "supcon":
-        first_view, second_view = batch["image"]
-        images = torch.cat([first_view, second_view], dim=0).to(
-            DEVICE, non_blocking=True
-        )
-        embeddings = model(images)
-        return loss_function(embeddings, labels.repeat(2))
-
-    images = batch["image"].to(DEVICE, non_blocking=True)
-    if model_name == "cae":
-        reconstruction, _ = model(images)
-        return loss_function(reconstruction, images)
-    if model_name == "arcface":
-        return model.arcface_loss(model(images), labels)
-
-    embeddings = model(images)
-    return loss_function(embeddings, labels)
-
-
 def train_one_epoch(
-    model_name: str,
     model: nn.Module,
     loss_function: nn.Module,
+    compute_loss: Callable[[nn.Module, nn.Module, dict[str, Any]], torch.Tensor],
     loader: DataLoader,
     optimizer: torch.optim.Optimizer,
     scaler: torch.amp.GradScaler,
@@ -77,7 +51,7 @@ def train_one_epoch(
     for batch in loader:
         optimizer.zero_grad(set_to_none=True)
         with torch.amp.autocast(device_type=DEVICE.type, enabled=AMP_ENABLED):
-            loss = compute_training_loss(model_name, model, loss_function, batch)
+            loss = compute_loss(model, loss_function, batch)
 
         scaler.scale(loss).backward()
         scaler.step(optimizer)
@@ -91,9 +65,9 @@ def train_one_epoch(
 
 
 def evaluate_loss(
-    model_name: str,
     model: nn.Module,
     loss_function: nn.Module,
+    compute_loss: Callable[[nn.Module, nn.Module, dict[str, Any]], torch.Tensor],
     loader: DataLoader,
 ):
     """Return the mean validation loss without updating model parameters."""
@@ -104,7 +78,7 @@ def evaluate_loss(
     with torch.inference_mode():
         for batch in loader:
             with torch.amp.autocast(device_type=DEVICE.type, enabled=AMP_ENABLED):
-                loss = compute_training_loss(model_name, model, loss_function, batch)
+                loss = compute_loss(model, loss_function, batch)
 
             batch_size = len(batch["label"])
             running_loss += loss.detach().item() * batch_size
