@@ -269,6 +269,7 @@ def neural_training_config(
         "learning_rate": 1e-3,
         "weight_decay": 1e-4,
         "label_smoothing": 0.05,
+        "spring_sampling_weight": 1.0,
         "history_metrics": ["loss", "accuracy"],
         "flip_probability": 0.5,
         "rotation_degrees": 8.0,
@@ -387,13 +388,38 @@ class NeuralTrainer:
             # warning and any accidental in-place write would be undefined.
             writable_labels = np.array(labels, dtype=np.int64, copy=True, order="C")
             self.labels = torch.from_numpy(writable_labels).to(owner.device)
+            self.sampling_weights = None
+            if shuffle:
+                spring_weight = float(owner.cfg.get("spring_sampling_weight", 1.0))
+                if not np.isfinite(spring_weight) or spring_weight <= 0:
+                    raise ValueError("spring_sampling_weight must be finite and positive")
+                if spring_weight != 1.0:
+                    if "Spring" not in owner.data.classes:
+                        raise ValueError("Spring sampling requires a Spring class")
+                    spring_index = owner.data.classes.index("Spring")
+                    if not np.any(writable_labels == spring_index):
+                        raise ValueError("Spring sampling requires Spring training examples")
+                    # CPU draws work with CPU, CUDA caches, and MPS alike.
+                    self.sampling_weights = torch.ones(len(writable_labels), dtype=torch.float32)
+                    self.sampling_weights[torch.from_numpy(writable_labels == spring_index)] = spring_weight
+                    mass = np.bincount(writable_labels, minlength=len(owner.data.classes)).astype(float)
+                    mass[spring_index] *= spring_weight
+                    print("Expected training sampling shares:", {
+                        label: f"{share:.2%}" for label, share in zip(owner.data.classes, mass / mass.sum())
+                    })
+                    print(f"Sampling with replacement: {len(writable_labels):,} draws per epoch")
 
         def __len__(self):
             return math.ceil(len(self.labels) / self.batch_size)
 
         def __iter__(self):
-            order = (torch.randperm(len(self.labels), device=self.images.device) if self.shuffle
-                     else torch.arange(len(self.labels), device=self.images.device))
+            if self.sampling_weights is not None:
+                order = torch.multinomial(
+                    self.sampling_weights, len(self.labels), replacement=True
+                ).to(self.images.device)
+            else:
+                order = (torch.randperm(len(self.labels), device=self.images.device) if self.shuffle
+                         else torch.arange(len(self.labels), device=self.images.device))
             for start in range(0, len(order), self.batch_size):
                 index = order[start:start + self.batch_size]
                 x = self.images[index].to(self.owner.device).permute(0, 3, 1, 2).float().div_(255)
