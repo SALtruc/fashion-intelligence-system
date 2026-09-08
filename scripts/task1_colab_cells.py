@@ -133,6 +133,12 @@ if PROJECT_ROOT == "auto":
     PROJECT_ROOT = ("/kaggle/working" if ON_KAGGLE else
                     "/content" if IN_COLAB else str(Path.cwd()))
 
+# The two automatic roots always exist, but a PROJECT_ROOT typed in by hand need not, and
+# disk_usage below would then fail on a path nothing has created yet. The staging cell makes
+# this directory anyway; doing it here as well costs nothing and moves the failure off a
+# reporting line that has no business being the first thing to break.
+Path(PROJECT_ROOT).mkdir(parents=True, exist_ok=True)
+
 print(f"Platform         : {PLATFORM}")
 print(f"PROJECT_ROOT     : {PROJECT_ROOT}")
 print(f"Python           : {sys.version.split()[0]}")
@@ -148,10 +154,24 @@ if _smi:
                           capture_output=True, text=True).stdout.strip()
 print("GPU              :", _gpu or "none visible")
 
+# A second card is worse than useless under Run All: a notebook kernel is one process and
+# uses one GPU, so a T4 x2 session bills two cards, trains on one, and that one T4 is slower
+# than the single P100 the same menu offers. Said here, at the top, rather than after the
+# imports -- by then the session is already committed.
+_gpu_count = len([_line for _line in _gpu.splitlines() if _line.strip()])
+if _gpu_count > 1:
+    print(f"\n  {_gpu_count} GPUs are attached, but Run All uses ONE of them: a notebook kernel\n"
+          "  is a single process. Two ways forward, and the first is usually right:\n"
+          "    - For an ordinary Run All, switch to the single-GPU accelerator (P100 on\n"
+          "      Kaggle). One P100 beats one T4, and you stop paying quota for an idle card.\n"
+          "    - To actually use both, do not Run All. Run this instead, in a new cell:\n"
+          "        !python scripts/task1_torchrun.py worker_<job>.ipynb\n"
+          "      which starts one process per GPU. See 'Using both GPUs' in the README.")
+
 if not _gpu and not COLAB_ALLOW_CPU:
     if ON_KAGGLE:
-        print("\n  This notebook needs a GPU. Notebook options -> Accelerator -> GPU T4 x2,\n"
-              "  then Run All again.")
+        print("\n  This notebook needs a GPU. Notebook options -> Accelerator -> GPU P100\n"
+              "  (or GPU T4 x2 if you intend to use the torchrun launcher), then Run All again.")
     else:
         print("\n  This notebook needs a GPU. Runtime -> Change runtime type -> T4 GPU,\n"
               "  then Runtime -> Run all again.")
@@ -168,6 +188,27 @@ ENVIRONMENT = r'''# ============================================================
 # with joblib, and a scikit-learn pickle is only reliably readable by the version that wrote
 # it: run hog_svm, hogsearch and the combine step on the same platform, or expect the
 # restore to warn and possibly fail. The .pt checkpoints carry no such constraint.
+
+# --- Thread limits, before anything loads a BLAS -----------------------------------------
+# OpenMP, MKL and OpenBLAS each read their thread count once, when the shared library is
+# first loaded, and ignore every later change to the environment. Section 1.0 below sets
+# these and is the authority on them -- but it runs after this cell, and THIS is the cell
+# that first imports numpy and torch. Setting them only there would be a no-op that looks
+# like it worked, and the run would quietly use the library defaults instead of every core.
+# The value matches Section 1.0's exactly, so the later assignment is a harmless restatement.
+import os  # noqa: E402
+import sys  # noqa: E402
+
+try:
+    _cores = len(os.sched_getaffinity(0))
+except AttributeError:                 # not on Linux; no affinity mask to read
+    _cores = os.cpu_count() or 1
+
+for _variable in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS",
+                  "NUMEXPR_NUM_THREADS", "VECLIB_MAXIMUM_THREADS", "BLIS_NUM_THREADS"):
+    os.environ[_variable] = str(_cores)
+os.environ["LOKY_MAX_CPU_COUNT"] = str(_cores)
+print(f"Thread limits pinned to {_cores} cores before the first BLAS import.")
 
 _required = {"numpy": "numpy", "pandas": "pandas", "torch": "torch",
              "sklearn": "scikit-learn", "skimage": "scikit-image",
@@ -386,14 +427,43 @@ for _archive_path in _handed_over:
     shutil.unpack_archive(str(_archive_path), str(CHECKPOINT_IMPORT_DIR))
     print(f"Imported {_archive_path.name}")
 
+# Loose files carry no arm in their own names, so the Dataset has to say. A checkpoint from
+# the other arm would be refused at load time by the fingerprint check -- but it would still
+# be sitting in this arm's directory, and the export cell zips that directory wholesale, so
+# the wrong-arm file would be handed on to the next session. Requiring the evidence up front
+# makes that impossible rather than merely unlikely.
+_unlabelled = []
 for _directory in input_datasets():
-    for _loose in sorted(_directory.glob("*")):
-        if _loose.suffix not in {".pt", ".joblib", ".npz"}:
-            continue
+    _loose_files = [path for path in sorted(_directory.glob("*"))
+                    if path.suffix in {".pt", ".joblib", ".npz"}]
+    if not _loose_files:
+        continue
+
+    # Evidence, in the order it is trusted: the Dataset's own name, or a marker file sitting
+    # beside the checkpoints. An arm named nowhere is not guessed at.
+    _names = f"{_directory.name} " + " ".join(path.name for path in _directory.glob("*.txt"))
+    _says_this_arm = COLAB_ARM in _names.lower()
+    _says_other_arm = any(arm in _names.lower()
+                          for arm in ("supplied", "enriched") if arm != COLAB_ARM)
+
+    if not _says_this_arm:
+        _unlabelled.append((_directory.name, len(_loose_files), _says_other_arm))
+        continue
+
+    for _loose in _loose_files:
         _target = CHECKPOINT_IMPORT_DIR / _loose.name
         if not _target.exists():
             shutil.copy2(_loose, _target)
             print(f"Imported {_loose.name} from {_directory.name}")
+
+for _name, _count, _other in _unlabelled:
+    _why = (f"it names the other arm" if _other
+            else f"nothing in it names an arm, and {COLAB_ARM!r} is not guessed at")
+    print(f"\nSkipped {_count} loose checkpoint(s) in Dataset {_name!r}: {_why}.")
+    if not _other:
+        print(f"  If they are {COLAB_ARM!r}, rename the Dataset to include {COLAB_ARM!r} and "
+              f"re-run,\n  or upload them as checkpoints_<job>_{COLAB_ARM}.zip, which carries "
+              "the arm in its name.")
 
 _banked_now = sorted(path.name for path in CHECKPOINT_IMPORT_DIR.iterdir()
                      if path.suffix in {".pt", ".joblib", ".npz"}

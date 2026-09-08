@@ -192,8 +192,15 @@ so.
 4. **+ Add Input** in the right-hand panel, and attach the Dataset from step 2. Attach any
    checkpoint hand-overs the job needs here too.
 
-5. **Notebook options → Accelerator → GPU**, except `worker_hog_svm` and `worker_hogsearch`,
-   which should stay on CPU. The control panel warns if it got the wrong one.
+5. **Notebook options → Accelerator → GPU P100**, except `worker_hog_svm` and
+   `worker_hogsearch`, which should stay on CPU. The control panel warns if it got the wrong
+   one.
+
+   Pick **P100, not `T4 x2`,** for an ordinary Run All. A notebook kernel is a single process
+   and uses one GPU, so `T4 x2` bills two cards, trains on one, and that one T4 is slower than
+   the P100 — the worst of both. `T4 x2` is worth choosing only if you are going to launch the
+   job with torchrun, which is [its own section](#using-both-gpus-of-a-gpu-t4-x2-session). The
+   control panel says so at the top of the run if it sees more than one card.
 
 6. **Set `COLAB_ARM`**, then **Run All**. Leave `PROJECT_ROOT` on `"auto"`.
 
