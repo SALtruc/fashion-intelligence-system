@@ -79,6 +79,32 @@ check("BUILD is stamped, not 'dev'",
       "run build_notebook.py" if not stamp or stamp.group(1) == "dev"
       else f"BUILD = {stamp.group(1)}")
 
+# Provenance: which build actually produced the outputs sitting in this file? Cell 0
+# prints its own BUILD, so comparing that against the stamp in the code says whether
+# the outputs are from the current code. A mismatch is legitimate -- a deliberate code
+# fix drops that cell's output and advances the stamp -- but it must be visible, not
+# discovered by a marker noticing that a printed hash differs from the code above it.
+_printed = None
+for c in code_cells:
+    for o in c.get("outputs", []) or []:
+        txt = o.get("text") or ""
+        if isinstance(txt, list):
+            txt = "".join(txt)
+        m = re.search(r"BUILD=([0-9a-f]{8})", txt)
+        if m:
+            _printed = m.group(1)
+if _printed is None:
+    print("  NOTE  no BUILD line in any recorded output -- the notebook has not been run")
+elif stamp and _printed == stamp.group(1):
+    print(f"  PASS  outputs were produced by the current code (BUILD {_printed})")
+else:
+    n_missing = sum(1 for c in code_cells if not c.get("outputs"))
+    print(f"  NOTE  outputs came from BUILD {_printed}, code is now "
+          f"{stamp.group(1) if stamp else '?'}; {n_missing} cell(s) carry no output.")
+    print("        Legitimate only if the code changed deliberately AFTER the run and "
+          "the affected")
+    print("        cells lost their output. Otherwise re-run before submitting.")
+
 # The check that matters most: the notebook must be this source, not an older build.
 src = io.open(SRC, encoding="utf-8").read().replace("\r\n", "\n")
 parts = re.split(r"(?m)^# %%(.*)$", src)

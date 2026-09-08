@@ -58,9 +58,12 @@ src = io.open(SRC, encoding="utf-8").read().replace("\r\n", "\n")
 if PLACEHOLDER not in src:
     raise SystemExit(f"{SRC.name} is missing the {PLACEHOLDER} line")
 
-# Hash the source with the stamp still a placeholder, so the hash is a function of the
-# real content and does not depend on itself.
-build = hashlib.sha256(src.encode()).hexdigest()[:8]
+# Hash the CODE cells only, with the stamp still a placeholder. Two reasons: the hash
+# must not depend on itself, and a prose edit must not invalidate it. The stamp answers
+# "did the right code run", so revising markdown after a run should leave it alone --
+# otherwise every wording fix makes the recorded outputs look stale.
+_code_only = "\n".join(b for kind, b in split_cells(src) if kind == "code")
+build = hashlib.sha256(_code_only.encode()).hexdigest()[:8]
 stamped = src.replace(PLACEHOLDER, f'BUILD = "{build}"')
 
 cells = split_cells(stamped)

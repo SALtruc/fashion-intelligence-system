@@ -21,6 +21,42 @@ between them is the design choice and nothing else.
 Then three ablations, one variable each: class-weighted loss, external data, and a
 split that mimics the real test set.
 
+## Running it locally on a GPU — the faster path
+
+Colab is not required. This repo's owner has an RTX 4070 Laptop, which beats the T4
+the first three runs used, and the catalogue is already staged at `D:/ColabDataset`
+(both that path and `D:/g2/Dataset` for the external images are already in the search
+lists in §0.2, so nothing needs editing).
+
+One-time setup:
+
+```bash
+python -m pip install torch --index-url https://download.pytorch.org/whl/cu126
+python -m pip install nbconvert nbclient
+python -m ipykernel install --user --name a2torch --display-name "A2 (torch cu126)"
+```
+
+Then:
+
+```bash
+python run_notebook.py --quick     # ~2 min, proves the pipeline runs
+python run_notebook.py             # the real run, writes outputs into the .ipynb
+python check_notebook.py           # gate before committing
+```
+
+`run_notebook.py` regenerates the notebook from `task3_build.py` before executing, so
+it is structurally impossible to run a stale file — which is the failure that cost a
+70-minute Colab run. `--quick` executes a scratch copy so the real notebook keeps its
+outputs.
+
+Local staging, if `D:/ColabDataset` is ever missing: it needs
+`preprocessed_datasets/train/styles_train.csv` and `images_train/`, holding exactly
+the 37,745 rows the frozen split covers. Take the CSV from `ColabDataset.zip` rather
+than filtering the provided `styles_train.csv` — **two `gender` labels differ** between
+them (ids 36762 and 39107, `Unisex` in the de-duplicated file against `Men` and `Boys`
+in the raw one), so the de-duplicated file is not a subset of the raw one and only the
+zip matches what the earlier runs measured.
+
 ## Running it on Colab
 
 Setup is built into the notebook — sections 0.1 and 0.2 mount Drive, copy the zip,
@@ -124,16 +160,37 @@ also stamps `BUILD` with a hash of the source and prints the value — see below
 
 ## The BUILD stamp — check this first, every time
 
-The notebook's **first cell** prints something like
+`build_notebook.py` prints a `BUILD` hash and stamps it into the notebook's **first
+cell**, which echoes it when run:
 
 ```
-colab=True  quick=False  epochs=20  BUILD=c5cb3ab7
+colab=False  quick=False  epochs=20  BUILD=ec67e08c
 ```
 
-If that hash is not the one the handover note quotes, **you are running an old
-upload** — stop and re-upload. This exists because it has already gone wrong twice:
-once the notebook failed ten minutes in with a stale data path, and once a 70-minute
-run wrote its results to `/content` instead of Drive because the uploaded copy was one
-regeneration behind. Both would have been caught in five seconds by this line.
+If the hash the notebook prints is not the one `build_notebook.py` reported, **you are
+running an old upload** — stop and rebuild. This exists because it has already gone
+wrong twice: once the notebook failed ten minutes in on a stale data path, and once a
+70-minute Colab run wrote its results to `/content` instead of Drive because the
+uploaded copy was one regeneration behind.
 
-Current: **`BUILD=c5cb3ab7`**, 78 cells.
+The hash covers the **code cells only**, so revising prose after a run does not
+invalidate it — the stamp answers "did the right code run", and nothing else.
+
+### Provenance of the outputs currently in the notebook
+
+They come from a local GPU run of **BUILD `7c0ab330`** — 108.8 minutes, RTX 4070,
+41/43 code cells producing output. Since that run, one `print` in §7 was rewritten to
+stop it asserting a cross-run conclusion that its own numbers had contradicted, which
+advanced the code hash to `ec67e08c` and correctly discarded that one cell's output.
+Everything else is byte-identical code with its original output.
+
+`check_notebook.py` reports this comparison on every run, so the state is checked
+rather than assumed:
+
+```
+NOTE  outputs came from BUILD 7c0ab330, code is now ec67e08c; 3 cell(s) carry no output.
+```
+
+Of those three, two (the positional-index and batch-builder cells) never print anything.
+
+Current: 80 cells, 43 code.
