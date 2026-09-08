@@ -1,0 +1,43 @@
+=== catalog external arm, 3 paired seeds ===
+
+per-seed paired deltas (catalog minus base):
+  usage macroF1    s42:-0.0079  s43:-0.0144  s44:+0.0012    mean -0.0070
+  gender macroF1   s42:+0.0056  s43:-0.0212  s44:+0.0006    mean -0.0050
+
+  base arm's own seed spread: usage 0.0287   Formal 0.0313
+
+per-class F1, arm means, and where the macro delta actually comes from:
+  class          val n     base  catalog     delta   contrib
+  Casual          4306   0.9123   0.9131   +0.0008   +0.0001
+  Ethnic           383   0.8487   0.8399   -0.0088   -0.0011
+  Formal           343   0.7419   0.7053   -0.0366   -0.0046
+  Home               0   0.0000   0.0000   +0.0000   +0.0000
+  Party              3   0.0000   0.0000   +0.0000   +0.0000  <- targeted
+  Smart Casual       9   0.1624   0.0957   -0.0667   -0.0083  <- targeted
+  Sports           614   0.6676   0.6459   -0.0217   -0.0027
+  Travel             3   0.1905   0.2667   +0.0762   +0.0095  <- targeted
+                                             TOTAL   -0.0071
+
+external holdout accuracy: base 0.0000  ->  catalog 0.9737
+  (high here with a flat validation is the signature of a domain gap: the set
+   was learned, and none of it crossed to the provided catalogue's images)
+
+=== the rule, as written before the run ===
+  1. usage paired mean -0.0070 > +0.047          -> False
+  2. Party F1 > 0 in >=2 of 3 seeds (actual 0)   -> False
+  3. Formal delta -0.0366 >= -0.0313 (its own spread) -> False
+
+  VERDICT: REJECT
+
+=== the recorded prediction ===
+  predicted REJECT   -> CORRECT
+  predicted Formal falls, measured -0.0366   -> CORRECT
+  Formal per seed: s42:+0.0101  s43:-0.1218  s44:+0.0020
+  note: negative on the mean but not on every seed, so the direction is
+        indicated, not established. Say so rather than claiming the prediction.
+
+=== what follows ===
+  REJECT: handled the way the imaterialist set was -- this standalone script and
+  its CSV are the evidence, the report carries one paragraph, and the notebook is
+  NOT modified. Tonight's notebook run therefore stands, and the shipped model
+  is unchanged.
