@@ -284,6 +284,55 @@ def neural_training_config(
     }
 
 
+def build_task2_neural_model(model_config: dict, n_classes: int) -> nn.Module:
+    """Build a Task 2 CNN exactly as described by its checkpoint configuration.
+
+    The small-input variants remove only the final spatial reduction.  For an
+    80x60 tensor, DenseNet therefore retains a 5x3 map instead of 2x1 and
+    EfficientNet retains 5x4 instead of 3x2 before global average pooling.
+    """
+    architecture = model_config.get("architecture")
+    dropout = float(model_config.get("classifier_dropout", 0.0))
+    if n_classes < 2:
+        raise ValueError("n_classes must be at least two")
+    if not 0.0 <= dropout < 1.0:
+        raise ValueError("classifier_dropout must be in [0, 1)")
+
+    if architecture in {"efficientnet_b0", "efficientnet_b0_small_input"}:
+        from torchvision.models import efficientnet_b0
+
+        model = efficientnet_b0(weights=None)
+        if architecture == "efficientnet_b0_small_input":
+            downsample = model.features[6][0].block[1][0]
+            if not isinstance(downsample, nn.Conv2d) or downsample.stride != (2, 2):
+                raise RuntimeError(
+                    "The installed torchvision EfficientNet-B0 layout has changed; "
+                    "refusing to modify an unexpected layer"
+                )
+            downsample.stride = (1, 1)
+        in_features = model.classifier[1].in_features
+        model.classifier = nn.Sequential(
+            nn.Dropout(dropout),
+            nn.Linear(in_features, n_classes),
+        )
+        return model
+
+    if architecture in {"densenet121", "densenet121_small_input"}:
+        from torchvision.models import densenet121
+
+        model = densenet121(weights=None)
+        if architecture == "densenet121_small_input":
+            model.features.transition3.pool = nn.Identity()
+        in_features = model.classifier.in_features
+        model.classifier = nn.Sequential(
+            nn.Dropout(dropout),
+            nn.Linear(in_features, n_classes),
+        )
+        return model
+
+    raise ValueError(f"Unsupported Task 2 neural architecture: {architecture!r}")
+
+
 class NeuralTrainer:
     """Shared augmentation, batching, training, and checkpoint recovery for Task 2 CNNs."""
 
