@@ -29,12 +29,18 @@ Three designs were compared with everything else held constant: two independent 
 (A), one model on the joint `gender × usage` label (B), and one shared convolutional body
 with two heads (C). A led on macro-F1 in all four runs. **The ultimate judgement is
 nevertheless C with a class-weighted loss** (289k parameters, plus mirror test-time
-augmentation). A's advantage on `gender` is 0.013–0.025 and consistent in sign across
-all four runs, so we treat it as real rather than as noise — three fresh seeds put
-`gender`'s own spread at only 0.007. But class weighting's gain on `usage` is **+0.06 to
-+0.10**, two to four times larger, so C trades a ~0.02 loss on one target for a ~0.08
-gain on the other and improves the mean of the two by about +0.03. That, and not an
-appeal to measurement error, is why C ships; A would also cost 2× the parameters.
+augmentation). A's advantage on `gender` is 0.006–0.037 over five runs, mean **+0.023**
+and consistent in sign, so we treat it as real rather than as noise — six runs of one
+configuration put `gender`'s own spread at 0.011. Class weighting's gain on `usage` is
+larger but less stable than we first reported: **+0.081, +0.061 and +0.028** on three
+platforms, mean **+0.057**. C therefore trades about 0.02 on one target for about 0.06
+on the other.
+
+A hyper-parameter sweep then closed the rest of the gap without touching the design.
+Training 30 epochs instead of 20 gains `gender` **+0.019** — positive on both seeds,
+against a 0.011 band — which is as much as A's entire lead, for none of A's 2×
+parameter cost. That is the stronger form of the argument, and it exists only because
+the sweep was run rather than assumed.
 
 The submitted model scores **gender 0.7202, usage 0.4676**, and is the **median of three
 runs rather than the best**; choosing the best on validation would inflate the figure we
@@ -93,8 +99,9 @@ Running the identical notebook four times, **two runs of the same code differ by
 places** — so data, split and metric are identical and the difference is training alone.
 Note what that means: with the seed fixed, initialisation and batch order are fixed too,
 so the residual comes from nondeterministic GPU kernels rather than from sampling. Three
-runs at genuinely different seeds separate the two targets sharply — `gender` spreads
-only **0.007**, `usage` **0.047** — and the asymmetry is not mysterious. All of `usage`'s
+runs at genuinely different seeds separate the two targets sharply, and six runs of the
+same configuration settle it at `gender` **0.011** against `usage` **0.064** — the
+asymmetry is not mysterious. All of `usage`'s
 instability sits in its tiny classes: across those three seeds `Travel` F1 swings
 0.000/0.571/0.222 on **three** validation images while `Casual` moves 0.003 on 4,306.
 `gender`'s rarest validation class has 66. **So the same headline metric is trustworthy
@@ -143,7 +150,7 @@ data never touched.
 
 | effect | estimate | held on other hardware? |
 |---|---|---|
-| class weighting, `usage` | +0.081 | yes, +0.061 |
+| class weighting, `usage` | +0.081 | yes, +0.061 and +0.028 |
 | A − B, `gender` | +0.026 | yes, +0.022 |
 | A − C, `gender` | +0.022 | sign only; size varies 0.006–0.037 |
 | external data, either target | ~0 | sign flips |
@@ -180,3 +187,26 @@ notebook (not the submitted seed; the submitted model's own scores are in A)
 * `predictions/task3_gender_usage_nguyen.csv` has `gender` and `usage` filled for all
   5,829 test rows in the original order, with `articleType` and `season` left empty for
   whoever merges the four tasks.
+
+**B6. Hyper-parameter sensitivity** — one knob moved at a time around the shipped
+configuration, two seeds each, against the six runs that already measured the default.
+Reported as sensitivity: no configuration is adopted on the strength of a validation
+score measured on the split this report quotes.
+
+| configuration | `gender` | Δ | beyond band? | `usage` | Δ | beyond band? |
+|---|---|---|---|---|---|---|
+| **default** (lr 1e-3, dropout 0.2, bs 256, 20 epochs) | 0.7317 | — | — | 0.4494 | — | — |
+| lr 3e-4 | 0.6964 | **−0.035** | yes | 0.4310 | −0.018 | no |
+| lr 3e-3 | 0.7489 | **+0.017** | yes | 0.4505 | +0.001 | no |
+| dropout 0.0 | 0.7413 | +0.010 | no | 0.4439 | −0.006 | no |
+| dropout 0.4 | 0.7273 | −0.004 | no | 0.4423 | −0.007 | no |
+| 30 epochs | 0.7510 | **+0.019** | yes | 0.4551 | +0.006 | no |
+
+Noise bands: `gender` 0.011, `usage` 0.064. **Nothing moves `usage` beyond its band and
+three configurations move `gender` beyond its** — the same asymmetry §9.2 found, and for
+the same reason: `usage`'s instability lives in classes holding 3 to 9 validation images,
+so it cannot resolve an effect this size, while `gender`'s smallest validation class has
+66. Two knobs, `lr 3e-3` and `30 epochs`, beat the shipped default on `gender`. Neither
+is adopted here: five configurations at two seeds makes the best of them partly luck, and
+they were scored on the same validation set this report quotes. They are the candidates a
+confirmation run should test, and §9.4's first entry.

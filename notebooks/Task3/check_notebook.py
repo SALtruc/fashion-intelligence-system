@@ -89,7 +89,8 @@ _out = "\n".join(_out)
 if _out.strip():
     check("the run loaded the team's shared split file, not a generated one",
           "shared split file NOT found" not in _out,
-          "an output says the split was generated -- those numbers compare with nobody's")
+          "an output says the split was generated -- those numbers compare with nobody's"
+          if "shared split file NOT found" in _out else "")
 
 # Definition-only cells legitimately print nothing, so counting empty cells overstates
 # the problem: it once reported "3 cells carry no output" when two of them only define
