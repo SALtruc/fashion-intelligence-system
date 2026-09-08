@@ -344,6 +344,12 @@ elif extracted_bundle() is not None:
         _target = PROJECT / _entry.name
         if _target.exists() or _target.is_symlink():
             continue
+        # Bundles may include banked models. Keep output trees writable: Kaggle
+        # inputs are read-only, and training must be able to add checkpoints here.
+        if _entry.name in {"models", "outputs", "predictions"}:
+            shutil.copytree(_entry, _target)
+            _copied += 1
+            continue
         try:
             _target.symlink_to(_entry, target_is_directory=_entry.is_dir())
             _linked += 1

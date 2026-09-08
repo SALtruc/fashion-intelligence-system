@@ -23,6 +23,24 @@ Checked against the source notebooks on **7 September 2026**.
 > `python scripts/make_task1_colab.py --check` verifies this folder is current without
 > writing anything.
 
+## Bundle with current checkpoints
+
+`task1_collab_full.zip` includes the full data bundle, all model files present when built,
+and the Kaggle combine and evaluation notebooks. Build it with:
+
+```bash
+python scripts/make_colab_bundle.py --include-models --output task1_collab_full.zip
+```
+
+Upload this ZIP as a Kaggle Dataset. Import `01_task1_article_type.ipynb` from this
+folder as the notebook, attach the Dataset, select a GPU, set `COLAB_ARM` to
+`"supplied"` or `"enriched"`, and Run All. Use this updated notebook version: its staging
+cell copies bundled models into writable storage. Existing matching checkpoints are
+reused; missing work is trained by the combine run. Run once per arm for both arms.
+The archive is a snapshot, so rebuild it to include checkpoints received later.
+Run the final export cell and save the notebook output. For independent evaluation,
+use `02_independent_evaluation.ipynb` with the resulting checkpoints.
+
 ## Why a separate edition is needed at all
 
 The source notebooks find the repository root by walking *up* from the notebook's own

@@ -25,3 +25,6 @@ __pycache__/
 .venv/
 venv/
 datasets.zip
+
+# Full Kaggle bundle, rebuilt with --include-models
+task1_collab_full.zip

@@ -147,6 +147,8 @@ def main():
                         help="omit datasets/test/; worker sessions do not read it")
     parser.add_argument("--no-external", action="store_true",
                         help="omit dataset1/ and dataset2/; supplied-arm workers do not read them")
+    parser.add_argument("--include-models", action="store_true",
+                        help="include all current model files and the evaluation notebook")
     parser.add_argument("--check", action="store_true",
                         help="list what an existing archive holds, write nothing")
     arguments = parser.parse_args()
@@ -176,6 +178,13 @@ def main():
 
     items = entries(include_test=not arguments.no_test,
                     include_external=not arguments.no_external)
+
+    if arguments.include_models:
+        items.extend((path, path.relative_to(ROOT).as_posix())
+                     for path in sorted((ROOT / "models").rglob("*")) if path.is_file())
+        evaluation = COLAB_DIR / "02_independent_evaluation.ipynb"
+        items.append((evaluation, evaluation.name))
+        items.append((COLAB_DIR / "README.md", "README.md"))
 
     absent = [str(source.relative_to(ROOT)) for source, _ in items if not source.is_file()]
     if absent:
