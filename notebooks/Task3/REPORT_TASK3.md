@@ -29,15 +29,17 @@ Three designs were compared with everything else held constant: two independent 
 (A), one model on the joint `gender × usage` label (B), and one shared convolutional body
 with two heads (C). A led on macro-F1 in all four runs. **The ultimate judgement is
 nevertheless C with a class-weighted loss** (289k parameters, plus mirror test-time
-augmentation), because A's advantage on `gender` is 0.013–0.025 — *inside* the 0.030
-spread we measured for a single configuration across seeds and platforms — while class
-weighting's gain on `usage` is **+0.06 to +0.10**, far outside it. Paying 2× the
-parameters for a difference we cannot measure, to give up one we can, is not defensible.
+augmentation). A's advantage on `gender` is 0.013–0.025 and consistent in sign across
+all four runs, so we treat it as real rather than as noise — three fresh seeds put
+`gender`'s own spread at only 0.007. But class weighting's gain on `usage` is **+0.06 to
++0.10**, two to four times larger, so C trades a ~0.02 loss on one target for a ~0.08
+gain on the other and improves the mean of the two by about +0.03. That, and not an
+appeal to measurement error, is why C ships; A would also cost 2× the parameters.
 
 The submitted model scores **gender 0.7202, usage 0.4676**, and is the **median of three
-seeds rather than the best**; choosing the best on validation would inflate the figure we
-then report. Across seeds the design gives gender 0.720–0.750 and usage 0.436–0.472, and
-those ranges are what it is worth.
+runs rather than the best**; choosing the best on validation would inflate the figure we
+then report. Across those runs the design gives gender 0.720–0.750 and usage
+0.436–0.472, and those ranges are what it is worth.
 
 ### Why the scores are not higher — measured, not assumed
 
@@ -89,10 +91,20 @@ against +0.008 at inference**, the same idea tenfold apart.
 Running the identical notebook four times, **two runs of the same code differ by up to
 0.036 on a trained model while the untrained baselines reproduce to four decimal
 places** — so data, split and metric are identical and the difference is training alone.
-Three independent seeds spread 0.030 on `gender` and 0.036 on `usage`. This retired two
-conclusions we had drawn from single runs: that the external data hurt `gender`, and a
-strict three-way ranking of the designs. Repeating a run is not sampling a configuration,
-which is why every claim above carries its spread.
+Note what that means: with the seed fixed, initialisation and batch order are fixed too,
+so the residual comes from nondeterministic GPU kernels rather than from sampling. Three
+runs at genuinely different seeds separate the two targets sharply — `gender` spreads
+only **0.007**, `usage` **0.047** — and the asymmetry is not mysterious. All of `usage`'s
+instability sits in its tiny classes: across those three seeds `Travel` F1 swings
+0.000/0.571/0.222 on **three** validation images while `Casual` moves 0.003 on 4,306.
+`gender`'s rarest validation class has 66. **So the same headline metric is trustworthy
+to three decimals on one target and to barely one on the other**, and any `usage` effect
+below ~0.05 has to be argued per class, not from the macro. This retired two conclusions
+we had drawn from single runs — that the external data hurt `gender`, and a strict
+three-way ranking of the designs — and later retired a third: a 215-image external
+`Party` set raised the `usage` macro by +0.007, but `Party` F1 was 0.0000 in all nine
+models trained, and the entire apparent gain decomposed onto `Travel`, a class the new
+data never touched.
 
 ---
 

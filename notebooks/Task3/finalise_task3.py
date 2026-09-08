@@ -14,10 +14,12 @@ notebook's measurements, not preference:
   * Class weighting is the only effect that survived every check -- four runs across
     two platforms, +0.0813 on Colab and +0.0608 locally on `usage` macro-F1. Nothing
     else in the notebook is that robust.
-  * It costs `gender` about 0.013 against the best design (A, two models), which is
-    inside the run-to-run band of 0.036. It gains `usage` about 0.059, which is far
-    outside it. Trading a difference you cannot measure for one you can is the whole
-    argument.
+  * It costs `gender` about 0.013-0.025 against the best design (A, two models) and
+    gains `usage` about 0.06-0.10. Both are real: three genuinely-seeded runs put
+    `gender`'s spread at only 0.007 and `usage`'s at 0.047, so A's gender edge is not
+    noise -- it is simply the smaller of the two effects. Giving up ~0.02 on one
+    target to gain ~0.08 on the other lifts the mean of the two by about +0.03, and
+    that is the argument.
   * A would cost 2x the parameters for the `gender` margin, and section 9.3 finding 3
     shows that margin is reliable in sign but not in size (+0.037, +0.023, +0.006,
     +0.031 across four runs).
@@ -84,9 +86,9 @@ heads_multi = {t: len(CLASSES[t]) for t in TARGETS}
 tr, va = g["splits"][("gender", "primary")]
 print(f"\ntrain {len(tr):,}  val {len(va):,}  |  heads {heads_multi}")
 
-SEEDS = [42, 43, 44]
-print(f"\n=== ultimate judgement: design C, class-weighted loss, seeds {SEEDS} ===")
-print("Three seeds, and the SHIPPED model is the MEDIAN -- not the best.")
+SEEDS = [42, 43, 44]        # labels for three repeats, NOT three seeds -- see below
+print(f"\n=== ultimate judgement: design C, class-weighted loss, {len(SEEDS)} repeats ===")
+print("Three repeat runs, and the SHIPPED model is the MEDIAN -- not the best.")
 print("The notebook measured this configuration four times, 0.4657-0.5020 on usage,")
 print("but every one of those trained it fifth in the same script order, so they")
 print("share an RNG history and are a correlated sample, not four independent draws.")
@@ -94,16 +96,27 @@ print("A fresh independent draw came out 0.045 below that band -- which is exact
 print("section 9.2's lesson landing on this notebook's own headline number.")
 print("Shipping the best of three would be selecting on the validation set again.")
 
+# These are three REPEATS, not three seeds, and the distinction is worth stating
+# because the variable is named `sd`. `train_model` re-seeds from the module-level
+# SEED as its first statement, so seeding here would be overwritten and is not
+# attempted; the three runs share initialisation and batch order, and differ only
+# through nondeterministic GPU kernels. That is still a valid noise estimate -- it
+# is the irreducible variation of the training procedure itself -- and shipping the
+# median of three of them is still not selecting on validation. It is simply a
+# narrower source of variation than changing the seed would be.
+#
+# Measured afterwards, with the seed genuinely varied (see
+# experiment_party_external.py, whose base arm does this properly): `gender` spreads
+# 0.007 across three seeds and `usage` 0.047. So this loop's spread understates the
+# `usage` band and overstates the `gender` one; section 9.3 carries both numbers.
 trained = []
 for sd in SEEDS:
-    torch.manual_seed(sd)
-    torch.cuda.manual_seed_all(sd)
-    m, _ = g["train_model"](f"C_weighted_seed{sd}", heads_multi, tr, va,
+    m, _ = g["train_model"](f"C_weighted_repeat{sd}", heads_multi, tr, va,
                             weighted=True, verbose=False)
     trained.append((sd, m))
-    print(f"  seed {sd} done")
+    print(f"  repeat {sd} done")
 
-print(f"\n=== each seed, and whether mirror TTA helps the WEIGHTED model ===")
+print(f"\n=== each repeat, and whether mirror TTA helps the WEIGHTED model ===")
 print("(the notebook only ever tested TTA on the UNWEIGHTED model, so it is measured",
       "here rather than assumed)")
 # Same arithmetic as the notebook's logits_of, which lives in section 10 and so is
@@ -129,28 +142,28 @@ for sd, m in trained:
     for tta in (False, True):
         p = predict_rows(m, va, heads_multi, tta=tta)
         s = {t: g["score"](va[t], p[t], labels=CLASSES[t]) for t in TARGETS}
-        rows.append({"seed": sd, "view": "mirror" if tta else "single", "tta": tta,
+        rows.append({"repeat": sd, "view": "mirror" if tta else "single", "tta": tta,
                      **{f"{t} macro-F1": round(s[t]["macro_f1"], 4) for t in TARGETS},
                      "mean": round(float(np.mean([s[t]["macro_f1"]
                                                   for t in TARGETS])), 4)})
 allr = pd.DataFrame(rows)
 print(allr.drop(columns="tta").to_string(index=False))
 
-# One TTA decision, taken from the mean over seeds rather than cherry-picked per seed.
+# One TTA decision, taken from the mean over repeats rather than cherry-picked per run.
 by_tta = allr.groupby("tta")["mean"].mean()
 best_tta = bool(by_tta[True] > by_tta[False])
-print(f"\n  TTA averaged over seeds: {by_tta[False]:.4f} -> {by_tta[True]:.4f} "
+print(f"\n  TTA averaged over repeats: {by_tta[False]:.4f} -> {by_tta[True]:.4f} "
       f"({by_tta[True] - by_tta[False]:+.4f}) -> "
       f"{'USING TTA' if best_tta else 'NOT using TTA'}")
 
 sel = allr[allr.tta == best_tta].sort_values("mean").reset_index(drop=True)
-median_seed = int(sel.iloc[len(sel) // 2]["seed"])
-model = dict(trained)[median_seed]
+median_run = int(sel.iloc[len(sel) // 2]["repeat"])
+model = dict(trained)[median_run]
 _u = sorted(sel["usage macro-F1"].tolist())
 _gd = sorted(sel["gender macro-F1"].tolist())
-print(f"\n  usage macro-F1 across seeds:  {_u}   spread {max(_u) - min(_u):.4f}")
-print(f"  gender macro-F1 across seeds: {_gd}   spread {max(_gd) - min(_gd):.4f}")
-print(f"  SHIPPING seed {median_seed} -- the median by mean macro-F1, not the best")
+print(f"\n  usage macro-F1 across repeats:  {_u}   spread {max(_u) - min(_u):.4f}")
+print(f"  gender macro-F1 across repeats: {_gd}   spread {max(_gd) - min(_gd):.4f}")
+print(f"  SHIPPING repeat {median_run} -- the median by mean macro-F1, not the best")
 
 pred_val = predict_rows(model, va, heads_multi, tta=best_tta)
 val_scores = {t: g["score"](va[t], pred_val[t], labels=CLASSES[t]) for t in TARGETS}
@@ -176,8 +189,8 @@ torch.save({
     "design": "C - one shared conv body, one head per target, class-weighted loss",
     "trained_on": {"split_file": "train_val_grouped_sha256.csv",
                    "n_train": int(len(tr)), "n_val": int(len(va)),
-                   "epochs": int(g["EPOCHS"]), "seeds_tried": SEEDS,
-                   "seed_shipped": median_seed,
+                   "epochs": int(g["EPOCHS"]), "repeats_tried": SEEDS,
+                   "repeat_shipped": median_run,
                    "selection": "median by mean macro-F1, not the best"},
     "val_macro_f1": {t: round(val_scores[t]["macro_f1"], 4) for t in TARGETS},
     "val_macro_f1_in_val_classes": {t: round(val_scores[t]["macro_f1_in_val"], 4)
