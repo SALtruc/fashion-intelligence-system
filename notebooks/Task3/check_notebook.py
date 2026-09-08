@@ -71,6 +71,43 @@ check("/content in the catalogue search", '"/content",' in code)
 check("unzip uses -o (a re-run must not hang on a prompt)", '"-qo"' in code)
 check("file-count assertion after unpack", "images missing" in code)
 check("both macro-F1 conventions reported", "macro_f1_in_val" in code)
+
+# Read the recorded outputs back, not just the code. Two things are only visible there.
+_out = []
+for c in code_cells:
+    for o in c.get("outputs", []) or []:
+        txt = o.get("text") or (o.get("data") or {}).get("text/plain") or ""
+        if isinstance(txt, list):
+            txt = "".join(txt)
+        _out.append(txt)
+_out = "\n".join(_out)
+
+# A run that generates its own split instead of loading the team's produces numbers
+# that overlap theirs by 15.6% -- comparable with nobody's. It used to announce itself
+# in one warning line, mid-run, that nothing was watching, and one 106-minute run was
+# spent that way before anyone noticed the split label had changed to "generated val".
+if _out.strip():
+    check("the run loaded the team's shared split file, not a generated one",
+          "shared split file NOT found" not in _out,
+          "an output says the split was generated -- those numbers compare with nobody's")
+
+# Definition-only cells legitimately print nothing, so counting empty cells overstates
+# the problem: it once reported "3 cells carry no output" when two of them only define
+# functions and could never have any. Count the cells that call print() at top level.
+_silent = []
+for n, c in enumerate(code_cells):
+    if c.get("outputs"):
+        continue
+    body = "".join(c["source"])
+    top_level_print = any(l.startswith("print(") or l.startswith("display(")
+                          for l in body.split("\n"))
+    if top_level_print:
+        _silent.append(n)
+if _out.strip():
+    check("every cell that prints has its output recorded",
+          not _silent,
+          f"code cells {_silent} call print() at top level but carry no output"
+          if _silent else "")
 check("QUICK ships as False", re.search(r"^QUICK = False$", code, re.M) is not None)
 
 stamp = re.search(r'BUILD = "([0-9a-f]{8}|dev)"', code)

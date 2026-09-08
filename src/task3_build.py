@@ -32,6 +32,27 @@
 # on `usage` and a macro-F1 of **0.109**.
 
 # %% [markdown]
+# ### Where to find each model, and the judgement
+#
+# | | section |
+# |---|---|
+# | baselines (majority, 1-NN on pixels) | §3 |
+# | design **A** — two independent models | §5 |
+# | design **B** — one joint `gender × usage` label | §5 |
+# | design **C** — one shared body, two heads | §5 |
+# | C + class-weighted loss | §6 |
+# | C + external data | §7 |
+# | design **D** — transfer from `articleType` | §10.3 |
+# | C + logit adjustment / mirror TTA | §10.1, §10.2 |
+# | every model in one table | §10.4 |
+# | **ultimate judgement** | **§11** |
+#
+# Architecture and every hyper-parameter are tabulated in §4. Two harder evaluations
+# than the random split — a forward split by id, and 261 independently photographed
+# items — are in §8. Exploratory data analysis for the shared dataset lives in the
+# team's `notebooks/eda.ipynb` and is not duplicated here.
+
+# %% [markdown]
 # ## 0 · Setup
 #
 # Runs on Colab or locally. On Colab, mount Drive first; the cell below finds the
@@ -543,21 +564,39 @@ def record(name, target, split, y_true, y_pred, labels=None, **extra):
 SHARED_SPLIT_NAME = "train_val_grouped_sha256.csv"
 
 def find_shared_split():
-    cands = [os.environ.get("A2_SHARED_SPLIT", ""),
-             f"/content/drive/MyDrive/A2_ExternalData/{SHARED_SPLIT_NAME}",
-             f"/content/{SHARED_SPLIT_NAME}",
-             f"/content/splits/{SHARED_SPLIT_NAME}",
-             str(Path.cwd() / SHARED_SPLIT_NAME),
-             str(Path.cwd().parent / "splits" / SHARED_SPLIT_NAME),
-             f"D:/g2/splits/{SHARED_SPLIT_NAME}",
-             str(Path.cwd() / "task3" / SHARED_SPLIT_NAME)]
+    """Locate the team's split file wherever this is being executed from.
+
+    The earlier version listed fixed paths, including `cwd.parent/"splits"`. That
+    matches a flat working folder but is one level short of the repository layout,
+    where the notebook lives in `notebooks/Task3/` and the file in `splits/`. Run from
+    the repo, the search missed, the notebook printed a warning nobody was watching,
+    and a full 106-minute run produced numbers on a locally generated split -- which
+    section 3.0 measured as overlapping the team's by only 15.6%. So: walk up from the
+    working directory rather than guessing a depth, and treat the fallback as an error.
+    """
+    here = Path.cwd().resolve()
+    cands = []
+    if os.environ.get("A2_SHARED_SPLIT"):
+        cands.append(Path(os.environ["A2_SHARED_SPLIT"]))
+    cands += [Path(f"/content/drive/MyDrive/A2_ExternalData/{SHARED_SPLIT_NAME}"),
+              Path(f"/content/{SHARED_SPLIT_NAME}"),
+              Path(f"/content/splits/{SHARED_SPLIT_NAME}")]
+    for base in (here, *here.parents):
+        cands += [base / SHARED_SPLIT_NAME,
+                  base / "splits" / SHARED_SPLIT_NAME,
+                  base / "task3" / SHARED_SPLIT_NAME]
     for c in cands:
-        if c and Path(c).is_file():
+        if Path(c).is_file():
             return Path(c)
-    print("shared split file NOT found - falling back to a locally generated split.\n"
-          "Numbers will NOT be comparable with teammates'. Tried:\n  "
-          + "\n  ".join(str(c) for c in cands if c))
-    return None
+    msg = ("shared split file NOT found - a generated split would NOT be comparable "
+           "with teammates' numbers, so this stops here rather than spending an hour "
+           "producing figures nobody can use.\n"
+           "Set A2_ALLOW_GENERATED_SPLIT=1 to proceed anyway, or A2_SHARED_SPLIT to "
+           "the file.\nSearched " + str(len(cands)) + " locations under " + str(here))
+    if os.environ.get("A2_ALLOW_GENERATED_SPLIT") == "1":
+        print("WARNING: " + msg)
+        return None
+    raise FileNotFoundError(msg)
 
 
 SHARED = find_shared_split()
@@ -673,6 +712,47 @@ for t in TARGETS:
 # a 60×80 thumbnail does not carry enough detail to justify a deep network, and a
 # small model makes eight training runs affordable, which is what actually buys the
 # evidence.
+#
+# ### Layers and hyper-parameters
+#
+# `conv_block(cin, cout)` is Conv3×3 → BatchNorm → ReLU, twice, then MaxPool2. Three
+# of them, then a global average pool. The same `Net` class serves A, B and C — only
+# the `heads` dict differs — so no accidental difference in the body can confound §5.
+#
+# | # | layer | output | parameters |
+# |---|---|---|---|
+# | | input | 3 × 80 × 60 | — |
+# | 1 | `conv_block(3, 32)` | 32 × 40 × 30 | 10,208 |
+# | 2 | `conv_block(32, 64)` | 64 × 20 × 15 | 55,552 |
+# | 3 | `conv_block(64, 128)` | 128 × 10 × 7 | 221,696 |
+# | 4 | `AdaptiveAvgPool2d(1)` | 128 | — |
+# | 5 | `Dropout(0.2)` | 128 | — |
+# | 6a | `Linear(128, 5)` — `gender` head | 5 | 645 |
+# | 6b | `Linear(128, 8)` — `usage` head | 8 | 1,032 |
+# | | **total (design C)** | | **289,133** |
+#
+# **The body is 287,456 of those 289,133 parameters — 99.4%.** That single number is
+# the argument for C: the second head costs 1,032 parameters, so answering a second
+# question is nearly free, while design A duplicates the body for 577k in total.
+#
+# | hyper-parameter | value | why this value |
+# |---|---|---|
+# | optimiser | Adam | no schedule tuning needed to get a usable baseline; the comparison is between designs, not optimisers |
+# | learning rate | `1e-3` | Adam's default region; held fixed across A/B/C/D so §5 measures the design |
+# | schedule | `CosineAnnealingLR(T_max=epochs)` | decays to ~0 by the last epoch, so the final weights are not mid-oscillation |
+# | epochs | 20 | validation curves are flat well before this (§5); the peak-to-final gap is 0.000–0.007 |
+# | batch size | 256 | the whole 543 MB image array sits on the GPU, so large batches cost nothing |
+# | dropout | 0.2 | one regulariser on 289k parameters and 32k rows; §5's curves show no overfitting to correct |
+# | augmentation | random horizontal flip | a mirrored garment is the same garment, the same `gender` and the same `usage` — safe here, and it would not be for a target that depended on printed text |
+# | class weights | `1 / sqrt(n)`, `usage` only | `1/n` gives `Home`'s single image ~29,000× the pull of a `Casual` row; sqrt keeps the direction and tempers it (§6). `gender`'s smallest class has 483 rows and needs none |
+# | checkpoint | best mean macro-F1 over the reported targets | never accuracy, for the reason in §1.2 |
+#
+# Every value above is held **constant across all four designs**, deliberately: tuning
+# per design would mean §5's differences could no longer be attributed to the design.
+# Sensitivity to lr, dropout and epochs is measured separately in
+# `experiment_hyperparams.py`, as a sensitivity table rather than a search — picking
+# the best of N on the validation set this notebook quotes is the selection bias §10.1
+# already warns about.
 
 # %%
 import torch
@@ -2053,3 +2133,105 @@ print("  so 'both correct' has no slack of its own: it moves only when a factor 
 # Casual`, and §9.4 says what to do about that. Reporting a measured ceiling is a more
 # useful result than a fourth lever, which is why this section is titled *finding where
 # the improvement stops*.
+
+# %% [markdown]
+# ## 11 · Ultimate judgement
+#
+# ### Evaluation criteria
+#
+# Fixed before the comparisons, so the winner is not chosen by the yardstick:
+#
+# 1. **macro-F1, not accuracy.** Predicting `Casual` for every row scores 76.7%
+#    accuracy on `usage` and macro-F1 **0.109** (§1.2).
+# 2. **Both macro-F1 conventions reported.** `Home` has no validation instance, so
+#    averaging over 8 classes and over the 7 present differ by ~14% on identical
+#    predictions (§1.3). Mixing the two silently rewards a model for declining to
+#    predict a class.
+# 3. **Every effect judged against measured noise.** Repeat runs of one configuration
+#    spread **0.007** on `gender` and **0.047** on `usage` (§9.2). A difference smaller
+#    than its target's spread is not a result.
+# 4. **Robustness, not just the random split** — the forward split by id, which is how
+#    the graded test set was actually cut, and 261 independently photographed items (§8).
+# 5. **Parameter cost**, since two of the designs differ 2× in size.
+#
+# ### Model performance summary
+#
+# Validation macro-F1, 8-class convention, on the team's frozen split:
+#
+# | model | `gender` | `usage` | parameters |
+# |---|---|---|---|
+# | majority baseline | 0.141 | 0.108 | 0 |
+# | 1-NN on raw pixels | 0.534 | 0.327 | 0 |
+# | **A** two models | 0.735 | 0.408 | 577k |
+# | **B** joint label | 0.721 | 0.405 | 289k |
+# | **C** shared body | 0.728 | 0.401 | 289k |
+# | **D** `articleType`-pretrained | 0.732 | 0.408 | 289k |
+# | **C + class-weighted loss** | 0.723 | **0.485** | 289k |
+# | C + logit adjustment + TTA | 0.746 | 0.413 | 289k |
+#
+# ### Analysis of models
+#
+# **A leads `gender` and the lead is real** — 0.013–0.025, the same sign in all four
+# runs, against a `gender` spread of only 0.007. We do not dismiss it as noise.
+#
+# **Class weighting gains `usage` two to four times more than that** — +0.081 on Colab,
+# +0.061 locally, the only effect that survived every check across two platforms.
+#
+# So C trades ~0.02 on one target for ~0.08 on the other and lifts the mean of the two
+# by about +0.03, at half A's parameters. **B is eliminated on structure, not score:**
+# the joint label turns one rare `usage` class into six combinations under 10 rows, and
+# 16 of 40 `gender × usage` pairs have no training example at all, so B cannot ever
+# predict them.
+#
+# The cheap inference stack (logit adjustment + TTA) posts the best `gender` number, but
+# §10.1's caveat applies: τ is chosen by argmax on the same validation set it is scored
+# on, so its gain cannot come out negative and is an upper bound.
+#
+# ### Beyond performance metrics
+#
+# The brief asks for more than metric comparison for the higher grades. Four things here
+# are not readable off the table above.
+#
+# **1. The decision was made from information theory before training, then checked.**
+# Knowing `gender` removes only 11.5% of `usage`'s uncertainty and knowing `usage`
+# removes 9.5% of `gender`'s — the targets are nearly independent. But `articleType`
+# removes **66.8%** and **43.1%**. They are related *through the garment*, not through
+# each other, which argues for sharing at the features and not at the label: one body,
+# two heads (§2). §5 then measured it.
+#
+# **2. `usage` is at the ceiling its labels allow, and we measured the ceiling.** An
+# oracle handed the true `articleType` reaches 0.8945 accuracy where the CNN reaches
+# 0.8972, and its macro-F1 is **0.3872** with F1 exactly **0.0000** on all four rare
+# classes (§10.5). The cause is in the labels: 710 backpacks are labelled `Casual` 616
+# times and `Travel` 11 times; 345 dresses, `Casual` 337 and `Party` 7. Photographs of
+# the two groups are drawn from the same product categories, so no image model and no
+# volume of extra data can separate them. `usage` macro-F1 near 0.47 is not an
+# under-trained model — it is four structurally unlearnable classes each costing a fixed
+# 0.125 of an 8-class average.
+#
+# **3. `gender` is the opposite case, and that is why the image matters.** Its best
+# metadata oracle reaches 0.8002 accuracy against the CNN's 0.9057 — **the pixels are
+# worth +10.6 points** there. The two targets are different kinds of problem, which is
+# the technical reason not to merge them into one label.
+#
+# **4. Three conclusions were retired by their own data.** That the external data hurt
+# `gender`; a strict A > B > C ranking; and, after this notebook, that a 215-image
+# external `Party` set helps — it moved the macro +0.007 while `Party` F1 stayed 0.0000
+# in all nine models trained, and the movement decomposed entirely onto `Travel`, a
+# class the new data never touched. Two externally collected sets were measured and
+# rejected on evidence rather than dropped quietly.
+#
+# ### Final judgement
+#
+# > **Design C — one shared convolutional body, two heads — with a class-weighted loss
+# > on `usage` and mirror test-time augmentation. 289,133 parameters.**
+# >
+# > Validation macro-F1 **`gender` 0.7202, `usage` 0.4676**. The shipped checkpoint is
+# > the **median of three runs, not the best**: selecting the best of N on the same
+# > validation set the report quotes would inflate the figure being reported.
+#
+# It is recommended because it takes the larger of two real effects, costs half of A's
+# parameters, and is the only configuration whose advantage reproduced across two
+# platforms. What would raise the score is not in the optimiser or the loss — it is the
+# 79 training images spread across `Home`, `Party`, `Travel` and `Smart Casual`, and the
+# consistency of the labels attached to them (§9.4).
