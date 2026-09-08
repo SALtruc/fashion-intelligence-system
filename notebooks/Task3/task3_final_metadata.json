@@ -1,0 +1,27 @@
+{
+  "model": "artifacts/task3/task3_gender_usage_C_weighted.pt",
+  "predictions": "predictions/task3_gender_usage_nguyen.csv",
+  "design": "C shared body, class-weighted loss",
+  "tta_used": true,
+  "val_macro_f1": {
+    "gender": 0.7202,
+    "usage": 0.4676
+  },
+  "val_macro_f1_over_classes_present": {
+    "gender": 0.7202,
+    "usage": 0.5344
+  },
+  "val_accuracy": {
+    "gender": 0.8668,
+    "usage": 0.8693
+  },
+  "n_test": 5829,
+  "columns_filled": [
+    "gender",
+    "usage"
+  ],
+  "columns_left_for_teammates": [
+    "articleType",
+    "season"
+  ]
+}

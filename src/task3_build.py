@@ -1407,6 +1407,27 @@ print(f"\nsaved -> {OUT}")
 # sign held, the magnitude fell fourfold. **A tight spread across runs on one machine is
 # not a small error bar; it is a small sample of one platform.** That is the single most
 # useful thing the fourth run bought.
+#
+#### A third check, forced by the model that got submitted
+#
+# Saving a model for submission meant training this configuration once more, on its
+# own, and it came out **0.045 below** the band these four runs had measured for it.
+# The reason is that the four runs are not four independent draws of it: every one
+# trained `C weighted` **fifth**, after A, B and C, in the same script order, so all
+# four share an RNG history. They are a correlated sample of one code path.
+#
+# Three genuinely independent seeds of the same configuration give:
+#
+# | | seed 42 | seed 43 | seed 44 | spread |
+# |---|---|---|---|---|
+# | `usage` macro-F1 | 0.4718 | 0.4360 | 0.4676 | **0.0358** |
+# | `gender` macro-F1 | 0.7501 | 0.7396 | 0.7202 | **0.0299** |
+#
+# So the configuration's real spread is about 0.035, not the 0.0363-wide band that
+# looked like four measurements and was closer to one. This is the same error as the
+# `A − C` case above, made in the opposite direction and against this notebook's own
+# headline: **repeating a run is not the same as sampling a configuration.** Quote
+# `usage` for this design as **0.44–0.47 across seeds**, not as a single 0.4674.
 # %%
 # The three runs' shared-val macro-F1, transcribed from task3_results.csv of each.
 # Literal on purpose: a past run cannot be recomputed, and pretending otherwise by
@@ -1519,8 +1540,10 @@ print("  as unresolved, which is a result too.")
 #
 # **1. `gender` and `usage` are not one task.** `gender` has five classes, smallest 483;
 # `usage` has eight, smallest **1**. Best `gender` macro-F1 **0.7488**, best `usage`
-# **0.4674**. The gap is not model quality — half of `usage`'s classes have almost no
-# training data.
+# **0.4674** — though §9.2's seed sweep puts that second figure at **0.44–0.47**
+# depending on initialisation, so read it as a range, not a score. The gap between the
+# two targets is not model quality: half of `usage`'s classes have almost no training
+# data.
 #
 # **2. Accuracy is unusable here.** Predicting `Casual` everywhere scores **76.1%**
 # accuracy and **0.108** macro-F1. The best `usage` model reaches **87.4%**, eleven
@@ -1624,10 +1647,11 @@ print("  as unresolved, which is a result too.")
 #
 # ### 9.4 What would be worth doing next
 #
-# * **Vary the seed deliberately, not just the platform.** Four runs came from GPU
-#   non-determinism plus one platform change; none varies the seed explicitly. The claim
-#   that needs it is the `gender` A − C margin, whose spread (0.031) still exceeds its
-#   mean (0.024).
+# * **The seed sweep is now partly done, and it widened the error bars.** Three
+#   independent seeds of the chosen configuration (§9.2) spread **0.0358** on `usage`
+#   and **0.0299** on `gender` — as wide as the marginal spread, and wider than the
+#   paired differences suggested. Five seeds per design, rather than three for one
+#   design, is what would settle the `gender` A − C margin.
 # * **Add a third split, because every number here is selected on the one it is
 #   reported on.** Two mechanisms do this. `train_model` returns the checkpoint with the
 #   best mean validation F1, so each reported score is a peak by construction — visible
