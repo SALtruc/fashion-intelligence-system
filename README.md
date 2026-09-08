@@ -40,10 +40,16 @@ Both exist and are distributed through the Drive folder `A2_ExternalData`:
 
 All three are gated to **zero overlap** with the provided train and test sets.
 
-Adding them to a training run is one line, and it is a **per-target** decision — the
-rows help `articleType` and `season`, do nothing for `gender`, and actively hurt
-`usage`. Read **[docs/EXTERNAL_DATA_USAGE.md](docs/EXTERNAL_DATA_USAGE.md)** before
-using them; provenance for each set is in [docs/external_sets/](docs/external_sets/).
+Adding them to a training run is one line, and it is a **per-target** decision. The
+rows were chosen to fill `articleType` classes that are starved *and* concentrated in
+the region the graded test set comes from, so Tasks 1 and 2 are where a gain is
+plausible. On **Task 3 there was no measurable effect on either target** — four runs
+across two platforms, sign flipped both times. An earlier version of this README said
+the rows "actively hurt `usage`"; that came from one run of four and is withdrawn.
+
+Read **[docs/EXTERNAL_DATA.md](docs/EXTERNAL_DATA.md)** before using them — one file,
+covering provenance, licences, the attribution obligation, the leakage evidence and
+the four caveats that belong in the report.
 
 ## Setup
 
