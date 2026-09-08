@@ -65,6 +65,9 @@ def entries(include_test=True, include_external=True):
 
     # --- Always: what every worker session reads -----------------------------------------
     add_file(ROOT / "src" / "preprocessing.py", "src/preprocessing.py")
+    # The DDP harness, which every notebook imports at Section 1.3 whether or not it is
+    # running distributed -- a session without it fails on the import, not at training time.
+    add_file(ROOT / "src" / "task1_ddp.py", "src/task1_ddp.py")
     add_file(ROOT / "preprocessed_datasets" / "train_manifest.csv",
              "preprocessed_datasets/train_manifest.csv")
     add_tree(ROOT / "datasets" / "train" / "images_train", "datasets/train/images_train",
@@ -101,6 +104,16 @@ def entries(include_test=True, include_external=True):
     combine = COLAB_DIR / COMBINE_NAME
     if combine.is_file():
         add_file(combine, COMBINE_NAME)
+
+    # The multi-GPU launcher, and the worker notebooks it takes as arguments. A Kaggle GPU
+    # T4 x2 session has two cards and a notebook kernel reaches one, so the second is only
+    # reachable by shelling out to torchrun -- which needs the notebook as a file on disk,
+    # and the notebook open in the browser tab is not one. Together these are about 1.5 MB.
+    launcher = ROOT / "scripts" / "task1_torchrun.py"
+    if launcher.is_file():
+        add_file(launcher, "scripts/task1_torchrun.py")
+    for worker in sorted(COLAB_DIR.glob("worker_*.ipynb")):
+        add_file(worker, worker.name)
 
     return items
 
@@ -153,7 +166,8 @@ def main():
         for key in sorted(groups):
             print(f"  {key:<44} {groups[key]:>7,} files")
         missing = [required for required in
-                   ("src/preprocessing.py", "preprocessed_datasets/train_manifest.csv")
+                   ("src/preprocessing.py", "src/task1_ddp.py",
+                    "preprocessed_datasets/train_manifest.csv")
                    if required not in names]
         if missing:
             print("\n  MISSING:", ", ".join(missing))

@@ -55,6 +55,46 @@ uv run jupyter execute --timeout=-1 --output="run_{notebook_name}" notebooks/Tas
 file clean, so `check_task1_workers.py` still passes afterwards. Checkpoints are written as a
 side effect either way; the executed copy is your provenance record of the printed scores.
 
+### Using every GPU on the machine
+
+A notebook kernel is one process and reaches one GPU. On a machine with more than one card,
+run the worker through the launcher instead:
+
+```bash
+python scripts/task1_torchrun.py notebooks/Task1/worker_resnet.ipynb
+```
+
+It flattens the notebook's code cells into a module and starts one process per visible GPU
+under `torchrun`, which is what `src/task1_ddp.py` needs in order to build a process group.
+`--nproc N` overrides the process count, and `--dry-run` writes the flattened script without
+running it. With one GPU, or none, it runs the script in a single process and nothing about
+the run changes.
+
+**The global batch does not change.** `BATCH_SIZE` stays the global batch and each rank takes
+`BATCH_SIZE // world_size` of it — 128 becomes 64 × 2 on two cards, 32 × 4 on four. That is
+deliberate: `BATCH_SIZE` is hashed into `RUN_FINGERPRINT`, so scaling it per device would make
+a checkpoint's identity depend on the hardware that produced it and machines with different
+card counts would stop being able to share checkpoints. Because the global batch is fixed,
+DDP's gradient all-reduce computes the same gradient a single process would, and every
+BatchNorm is converted to `SyncBatchNorm` so the normalisation statistics are pooled across
+ranks rather than computed per shard. An N-GPU run is therefore equivalent to a 1-GPU run,
+not merely close to it, and the checkpoints it writes are interchangeable with every other
+machine's. `world_size` must divide `BATCH_SIZE`; 1, 2, 4 and 8 all do, and a size that does
+not is refused at start-up rather than silently rounded.
+
+Two details worth knowing. Only the training stream is sharded — validation is replicated on
+every rank, so `fit` still scores against the whole of `y_val` and the early-stopping decision
+is identical on every rank without any synchronisation. And rank 0 alone writes checkpoints,
+figures and CSVs; the other ranks are silenced on stdout but keep stderr, so a traceback on
+any rank is still visible.
+
+The exception is the augmentation RNG: each rank augments its own shard, so the draw sequence
+differs from a single process working through the same rows. The policy and its distribution
+are unchanged and the run is reproducible, but it is not bit-identical to a single-GPU run.
+Nothing can make it so while the shards are augmented in parallel.
+
+`hog_svm` and `hogsearch` are CPU jobs and gain nothing from this.
+
 ## What each job needs from the machine
 
 | Job | Device | Trains | GPU memory | Can share a machine with |

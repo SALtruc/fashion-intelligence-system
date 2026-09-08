@@ -209,6 +209,7 @@ STAGING = r'''# ================================================================
 #
 #     /content/
 #     |- src/preprocessing.py
+#     |- src/task1_ddp.py
 #     |- preprocessed_datasets/train_manifest.csv
 #     |- preprocessed_datasets/task1_dataset1_arms/<version>/     (enriched arm)
 #     |- datasets/train/images_train/*.jpg
@@ -352,6 +353,16 @@ else:
     print(f"Unpacking {_zip.name} ({_zip.stat().st_size / 1e6:.0f} MB) into {PROJECT} ...")
     shutil.unpack_archive(str(_zip), str(PROJECT))
     print("Unpacked.")
+
+# A bundle built before the multi-GPU support was added stages cleanly and then fails at the
+# import in Section 1.3, an hour later on a Kaggle commit run. Naming it here instead.
+if not (PROJECT / "src" / "task1_ddp.py").is_file():
+    raise FileNotFoundError(
+        f"{PROJECT}/src/task1_ddp.py is missing, so this bundle predates the multi-GPU "
+        "support that Section 1.3 imports. "
+        "Rebuild it with `python scripts/make_colab_bundle.py` and re-upload, or drop a copy "
+        "of src/task1_ddp.py next to src/preprocessing.py if you only need this one session."
+    )
 
 for _name in ("models", "outputs", "predictions"):
     (PROJECT / _name).mkdir(parents=True, exist_ok=True)

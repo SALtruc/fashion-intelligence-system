@@ -226,6 +226,43 @@ Two ways, both supported by the staging cell:
 The quota being *visible* is the real advantage for this run: `lrsearch` at ~115 minutes and the
 `resnet` chain at ~115 minutes are a known, plannable spend rather than a guess.
 
+### Using both GPUs of a **GPU T4 x2** session
+
+Picking `GPU T4 x2` in the accelerator menu gives the session two cards, but a notebook kernel
+is a single process and reaches only the first. The notebooks detect this and say so at
+start-up — *"2 GPUs visible but this is a single process"*. To use both, run the job through
+the launcher in a shell cell instead of running the cells directly:
+
+```python
+!python scripts/task1_torchrun.py worker_resnet.ipynb
+```
+
+Both `scripts/task1_torchrun.py` and every `worker_*.ipynb` ride along in the bundle, because
+torchrun needs the notebook as a *file* and the one open in the browser tab is not one — Kaggle
+holds it server-side. The launcher flattens the notebook's code cells into a module and starts
+one process per visible GPU. Output appears under the shell cell rather than under each cell,
+and everything is written to the same places, so the export cell afterwards behaves as usual.
+
+It roughly halves the wall clock on the GPU-bound jobs — `resnet`, `lrsearch`, `sweep`,
+`stage2grid`. `hog_svm` and `hogsearch` are CPU jobs and gain nothing.
+
+**The models are unchanged.** `BATCH_SIZE` stays the *global* batch and each GPU takes half of
+it (128 → 64 × 2), so `RUN_FINGERPRINT` is untouched and the checkpoints stay interchangeable
+with every single-GPU session in the same pass. Holding the global batch fixed is also what
+makes DDP's averaged gradient identical to a one-GPU gradient; every BatchNorm is converted to
+`SyncBatchNorm` so its statistics are pooled across both cards rather than computed per half.
+The one thing that is not bit-identical is the augmentation RNG — each card augments its own
+half, so the draw sequence differs. The policy and the distribution do not.
+
+Worth knowing before you spend quota on it: **two cards for one hour costs two GPU-hours**, not
+one. Against a ~30 GPU-hour weekly budget this buys wall-clock, not quota. It is worth it for a
+job you are waiting on, and not worth it for one you would have committed and walked away from.
+
+This is a Kaggle note rather than a Colab one. A free Colab runtime has a single GPU, so there
+is nothing to distribute; on a multi-GPU Colab runtime the launcher works, but the export
+cell's `files.download()` cannot run outside the kernel, so collect results from the file
+browser instead.
+
 ---
 
 ## The parallel run
