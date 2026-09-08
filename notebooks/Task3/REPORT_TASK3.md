@@ -36,11 +36,11 @@ larger but less stable than we first reported: **+0.081, +0.061 and +0.028** on 
 platforms, mean **+0.057**. C therefore trades about 0.02 on one target for about 0.06
 on the other.
 
-A hyper-parameter sweep then closed the rest of the gap without touching the design.
-Training 30 epochs instead of 20 gains `gender` **+0.019** — positive on both seeds,
-against a 0.011 band — which is as much as A's entire lead, for none of A's 2×
-parameter cost. That is the stronger form of the argument, and it exists only because
-the sweep was run rather than assumed.
+A hyper-parameter sweep looked for a cheaper way to recover that `gender` gap and
+appeared to find one — 30 epochs instead of 20 gained **+0.019**, positive on both
+seeds — but the gain did not survive being tested on a split that had not selected it.
+See "Selection bias, caught in our own work" below; the shipped configuration is
+unchanged.
 
 The submitted model scores **gender 0.7202, usage 0.4676**, and is the **median of three
 runs rather than the best**; choosing the best on validation would inflate the figure we
@@ -91,6 +91,20 @@ TTA, `articleType` pretraining) each gave a reproducible but tiny **+0.003 to +0
 `usage` and nothing surviving a sign test on `gender`. Two of them correct the class
 prior at inference — which is what class weighting does in the loss: **+0.08 in the loss
 against +0.008 at inference**, the same idea tenfold apart.
+
+### Selection bias, caught in our own work
+
+§10.1 warns that τ is chosen by argmax on the validation set it is then scored on, so its
+gain cannot come out negative. The hyper-parameter sweep then walked into the same trap
+with a different knob, and we can put a number on it. `epochs=30` won the sweep on the
+random validation split by **+0.019** on `gender`. Re-run on the **forward split** — the
+high-id holdout that mimics the graded test set and had selected nothing — the same change
+measured **−0.002**, with the sign flipping across three fresh seeds. We had recorded
+"adopt" as the prediction beforehand. It was wrong, and reporting that is the point: the
+sweep's winner was **the sweep**, not the model, and the only reason we know is that the
+confirmation used a split the selection had never touched. Every "improvement" in §10
+should be read with that in mind, and it is why the sweep is reported as sensitivity and
+the shipped configuration is unchanged.
 
 ### The methodological finding
 
@@ -207,6 +221,20 @@ three configurations move `gender` beyond its** — the same asymmetry §9.2 fou
 the same reason: `usage`'s instability lives in classes holding 3 to 9 validation images,
 so it cannot resolve an effect this size, while `gender`'s smallest validation class has
 66. Two knobs, `lr 3e-3` and `30 epochs`, beat the shipped default on `gender`. Neither
-is adopted here: five configurations at two seeds makes the best of them partly luck, and
-they were scored on the same validation set this report quotes. They are the candidates a
-confirmation run should test, and §9.4's first entry.
+is adopted here, and the reason is measured rather than asserted. `epochs=30` was the
+stronger candidate: both its seeds landed above all six baseline runs, an exact rank-sum
+`p = 0.0357`. But it was the best of five knobs, and correcting for having looked five
+times leaves `1 - (1 - 0.0357)^5 = 0.166`. So it was re-tested on the **forward split**,
+which had never selected anything, with three fresh seeds and an adoption rule and a
+prediction both fixed in advance:
+
+| split | selected `epochs=30`? | `gender` Δ (30 − 20) | per seed |
+|---|---|---|---|
+| random validation | **yes** | **+0.019** | +0.024, +0.015 |
+| forward split | no | **−0.002** | +0.005, **−0.016**, +0.006 |
+
+**+0.019 on the split that chose it, −0.002 on the split that did not.** The prediction
+recorded before the run was to adopt; it was wrong, and the rule refused. `epochs=20`
+stands and the submitted model is unchanged. `usage` did rise on the forward split in all
+three seeds, but by +0.007 against that arm's own 0.007 spread — at the noise floor, and
+not what the rule was about.
