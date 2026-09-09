@@ -287,6 +287,66 @@ with the table it came from.
 
 ---
 
+**B9. Measured against a pre-trained backbone** - the spec forbids a pre-trained
+system as the submitted model and recommends one for comparison, so this is the
+comparison and none of it is a submission candidate. Published results on the wider
+Kaggle collection this dataset is drawn from are not usable as a reference: they report
+accuracy, over a different label set, at full resolution, on their own splits. Changing
+three definitions at once and quoting the number is decoration. Training a strong
+external backbone on **our** rows and scoring it with **our** metric is the same
+question asked in a way that has an answer.
+
+All arms share the split, the class-weighted loss, the two-head structure and the
+metric; the backbone is the only difference. The pre-trained arms see the 60x80 images
+upscaled to 224x224 with ImageNet normalisation, which adds no information but matches
+the receptive field their stem assumes. Our own design was retrained in the same
+session so the comparison carries no cross-session confound.
+
+| model | trainable params | `gender` | `usage` | minutes |
+|---|---:|---:|---:|---:|
+| `resnet18_frozen` | 6,669 | 0.7146 | 0.4134 | 0.5 |
+| `resnet18_finetune` | 11,183,181 | 0.8228 | 0.5964 | 18.8 |
+| `C_weighted (ours)` | 289,133 | 0.7211 | 0.4497 | 9.7 |
+
+| against ours | `gender` delta | vs band 0.0114 | `usage` delta | vs band 0.064 |
+|---|---:|---|---:|---|
+| `resnet18_frozen` | -0.0065 | within | -0.0363 | within |
+| `resnet18_finetune` | +0.1017 | beyond | +0.1467 | beyond |
+
+`resnet18_frozen` trains 6,669 parameters and runs 11.2 million frozen ones, so its
+row is not a claim about a small model. It answers a narrower question: generic
+ImageNet features, with no fine-tuning at all, land within noise of a network we
+trained from scratch on this data. Fine-tuning is where the gap opens.
+
+| `usage` class | val images | ours | resnet18_finetune | contribution to the gap |
+|---|---:|---:|---:|---:|
+| Casual | 4306 | 0.911 | 0.953 | +0.0052 |
+| Ethnic | 383 | 0.856 | 0.940 | +0.0105 |
+| Formal | 343 | 0.770 | 0.848 | +0.0097 |
+| Home *(rare)* | 0 | 0.000 | 0.000 | +0.0000 |
+| Party *(rare)* | 3 | 0.000 | 0.000 | +0.0000 |
+| Smart Casual *(rare)* | 9 | 0.182 | 0.444 | +0.0328 |
+| Sports | 614 | 0.656 | 0.786 | +0.0162 |
+| Travel *(rare)* | 3 | 0.222 | 0.800 | +0.0722 |
+| **total** | **5,661** | | | **+0.1466** |
+
+| `gender` class | val images | ours | resnet18_finetune | contribution to the gap |
+|---|---:|---:|---:|---:|
+| Unisex | 305 | 0.536 | 0.701 | +0.0330 |
+| Boys | 93 | 0.667 | 0.810 | +0.0288 |
+| Girls | 66 | 0.604 | 0.714 | +0.0221 |
+| Women | 2107 | 0.885 | 0.938 | +0.0106 |
+| Men | 3090 | 0.914 | 0.950 | +0.0072 |
+| **total** | **5,661** | | | **+0.1016** |
+
+**72% of that gap sits on 15 validation images.** The four rare classes hold 15 between them against 5,646 in the large four, and each class contributes an eighth of the macro average regardless of how many images stand behind it. `Travel` alone, on 3 images, accounts for +0.0722 of it. And `Home` and `Party` score **0.0000 for the pre-trained model as well**. A network with 11.2 million parameters and 1.2 million ImageNet images behind it learns them no better than ours does, because the training set holds one row and ten. That is the label ceiling stated by something other than us.
+
+The other half of the same table is the part we got wrong. The four large classes contribute **+0.0416**, taking their mean per-class F1 from 0.7985 to 0.8816. These are classes with 5,646 validation images; the gain is small but it is not noise. So the label evidence stands -- the `articleType` oracle scores below our CNN, `Home` has no validation image at all, and identical article types carry different `usage` labels -- while the inference we drew from it does not. We wrote that the scores could not go much higher. On the classes with enough data to measure, a stronger backbone at higher resolution shows they can. The ceiling is a claim about the rare classes and about *our* model, not about the task.
+
+`gender` gives the opposite reading and there is no comfortable way to put it: **every class that gains holds a real sample** -- the smallest is 66 validation images, not three -- so none of the +0.1016 can be dismissed as a small-sample draw. The largest single contribution is `Unisex` at +0.0330, which is the class our own diagnostic had already identified as the bottleneck and the only one where an `articleType` lookup beat our CNN. A pre-trained backbone closes much of that gap, from 0.536 to 0.701. On this target we were simply under-powered, and an argument made while analysing design D -- that dropout=0.0 showing nothing meant capacity was not the constraint -- was wrong: dropout measures regularisation, not capacity.
+
+---
+
 ## Notes for Trực - not for the report
 
 * If Section A is too long, cut from the bottom. The order is deliberate: judgement and
