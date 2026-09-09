@@ -44,7 +44,7 @@ split's rows would leak: the forward holdout sits mostly inside them.
     rises. If `gender` improves without Unisex improving, the story is wrong even if
     the number is up.
 
-    python notebooks/Task3/experiment_transfer_weighted.py
+    python src/task3/experiment_transfer_weighted.py
 
 Roughly 75 minutes on an RTX 4070: per repeat, ~5 min pretraining, ~10 min for each
 of the two arms.
@@ -59,6 +59,17 @@ import numpy as np
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent
+
+def _results_dir():
+    """Outputs go to results/task3, not next to the source. This file lives in
+    src/task3 now, so HERE is the wrong place to write."""
+    for base in (HERE, *HERE.parents):
+        if (base / ".git").exists():
+            d = base / "results" / "task3"
+            d.mkdir(parents=True, exist_ok=True)
+            return d
+    return HERE
+
 
 
 def _repo_root():
@@ -75,7 +86,7 @@ PREFIX_STOP = "# ## 5 "
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--seeds", default="51,52,53")
-ap.add_argument("--out", default=str(HERE / "experiment_transfer_weighted.csv"))
+ap.add_argument("--out", default=str(_results_dir() / "experiment_transfer_weighted.csv"))
 args = ap.parse_args()
 SEEDS = [int(s) for s in args.seeds.split(",")]
 

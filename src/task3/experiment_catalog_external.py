@@ -42,6 +42,17 @@ import numpy as np
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent
+
+def _results_dir():
+    """Outputs go to results/task3, not next to the source. This file lives in
+    src/task3 now, so HERE is the wrong place to write."""
+    for base in (HERE, *HERE.parents):
+        if (base / ".git").exists():
+            d = base / "results" / "task3"
+            d.mkdir(parents=True, exist_ok=True)
+            return d
+    return HERE
+
 SRC = HERE / "task3_build.py"
 PREFIX_STOP = "# ## 5 "
 
@@ -50,7 +61,7 @@ ap.add_argument("--epochs", type=int, default=None)
 ap.add_argument("--seeds", default="42,43,44")
 ap.add_argument("--ext", required=True)
 ap.add_argument("--holdout", type=float, default=0.15)
-ap.add_argument("--out", default=str(HERE / "experiment_catalog_external.csv"))
+ap.add_argument("--out", default=str(_results_dir() / "experiment_catalog_external.csv"))
 args = ap.parse_args()
 SEEDS = [int(s) for s in args.seeds.split(",")]
 EXT = Path(args.ext)

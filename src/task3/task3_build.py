@@ -94,7 +94,7 @@ SAMPLE = 4000 if QUICK else None
 
 random.seed(SEED); np.random.seed(SEED)
 
-# Stamped by build_notebook.py from a hash of the source. Its whole job is to make a
+# A fingerprint of the code cells, recorded at the run that produced the outputs. Its whole job is to make a
 # stale upload obvious in the first five seconds: the handover note says which BUILD
 # to expect, so a notebook that is a regeneration behind announces itself here rather
 # than failing seventy minutes later. "dev" means running the .py directly.

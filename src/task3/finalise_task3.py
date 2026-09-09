@@ -47,6 +47,17 @@ import time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+
+def _results_dir():
+    """Outputs go to results/task3, not next to the source. This file lives in
+    src/task3 now, so HERE is the wrong place to write."""
+    for base in (HERE, *HERE.parents):
+        if (base / ".git").exists():
+            d = base / "results" / "task3"
+            d.mkdir(parents=True, exist_ok=True)
+            return d
+    return HERE
+
 SRC = HERE / "task3_build.py"
 PREFIX_STOP = "# ## 5 "          # everything before section 5 defines what we need
 
@@ -186,16 +197,15 @@ def _repo_root():
 
 
 ROOT = _repo_root()
-# models/task3/checkpoints, not artifacts/task3: artifacts/** is gitignored on every
-# branch and models/ is ignored on none, so Task 1 and Task 2 already keep their
-# checkpoints under models/. At 1.2 MB this belongs in the repo beside theirs, so
-# whoever assembles the submission finds all four in one place. The artifacts/ copy
-# is written too, for the Drive upload the team convention still asks for.
-CKPT = ROOT / "models" / "task3" / "checkpoints"
+# artifacts/task3, which is gitignored, and from there to the team Drive. The
+# checkpoint spent an evening under models/task3/checkpoints because three of the four
+# tasks keep theirs under models/; the team lead's call is that models/ counts as
+# artifacts and does not get pushed, so this follows the written convention rather
+# than the majority practice.
 ART = ROOT / "artifacts" / "task3"
-for d in (CKPT, ART):
-    d.mkdir(parents=True, exist_ok=True)
-MODEL_PATH = CKPT / "task3_gender_usage_C_weighted.pt"
+CKPT = ART
+ART.mkdir(parents=True, exist_ok=True)
+MODEL_PATH = ART / "task3_gender_usage_C_weighted.pt"
 torch.save({
     "state_dict": model.state_dict(),
     "heads": heads_multi,
@@ -216,8 +226,6 @@ torch.save({
     "val_accuracy": {t: round(val_scores[t]["accuracy"], 4) for t in TARGETS},
 }, MODEL_PATH)
 print(f"\nmodel -> {MODEL_PATH}  ({MODEL_PATH.stat().st_size / 1e6:.1f} MB)")
-shutil.copy2(MODEL_PATH, ART / MODEL_PATH.name)
-print(f"      -> {ART / MODEL_PATH.name}  (the copy the Drive convention asks for)")
 
 # ------------------------------------------------------------ predict the test set
 # `predict` and `logits_of` index X_t, the training images already on the GPU, so
@@ -340,7 +348,7 @@ meta = {
     "validation_metrics": {t: {"macro_f1": round(val_scores[t]["macro_f1"], 4),
                                "accuracy": round(val_scores[t]["accuracy"], 4)}
                            for t in TARGETS},
-    "notes": (f"python notebooks/Task3/finalise_task3.py -- design C, class-weighted "
+    "notes": (f"python src/task3/finalise_task3.py -- design C, class-weighted "
               f"loss, {'mirror TTA' if best_tta else 'no TTA'}, {g['EPOCHS']} epochs, "
               f"batch {_sig['bs'].default}, Adam lr {_sig['lr'].default}. Shipped "
               f"checkpoint is the MEDIAN of {len(SEEDS)} repeats by mean macro-F1, "
@@ -371,7 +379,7 @@ meta = {
 # Written from one dict to every location, so the copies cannot drift apart.
 _meta_json = json.dumps(meta, indent=2)
 print()
-for _d in (CKPT, ART, HERE):
+for _d in (ART, _results_dir()):
     (_d / "task3_final_metadata.json").write_text(_meta_json, encoding="utf-8")
     print(f"metadata -> {_d / 'task3_final_metadata.json'}")
 print(f"\nUPLOAD {MODEL_PATH.name} to the team Drive: artifacts/** is gitignored.")

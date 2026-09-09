@@ -1,5 +1,5 @@
 {
-  "artifact": "models/task3/checkpoints/task3_gender_usage_C_weighted.pt",
+  "artifact": "artifacts/task3/task3_gender_usage_C_weighted.pt",
   "task": "task3",
   "created_at": "2026-09-08",
   "metadata_regenerated_on": "2026-09-09",
@@ -24,9 +24,8 @@
     }
   },
   "notes": "python notebooks/Task3/finalise_task3.py -- design C (one shared conv body, one head per target), class-weighted loss 1/sqrt(n), mirror TTA, 20 epochs, batch 256, Adam lr 0.001. Shipped checkpoint is the MEDIAN of 3 repeats by mean macro-F1, not the best. train_model() calls torch.manual_seed(SEED) on entry, so these are repeats at SEED=42 differing by cuDNN nondeterminism, NOT independent seeds. The labels 42/43/44 name the repeats only. macro-F1 with labels= over all classes, including any absent from validation; sklearn's default would drop them and read higher.",
-  "model": "models/task3/checkpoints/task3_gender_usage_C_weighted.pt",
-  "also_on_drive": "artifacts/task3/task3_gender_usage_C_weighted.pt",
-  "in_git": true,
+  "model": "artifacts/task3/task3_gender_usage_C_weighted.pt",
+  "in_git": false,
   "predictions": "predictions/task3_gender_usage_nguyen.csv",
   "predictions_sha256": "cf1a43bfd48bbc3029d633a799ea580d889e0550e66895c0f703fa00bd1f6f00",
   "design": "C - one shared conv body, one head per target, class-weighted loss",
@@ -70,5 +69,6 @@
   "columns_left_for_teammates": [
     "articleType",
     "season"
-  ]
+  ],
+  "where": "artifacts/** is gitignored by team convention, so the checkpoint is on the team Drive under artifacts/task3. This file records the numbers, the commit and the sha256 so the weights can be identified without being in the repository."
 }

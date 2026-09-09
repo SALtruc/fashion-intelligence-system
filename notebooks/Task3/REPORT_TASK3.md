@@ -281,14 +281,12 @@ someone else's.
   and 39107 (`Boys` -> `Unisex`). Two rows of 37,745, so no metric moves, but the
   de-duplicated labels are therefore *not* a subset of the provided ones, and anyone who
   filters the raw CSV themselves rather than using the zip will get different labels.
-* The submitted weights are **in git** at
-  `models/task3/checkpoints/task3_gender_usage_C_weighted.pt` (1.2 MB), with a matching
-  `task3_final_metadata.json` recording the commit that produced them, the split, the
-  framework version and a sha256. `artifacts/**` is gitignored by our own convention,
-  but that convention is bypassed by three of the four tasks, which keep their
-  checkpoints under `models/` - so this sits beside theirs and the submission can be
-  assembled from one clone. A copy is still written to `artifacts/task3/` for anyone
-  following the Drive convention.
+* The submitted weights are **not in git**: `artifacts/**` is gitignored by team
+  convention, so `task3_gender_usage_C_weighted.pt` (1.2 MB) is on the team Drive under
+  `artifacts/task3`. What is in git is `results/task3/task3_final_metadata.json`, which
+  records its sha256, the commit that produced it, the split, the framework version and
+  the validation scores - enough to identify the file without shipping it. It needs to
+  go into the Canvas submission, since deliverable 2 asks for the models themselves.
 * `predictions/task3_gender_usage_nguyen.csv` has `gender` and `usage` filled for all
   5,829 test rows in the original order, with `articleType` and `season` left empty for
   whoever merges the four tasks.

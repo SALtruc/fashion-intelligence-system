@@ -38,16 +38,27 @@ python -m ipykernel install --user --name a2torch --display-name "A2 (torch cu12
 
 Then:
 
+Open `03_task3_gender_usage_nguyen.ipynb` and run all cells: about 90 minutes on an
+RTX 4070, and the notebook is self-contained. Setting `A2_QUICK=1` in the environment
+cuts it to roughly two minutes on a 4,000-row sample, which is enough to prove the
+pipeline runs before committing an hour of GPU.
+
+The same code also exists as `src/task3/task3_build.py`, cell-for-cell identical and
+marked with `# %%`. That is the copy the experiment scripts execute, so they share the
+notebook's preprocessing rather than duplicating it:
+
 ```bash
-python run_notebook.py --quick     # ~2 min, proves the pipeline runs
-python run_notebook.py             # the real run, writes outputs into the .ipynb
-python check_notebook.py           # gate before committing
+python src/task3/finalise_task3.py               # the submitted model and predictions
+python src/task3/experiment_hyperparams.py       # the sweep behind appendix B6
+python src/task3/experiment_epochs_confirm.py    # the confirmation that refuted it
+python src/task3/experiment_transfer_weighted.py # appendix B7
+python src/task3/diagnose_gender_ceiling.py      # per-class ceilings, trains nothing
+python src/task3/experiment_party_external.py    # external data, round 1
+python src/task3/experiment_catalog_external.py  # external data, round 2
 ```
 
-`run_notebook.py` regenerates the notebook from `task3_build.py` before executing, so
-it is structurally impossible to run a stale file - which is the failure that cost a
-70-minute Colab run. `--quick` executes a scratch copy so the real notebook keeps its
-outputs.
+Each writes into `results/task3/`, and all ten result CSVs are also folded into
+`results/task3/task3_all_results.csv` in long form, one row per measurement.
 
 Local staging, if `D:/ColabDataset` is ever missing: it needs
 `preprocessed_datasets/train/styles_train.csv` and `images_train/`, holding exactly

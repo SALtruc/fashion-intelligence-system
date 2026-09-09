@@ -13,7 +13,7 @@ shared validation split, then measures two ceilings for comparison:
   * an `articleType -> modal gender` oracle, the same instrument used on `usage`
   * the confusion matrix, to see whether the loss is one class or spread
 
-    python notebooks/Task3/diagnose_gender_ceiling.py
+    python src/task3/diagnose_gender_ceiling.py
 """
 import io
 import re
@@ -26,6 +26,17 @@ import torch
 
 HERE = Path(__file__).resolve().parent
 
+def _results_dir():
+    """Outputs go to results/task3, not next to the source. This file lives in
+    src/task3 now, so HERE is the wrong place to write."""
+    for base in (HERE, *HERE.parents):
+        if (base / ".git").exists():
+            d = base / "results" / "task3"
+            d.mkdir(parents=True, exist_ok=True)
+            return d
+    return HERE
+
+
 
 def _repo_root():
     for base in (HERE, *HERE.parents):
@@ -37,7 +48,7 @@ def _repo_root():
 ROOT = _repo_root()
 SRC = next(p for p in (ROOT / "src" / "task3_build.py", HERE / "task3_build.py")
            if p.is_file())
-CKPT = ROOT / "models" / "task3" / "checkpoints" / "task3_gender_usage_C_weighted.pt"
+CKPT = ROOT / "artifacts" / "task3" / "task3_gender_usage_C_weighted.pt"
 PREFIX_STOP = "# ## 5 "
 
 
@@ -149,7 +160,7 @@ for c in CLASSES["gender"]:
     print(f"    {c:8} oracle {orep[c]['f1-score']:.3f}   "
           f"CNN {classification_report(va['gender'], pred['gender'], labels=CLASSES['gender'], output_dict=True, zero_division=0)[c]['f1-score']:.3f}")
 
-out = HERE / "diagnose_gender_ceiling.csv"
+out = _results_dir() / "diagnose_gender_ceiling.csv"
 rows = []
 for t in TARGETS:
     rep = classification_report(va[t], pred[t], labels=CLASSES[t],
