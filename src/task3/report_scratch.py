@@ -28,6 +28,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from results_io import forward_repeats, load_wide
+
 HERE = Path(__file__).resolve().parent
 
 
@@ -47,11 +49,12 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--append", action="store_true")
 args = ap.parse_args()
 
-for f in ("scratch_vs_pretrained.csv", "sota_comparison.csv", "task3_all_results.csv"):
-    if not (RES / f).is_file():
-        raise SystemExit(f"{f} not found -- this section cannot be written without it")
-
-sv = pd.read_csv(RES / "scratch_vs_pretrained.csv")
+# Each experiment is read through results_io, which falls back to the consolidated
+# table when the per-experiment CSV is absent -- as it is in any fresh checkout, since
+# .gitignore admits only task3_all_results.csv.
+sv = load_wide("scratch_vs_pretrained", "scratch_vs_pretrained",
+               ["arm", "split", "tta"],
+               needs=["arm", "split", "tta", "gender macroF1", "usage macroF1"])
 
 
 def sv_get(arm, split, tta=False):
@@ -64,26 +67,15 @@ def sv_get(arm, split, tta=False):
 # Ours on the random split comes from the SOTA comparison, where it was retrained in
 # the same session as the pre-trained arms. Ours on the forward split comes from the
 # three 20-epoch repeats in the consolidated catalog. Both are read, not typed.
-so = pd.read_csv(RES / "sota_comparison.csv").drop_duplicates("arm", keep="last")
+so = load_wide("sota_comparison", "pretrained_comparison", ["arm"],
+               needs=["arm", "gender macroF1", "usage macroF1"]
+               ).drop_duplicates("arm", keep="last")
 _ours = so[so.arm == "C_weighted (ours)"]
 if len(_ours) != 1:
     raise SystemExit("no single 'C_weighted (ours)' row in sota_comparison.csv")
 OURS_RANDOM = {t: float(_ours[f"{t} macroF1"].iloc[0]) for t in TARGETS}
 
-cat = pd.read_csv(RES / "task3_all_results.csv", dtype=str)
-# This file's `run` column packs a composite key into one string: for
-# epochs_confirmation it is "<epochs> <repeat>", so `run` cannot be compared to a
-# number and the first whitespace-separated token has to be taken instead. The values
-# themselves are unaffected. Fixed separately; parsed defensively here so that the
-# section does not silently read the wrong rows if the file is cleaned up later.
-_c = cat[cat.source == "epochs_confirmation"].copy()
-_c["_epochs"] = _c.run.fillna("").str.split().str[0]
-_c = _c[_c._epochs.isin(["20", "20.0"])]
-FWD_RUNS = {t: [float(v) for v in _c[_c.metric == f"{t} macroF1"].value] for t in TARGETS}
-for t in TARGETS:
-    if len(FWD_RUNS[t]) != 3:
-        raise SystemExit(f"expected 3 forward repeats for {t}, found "
-                         f"{len(FWD_RUNS[t])}")
+FWD_RUNS = {t: forward_repeats(t, epochs=20) for t in TARGETS}
 OURS_FWD = {t: float(np.mean(FWD_RUNS[t])) for t in TARGETS}
 SPREAD = {t: max(FWD_RUNS[t]) - min(FWD_RUNS[t]) for t in TARGETS}
 

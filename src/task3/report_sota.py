@@ -26,6 +26,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from results_io import load_wide
+
 HERE = Path(__file__).resolve().parent
 
 
@@ -50,9 +52,12 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--append", action="store_true")
 args = ap.parse_args()
 
-if not CSV.is_file():
-    raise SystemExit(f"{CSV.name} not found -- run experiment_pretrained_sota.py first")
-res = pd.read_csv(CSV).drop_duplicates("arm", keep="last")
+# Read through results_io so that a checkout without the per-experiment CSVs -- which
+# is every checkout but this one, since .gitignore admits only the consolidated file --
+# rebuilds them from task3_all_results.csv instead of failing.
+res = load_wide("sota_comparison", "pretrained_comparison", ["arm"],
+                needs=["arm", "params", "minutes", "gender macroF1", "usage macroF1"]
+                ).drop_duplicates("arm", keep="last")
 if OURS not in set(res.arm):
     raise SystemExit(f"no '{OURS}' row -- the comparison needs our own arm to mean "
                      f"anything")
@@ -76,8 +81,11 @@ for _, r in res.iterrows():
 
 # ------------------------------------------------------------- the exact decomposition
 verdict = attribution = ""
-if PC.is_file():
-    pc = pd.read_csv(PC).drop_duplicates(["arm", "target", "class"], keep="last")
+pc = load_wide("sota_comparison_perclass", "pretrained_comparison_perclass",
+               ["arm", "target", "class"],
+               needs=["arm", "target", "class", "f1", "val_n"], optional=True)
+if pc is not None:
+    pc = pc.drop_duplicates(["arm", "target", "class"], keep="last")
     u = pc[pc.target == "usage"]
     w = u.pivot_table(index="class", columns="arm", values="f1")
     best = res.loc[res["usage macroF1"].idxmax(), "arm"]
@@ -210,8 +218,8 @@ trained from scratch on this data. Fine-tuning is where the gap opens.
 
 print(text)
 if args.append:
-    if not PC.is_file():
-        raise SystemExit("refusing to append without the per-class file: the section's "
+    if pc is None:
+        raise SystemExit("refusing to append without the per-class data: the section's "
                          "conclusion depends on it")
     t = io.open(REPORT, encoding="utf-8").read().replace("\r\n", "\n")
     if "**B9. Measured against a pre-trained backbone**" in t:

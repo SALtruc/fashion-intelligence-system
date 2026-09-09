@@ -52,6 +52,13 @@ COLS = ["source", "arm", "variant", "rep", "split", "tta",
         "target", "class", "metric", "value"]
 TARGETS = ("gender", "usage", "pair")
 
+# Every source name produced by the melt calls further down. Kept here so the guard
+# above can tell "a source I rebuild" from "a source only this file still holds".
+MELTED = ("pretrained_comparison", "pretrained_comparison_perclass",
+          "scratch_vs_pretrained", "scratch_vs_pretrained_perclass",
+          "ensemble", "ensemble_perclass", "ensemble_confirm",
+          "gender_ceiling_diagnostic", "gender_confusion")
+
 ap = argparse.ArgumentParser()
 ap.add_argument("--check", action="store_true", help="verify only, write nothing")
 args = ap.parse_args()
@@ -114,15 +121,37 @@ def rebuild(source, row, arm_original):
     return arm_original
 
 
+# Sources whose own CSV no longer exists on disk: they were consolidated and the
+# per-experiment files removed, so this file is their only copy and its rows are
+# carried forward. Everything else is re-derived from the CSVs below, which is what
+# makes a second run safe -- an earlier version of this script read its own output as
+# input, so re-running it would have doubled every melted row and then failed on the
+# missing `run` column.
+LEGACY = ("epochs_confirmation", "external_catalog", "external_party",
+          "gender_ceiling", "hyperparam_summary", "hyperparam_sweep",
+          "model_comparison", "training_history", "transfer_weighted",
+          "transfer_weighted_perclass")
+
 old = pd.read_csv(OUT, dtype=str).fillna("")
 print(f"read {OUT.name}: {len(old):,} rows, sources {old.source.nunique()}")
+unknown = sorted(set(old.source) - set(LEGACY) - set(MELTED))
+if unknown:
+    raise SystemExit(f"unrecognised sources in {OUT.name}: {unknown}. Add them to "
+                     f"LEGACY if their CSV is gone, or to the melt list if it is not.")
+dropped = len(old) - int(old.source.isin(LEGACY).sum())
+old = old[old.source.isin(LEGACY)]
+if "run" not in old.columns:
+    old = old.assign(run="")
+    print(f"  input already in the new schema; {len(old):,} legacy rows kept verbatim")
+elif dropped:
+    print(f"  {dropped:,} re-derivable rows dropped, to be rebuilt from their CSVs")
 rows, mismatched = [], 0
 for _, r in old.iterrows():
     out = {c: "" for c in COLS}
     out.update({"source": r["source"], "arm": r["arm"], "target": r["target"],
                 "class": r["class"], "metric": r["metric"], "value": r["value"]})
     out.update(unpack(r["source"], r["run"], r["arm"]))
-    if rebuild(r["source"], out, r["arm"].strip()) != (r["run"] or "").strip():
+    if (r["run"] or "").strip() and             rebuild(r["source"], out, r["arm"].strip()) != (r["run"] or "").strip():
         mismatched += 1
         if mismatched <= 5:
             print(f"  MISMATCH {r['source']}: {r['run']!r} != "
