@@ -346,6 +346,72 @@ The other half of the same table is the part we got wrong. The four large classe
 `gender` gives the opposite reading and there is no comfortable way to put it: **every class that gains holds a real sample** -- the smallest is 66 validation images, not three -- so none of the +0.1016 can be dismissed as a small-sample draw. The largest single contribution is `Unisex` at +0.0330, which is the class our own diagnostic had already identified as the bottleneck and the only one where an `articleType` lookup beat our CNN. A pre-trained backbone closes much of that gap, from 0.536 to 0.701. On this target we were simply under-powered, and an argument made while analysing design D -- that dropout=0.0 showing nothing meant capacity was not the constraint -- was wrong: dropout measures regularisation, not capacity.
 
 ---
+ **B10. Where the pre-trained advantage actually comes from** - B9 changed three things
+at once. The stronger backbone had 39 times the parameters, saw 224x224 inputs, and
+started from ImageNet weights. The first two are legal for us and the third is not, so
+separating them decides whether B9 leaves anything worth trying. The experiment trains
+the same ResNet18 **from scratch on our rows only**, which is a legal submission
+candidate, and compares it against both design C and the fine-tuned arm on both splits.
+The rule and the prediction below were written into the script's docstring before it
+ran, as in B7.
+
+On the forward split, which holds out the highest ids and covers only 101 of 121
+`articleType` values, so it is the closest proxy we have for a graded test:
+
+| model | trainable params | `gender` | `usage` | minutes |
+|---|---:|---:|---:|---:|
+| design C (ours), 3 repeats | 289,133 | 0.5883 | 0.3433 | 9.5 |
+| ResNet18 from scratch | 11,183,181 | 0.5982 | 0.3545 | 47.6 |
+| ResNet18 pre-trained, fine-tuned | 11,183,181 | 0.6543 | 0.3724 | 19.1 |
+
+Splitting the two effects and asking how much of each survives:
+
+| effect | random split | forward split | retained |
+|---|---:|---:|---:|
+| capacity and resolution (`gender`) | +0.0439 | +0.0099 | 23% |
+| capacity and resolution (`usage`) | +0.0652 | +0.0112 | 17% |
+| ImageNet pre-training (`gender`) | +0.0578 | +0.0561 | 97% |
+| ImageNet pre-training (`usage`) | +0.0815 | +0.0179 | 22% |
+
+That is the section's result. **Capacity keeps 23% of its `gender` gain when the
+validation set contains article types the model never saw; pre-training keeps 97%.** The
+two were indistinguishable inside B9's single number and they behave nothing alike. The
+mechanism is not mysterious: parameters trained only on our 37,745 rows can memorise the
+article types present in them, which buys nothing on the twenty types held out, whereas
+ImageNet features describe shape and texture without reference to any article type in
+our training set. On `usage` both effects collapse together (17% and 22%), which is what
+B9's decomposition predicts: most of that target's headroom sat on fifteen validation
+images belonging to classes the forward split barely contains either.
+
+The pre-registered rule asked whether the from-scratch arm is a submission candidate,
+that is, whether it beats our three-run forward reference by more than that reference's
+own spread:
+
+| target | ours, 3-run mean | from scratch | delta | our spread | rule |
+|---|---:|---:|---:|---:|---|
+| `gender` | 0.5883 | 0.5982 | +0.0099 | 0.0103 | fails |
+| `usage` | 0.3433 | 0.3545 | +0.0112 | 0.0072 | passes |
+
+The rule was written on `gender`, and on `gender` it **fails by 0.0004** -- a margin
+small enough that the honest description is a tie, not a win for design C. The `usage`
+row passes its own analogous test, and is recorded here for the same reason the rule was
+fixed in advance: a criterion that only binds when it agrees with us is not a criterion.
+Read together, a network with 39 times the parameters and five times the training time
+is worth about +0.01 on both targets on the split that resembles the graded test, at the
+edge of what we can measure with three runs. Design C ships unchanged, as one model.
+
+Two smaller observations belong with it. Mirror TTA, which helps design C, moves the
+from-scratch arm by -0.0111 on the forward split while helping the fine-tuned arm by
++0.0148: the larger model trained on our data alone is the one that cannot handle a
+mirrored image of an unfamiliar article type. And the pre-trained arm's forward-split
+advantage over us, +0.0660 on `gender`, is the measured price of the constraint we are
+working under. The spec forbids a pre-trained system as the submitted model and
+recommends one for comparison; this is that comparison, and it says the ceiling on this
+task under that constraint sits measurably below the ceiling on the task itself. That is
+a limitation to state, not a result to be unhappy about, and it is the sharpest thing
+our experiments can say about what a better Task 3 would need.
+
+---
 
 ## Notes for Trực - not for the report
 
