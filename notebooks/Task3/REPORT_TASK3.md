@@ -346,7 +346,7 @@ The other half of the same table is the part we got wrong. The four large classe
 `gender` gives the opposite reading and there is no comfortable way to put it: **every class that gains holds a real sample** -- the smallest is 66 validation images, not three -- so none of the +0.1016 can be dismissed as a small-sample draw. The largest single contribution is `Unisex` at +0.0330, which is the class our own diagnostic had already identified as the bottleneck and the only one where an `articleType` lookup beat our CNN. A pre-trained backbone closes much of that gap, from 0.536 to 0.701. On this target we were simply under-powered, and an argument made while analysing design D -- that dropout=0.0 showing nothing meant capacity was not the constraint -- was wrong: dropout measures regularisation, not capacity.
 
 ---
- **B10. Where the pre-trained advantage actually comes from** - B9 changed three things
+**B10. Where the pre-trained advantage actually comes from** - B9 changed three things
 at once. The stronger backbone had 39 times the parameters, saw 224x224 inputs, and
 started from ImageNet weights. The first two are legal for us and the third is not, so
 separating them decides whether B9 leaves anything worth trying. The experiment trains

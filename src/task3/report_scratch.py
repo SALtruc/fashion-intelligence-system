@@ -205,7 +205,8 @@ def rewrap(s, width=88):
         if any(ln.lstrip().startswith("|") for ln in lines) or not block.strip():
             out.append(block)
         else:
-            out.append(textwrap.fill(" ".join(ln.strip() for ln in lines), width=width))
+            out.append(textwrap.fill(" ".join(ln.strip() for ln in lines).strip(),
+                                     width=width))
     return "\n\n".join(out)
 
 
