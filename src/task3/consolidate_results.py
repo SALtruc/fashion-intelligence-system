@@ -57,7 +57,8 @@ TARGETS = ("gender", "usage", "pair")
 MELTED = ("pretrained_comparison", "pretrained_comparison_perclass",
           "scratch_vs_pretrained", "scratch_vs_pretrained_perclass",
           "ensemble", "ensemble_perclass", "ensemble_confirm",
-          "gender_ceiling_diagnostic", "gender_confusion")
+          "gender_ceiling_diagnostic", "gender_confusion",
+          "ensemble_diversity")
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--check", action="store_true", help="verify only, write nothing")
@@ -218,6 +219,21 @@ for sp in ("forward", "random"):
                 {"id": "arm", "kind": "variant", "split": "split"})
 new += melt("diagnose_gender_ceiling", "gender_ceiling_diagnostic",
             {"target": "target", "class": "class"})
+
+# Already long-form, so it is copied across rather than melted: the member pair goes
+# into `rep`, which is where a repeat identifier belongs.
+f = RES / "ensemble_diversity.csv"
+if f.is_file():
+    d = pd.read_csv(f)
+    n = 0
+    for _, r in d.iterrows():
+        row = {k: "" for k in COLS}
+        row.update({"source": "ensemble_diversity", "split": str(r["split"]),
+                    "target": str(r["target"]), "rep": str(r["pair"]),
+                    "metric": str(r["metric"]), "value": str(r["value"])})
+        new.append(row)
+        n += 1
+    print(f"  ensemble_diversity.csv -> {n:,} rows")
 
 # The confusion matrix is the one file that is not one row per measurement: its columns
 # are predicted classes. Encoded as metric="predicted_<class>" so the truth row stays

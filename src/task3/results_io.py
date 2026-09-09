@@ -42,14 +42,21 @@ BOOLS = ("tta",)
 def load_wide(name, source, keys, needs=(), optional=False):
     """The experiment's own CSV if present, else rebuilt from the consolidated table.
 
-    `keys` are the schema columns that identify a row (arm, split, tta, target,
-    class, variant, rep). `needs` are column names the caller will index by name; if
-    the rebuild cannot produce one of them it raises rather than returning a frame
-    that fails later with a KeyError somewhere less informative.
+    `keys` maps the experiment CSV's own key columns onto the schema's, exactly as the
+    melt in consolidate_results.py does -- {"id": "arm", "kind": "variant"} and so on.
+    A plain list means the names already agree. Passing it matters because the raw CSV
+    calls a column `id` where the consolidated table calls it `arm`; without the
+    rename the two paths would return frames of the same shape under different names,
+    which is precisely the failure this module exists to prevent.
+
+    `needs` are column names the caller will index by name; if the frame cannot
+    provide one of them it raises rather than failing later with a KeyError somewhere
+    less informative.
     """
+    keymap = {k: k for k in keys} if not isinstance(keys, dict) else dict(keys)
     f = RES / f"{name}.csv"
     if f.is_file():
-        d = pd.read_csv(f)
+        d = pd.read_csv(f).rename(columns=keymap)
     else:
         # optional=True is for data a section can do without: the caller decides what
         # to leave out rather than dying, and still refuses to publish a section whose
@@ -69,13 +76,14 @@ def load_wide(name, source, keys, needs=(), optional=False):
             raise SystemExit(f"{name}.csv is absent and {CONSOLIDATED.name} holds no "
                              f"rows for source {source!r}; run "
                              f"consolidate_results.py")
-        target_is_key = "target" in keys
+        target_is_key = "target" in keymap.values()
         long = long.assign(_col=[
             m if (target_is_key or not t) else f"{t} {m}"
             for t, m in zip(long["target"], long["metric"])])
-        idx = [k for k in keys if (long[k] != "").any()]
+        idx = [k for k in keymap.values() if (long[k] != "").any()]
         if not idx:
-            raise SystemExit(f"none of {keys} is populated for source {source!r}")
+            raise SystemExit(f"none of {sorted(keymap.values())} is populated "
+                             f"for source {source!r}")
         d = (long.pivot_table(index=idx, columns="_col", values="value",
                               aggfunc="last")
              .reset_index().rename_axis(None, axis=1))
