@@ -21,17 +21,3 @@ __pycache__/
 .venv/
 venv/
 .mypy_cache/
-# Task 3: the notebook writes these beside the tracked *_nguyen.csv copies.
-# Byte-identical duplicates -- keep one of each in git, not two.
-notebooks/Task3/task3_history.csv
-notebooks/Task3/task3_results.csv
-
-# Task 3 weights are artifacts: they live in artifacts/task3 and on
-# Drive, not here. Scoped to task3 so task 1 and task 2, which do keep
-# checkpoints under models/, are unaffected.
-models/task3/**
-
-# Task 3 experiment scripts each write their own CSV into results/task3.
-# Only the consolidated long-form file is tracked; the rest are intermediates.
-results/task3/*.csv
-!results/task3/task3_all_results.csv
