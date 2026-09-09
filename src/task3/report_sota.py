@@ -98,30 +98,83 @@ if PC.is_file():
             + f"\n| **total** | **{n_big + n_rare:,}** | | | **{big + rare:+.4f}** |\n")
 
         share_big = big / (big + rare) if (big + rare) else 0.0
-        if share_big >= 0.5:
-            verdict = (
-                f"**{share_big:.0%} of the gap comes from the four large classes**, "
-                f"which hold {n_big:,} validation images between them. That is not "
-                f"luck on a handful of pictures, and it means this report's earlier "
-                f"claim was too strong. The label evidence stands: an `articleType` "
-                f"oracle scores below our CNN, `Home` has no validation image at all, "
-                f"and identical article types carry different `usage` labels. What "
-                f"does not follow, and what we wrote anyway, is that therefore no "
-                f"model could do much better. A pre-trained backbone at 224x224 finds "
-                f"`usage` signal in the pixels that a 289k-parameter network at 60x80 "
-                f"does not. Much of what we attributed to noisy labels was capacity "
-                f"and resolution. The ceiling argument is now a claim about *our* "
-                f"model, not about the task.")
-        else:
-            verdict = (
-                f"**{1 - share_big:.0%} of the gap comes from the four rare classes**, "
-                f"which hold {n_rare} validation images between them against "
-                f"{n_big:,} in the large four -- and each contributes an eighth of "
-                f"the average regardless. A gain concentrated there is a gain on "
-                f"{n_rare} pictures, which is the instability this report measures at "
-                f"0.064 rather than a capability the model acquired. The label-ceiling "
-                f"argument survives, and the headline gap overstates what a stronger "
-                f"backbone actually buys on this target.")
+        share_rare = 1.0 - share_big
+
+        # Both halves get stated. Which one leads depends on which dominates, but
+        # neither is dropped: a threshold that hides the smaller half would be the
+        # generator suppressing its own evidence.
+        lead = (
+            f"**{share_rare:.0%} of that gap sits on {n_rare} validation images.** "
+            f"The four rare classes hold {n_rare} between them against {n_big:,} in "
+            f"the large four, and each class contributes an eighth of the macro "
+            f"average regardless of how many images stand behind it. `Travel` alone, "
+            f"on {int(u[(u.arm == OURS) & (u['class'] == 'Travel')].val_n.iloc[0])} "
+            f"images, accounts for {d.get('Travel', 0):+.4f} of it."
+            if share_rare >= share_big else
+            f"**{share_big:.0%} of that gap sits on the four large classes**, which "
+            f"hold {n_big:,} validation images between them, so it is not an artefact "
+            f"of small samples.")
+
+        # Does the rare-class part reproduce, or is it a draw? Home and Party scoring
+        # zero for an 11.2M-parameter model is the strongest ceiling evidence we have.
+        zeros = [c for c in w.index
+                 if float(w.loc[c, OURS]) == 0.0 and float(w.loc[c, best]) == 0.0]
+        zero_txt = ""
+        if zeros:
+            zero_txt = (
+                f" And {' and '.join('`' + c + '`' for c in zeros)} score **0.0000 "
+                f"for the pre-trained model as well**. A network with 11.2 million "
+                f"parameters and 1.2 million ImageNet images behind it learns them no "
+                f"better than ours does, because the training set holds one row and "
+                f"ten. That is the label ceiling stated by something other than us.")
+
+        verdict = (
+            f"{lead}{zero_txt}\n\n"
+            f"The other half of the same table is the part we got wrong. The four "
+            f"large classes contribute **{big:+.4f}**, taking their mean per-class F1 "
+            f"from {float(w.loc[[c for c in LARGE if c in w.index], OURS].mean()):.4f} "
+            f"to {float(w.loc[[c for c in LARGE if c in w.index], best].mean()):.4f}. "
+            f"These are classes with {n_big:,} validation images; the gain is small "
+            f"but it is not noise. So the label evidence stands -- the `articleType` "
+            f"oracle scores below our CNN, `Home` has no validation image at all, and "
+            f"identical article types carry different `usage` labels -- while the "
+            f"inference we drew from it does not. We wrote that the scores could not "
+            f"go much higher. On the classes with enough data to measure, a stronger "
+            f"backbone at higher resolution shows they can. The ceiling is a claim "
+            f"about the rare classes and about *our* model, not about the task.\n"
+        )
+
+    # `gender` tells the opposite story, and it is the less comfortable one.
+    gu = pc[pc.target == "gender"]
+    gw = gu.pivot_table(index="class", columns="arm", values="f1")
+    gbest = res.loc[res["gender macroF1"].idxmax(), "arm"]
+    if {gbest, OURS} <= set(gw.columns) and gbest != OURS:
+        gd = (gw[gbest] - gw[OURS]) / len(gw)
+        gn = gu[gu.arm == OURS].set_index("class").val_n
+        attribution += (
+            "\n| `gender` class | val images | ours | " + gbest
+            + " | contribution to the gap |\n|---|---:|---:|---:|---:|\n"
+            + "\n".join(
+                f"| {c} | {int(gn[c])} | {gw.loc[c, OURS]:.3f} | "
+                f"{gw.loc[c, gbest]:.3f} | {gd[c]:+.4f} |"
+                for c in gd.sort_values(ascending=False).index)
+            + f"\n| **total** | **{int(gn.sum()):,}** | | | **{gd.sum():+.4f}** |\n")
+        smallest = int(gn.min())
+        verdict += (
+            f"\n`gender` gives the opposite reading and there is no comfortable way "
+            f"to put it: **every class that gains holds a real sample** -- the "
+            f"smallest is {smallest} validation images, not three -- so none of "
+            f"the {gd.sum():+.4f} can be dismissed as a small-sample draw. The "
+            f"largest single contribution is `Unisex` at {gd.get('Unisex', 0):+.4f}, "
+            f"which is the class our own diagnostic had already identified as the "
+            f"bottleneck and the only one where an `articleType` lookup beat our CNN. "
+            f"A pre-trained backbone closes much of that gap, from "
+            f"{gw.loc['Unisex', OURS]:.3f} to {gw.loc['Unisex', gbest]:.3f}. On this "
+            f"target we were simply under-powered, and an argument made while "
+            f"analysing design D -- that dropout=0.0 showing nothing meant capacity "
+            f"was not the constraint -- was wrong: dropout measures regularisation, "
+            f"not capacity.\n"
+        )
 
 text = f"""
 **B9. Measured against a pre-trained backbone** - the spec forbids a pre-trained
