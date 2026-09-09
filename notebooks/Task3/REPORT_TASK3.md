@@ -412,6 +412,101 @@ a limitation to state, not a result to be unhappy about, and it is the sharpest 
 our experiments can say about what a better Task 3 would need.
 
 ---
+**B11. Averaging several models, and what our own seed was worth** - variance reduction
+is not the same lever as capacity, and B10 had just shown capacity keeping 23% of its
+gain on the forward split. An ensemble was therefore the one remaining intervention with
+a mechanism rather than a hope behind it, and it costs nothing extra to train:
+`finalise_task3.py` already fits three models and ships the median of them.
+
+An earlier run compared two three-model ensembles on the forward split: three runs at
+one seed, which is what `finalise_task3.py` already trains and discards two of, and
+three genuinely seeded runs. The seeded arm scored 0.6107 against the correlated arm's
+0.6040. Its pre-registered rule nevertheless failed the seeded arm and passed the
+correlated one by 0.0002, because the rule divided each gain by its members' spread and
+seeded members are more spread out. Spread there is not noise, it is the diversity the
+method runs on, so the rule penalised an arm for the property that makes it work. It was
+replaced before the confirmation run, not after seeing the result, and the replacement
+has no spread in its denominator.
+
+The confirmation trains 6 models at 6 different seeds and scores every one of the 20
+three-model ensembles that pool allows, so the reported number is a distribution rather
+than a draw. Mirror TTA is applied throughout, as the shipped model uses it.
+
+| target | shipped | members (spread) | mean of 20 triples | range | all 6 | disagreement |
+|---|---:|---:|---:|---:|---:|---:|
+| `gender` | 0.5883 | 0.5542 to 0.5843 (0.0301) | 0.5927 | 0.5818 to 0.6030 | 0.5992 | 10.1% |
+| `usage` | 0.3433 | 0.3507 to 0.3537 (0.0030) | 0.3553 | 0.3538 to 0.3578 | 0.3556 | 6.1% |
+
+Members disagree on about a tenth of validation rows, which is what makes the averaging
+do anything; the rate is reported because an ensemble gain quoted without it could as
+easily be a bug as an effect.
+
+The uncomfortable column is the second one. Six seeds spread **0.0301** on `gender`, and
+`SEED = 42`, the module default the submitted model was trained under, ranks **2 of 6**
+at 0.5838 against a member mean of 0.5721. It was never selected on validation -- it was
+fixed before any of this was measured -- but our reported number is a fortunate default
+rather than a typical one, by roughly +0.0117. Section 9.2's lesson arrives one more
+time, from a direction we had not checked.
+
+That is also what decides the ensemble question, because an ensemble has to be compared
+against the model in the zip file and not against the median seed:
+
+| comparison on `gender`, forward split | mean | worst | triples below what we ship |
+|---|---:|---:|---:|
+| all 20 triples | +0.0045 | -0.0065 | 5 of 20 |
+| the 10 triples containing seed 42 | +0.0083 | +0.0027 | 0 of 10 |
+| all 6 members averaged | +0.0109 | | |
+
+Against the median seed the ensemble gains +0.0201, and against the model we actually
+ship it gains +0.0045. Both numbers are true; only the second one is the decision. 5 of
+20 triples land below what we already have, and the ones that reuse our own seed are the
+ones that do not.
+
+The same six seeds on the random split, which is where the reported headline lives:
+
+| target | shipped | members (spread) | mean of 20 triples | range | all 6 | disagreement |
+|---|---:|---:|---:|---:|---:|---:|
+| `gender` | 0.7202 | 0.7237 to 0.7496 (0.0259) | 0.7483 | 0.7375 to 0.7656 | 0.7438 | 7.3% |
+| `usage` | 0.4676 | 0.4303 to 0.4517 (0.0214) | 0.4384 | 0.4023 to 0.4715 | 0.4230 | 7.2% |
+
+On `gender` the shipped 0.7202 sits below the member range, and on `usage` it sits above
+it. Adopting an ensemble would therefore move the two reported numbers in opposite
+directions: `gender` +0.0281 and `usage` -0.0292. A change that improves the split we
+cannot see while lowering the number the report quotes is not a free upgrade, and saying
+so is the reason this split was measured at all.
+
+The criterion was fixed before either run, and the two splits do not agree:
+
+| criterion | `gender` fwd | `usage` fwd | `gender` random | `usage` random |
+|---|---|---|---|---|
+| 1. mean triple beats the best member | **passes** | **passes** | fails | fails |
+| 2. worst triple at or above the median member | **passes** | **passes** | fails | fails |
+
+One number in that table deserves its own sentence. Averaging all 6 members scores
+0.4230 on `usage`, below the worst single member at 0.4303. Averaging probabilities
+pulls a confident minority-class prediction back toward the majority, and macro-F1 gives
+a class with three validation images the same weight as one with four thousand, so
+losing a handful of rare-class hits costs more than the accuracy gained on the common
+ones is worth. That is the likely mechanism rather than a measured one -- it was not
+tested separately -- but it is consistent with `usage` having four classes that hold
+fifteen validation images between them.
+
+**Design C ships unchanged, as one model.** The intervention passed on the split it was
+designed for and failed on the other one, which is why the criterion was written to
+cover both splits rather than only the one that motivated it. There is no variant of
+adopting it that is safe: the gain on the forward split is +0.0045 against what we ship,
+and the cost on the random split is a `usage` number that no member of the ensemble
+would have produced.
+
+The finding worth carrying out of this section is not the ensemble. It is the spread.
+Six seeds of the same architecture, same data, same schedule, differ by 0.0301 on
+`gender` on the forward split and 0.0030 on `usage`, and `SEED = 42` ranks 2 of 6 on one
+split while ranking 6 of 6 on the other. There is no such thing as a good seed here,
+only a good draw for one validation set. Every single number in this report, ours
+included, should be read as one sample from a spread of that width rather than as the
+performance of the method.
+
+---
 
 ## Notes for Trực - not for the report
 

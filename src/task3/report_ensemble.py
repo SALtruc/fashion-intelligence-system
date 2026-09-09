@@ -136,6 +136,21 @@ def block(c, ship, split):
 fwd_rows, FS = block(F, SHIP_FWD, "forward")
 rnd_rows, RS = block(R, SHIP_RANDOM, "random") if R else ("", None)
 
+
+def criterion(stats):
+    """The corrected criterion, recomputed here rather than trusted from a log."""
+    out = {}
+    for t, s in stats.items():
+        c1 = float(np.mean(s["ts"])) > max(s["ms"])
+        c2 = min(s["ts"]) >= float(np.median(s["ms"]))
+        out[t] = (c1, c2)
+    return out
+
+
+CRIT = {"forward": criterion(FS)}
+if RS is not None:
+    CRIT["random"] = criterion(RS)
+
 n_mem = len(F["members"])
 n_tri = len(F["triples"])
 g = FS["gender"]
@@ -164,6 +179,29 @@ if first is not None:
             f"property that makes it work. It was replaced before the confirmation "
             f"run, not after seeing the result, and the replacement has no spread in "
             f"its denominator.\n\n")
+
+def _c(split, target, i):
+    if split not in CRIT:
+        return "not run"
+    return "**passes**" if CRIT[split][target][i] else "fails"
+
+
+_rand_detail = ""
+if RS is not None:
+    _ru = RS["usage"]
+    _worst_member = min(_ru["ms"])
+    if _ru["all"] < _worst_member:
+        _rand_detail = (
+            f"One number in that table deserves its own sentence. Averaging all "
+            f"{n_mem} members scores {_ru['all']:.4f} on `usage`, below the worst "
+            f"single member at {_worst_member:.4f}. Averaging probabilities pulls a "
+            f"confident minority-class prediction back toward the majority, and "
+            f"macro-F1 gives a class with three validation images the same weight as "
+            f"one with four thousand, so losing a handful of rare-class hits costs "
+            f"more than the accuracy gained on the common ones is worth. That is the "
+            f"likely mechanism rather than a measured one -- it was not tested "
+            f"separately -- but it is consistent with `usage` having four classes that "
+            f"hold fifteen validation images between them.\n\n")
 
 rnd_section = ""
 if RS is not None:
@@ -229,15 +267,30 @@ are true; only the second one is the decision. {g['below']} of {n_tri} triples l
 below what we already have, and the ones that reuse our own seed are the ones that do
 not.
 
-{rnd_section}Design C ships unchanged, as one model. The measured gain over the
-submitted artifact is small, it is not uniform across the two targets, and adopting it
-this close to the deadline would mean six checkpoints in the zip, a `finalise_task3.py`
-that varies the seed per member where it currently does not, regenerated predictions,
-and a report whose quoted headline moves. The finding that matters here is not the
-ensemble anyway. It is that a single training run of this model carries a
-{max(g['ms']) - min(g['ms']):.4f} spread on the split that resembles the graded test, so
-any single number we report -- including ours -- should be read as one draw from that
-spread rather than as the model's performance.
+{rnd_section}The criterion was fixed before either run, and the two splits do not
+agree:
+
+| criterion | `gender` fwd | `usage` fwd | `gender` random | `usage` random |
+|---|---|---|---|---|
+| 1. mean triple beats the best member | {_c('forward', 'gender', 0)} | {_c('forward', 'usage', 0)} | {_c('random', 'gender', 0)} | {_c('random', 'usage', 0)} |
+| 2. worst triple at or above the median member | {_c('forward', 'gender', 1)} | {_c('forward', 'usage', 1)} | {_c('random', 'gender', 1)} | {_c('random', 'usage', 1)} |
+
+{_rand_detail}**Design C ships unchanged, as one model.** The intervention passed on the
+split it was designed for and failed on the other one, which is why the criterion was
+written to cover both splits rather than only the one that motivated it. There is no
+variant of adopting it that is safe: the gain on the forward split is
+{float(np.mean(g['ts'])) - SHIP_FWD['gender']:+.4f} against what we ship, and the cost on
+the random split is a `usage` number that no member of the ensemble would have produced.
+
+The finding worth carrying out of this section is not the ensemble. It is the spread.
+Six seeds of the same architecture, same data, same schedule, differ by
+{max(g['ms']) - min(g['ms']):.4f} on `gender` on the forward split and
+{max(FS['usage']['ms']) - min(FS['usage']['ms']):.4f} on `usage`, and `SEED = 42` ranks
+{g['rank42']} of {n_mem} on one split while ranking
+{RS['gender']['rank42'] if RS else 'n/a'} of {n_mem} on the other. There is no such
+thing as a good seed here, only a good draw for one validation set. Every single number
+in this report, ours included, should be read as one sample from a spread of that width
+rather than as the performance of the method.
 """
 
 

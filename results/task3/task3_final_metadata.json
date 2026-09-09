@@ -23,7 +23,7 @@
       "accuracy": 0.8693
     }
   },
-  "notes": "python notebooks/Task3/finalise_task3.py -- design C (one shared conv body, one head per target), class-weighted loss 1/sqrt(n), mirror TTA, 20 epochs, batch 256, Adam lr 0.001. Shipped checkpoint is the MEDIAN of 3 repeats by mean macro-F1, not the best. train_model() calls torch.manual_seed(SEED) on entry, so these are repeats at SEED=42 differing by cuDNN nondeterminism, NOT independent seeds. The labels 42/43/44 name the repeats only. macro-F1 with labels= over all classes, including any absent from validation; sklearn's default would drop them and read higher.",
+  "notes": "python src/task3/finalise_task3.py -- design C (one shared conv body, one head per target), class-weighted loss 1/sqrt(n), mirror TTA, 20 epochs, batch 256, Adam lr 0.001. Shipped checkpoint is the MEDIAN of 3 repeats by mean macro-F1, not the best. train_model() calls torch.manual_seed(SEED) on entry, so these are repeats at SEED=42 differing by cuDNN nondeterminism, NOT independent seeds. The labels 42/43/44 name the repeats only. macro-F1 with labels= over all classes, including any absent from validation; sklearn's default would drop them and read higher.",
   "model": "artifacts/task3/task3_gender_usage_C_weighted.pt",
   "in_git": false,
   "predictions": "predictions/task3_gender_usage_nguyen.csv",

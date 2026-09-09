@@ -149,8 +149,12 @@ elif dropped:
 rows, mismatched = [], 0
 for _, r in old.iterrows():
     out = {c: "" for c in COLS}
-    out.update({"source": r["source"], "arm": r["arm"], "target": r["target"],
-                "class": r["class"], "metric": r["metric"], "value": r["value"]})
+    # Every schema column the input actually has, not a fixed six. Copying only
+    # source/arm/target/class/metric/value silently blanked `variant`, `rep` and
+    # `split` for all 1,326 legacy rows on a second run -- the columns this script
+    # exists to populate -- and the damage was invisible until a generator went
+    # looking for the epoch count and found nothing.
+    out.update({c: r[c] for c in COLS if c in old.columns})
     out.update(unpack(r["source"], r["run"], r["arm"]))
     if (r["run"] or "").strip() and             rebuild(r["source"], out, r["arm"].strip()) != (r["run"] or "").strip():
         mismatched += 1
@@ -264,6 +268,24 @@ for c in ("variant", "rep"):
     if len(bad):
         raise SystemExit(f"column {c} still packs a key in {len(bad)} rows: "
                          f"{sorted(set(bad[c]))[:5]}")
+# Self-check: the unpacked columns must actually be populated. Without this the
+# corruption above is a blank column nobody notices until a report fails to build.
+EXPECT = {"epochs_confirmation": ("variant", "rep"),
+          "training_history": ("arm", "variant", "rep"),
+          "model_comparison": ("split",),
+          "transfer_weighted": ("rep",),
+          "hyperparam_sweep": ("rep",)}
+for src, cols in EXPECT.items():
+    part = allrows[allrows.source == src]
+    if part.empty:
+        raise SystemExit(f"source {src} vanished from the rebuild")
+    for c in cols:
+        if (part[c].astype(str) == "").any():
+            raise SystemExit(f"{src}: column {c} is blank in "
+                             f"{int((part[c].astype(str) == '').sum())} of "
+                             f"{len(part)} rows -- the unpacking lost data")
+print(f"self-check: {len(EXPECT)} legacy sources keep their unpacked keys")
+
 nonnum = allrows[pd.to_numeric(allrows.value, errors="coerce").isna()]
 print(f"non-numeric values: {len(nonnum)}"
       + (f" -- {sorted(set(nonnum.metric))[:6]}" if len(nonnum) else ""))
