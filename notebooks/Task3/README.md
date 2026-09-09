@@ -82,7 +82,7 @@ Drive -> **Add shortcut to Drive** first.
 |---|---|---|
 | `ColabDataset.zip` | the provided catalogue, zipped | 43,577 separate Drive reads take ~30 min *per session*; one zip takes ~1 min |
 | `A2_ExternalData/` | the collected images (folder, 20 MB) | small enough to read straight from Drive |
-| `train_val_grouped_sha256.csv` | **the team's frozen split** (430 KB) | put it inside `A2_ExternalData/`; without it the notebook generates its own split and the numbers stop being comparable |
+| `splits/task3/train_val_grouped_sha256.csv` | **the team's frozen split** (430 KB) | keep this file with the repository, or copy the same file into `A2_ExternalData/` for a notebook-only Colab upload |
 
 The split file is not optional if the numbers are going to sit beside a teammate's.
 A split generated here from seed 42 overlapped the team's frozen file by **15.6%** -
@@ -152,56 +152,26 @@ The three numbers worth carrying into the report:
 * the **independent evaluation** (section 8.2) is the brief's section 3.3 requirement, and the gap
   between it and validation is the finding, not a disappointment.
 
-## Regenerating the notebook from the script
+## Notebook and output provenance
 
-The `.py` is the source of truth; the `.ipynb` is a build artefact.
+`src/task3/task3_build.py` is the plain-script mirror of the notebook. Keep narrative,
+paths and model code aligned between the two files when making future changes.
 
-```bash
-python build_notebook.py                       # rebuild, keep the outputs already there
-python build_notebook.py path/to/fresh_run.ipynb   # take outputs from a completed run
-python check_notebook.py                       # gate it before anyone uploads it
-```
+Earlier versions of this README referred to `build_notebook.py` and
+`check_notebook.py`; those helpers are not present in the current branch, so they must
+not be presented as an active reproducibility gate. The executed model and figure
+outputs currently embedded in the notebook are preserved from the completed GPU run.
+This refinement changed prose, figure references, and the split resolver path only; it
+did not rerun training or replace any stored metric.
 
-`build_notebook.py` transplants outputs from the donor by matching the exact text of
-each code cell, so a cell whose code changed loses its stale output on purpose. It
-also stamps `BUILD` with a hash of the source and prints the value - see below.
-
-`check_notebook.py` refuses to pass a notebook whose code differs from
-`task3_build.py`, and tells you how many code cells are missing output.
-
-## The BUILD stamp - check this first, every time
-
-`build_notebook.py` prints a `BUILD` hash and stamps it into the notebook's **first
-cell**, which echoes it when run:
+The frozen split itself is unchanged after being organised under `splits/task3/`:
 
 ```
-colab=False  quick=False  epochs=20  BUILD=ec67e08c
+rows: 37,745 (32,084 train; 5,661 validation)
+SHA-256: 905bb7e1dfbfcf5a9dbf5f2bcd89444f866588d394fe483e0b20b7703c9647ed
 ```
 
-If the hash the notebook prints is not the one `build_notebook.py` reported, **you are
-running an old upload** - stop and rebuild. This exists because it has already gone
-wrong twice: once the notebook failed ten minutes in on a stale data path, and once a
-70-minute Colab run wrote its results to `/content` instead of Drive because the
-uploaded copy was one regeneration behind.
-
-The hash covers the **code cells only**, so revising prose after a run does not
-invalidate it - the stamp answers "did the right code run", and nothing else.
-
-### Provenance of the outputs currently in the notebook
-
-They come from a local GPU run of **BUILD `7c0ab330`** - 108.8 minutes, RTX 4070,
-41/43 code cells producing output. Since that run, one `print` in section 7 was rewritten to
-stop it asserting a cross-run conclusion that its own numbers had contradicted, which
-advanced the code hash to `ec67e08c` and correctly discarded that one cell's output.
-Everything else is byte-identical code with its original output.
-
-`check_notebook.py` reports this comparison on every run, so the state is checked
-rather than assumed:
-
-```
-NOTE  outputs came from BUILD 7c0ab330, code is now ec67e08c; 3 cell(s) carry no output.
-```
-
-Of those three, two (the positional-index and batch-builder cells) never print anything.
-
-Current: 80 cells, 43 code.
+The saved split-loading output may still display its previous machine-specific path.
+That line is execution provenance, not the current repository location. Run the setup
+and split cells again when a fresh environment is available; no model retraining is
+required for that check.

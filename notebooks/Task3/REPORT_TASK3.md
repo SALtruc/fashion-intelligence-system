@@ -2,7 +2,7 @@
 
 For Trực. **Section A is the main text, trimmed to fit ~1 page**; Section B is appendix
 material to use only if the two appendix pages have room. Every number is on the team's
-frozen split `splits/train_val_grouped_sha256.csv` (37,745 rows, 15% validation), so it
+frozen split `splits/task3/train_val_grouped_sha256.csv` (37,745 rows, 15% validation), so it
 is directly comparable with the other tasks.
 
 ---

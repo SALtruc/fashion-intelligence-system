@@ -32,6 +32,22 @@
 # on `usage` and a macro-F1 of **0.109**.
 
 # %% [markdown]
+# ### Task 3 investigation flow
+#
+# ![Task 3 investigation flow](../../notebooks/Task3/figures/00_task3_investigation_flow.svg)
+#
+# *Figure 1. Target analysis, controlled model comparison and increasingly difficult
+# evaluations lead to one deployment-aware decision. Original schematic based on the
+# evidence generated in this notebook.*
+#
+# Preprocessing leaves two targets with very different difficulty. `gender` has enough
+# examples in every class, while four `usage` classes together contain only **94 rows**.
+# The investigation therefore starts with the data constraint, holds the split and
+# training protocol fixed, and changes one modelling decision at a time. Later tests
+# deliberately move away from the random validation distribution before the final
+# model is selected.
+
+# %% [markdown]
 # ### Where to find each model, and the judgement
 #
 # | | section |
@@ -50,7 +66,7 @@
 # Architecture and every hyper-parameter are tabulated in section 4. Two harder evaluations
 # than the random split - a forward split by id, and 261 independently photographed
 # items - are in section 8. Exploratory data analysis for the shared dataset lives in the
-# team's `notebooks/eda.ipynb` and is not duplicated here.
+# team's `notebooks/00_eda_and_preprocessing.ipynb` and is not duplicated here.
 
 # %% [markdown]
 # ## 0 - Setup
@@ -289,7 +305,7 @@ print(f"{len(frame):,} rows, {frame['articleType'].nunique()} articleTypes")
 print(frame[["id", "gender", "usage", "articleType"]].head(3).to_string(index=False))
 
 # %% [markdown]
-# ## 1 - What the task actually is
+# ## 1 - Target and class-distribution analysis
 #
 # Before any model: the two targets look like one task but behave like two very
 # different ones, and every design decision later follows from this section.
@@ -341,7 +357,7 @@ print(ceiling.to_string(index=False))
 # data does not contain enough of to teach.
 
 # %% [markdown]
-# ### 1.2 Why accuracy must not be the metric here
+# ### 1.2 Evaluation metric
 
 # %%
 rows = []
@@ -362,11 +378,12 @@ print(pd.DataFrame(rows).to_string(index=False))
 # evidence of this gap.
 
 # %% [markdown]
-# ### 1.3 "macro-F1" is two different numbers - which matters when comparing notebooks
+# ### 1.3 Macro-F1 conventions
 #
 # `usage` has classes that can vanish from validation entirely (`Home` has one image
 # in the whole training set, so a grouped split puts it in train and nowhere else).
-# When that happens the two usual conventions disagree:
+# Macro-F1 gives equal weight to every class rather than every row [1]. When a class
+# vanishes from validation, the two usual conventions disagree:
 #
 # | | denominator | what it says |
 # |---|---|---|
@@ -385,12 +402,14 @@ print(pd.DataFrame(rows).to_string(index=False))
 # Confirm all three before claiming one approach beat another.
 
 # %% [markdown]
-# ## 2 - One model or two? - deciding before training, not after
+# ## 2 - Multi-output design choice
 #
 # The brief leaves this open. It is tempting to settle it by training both and
 # keeping the winner, but that answers "which scored higher on this seed", not
 # "which is the right design". Two properties of the data decide it in advance,
-# and the training runs in section 5 then test the prediction.
+# and the training runs in section 5 then test the prediction. Multi-task learning
+# can improve generalisation through a shared representation, but sharing is useful
+# only when the tasks provide compatible signals [2], [3].
 
 # %%
 g = sorted(frame["gender"].dropna().unique())
@@ -452,6 +471,43 @@ print(pd.DataFrame(rows).to_string(index=False))
 # > **Prediction recorded before training:** C ~ A > B, with B losing most on
 # > `usage` macro-F1. Section 5 either confirms this or the reasoning above is wrong, and
 # > both outcomes are worth reporting.
+
+# %% [markdown]
+# ### Research basis: hard parameter sharing
+#
+# ![Hard parameter sharing from Ruder](../../notebooks/Task3/figures/research/ruder_hard_parameter_sharing_fig1.png)
+#
+# *Research figure. Hard parameter sharing keeps a common feature extractor and gives
+# each task its own output layers. Reproduced from Fig. 1 of Ruder [3].*
+#
+# In hard parameter sharing, all targets update the same hidden representation, while
+# each target keeps a separate prediction head [2], [3]. The attraction is both
+# statistical and practical: related tasks can regularise the shared features, and one
+# backbone is evaluated instead of two. The risk is **negative transfer**. If the two
+# losses prefer different features, their gradients compete and a shared model can be
+# worse than two independent models.
+#
+# Design C is exactly this structure: garment pixels pass through one convolutional
+# body, then branch into `gender` and `usage`. It fits this dataset as a hypothesis
+# because both labels depend on visible garment properties, but the low mutual
+# information measured above makes negative transfer plausible. That is why A is kept
+# as a controlled alternative rather than assuming that parameter sharing must help.
+
+# %% [markdown]
+# ### Model designs
+#
+# ![Three Task 3 model designs](../../notebooks/Task3/figures/01_multitask_designs.svg)
+#
+# *Figure 2. A duplicates the feature extractor, B merges both targets into one sparse
+# label, and C shares visual features while keeping separate decisions. Original
+# schematic based on the architectures implemented below.*
+#
+# The diagram makes the trade-off explicit. Design A protects each target from
+# interference but duplicates almost the whole network. Design B is compact but turns
+# the existing long tail into missing joint classes. Design C adds the second output
+# for only **1,032 parameters**, which makes it the most efficient candidate if its
+# loss in predictive performance remains smaller than the gain obtained from tail
+# weighting.
 
 # %% [markdown]
 # ## 3 - Baselines
@@ -545,7 +601,7 @@ def record(name, target, split, y_true, y_pred, labels=None, **extra):
 # ### 3.0 The split - the team's frozen file, not one generated here
 #
 # The repo's rule 2 is that everyone evaluates on the same split. That split is a
-# **file**, `splits/train_val_grouped_sha256.csv`, not a function call - and the
+# **file**, `splits/task3/train_val_grouped_sha256.csv`, not a function call - and the
 # difference matters more than it looks. Regenerating a stratified split from a seed
 # reproduces it only if everyone runs the same scikit-learn version; the split this
 # notebook generated for itself overlapped the team's by **15.6%**, so every number
@@ -568,7 +624,7 @@ def find_shared_split():
 
     The earlier version listed fixed paths, including `cwd.parent/"splits"`. That
     matches a flat working folder but is one level short of the repository layout,
-    where the notebook lives in `notebooks/Task3/` and the file in `splits/`. Run from
+    where the notebook lives in `notebooks/Task3/` and the file in `splits/task3/`. Run from
     the repo, the search missed, the notebook printed a warning nobody was watching,
     and a full 106-minute run produced numbers on a locally generated split -- which
     Section 3.0 measured as overlapping the team's by only 15.6%. So: walk up from the
@@ -580,10 +636,10 @@ def find_shared_split():
         cands.append(Path(os.environ["A2_SHARED_SPLIT"]))
     cands += [Path(f"/content/drive/MyDrive/A2_ExternalData/{SHARED_SPLIT_NAME}"),
               Path(f"/content/{SHARED_SPLIT_NAME}"),
-              Path(f"/content/splits/{SHARED_SPLIT_NAME}")]
+              Path(f"/content/splits/task3/{SHARED_SPLIT_NAME}")]
     for base in (here, *here.parents):
         cands += [base / SHARED_SPLIT_NAME,
-                  base / "splits" / SHARED_SPLIT_NAME,
+                  base / "splits" / "task3" / SHARED_SPLIT_NAME,
                   base / "task3" / SHARED_SPLIT_NAME]
     for c in cands:
         if Path(c).is_file():
@@ -1066,7 +1122,7 @@ except ImportError:
     print(fig_hist.to_string(index=False))
 
 # %% [markdown]
-# ## 6 - Class-weighted loss - does it help the tail or just move the damage?
+# ## 6 - Class-weighted loss
 #
 # The obvious response to `usage` having a class with one image is to weight the
 # loss. One variable changes: the winning design from section 5, trained again with
@@ -1076,7 +1132,32 @@ except ImportError:
 # precision for tail-class recall - and because macro-F1 counts a 1-image class
 # exactly as much as a 29,000-image one, that trade can raise macro-F1 while making
 # the model worse at almost every row it will actually see. Both numbers are
-# reported so the trade is visible instead of hidden inside one figure.
+# reported so the trade is visible instead of hidden inside one figure. This is a
+# tempered cost-sensitive strategy: long-tail methods commonly reweight classes, but
+# the square root prevents the single `Home` image from dominating every update [4].
+
+# %% [markdown]
+# ### Research basis: learning from a long tail
+#
+# ![Long-tail reweighting from Cui et al.](../../notebooks/Task3/figures/research/cui_long_tail_reweighting_fig1.png)
+#
+# *Research figure. Head classes contain many partly redundant examples, whereas tail
+# classes cover far fewer examples; loss reweighting changes their relative influence.
+# Reproduced from Fig. 1 of Cui et al. [4].*
+#
+# Ordinary cross-entropy averages over rows, so `Casual` contributes thousands of times
+# more updates than `Home`, even though macro-F1 later gives the two classes equal
+# importance. Cost-sensitive learning changes the contribution of each row instead of
+# duplicating rare images. Cui et al. formalise this with the effective number of
+# samples: the marginal information from another head-class example diminishes when it
+# overlaps what the class already covers [4].
+#
+# **Our implementation is related but not identical to the paper.** It uses
+# `w_c proportional to 1/sqrt(n_c)`, not Cui et al.'s beta-based effective-number
+# formula. Full inverse-frequency weighting would make one `Home` row about **24,662x**
+# as influential as one `Casual` row; the square root reduces that relative weight to
+# about **157x**. This is the hyper-parameter decision being tested below: give the tail
+# a usable gradient without allowing one possibly noisy example to control the model.
 
 # %%
 # Sections 6-9 all carry design C forward, because section 2 predicted it and section 5 is expected
@@ -1123,9 +1204,10 @@ for tag, model in [("unweighted", MODELS[("C", "multi")]), ("weighted", MODELS[(
     print(rep[["train n", "support", "precision", "recall", "f1-score"]].round(3).to_string())
 
 # %% [markdown]
-# ## 7 - The externally collected data - a prediction, then the measurement
+# ## 7 - External training data
 #
-# 1,899 extra images were collected for this assignment (`docs/EXTERNAL_DATA_USAGE.md`).
+# 1,899 extra images were collected for this assignment
+# (`docs/REVIEW_Task3UsageExternal.md`).
 # Every one of them is `gender=Women`, `usage=Casual`.
 #
 # **Recorded before the run:** this should do nothing for `gender` and should
@@ -1183,7 +1265,8 @@ else:
 # > through untouched. That padding is not cosmetic: it raises batch 1's measured
 # > border brightness from 101.5 to **201.2** against the catalogue's 247.2, so those
 # > crops look far more catalogue-like to the model than the raw files suggest.
-# > Reproduce with `python src/verify_external_data.py --domain-gap`.
+# > The measured domain-gap audit is recorded in
+# > `docs/REVIEW_Task3UsageExternal.md` and `results/task3/task3_all_results.csv`.
 
 # %%
 if EXT_OK:
@@ -1242,7 +1325,7 @@ if EXT_OK:
     print('    the verdict -- do not read a sign off this single table.')
 
 # %% [markdown]
-# ## 8 - Two harder tests than the random validation split
+# ## 8 - Robustness evaluation
 #
 # ### 8.1 The forward split - what the graded test set actually looks like
 #
@@ -1267,7 +1350,9 @@ for t in TARGETS:
 # `Women` goes from 33% of training to 53% of validation, `Men` the other way by
 # 14 points, `Sports` collapses from 12% to 3.7%. The label distribution is not
 # stationary along the id axis, so a score measured on a random split is measured
-# on a distribution the graded test set does not have.
+# on a distribution the graded test set does not have. Distribution-shift benchmarks
+# show the same practical failure mode: in-distribution scores can substantially
+# overstate performance after deployment conditions change [5].
 
 # %%
 MODELS[("C", "forward")], HIST[("C", "forward")] = train_model(
@@ -1287,6 +1372,21 @@ for tag, model, vv in [(PRIMARY, MODELS[("C", "multi")], va),
 print()
 print(pd.DataFrame(rows).pivot(index="target", columns="evaluated on",
                                values="macro-F1").to_string())
+
+# %% [markdown]
+# ### Evaluation distributions
+#
+# ![Task 3 evaluation distributions](../../notebooks/Task3/figures/02_evaluation_protocol.svg)
+#
+# *Figure 3. Random validation supports model development, the high-ID split tests the
+# direction of the graded set, and independently collected photographs expose a larger
+# image-domain and label-prior shift. Original schematic based on the measured results.*
+#
+# The decline is not one generic “test-set drop.” The forward split changes the time/ID
+# region while retaining catalogue photography; the independent set changes the image
+# source and deliberately over-represents rare labels. Their scores therefore answer
+# different questions. The **0.19 drop in `Casual` F1** is the cleanest available image
+# domain-gap estimate because that class undergoes the smallest prior change.
 
 # %% [markdown]
 # ### 8.2 The independent evaluation set
@@ -1374,7 +1474,7 @@ if EVAL_OK:
             ev[t], pred_ev[t], output_dict=True, zero_division=0)).T.round(3).to_string())
 
 # %% [markdown]
-# ## 9 - Results, and what they say
+# ## 9 - Results and interpretation
 #
 # ### 9.1 On the per-target split, as a robustness check
 #
@@ -1608,7 +1708,7 @@ print("  as unresolved, which is a result too.")
 # ### 9.3 What this notebook found
 #
 # Numbers are from run 4 unless stated, all on the team's frozen split
-# `train_val_grouped_sha256.csv` (37,745 rows, 15% validation), so they sit directly
+# `splits/task3/train_val_grouped_sha256.csv` (37,745 rows, 15% validation), so they sit directly
 # beside a teammate's. Effects are called by the test in section 9.2: **same sign in every run,
 # spread below the mean, and the sign holding on the held-out platform.** Anything else
 # is reported as unresolved, which is also a result.
@@ -1751,7 +1851,7 @@ print("  as unresolved, which is a result too.")
 #   documented "other" class, or report them as a known **0.250** of the macro-F1 that no
 #   model can earn. Choosing openly beats a quiet zero.
 # %% [markdown]
-# ## 10 - Trying to improve it, and finding where the improvement stops
+# ## 10 - Additional improvements and measured limits
 #
 # Section 9 established two things that decide what is worth attempting here.
 #
@@ -1785,13 +1885,33 @@ print("  as unresolved, which is a result too.")
 # prior before taking the argmax.
 #
 # ```
-# prediction = argmax( logit - tau - log P(class) )
+# prediction = argmax( logit - tau * log P(class) )
 # ```
 #
 # tau = 0 is the untouched model; tau = 1 fully removes the training prior. One trained
 # model gives the entire curve for the cost of a few forward passes, which is why this
 # is first: if the curve is flat there is nothing to buy and the retraining ideas
-# below are not worth starting.
+# below are not worth starting. Because tau is selected on the validation set, its
+# apparent gain is treated as an upper bound rather than independent evidence [6], [7].
+
+# %% [markdown]
+# ### Research basis: correcting the decision rule after training
+#
+# ![Logit adjustment decision boundaries from Menon et al.](../../notebooks/Task3/figures/research/menon_logit_adjustment_fig2.png)
+#
+# *Research figure. Logit adjustment moves the separator toward the Bayes rule for
+# balanced error on a synthetic long-tailed problem. Reproduced from Fig. 2 of Menon
+# et al. [7]. Results from that paper are background theory, not results of this
+# notebook.*
+#
+# A softmax model trained on the observed distribution estimates a posterior containing
+# the training prior `P(class)`. Menon et al. show that subtracting the log prior changes
+# the decision toward balanced error, where every class matters equally [7]. The scalar
+# `tau` controls the strength: **0** leaves the model untouched and **1** applies the
+# full prior correction. This matches Task 3 because `usage` is **76.7% Casual**, while
+# the headline macro-F1 weights every class equally. It is tested only after class
+# weighting because it is a cheap inference-time diagnostic, not a replacement for
+# learning visual evidence for classes with one or thirteen examples.
 
 # %%
 def train_prior(frame_tr, target):
@@ -2412,3 +2532,35 @@ else:
     fig.tight_layout()
     fig.savefig(FIGDIR / "fig4_learning_curves.png", dpi=150)
     plt.show()
+
+# %% [markdown]
+# ## 13 - References
+#
+# [1] M. Sokolova and G. Lapalme, "A systematic analysis of performance measures for
+# classification tasks," *Information Processing &amp; Management*, vol. 45, no. 4,
+# pp. 427-437, 2009, doi: https://doi.org/10.1016/j.ipm.2009.03.002.
+#
+# [2] R. Caruana, "Multitask learning," *Machine Learning*, vol. 28, pp. 41-75,
+# 1997, doi: https://doi.org/10.1023/A:1007379606734.
+#
+# [3] S. Ruder, "An overview of multi-task learning in deep neural networks,"
+# arXiv:1706.05098, 2017. [Online]. Available: https://arxiv.org/abs/1706.05098
+#
+# [4] Y. Cui, M. Jia, T.-Y. Lin, Y. Song, and S. Belongie, "Class-balanced loss based
+# on effective number of samples," in *Proc. IEEE/CVF Conf. Comput. Vis. Pattern
+# Recognit. (CVPR)*, 2019, pp. 9268-9277. [Online]. Available:
+# https://openaccess.thecvf.com/content_CVPR_2019/html/Cui_Class-Balanced_Loss_Based_on_Effective_Number_of_Samples_CVPR_2019_paper.html
+#
+# [5] P. W. Koh *et al.*, "WILDS: A benchmark of in-the-wild distribution shifts,"
+# in *Proc. 38th Int. Conf. Mach. Learn. (ICML)*, vol. 139, 2021, pp. 5637-5664.
+# [Online]. Available: https://proceedings.mlr.press/v139/koh21a.html
+#
+# [6] G. C. Cawley and N. L. C. Talbot, "On over-fitting in model selection and
+# subsequent selection bias in performance evaluation," *J. Mach. Learn. Res.*, vol.
+# 11, pp. 2079-2107, 2010. [Online]. Available:
+# https://www.jmlr.org/papers/v11/cawley10a.html
+#
+# [7] A. K. Menon, S. Jayasumana, A. S. Rawat, H. Jain, A. Veit, and S. Kumar,
+# "Long-tail learning via logit adjustment," in *Proc. Int. Conf. Learn.
+# Representations (ICLR)*, 2021. [Online]. Available:
+# https://arxiv.org/abs/2007.07314

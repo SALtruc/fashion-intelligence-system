@@ -338,7 +338,7 @@ meta = {
     "git_clean": (_dirty == "") if _dirty is not None else None,
     "dataset_version": ("A2_FashionDataset as provided, images 60x80 RGB, "
                         f"{len(g['frame']):,} labelled rows"),
-    "split": f"splits/{g['SHARED_SPLIT_NAME']}",
+    "split": f"splits/task3/{g['SHARED_SPLIT_NAME']}",
     "preprocessing": ("embedded in the checkpoint: image_size, channel_mean, "
                       "channel_std. No separate transformer file."),
     "labels": "embedded in the checkpoint under 'classes'; head order is that list",

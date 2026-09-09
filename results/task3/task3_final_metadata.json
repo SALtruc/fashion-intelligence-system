@@ -7,7 +7,7 @@
   "git_branch": "feat/task3-nguyen",
   "metadata_regenerated_at": "a8c87cc0d9c672a848366358c27eb314c69f663b",
   "dataset_version": "A2_FashionDataset as provided, images 60x80 RGB, 37,745 labelled rows",
-  "split": "splits/train_val_grouped_sha256.csv",
+  "split": "splits/task3/train_val_grouped_sha256.csv",
   "preprocessing": "embedded in the checkpoint: image_size, channel_mean, channel_std. No separate transformer file.",
   "labels": "embedded in the checkpoint under 'classes'; head order is that list",
   "framework": "PyTorch 2.14.0+cu126",
