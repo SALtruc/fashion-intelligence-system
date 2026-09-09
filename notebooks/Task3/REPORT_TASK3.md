@@ -186,27 +186,6 @@ notebook (not the submitted seed; the submitted model's own scores are in A)
 
 ---
 
-## Notes for Trực — not for the report
-
-* If Section A is too long, cut from the bottom. The order is deliberate: judgement and
-  the ceiling argument first, methodology last.
-* **A data-quality item you should know about.** The de-duplicated `ColabDataset`
-  changes **two `gender` labels** against the raw file — ids 36762 (`Men` → `Unisex`)
-  and 39107 (`Boys` → `Unisex`). Two rows of 37,745, so no metric moves, but the
-  de-duplicated labels are therefore *not* a subset of the provided ones, and anyone who
-  filters the raw CSV themselves rather than using the zip will get different labels.
-* The submitted weights are **in git** at
-  `models/task3/checkpoints/task3_gender_usage_C_weighted.pt` (1.2 MB), with a matching
-  `task3_final_metadata.json` recording the commit that produced them, the split, the
-  framework version and a sha256. `artifacts/**` is gitignored by our own convention,
-  but that convention is bypassed by three of the four tasks, which keep their
-  checkpoints under `models/` — so this sits beside theirs and the submission can be
-  assembled from one clone. A copy is still written to `artifacts/task3/` for anyone
-  following the Drive convention.
-* `predictions/task3_gender_usage_nguyen.csv` has `gender` and `usage` filled for all
-  5,829 test rows in the original order, with `articleType` and `season` left empty for
-  whoever merges the four tasks.
-
 **B6. Hyper-parameter sensitivity** — one knob moved at a time around the shipped
 configuration, two seeds each, against the six runs that already measured the default.
 Reported as sensitivity: no configuration is adopted on the strength of a validation
@@ -243,3 +222,26 @@ recorded before the run was to adopt; it was wrong, and the rule refused. `epoch
 stands and the submitted model is unchanged. `usage` did rise on the forward split in all
 three seeds, but by +0.007 against that arm's own 0.007 spread — at the noise floor, and
 not what the rule was about.
+
+---
+
+## Notes for Trực — not for the report
+
+* If Section A is too long, cut from the bottom. The order is deliberate: judgement and
+  the ceiling argument first, methodology last.
+* **A data-quality item you should know about.** The de-duplicated `ColabDataset`
+  changes **two `gender` labels** against the raw file — ids 36762 (`Men` → `Unisex`)
+  and 39107 (`Boys` → `Unisex`). Two rows of 37,745, so no metric moves, but the
+  de-duplicated labels are therefore *not* a subset of the provided ones, and anyone who
+  filters the raw CSV themselves rather than using the zip will get different labels.
+* The submitted weights are **in git** at
+  `models/task3/checkpoints/task3_gender_usage_C_weighted.pt` (1.2 MB), with a matching
+  `task3_final_metadata.json` recording the commit that produced them, the split, the
+  framework version and a sha256. `artifacts/**` is gitignored by our own convention,
+  but that convention is bypassed by three of the four tasks, which keep their
+  checkpoints under `models/` — so this sits beside theirs and the submission can be
+  assembled from one clone. A copy is still written to `artifacts/task3/` for anyone
+  following the Drive convention.
+* `predictions/task3_gender_usage_nguyen.csv` has `gender` and `usage` filled for all
+  5,829 test rows in the original order, with `articleType` and `season` left empty for
+  whoever merges the four tasks.
