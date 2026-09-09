@@ -132,6 +132,11 @@ cm = pd.DataFrame(confusion_matrix(va["gender"], pred["gender"],
                                    labels=CLASSES["gender"]),
                   index=CLASSES["gender"], columns=CLASSES["gender"])
 print(cm.to_string())
+# Saved because the figure that makes the Unisex problem obvious needs it, and
+# recomputing it means loading the checkpoint and every image again.
+_cm = _results_dir() / "gender_confusion.csv"
+cm.rename_axis("truth").to_csv(_cm)
+print(f"  -> {_cm}")
 
 # ------------------------------------------------------- the annotation ceiling
 # The same instrument that showed `usage` was at its label ceiling. If articleType

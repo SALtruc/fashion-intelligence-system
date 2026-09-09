@@ -272,6 +272,21 @@ someone else's.
 
 ---
 
+**B8. Figures** - four of them, in the notebook's Section 12 rather than here,
+because the appendix is capped at two pages and every one of them is already argued
+above in numbers. Each is drawn by a notebook cell from
+`results/task3/task3_all_results.csv`, so it reproduces in seconds and cannot disagree
+with the table it came from.
+
+| file | what it shows |
+|---|---|
+| `fig1_usage_label_ceiling.png` | `usage` F1 per class against validation count: four classes hold fifteen images between them, `Home` none at all |
+| `fig2_gender_confusion.png` | the `Unisex` column absorbing 178 `Men` and 119 `Women` |
+| `fig3_selection_bias.png` | `epochs=30` worth +0.0192 on the split that selected it, -0.0016 across three seeds of the split that did not |
+| `fig4_learning_curves.png` | the A/B/C/D curves, close together, which is why Section 9.2 argues from spread rather than from a ranking |
+
+---
+
 ## Notes for Trực - not for the report
 
 * If Section A is too long, cut from the bottom. The order is deliberate: judgement and

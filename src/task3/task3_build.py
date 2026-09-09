@@ -2235,3 +2235,180 @@ print("  so 'both correct' has no slack of its own: it moves only when a factor 
 # platforms. What would raise the score is not in the optimiser or the loss - it is the
 # 79 training images spread across `Home`, `Party`, `Travel` and `Smart Casual`, and the
 # consistency of the labels attached to them (section 9.4).
+
+# %% [markdown]
+# ## 12 - Figures
+#
+# The tables above carry every number; these four make the load-bearing ones visible.
+# They read `results/task3/` and train nothing, so this section runs in seconds.
+#
+# 1. **`usage` is at its label ceiling** - four classes rest on fifteen validation
+#    images between them, and `Home` on none at all.
+# 2. **`gender` loses its macro-F1 in one class** - `Unisex`, which absorbs 178 `Men`
+#    and 119 `Women`.
+# 3. **Selection bias, measured on our own sweep** - the same change is worth +0.019 on
+#    the split that chose it and nothing on a split that did not.
+# 4. **The A/B/C/D curves** - close together, which is why section 9.2 argues from
+#    spread rather than from a ranking.
+#
+# %%
+# Figures. Every one reads results/task3, so this section costs seconds and needs no
+# GPU: it draws what the tables above already measured. The resolver handles being run
+# from the notebook folder, the repo root, or a Colab copy with no results directory --
+# in the last case each cell says so and draws nothing rather than failing.
+import matplotlib.pyplot as plt
+import pandas as pd
+from pathlib import Path
+
+
+def _results():
+    here = Path.cwd().resolve()
+    for base in (here, *here.parents):
+        cand = base / "results" / "task3"
+        if cand.is_dir():
+            return cand
+    return None
+
+
+FIGDIR = _results()
+ALL = None
+if FIGDIR is not None and (FIGDIR / "task3_all_results.csv").is_file():
+    ALL = pd.read_csv(FIGDIR / "task3_all_results.csv")
+    print(f"reading {FIGDIR / 'task3_all_results.csv'}  ({len(ALL):,} measurements)")
+else:
+    print("results/task3 not found -- the figure cells below will skip.")
+
+
+def _wide(source):
+    """One row per run, one column per metric. The long file holds text values too
+    (model names, True/False flags), so the numeric coercion is not optional."""
+    d = ALL[ALL.source == source].copy()
+    d["value"] = pd.to_numeric(d.value, errors="coerce")
+    keys = ["run", "arm", "target", "class"]
+    w = d.pivot_table(index=keys, columns="metric", values="value",
+                      dropna=False, aggfunc="first").reset_index()
+    # dropna=False is needed so index levels that are empty for this source survive,
+    # but it also builds the full cross product of the levels -- target x class here
+    # invents rows like usage/Boys. Drop the ones that carry no measurement.
+    return w.dropna(subset=[c for c in w.columns if c not in keys], how="all")
+
+# %%
+# Figure 1. Why no amount of tuning moved `usage`: the four rare classes hold fifteen
+# validation images between them, and `Home` holds none, so its F1 is structurally
+# 0.000 and macro-F1 over eight classes cannot exceed 0.875.
+if ALL is None:
+    print("skipped: no results directory")
+else:
+    d = _wide("gender_ceiling")
+    d = d[d.target == "usage"].sort_values("f1")
+    fig, ax = plt.subplots(figsize=(8, 4.2))
+    colours = ["#c0392b" if v <= 15 else "#2c6fbb" for v in d.val_n]
+    ax.barh(d["class"], d.f1, color=colours)
+    for cls, f1, vn in zip(d["class"], d.f1, d.val_n):
+        ax.text(f1 + 0.012, cls, f"{f1:.3f}   n={int(vn)}", va="center", fontsize=9)
+    ax.set_xlim(0, 1.12)
+    ax.set_xlabel("F1 on the shared validation split")
+    ax.set_title("usage per class: red bars are classes with 15 or fewer "
+                 "validation images", fontsize=11)
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.tight_layout()
+    fig.savefig(FIGDIR / "fig1_usage_label_ceiling.png", dpi=150)
+    plt.show()
+
+# %%
+# Figure 2. Where `gender` loses its macro-F1. The model over-calls `Unisex`: it tags
+# 178 Men and 119 Women as Unisex, which is why that column is dark off the diagonal
+# and why Unisex precision is 0.417 against recall 0.721.
+if ALL is None or not (FIGDIR / "gender_confusion.csv").is_file():
+    print("skipped: gender_confusion.csv not found")
+else:
+    cm = pd.read_csv(FIGDIR / "gender_confusion.csv", index_col=0)
+    frac = cm.div(cm.sum(axis=1), axis=0)
+    fig, ax = plt.subplots(figsize=(6.2, 5.2))
+    ax.imshow(frac.values, cmap="Blues", vmin=0, vmax=1)
+    ax.set_xticks(range(len(cm.columns)), cm.columns, rotation=30, ha="right")
+    ax.set_yticks(range(len(cm.index)), cm.index)
+    ax.set_xlabel("predicted")
+    ax.set_ylabel("truth")
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            n = int(cm.values[i, j])
+            ax.text(j, i, f"{n:,}", ha="center", va="center", fontsize=9,
+                    color="white" if frac.values[i, j] > 0.5 else "#222")
+    ax.set_title("gender confusion, shaded by row share\n"
+                 "the Unisex column is where the macro-F1 goes", fontsize=11)
+    fig.tight_layout()
+    fig.savefig(FIGDIR / "fig2_gender_confusion.png", dpi=150)
+    plt.show()
+
+# %%
+# Figure 3. Selection bias, measured on our own work. The sweep nominated
+# `epochs=30` on the random validation split. Re-run on the forward split, which had
+# never selected anything, the same change is flat and flips sign across seeds. The
+# left bar is what the sweep saw; the right three are what a split it did not choose
+# on saw.
+if ALL is None:
+    print("skipped: no results directory")
+else:
+    chosen = float(ALL[(ALL.source == "hyperparam_summary")
+                       & (ALL.arm == "epochs=30")
+                       & (ALL.metric == "gender delta")].value.iloc[0])
+    ec = _wide("epochs_confirmation")
+    ec[["epochs", "seed"]] = ec.run.str.split(expand=True).astype(float)
+    p = ec.pivot_table(index="seed", columns="epochs", values="gender macroF1")
+    paired = (p[30.0] - p[20.0])
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    labels = ["random val\n(chose it)"] + [f"forward split\nseed {int(s)}"
+                                            for s in paired.index]
+    values = [chosen] + list(paired.values)
+    ax.bar(labels, values,
+           color=["#c0392b"] + ["#2c6fbb"] * len(paired), width=0.6)
+    ax.axhline(0, color="#444", lw=1)
+    span = max(values) - min(min(values), 0)
+    ax.set_ylim(min(min(values), 0) - 0.12 * span, max(values) + 0.12 * span)
+    for i, v in enumerate(values):
+        # Labels sit outside the bar on the side the bar grows, and the ylim above
+        # leaves room for them: a negative label placed below the axis gets clipped.
+        ax.text(i, v + (0.04 if v >= 0 else -0.04) * span, f"{v:+.4f}",
+                ha="center", va="bottom" if v >= 0 else "top", fontsize=9)
+    ax.set_ylabel("change in gender macro-F1, 30 epochs minus 20")
+    ax.set_title(f"the same change measured {chosen:+.4f} where it was selected and "
+                 f"{paired.mean():+.4f} where it was not", fontsize=11)
+    ax.spines[["top", "right"]].set_visible(False)
+    fig.tight_layout()
+    fig.savefig(FIGDIR / "fig3_selection_bias.png", dpi=150)
+    plt.show()
+
+# %%
+# Figure 4. The A/B/C/D comparison as it actually ran. Validation macro-F1 per epoch,
+# same body, same 20 epochs, same rows -- only the way the labels attach differs. The
+# curves are close, which is the point section 9.2 makes with numbers: the design
+# differences are small next to the run-to-run spread.
+if ALL is None:
+    print("skipped: no results directory")
+else:
+    h = ALL[ALL.source == "training_history"].copy()
+    h["value"] = pd.to_numeric(h.value, errors="coerce")
+    h["epoch"] = pd.to_numeric(h.run.str.rsplit(" ", n=1).str[-1], errors="coerce")
+    h["curve"] = h.run.str.rsplit(" ", n=1).str[0]
+    h = h.dropna(subset=["value", "epoch"])
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4), sharex=True)
+    for ax, metric in zip(axes, ("val_gender", "val_usage")):
+        sub = h[h.metric == metric]
+        for name, g in sorted(sub.groupby("curve")):
+            g = g.sort_values("epoch")
+            if len(g) < 3:
+                continue
+            ax.plot(g.epoch, g.value, lw=1.4, marker="o", ms=2.5, label=name)
+        ax.set_title(metric.replace("val_", "") + " macro-F1 by epoch", fontsize=11)
+        ax.set_xlabel("epoch")
+        ax.spines[["top", "right"]].set_visible(False)
+        # A legend per panel, because the two panels do not hold the same runs:
+        # design A trains one model per target, so "A gender" appears on the left
+        # and "A usage" on the right, and a single shared legend would mislabel one.
+        ax.legend(fontsize=7, ncol=2, frameon=False, loc="lower right")
+    axes[0].set_ylabel("validation macro-F1")
+    fig.tight_layout()
+    fig.savefig(FIGDIR / "fig4_learning_curves.png", dpi=150)
+    plt.show()
