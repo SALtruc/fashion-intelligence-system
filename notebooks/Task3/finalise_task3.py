@@ -40,6 +40,7 @@ import inspect
 import io
 import json
 import re
+import shutil
 import subprocess
 import sys
 import time
@@ -175,13 +176,26 @@ print(f"  shipped model: gender {val_scores['gender']['macro_f1']:.4f}  "
       f"usage {val_scores['usage']['macro_f1']:.4f}")
 
 # ---------------------------------------------------------------- save the model
-ART = HERE.parent / "artifacts" / "task3"
-for cand in (Path("D:/g2_pr/artifacts/task3"), ART):
-    if cand.parent.is_dir():
-        ART = cand
-        break
-ART.mkdir(parents=True, exist_ok=True)
-MODEL_PATH = ART / "task3_gender_usage_C_weighted.pt"
+def _repo_root():
+    """Walk up to the .git entry. Beats a hardcoded absolute path, which only ever
+    worked on the machine it was typed on."""
+    for base in (HERE, *HERE.parents):
+        if (base / ".git").exists():
+            return base
+    return HERE.parent.parent
+
+
+ROOT = _repo_root()
+# models/task3/checkpoints, not artifacts/task3: artifacts/** is gitignored on every
+# branch and models/ is ignored on none, so Task 1 and Task 2 already keep their
+# checkpoints under models/. At 1.2 MB this belongs in the repo beside theirs, so
+# whoever assembles the submission finds all four in one place. The artifacts/ copy
+# is written too, for the Drive upload the team convention still asks for.
+CKPT = ROOT / "models" / "task3" / "checkpoints"
+ART = ROOT / "artifacts" / "task3"
+for d in (CKPT, ART):
+    d.mkdir(parents=True, exist_ok=True)
+MODEL_PATH = CKPT / "task3_gender_usage_C_weighted.pt"
 torch.save({
     "state_dict": model.state_dict(),
     "heads": heads_multi,
@@ -202,6 +216,8 @@ torch.save({
     "val_accuracy": {t: round(val_scores[t]["accuracy"], 4) for t in TARGETS},
 }, MODEL_PATH)
 print(f"\nmodel -> {MODEL_PATH}  ({MODEL_PATH.stat().st_size / 1e6:.1f} MB)")
+shutil.copy2(MODEL_PATH, ART / MODEL_PATH.name)
+print(f"      -> {ART / MODEL_PATH.name}  (the copy the Drive convention asks for)")
 
 # ------------------------------------------------------------ predict the test set
 # `predict` and `logits_of` index X_t, the training images already on the GPU, so
@@ -267,11 +283,7 @@ assert list(out.columns) == list(sample.columns), "column set changed"
 assert len(out) == len(sample) and (out["id"].values == sample["id"].values).all(), \
     "row order changed"
 
-PRED_DIR = None
-for cand in (Path("D:/g2_pr/predictions"), HERE.parent / "predictions"):
-    if cand.parent.is_dir():
-        PRED_DIR = cand
-        break
+PRED_DIR = ROOT / "predictions"
 PRED_DIR.mkdir(parents=True, exist_ok=True)
 PRED_PATH = PRED_DIR / "task3_gender_usage_nguyen.csv"
 out.to_csv(PRED_PATH, index=False)
@@ -287,7 +299,7 @@ for t in TARGETS:
 def _rel(p):
     """Repo-relative, so a committed path means something on another machine."""
     p = Path(p)
-    for anchor in ("artifacts", "predictions"):
+    for anchor in ("models", "artifacts", "predictions"):
         if anchor in p.parts:
             return "/".join(p.parts[p.parts.index(anchor):])
     return p.name
@@ -356,10 +368,11 @@ meta = {
 # into the repo. So the metadata is written twice: beside the model for whoever picks
 # it up from Drive, and into the tracked notebook folder so the numbers describing the
 # submitted model survive in git even though the weights do not.
+# Written from one dict to every location, so the copies cannot drift apart.
 _meta_json = json.dumps(meta, indent=2)
-(ART / "task3_final_metadata.json").write_text(_meta_json)
-(HERE / "task3_final_metadata.json").write_text(_meta_json)
-print(f"\nmetadata -> {ART / 'task3_final_metadata.json'}")
-print(f"         -> {HERE / 'task3_final_metadata.json'}  (tracked in git)")
+print()
+for _d in (CKPT, ART, HERE):
+    (_d / "task3_final_metadata.json").write_text(_meta_json, encoding="utf-8")
+    print(f"metadata -> {_d / 'task3_final_metadata.json'}")
 print(f"\nUPLOAD {MODEL_PATH.name} to the team Drive: artifacts/** is gitignored.")
 print("\ndone. Remaining for the team: merge articleType and season into this file.")

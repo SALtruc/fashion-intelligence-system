@@ -1,16 +1,25 @@
-"""Bring the already-trained Task 3 artifact up to the team's handover schema.
+"""Bring the already-trained Task 3 artifact up to the team's handover schema, and
+put the checkpoint where git will keep it.
 
-Two things are wrong with what is on disk, and neither needs a retrain:
+Three things were wrong with what was on disk, and none needed a retrain:
 
-  1. `task3_final_metadata.json` records the metrics but none of the fields
+  1. `task3_final_metadata.json` recorded the metrics but none of the fields
      artifacts/README.md calls essential -- git_commit, split, preprocessing, labels.
-  2. The checkpoint's own `trained_on` block still says `seeds_tried`/`seed_shipped`,
+  2. The checkpoint's own `trained_on` block still said `seeds_tried`/`seed_shipped`,
      the wording that was retracted everywhere else: train_model() re-seeds from the
      module-level SEED on entry, so those three runs were repeats at seed 42, not
      three seeds. The generator script was corrected; the saved file was not.
+  3. The checkpoint lived only under `artifacts/`, which is gitignored on every
+     branch, so it was the one deliverable of four that had to be fetched from Drive
+     separately. `models/` is ignored on no branch and is where Task 1 and Task 2
+     already keep their checkpoints -- at 1.2 MB this belongs beside them.
 
-The weights are not touched. The script proves that by comparing every tensor
-before and after the round-trip, and refuses to replace the file if any differ.
+The weights are not touched. The script proves that by comparing every tensor before
+and after the round-trip, and refuses to replace the file if any differ.
+
+    python notebooks/Task3/refresh_artifact_meta.py
+
+Idempotent: running it twice changes nothing and produces the same sha256.
 """
 import datetime
 import hashlib
@@ -21,11 +30,31 @@ from pathlib import Path
 
 import torch
 
-REPO = Path("D:/g2_pr")
-ART = REPO / "artifacts" / "task3"
-MODEL = ART / "task3_gender_usage_C_weighted.pt"
+HERE = Path(__file__).resolve().parent
+
+
+def _repo_root():
+    for base in (HERE, *HERE.parents):
+        if (base / ".git").exists():
+            return base
+    raise SystemExit(f"no .git found above {HERE}")
+
+
+REPO = _repo_root()
+NAME = "task3_gender_usage_C_weighted.pt"
+META_NAME = "task3_final_metadata.json"
+
+CKPT = REPO / "models" / "task3" / "checkpoints"   # tracked in git
+ART = REPO / "artifacts" / "task3"                 # gitignored, mirrors to Drive
 PRED = REPO / "predictions" / "task3_gender_usage_nguyen.csv"
-NB = REPO / "notebooks" / "Task3"
+
+for d in (CKPT, ART):
+    d.mkdir(parents=True, exist_ok=True)
+
+# Prefer whichever copy exists; the tracked one wins if both do.
+MODEL = next((p for p in (CKPT / NAME, ART / NAME) if p.is_file()), None)
+if MODEL is None:
+    raise SystemExit(f"no checkpoint found at {CKPT / NAME} or {ART / NAME}")
 
 
 def git(*a):
@@ -42,7 +71,7 @@ def sha(p):
 
 ck = torch.load(MODEL, map_location="cpu", weights_only=False)
 before = {k: v.clone() for k, v in ck["state_dict"].items()}
-print(f"loaded {MODEL.name}: {len(before)} tensors, "
+print(f"loaded {MODEL.relative_to(REPO)}: {len(before)} tensors, "
       f"{sum(v.numel() for v in before.values()):,} values")
 
 # ---------------------------------------------------------------- fix the wording
@@ -59,7 +88,7 @@ else:
 tr["metric"] = ("macro-F1 with labels= over all classes, including any absent from "
                 "validation; sklearn's default would drop them and read higher")
 
-tmp = MODEL.with_suffix(".pt.tmp")
+tmp = (CKPT / NAME).with_suffix(".pt.tmp")
 torch.save(ck, tmp)
 
 # ------------------------------------------------- prove the weights are unchanged
@@ -70,16 +99,21 @@ if bad:
     tmp.unlink()
     raise SystemExit(f"REFUSING to replace: {len(bad)} tensors differ -- {bad[:3]}")
 print(f"  verified: all {len(before)} tensors bit-identical after the round-trip")
+
+MODEL = CKPT / NAME
 shutil.move(str(tmp), str(MODEL))
+shutil.copy2(MODEL, ART / NAME)
+print(f"  checkpoint -> {MODEL.relative_to(REPO)}   (tracked)")
+print(f"             -> {(ART / NAME).relative_to(REPO)}   (gitignored, for Drive)")
 
 # ------------------------------------------------------------------- the metadata
 # The commit that PRODUCED the weights, not today's HEAD. finalise_task3.py ran on
-# 08/09 and its output landed in one commit; HEAD has moved four commits since, and
-# recording HEAD here would claim the model came from code it never saw.
+# 08/09 and its output landed in one commit; HEAD has moved several commits since,
+# and recording HEAD here would claim the model came from code it never saw.
 TRAIN_COMMIT = git("log", "-1", "--format=%H", "--",
                    "predictions/task3_gender_usage_nguyen.csv")
 meta = {
-    "artifact": "artifacts/task3/task3_gender_usage_C_weighted.pt",
+    "artifact": f"models/task3/checkpoints/{NAME}",
     "task": "task3",
     # the date the weights were made, not the date this metadata was rewritten
     "created_at": git("log", "-1", "--format=%ad", "--date=short", TRAIN_COMMIT),
@@ -105,7 +139,9 @@ meta = {
               f"is the MEDIAN of {len(tr['repeats_tried'])} repeats by mean macro-F1, "
               "not the best. " + tr["seeding"] + " " + tr["metric"] + "."),
 
-    "model": "artifacts/task3/task3_gender_usage_C_weighted.pt",
+    "model": f"models/task3/checkpoints/{NAME}",
+    "also_on_drive": f"artifacts/task3/{NAME}",
+    "in_git": True,
     "predictions": "predictions/task3_gender_usage_nguyen.csv",
     "predictions_sha256": sha(PRED),
     "design": ck["design"],
@@ -119,22 +155,26 @@ meta = {
     "columns_left_for_teammates": ["articleType", "season"],
 }
 
-blob = json.dumps(meta, indent=2)
-(ART / "task3_final_metadata.json").write_text(blob, encoding="utf-8")
-(NB / "task3_final_metadata.json").write_text(blob, encoding="utf-8")
-
-# Every field the README calls required must actually be filled in.
+# Every field artifacts/README.md calls required must actually be filled in.
 required = ["artifact", "task", "created_at", "git_commit", "dataset_version",
             "split", "preprocessing", "labels", "framework", "validation_metrics",
             "notes"]
 missing = [k for k in required if not meta.get(k)]
 if missing:
     raise SystemExit(f"metadata still missing required fields: {missing}")
+
+# One dict, three files, so the copies cannot drift apart.
+blob = json.dumps(meta, indent=2)
+print()
+for d in (CKPT, ART, HERE):
+    (d / META_NAME).write_text(blob, encoding="utf-8")
+    print(f"metadata -> {(d / META_NAME).relative_to(REPO)}")
+
 print(f"\n  all {len(required)} required fields present")
 print(f"  model sha256   {meta['sha256']}")
 print(f"  preds sha256   {meta['predictions_sha256']}")
 print(f"  trained at     {meta['git_commit'][:8]} on {meta['git_branch']}")
 print(f"  meta refreshed {meta['metadata_regenerated_at'][:8]}")
-print(f"\nwrote {ART / 'task3_final_metadata.json'}")
-print(f"      {NB / 'task3_final_metadata.json'}   (tracked in git)")
-print(f"\nRE-UPLOAD {MODEL.name} to the team Drive -- its sha256 changed.")
+print(f"\nThe checkpoint is in git now, so the Drive copy is a convenience, not the "
+      f"only copy. If you keep Drive in sync, re-upload: the sha256 changed when the "
+      f"seeds/repeats wording was corrected.")
