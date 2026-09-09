@@ -34,9 +34,13 @@ finds, so there is no second copy of the decode/pad/normalise path to drift.
 
     python finalise_task3.py
 """
+import datetime
+import hashlib
+import inspect
 import io
 import json
 import re
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -289,7 +293,52 @@ def _rel(p):
     return p.name
 
 
+def _git(*a):
+    """The commit is what makes the weights reproducible; a missing one is worth
+    recording as missing rather than silently omitting."""
+    try:
+        return subprocess.run(("git", *a), cwd=str(HERE), capture_output=True,
+                              text=True, timeout=20).stdout.strip() or None
+    except Exception:
+        return None
+
+
+# Read the two knobs off the function signature rather than retyping them, so the
+# metadata cannot drift from the code the way a hardcoded number would.
+_sig = inspect.signature(g["train_model"]).parameters
+_dirty = _git("status", "--porcelain")
+
 meta = {
+    # -- the fields artifacts/README.md lists as required --------------------------
+    "artifact": _rel(MODEL_PATH),
+    "task": "task3",
+    "created_at": datetime.date.today().isoformat(),
+    "git_commit": _git("rev-parse", "HEAD"),
+    "git_branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
+    "git_clean": (_dirty == "") if _dirty is not None else None,
+    "dataset_version": ("A2_FashionDataset as provided, images 60x80 RGB, "
+                        f"{len(g['frame']):,} labelled rows"),
+    "split": f"splits/{g['SHARED_SPLIT_NAME']}",
+    "preprocessing": ("embedded in the checkpoint: image_size, channel_mean, "
+                      "channel_std. No separate transformer file."),
+    "labels": "embedded in the checkpoint under 'classes'; head order is that list",
+    "framework": f"PyTorch {torch.__version__}",
+    "sha256": hashlib.sha256(MODEL_PATH.read_bytes()).hexdigest(),
+    "size_bytes": MODEL_PATH.stat().st_size,
+    "validation_metrics": {t: {"macro_f1": round(val_scores[t]["macro_f1"], 4),
+                               "accuracy": round(val_scores[t]["accuracy"], 4)}
+                           for t in TARGETS},
+    "notes": (f"python notebooks/Task3/finalise_task3.py -- design C, class-weighted "
+              f"loss, {'mirror TTA' if best_tta else 'no TTA'}, {g['EPOCHS']} epochs, "
+              f"batch {_sig['bs'].default}, Adam lr {_sig['lr'].default}. Shipped "
+              f"checkpoint is the MEDIAN of {len(SEEDS)} repeats by mean macro-F1, "
+              f"not the best. train_model() re-seeds from the module-level SEED on "
+              f"entry, so those repeats differ by cuDNN nondeterminism only -- they "
+              f"are repeats, not independent seeds. macro-F1 uses labels= over all "
+              f"{len(CLASSES['usage'])} usage classes; dropping the class absent from "
+              f"validation would read about 0.07 higher."),
+
+    # -- Task 3 specifics, kept from the previous version --------------------------
     "model": _rel(MODEL_PATH),
     "predictions": _rel(PRED_PATH),
     "design": "C shared body, class-weighted loss",

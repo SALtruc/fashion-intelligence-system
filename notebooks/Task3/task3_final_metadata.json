@@ -1,8 +1,53 @@
 {
+  "artifact": "artifacts/task3/task3_gender_usage_C_weighted.pt",
+  "task": "task3",
+  "created_at": "2026-09-08",
+  "metadata_regenerated_on": "2026-09-09",
+  "git_commit": "7f10bdfc6e2ca109accd3c9802228739121f434d",
+  "git_branch": "feat/task3-nguyen",
+  "metadata_regenerated_at": "e312d7497d9408b62594149c8ebd24878fb6d4d8",
+  "dataset_version": "A2_FashionDataset as provided, images 60x80 RGB, 37,745 labelled rows",
+  "split": "splits/train_val_grouped_sha256.csv",
+  "preprocessing": "embedded in the checkpoint: image_size, channel_mean, channel_std. No separate transformer file.",
+  "labels": "embedded in the checkpoint under 'classes'; head order is that list",
+  "framework": "PyTorch 2.14.0+cu126",
+  "sha256": "03778010f2a931a26da02ac5aa39818a70233ccd0a174e4c1c9354270e135449",
+  "size_bytes": 1176489,
+  "validation_metrics": {
+    "gender": {
+      "macro_f1": 0.7202,
+      "accuracy": 0.8668
+    },
+    "usage": {
+      "macro_f1": 0.4676,
+      "accuracy": 0.8693
+    }
+  },
+  "notes": "python notebooks/Task3/finalise_task3.py -- design C (one shared conv body, one head per target), class-weighted loss 1/sqrt(n), mirror TTA, 20 epochs, batch 256, Adam lr 0.001. Shipped checkpoint is the MEDIAN of 3 repeats by mean macro-F1, not the best. train_model() calls torch.manual_seed(SEED) on entry, so these are repeats at SEED=42 differing by cuDNN nondeterminism, NOT independent seeds. The labels 42/43/44 name the repeats only. macro-F1 with labels= over all classes, including any absent from validation; sklearn's default would drop them and read higher.",
   "model": "artifacts/task3/task3_gender_usage_C_weighted.pt",
   "predictions": "predictions/task3_gender_usage_nguyen.csv",
-  "design": "C shared body, class-weighted loss",
+  "predictions_sha256": "cf1a43bfd48bbc3029d633a799ea580d889e0550e66895c0f703fa00bd1f6f00",
+  "design": "C - one shared conv body, one head per target, class-weighted loss",
   "tta_used": true,
+  "classes": {
+    "gender": [
+      "Boys",
+      "Girls",
+      "Men",
+      "Unisex",
+      "Women"
+    ],
+    "usage": [
+      "Casual",
+      "Ethnic",
+      "Formal",
+      "Home",
+      "Party",
+      "Smart Casual",
+      "Sports",
+      "Travel"
+    ]
+  },
   "val_macro_f1": {
     "gender": 0.7202,
     "usage": 0.4676
