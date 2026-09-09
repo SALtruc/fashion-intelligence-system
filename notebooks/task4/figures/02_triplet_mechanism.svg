@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" role="img" aria-labelledby="title desc">
+  <title id="title">Triplet margin loss mechanism</title>
+  <desc id="desc">The anchor and positive are pulled together while a negative is pushed beyond a fixed margin.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#475569"/></marker></defs>
+  <rect width="960" height="300" rx="18" fill="#f8fafc"/>
+  <text x="480" y="32" text-anchor="middle" font-family="Segoe UI,Arial" font-size="20" font-weight="700" fill="#0f172a">Triplet margin: enforce d(anchor, positive) + m &lt; d(anchor, negative)</text>
+  <g font-family="Segoe UI,Arial" fill="#0f172a">
+    <rect x="40" y="64" width="390" height="175" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/><text x="235" y="91" text-anchor="middle" font-size="16" font-weight="700">Before the update</text>
+    <circle cx="155" cy="155" r="15" fill="#2563eb"/><text x="155" y="190" text-anchor="middle" font-size="14">anchor</text>
+    <circle cx="340" cy="112" r="15" fill="#16a34a"/><text x="340" y="90" text-anchor="middle" font-size="14">positive</text>
+    <circle cx="235" cy="178" r="15" fill="#dc2626"/><text x="245" y="215" text-anchor="middle" font-size="14">negative</text>
+    <line x1="170" y1="151" x2="323" y2="116" stroke="#16a34a" stroke-width="3" stroke-dasharray="6 4"/><line x1="170" y1="159" x2="218" y2="174" stroke="#dc2626" stroke-width="3" stroke-dasharray="6 4"/>
+    <rect x="530" y="64" width="390" height="175" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/><text x="725" y="91" text-anchor="middle" font-size="16" font-weight="700">After the update</text>
+    <circle cx="650" cy="155" r="15" fill="#2563eb"/><text x="650" y="190" text-anchor="middle" font-size="14">anchor</text>
+    <circle cx="695" cy="132" r="15" fill="#16a34a"/><text x="695" y="110" text-anchor="middle" font-size="14">positive</text>
+    <circle cx="855" cy="185" r="15" fill="#dc2626"/><text x="855" y="220" text-anchor="middle" font-size="14">negative</text>
+    <line x1="665" y1="148" x2="679" y2="140" stroke="#16a34a" stroke-width="4"/><line x1="665" y1="157" x2="838" y2="182" stroke="#dc2626" stroke-width="3" stroke-dasharray="6 4"/>
+  </g>
+  <path d="M442 151 H515" stroke="#475569" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="480" y="272" text-anchor="middle" font-family="Segoe UI,Arial" font-size="14" fill="#475569">Only triplets that violate the margin contribute positive loss; batch composition controls which relations are seen.</text>
+</svg>
