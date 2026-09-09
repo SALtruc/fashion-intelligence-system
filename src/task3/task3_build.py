@@ -545,7 +545,7 @@ def record(name, target, split, y_true, y_pred, labels=None, **extra):
 # ### 3.0 The split - the team's frozen file, not one generated here
 #
 # The repo's rule 2 is that everyone evaluates on the same split. That split is a
-# **file**, `splits/train_val_grouped_sha256.csv`, not a function call - and the
+# **file**, `splits/task3/train_val_grouped_sha256.csv`, not a function call - and the
 # difference matters more than it looks. Regenerating a stratified split from a seed
 # reproduces it only if everyone runs the same scikit-learn version; the split this
 # notebook generated for itself overlapped the team's by **15.6%**, so every number
@@ -583,6 +583,11 @@ def find_shared_split():
               Path(f"/content/splits/{SHARED_SPLIT_NAME}")]
     for base in (here, *here.parents):
         cands += [base / SHARED_SPLIT_NAME,
+                  # splits/task3/ is where the team lead asked task 3's data to live,
+                  # matching splits/task4/. It is searched BEFORE the flat splits/ so
+                  # the current location wins, and the flat one is kept so a checkout
+                  # from before the move still resolves.
+                  base / "splits" / "task3" / SHARED_SPLIT_NAME,
                   base / "splits" / SHARED_SPLIT_NAME,
                   base / "task3" / SHARED_SPLIT_NAME]
     for c in cands:
