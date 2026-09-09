@@ -68,15 +68,15 @@ if FULL:
         bool(du.mean() >= -band_u)
     held = sum((c1, c2, c3))
     verdict = "**ADOPT `D weighted`**" if held == 3 else "**KEEP `C weighted`**"
-    rule = (f"Of the three pre-committed conditions — `gender` up in every repeat "
+    rule = (f"Of the three pre-committed conditions - `gender` up in every repeat "
             f"({'yes' if c1 else 'no'}), the mean above the C arm's own spread of "
             f"{band_g:.4f} ({'yes' if c2 else 'no'}), `usage` down by no more than "
-            f"its spread of {band_u:.4f} ({'yes' if c3 else 'no'}) — **{held} of 3** "
+            f"its spread of {band_u:.4f} ({'yes' if c3 else 'no'}) - **{held} of 3** "
             f"held.")
 else:
     why = (f"only {n} of {args.expect_repeats} repeats are in"
            if n < args.expect_repeats else "an arm's spread is degenerate")
-    verdict = "**provisional — no verdict**"
+    verdict = "**provisional - no verdict**"
     rule = (f"The rule is deliberately not evaluated here: {why}, and with too few "
             f"repeats an arm's spread collapses toward zero, which would let "
             f"\"the mean exceeds the arm's own spread\" pass on noise.")
@@ -103,7 +103,7 @@ if NB.is_file():
 pre_sentence = ""
 if pre_here and pre_nb:
     pre_sentence = (f" Second, the pre-training reached articleType macro-F1 "
-                    f"{pre_here:.4f} here against {pre_nb:.4f} on the random split — "
+                    f"{pre_here:.4f} here against {pre_nb:.4f} on the random split - "
                     f"the same code, a harder task.")
 
 # ------------------------------------------------------ article-type coverage, live
@@ -159,7 +159,7 @@ if pc is not None:
          .pivot_table(index="class", columns="arm", values="f1"))
     if {"C_weighted", "D_weighted"} <= set(m.columns):
         m["delta"] = m["D_weighted"] - m["C_weighted"]
-        cls_tbl = ("\n| `gender` class | C | D | Δ |\n|---|---|---|---|\n" + "\n".join(
+        cls_tbl = ("\n| `gender` class | C | D | delta |\n|---|---|---|---|\n" + "\n".join(
             f"| {c} | {m.loc[c, 'C_weighted']:.4f} | {m.loc[c, 'D_weighted']:.4f} "
             f"| {m.loc[c, 'delta']:+.4f} |" for c in m.index) + "\n")
         wide = pc[pc.repeat.isin(piv.index)].pivot_table(
@@ -176,7 +176,7 @@ if pc is not None:
             f"and its mean of {dg.mean():+.4f} sits below the arm's own spread. The "
             f"gains are small and `{worst}` loses {m.loc[worst, 'delta']:+.4f}, so "
             f"five class-level movements average out to almost nothing. The "
-            f"hypothesis is confirmed where it was made — at the class — and still "
+            f"hypothesis is confirmed where it was made - at the class - and still "
             f"does not produce a model worth submitting.")
 d_g = piv["gender macroF1"]["D_weighted"]
 band_dg = d_g.max() - d_g.min()
@@ -184,7 +184,7 @@ if band_g > 0:
     stability = (
         f"There is also a reason to prefer C beyond the averages. Across the same "
         f"repeats the D arm's own `gender` spread is **{band_dg:.4f}** against C's "
-        f"**{band_g:.4f}**, {band_dg / band_g:.1f}x as wide — its worst repeat "
+        f"**{band_g:.4f}**, {band_dg / band_g:.1f}x as wide - its worst repeat "
         f"({d_g.min():.4f}) falls below every C run. What gets submitted is one "
         f"training run, not a mean over three, so an arm that swings that far is the "
         f"worse deliverable even where its average is level. The likely cause is "
@@ -200,16 +200,16 @@ rows = "\n".join(
 
 plural = "repeat" if n == 1 else "repeats"
 text = f"""
-**B7. The two best ingredients, combined** — `D articleType-pretrained` is the
+**B7. The two best ingredients, combined** - `D articleType-pretrained` is the
 strongest `gender` model the notebook measures and `C weighted` the strongest `usage`
 one, and they had only ever been measured apart. This measures them together over
 {n} paired {plural}, **on the forward split** rather than on the validation split this
 report quotes. That choice is the whole design: `epochs=30` won the sweep by +0.019 on
-random validation and then measured −0.002 on the forward split, so a candidate tested
+random validation and then measured -0.002 on the forward split, so a candidate tested
 only where it was chosen cannot be told apart from its own selection. The rule and a
 prediction were both fixed before the run.
 
-| repeat | `gender` C | `gender` D | Δ | `usage` C | `usage` D | Δ |
+| repeat | `gender` C | `gender` D | delta | `usage` C | `usage` D | delta |
 |---|---|---|---|---|---|---|
 {rows}
 | **mean** | **{c_g.mean():.4f}** | **{piv['gender macroF1']['D_weighted'].mean():.4f}** | **{dg.mean():+.4f}** | **{c_u.mean():.4f}** | **{piv['usage macroF1']['D_weighted'].mean():.4f}** | **{du.mean():+.4f}** |
@@ -219,7 +219,7 @@ Verdict: {verdict}. {rule}
 The interesting part is not the verdict but where the effect went, and the mechanism
 check answers it. The diagnostic localised `gender`'s loss to one class: Unisex, F1
 {uni_rand or "0.53"} on random validation and {uni_fwd or "much lower"} on the forward
-split, and the sole class where an `articleType → modal gender` lookup beats the CNN.
+split, and the sole class where an `articleType -> modal gender` lookup beats the CNN.
 Design D carries exactly that signal, so if the story is right Unisex should rise.
 {uni}
 {cls_tbl}
@@ -230,7 +230,7 @@ Design D carries exactly that signal, so if the story is right Unisex should ris
 Two measurements explain the weakness, and neither is visible on a random split.
 First, {cov}; the absent classes are the ones appearing only among the high ids, which
 is precisely what the model has to generalise to.{pre_sentence} **So design D's
-advantage, as measured in §10.3, is partly an artefact of a random split showing the
+advantage, as measured in section 10.3, is partly an artefact of a random split showing the
 pre-training every article type in the catalogue.** The way the graded test set is
 actually cut does not. That is a qualification on our own reported result, not on
 someone else's.
@@ -248,7 +248,7 @@ if args.append:
     # rstrip() + block and landed below a heading reading "not for the report",
     # which is not where an appendix data table belongs. Appending to a file is
     # not the same operation as adding to a section.
-    NOTES = "## Notes for Trực — not for the report"
+    NOTES = "## Notes for Trực - not for the report"
     i = t.find(NOTES)
     if i < 0:
         raise SystemExit("cannot find the notes heading -- refusing to guess where "

@@ -1,7 +1,7 @@
 # %% [markdown]
-# # Task 3 — `gender` and `usage`
+# # Task 3 - `gender` and `usage`
 #
-# COSC2753 Assignment 2 · group SG_G3
+# COSC2753 Assignment 2 - group SG_G3
 #
 # The brief asks for a system that predicts **both** `gender` and `usage`. It does
 # not say whether that is one model or two, which is the interesting part: that
@@ -12,8 +12,8 @@
 #
 # | | design | backbones | outputs |
 # |---|---|---|---|
-# | **A** | two independent models | 2 | 5 · 8 |
-# | **B** | one model, joint label | 1 | 24 `gender × usage` pairs that occur |
+# | **A** | two independent models | 2 | 5 - 8 |
+# | **B** | one model, joint label | 1 | 24 `gender x usage` pairs that occur |
 # | **C** | one shared backbone, two heads | 1 | 5 + 8 |
 #
 # Identical convolutional body, identical seed, identical schedule. The only thing
@@ -23,8 +23,8 @@
 # **Three further questions, each one variable at a time**
 #
 # 1. does class-weighted loss help the long tail, or just trade the head for it?
-# 2. does the externally collected data help? (it is predicted to *hurt* `usage` —
-#    see §7, and the prediction is recorded here before the run)
+# 2. does the externally collected data help? (it is predicted to *hurt* `usage` -
+#    see section 7, and the prediction is recorded here before the run)
 # 3. how much of the score survives a split that mimics the real test set?
 #
 # **Metric.** macro-F1 throughout. Accuracy is reported beside it only to show why
@@ -36,24 +36,24 @@
 #
 # | | section |
 # |---|---|
-# | baselines (majority, 1-NN on pixels) | §3 |
-# | design **A** — two independent models | §5 |
-# | design **B** — one joint `gender × usage` label | §5 |
-# | design **C** — one shared body, two heads | §5 |
-# | C + class-weighted loss | §6 |
-# | C + external data | §7 |
-# | design **D** — transfer from `articleType` | §10.3 |
-# | C + logit adjustment / mirror TTA | §10.1, §10.2 |
-# | every model in one table | §10.4 |
-# | **ultimate judgement** | **§11** |
+# | baselines (majority, 1-NN on pixels) | section 3 |
+# | design **A** - two independent models | section 5 |
+# | design **B** - one joint `gender x usage` label | section 5 |
+# | design **C** - one shared body, two heads | section 5 |
+# | C + class-weighted loss | section 6 |
+# | C + external data | section 7 |
+# | design **D** - transfer from `articleType` | section 10.3 |
+# | C + logit adjustment / mirror TTA | section 10.1, section 10.2 |
+# | every model in one table | section 10.4 |
+# | **ultimate judgement** | **Section 11** |
 #
-# Architecture and every hyper-parameter are tabulated in §4. Two harder evaluations
-# than the random split — a forward split by id, and 261 independently photographed
-# items — are in §8. Exploratory data analysis for the shared dataset lives in the
+# Architecture and every hyper-parameter are tabulated in section 4. Two harder evaluations
+# than the random split - a forward split by id, and 261 independently photographed
+# items - are in section 8. Exploratory data analysis for the shared dataset lives in the
 # team's `notebooks/eda.ipynb` and is not duplicated here.
 
 # %% [markdown]
-# ## 0 · Setup
+# ## 0 - Setup
 #
 # Runs on Colab or locally. On Colab, mount Drive first; the cell below finds the
 # data wherever it ended up.
@@ -78,7 +78,7 @@ if IN_COLAB:
     drive.mount("/content/drive")
 
 SEED = 42
-IMAGE_SIZE = (60, 80)          # width, height — the provided dataset's exact size
+IMAGE_SIZE = (60, 80)          # width, height - the provided dataset's exact size
 TARGETS = ["gender", "usage"]
 
 # QUICK=True runs everything end to end in a few minutes on a smaller sample, to
@@ -102,7 +102,7 @@ BUILD = "dev"
 print(f"colab={IN_COLAB}  quick={QUICK}  epochs={EPOCHS}  BUILD={BUILD}")
 
 # %% [markdown]
-# ### 0.1 Staging the data — Colab only, skipped locally
+# ### 0.1 Staging the data - Colab only, skipped locally
 #
 # Reading 37,745 individual JPEGs through the Drive mount is the slowest thing in
 # this notebook: every file is a separate API call, so it costs roughly half an hour
@@ -110,7 +110,7 @@ print(f"colab={IN_COLAB}  quick={QUICK}  epochs={EPOCHS}  BUILD={BUILD}")
 # into about a minute.
 #
 # Set the two paths below to match your Drive. A shortcut in *My Drive* pointing at a
-# Shared Drive works fine — Colab mounts My Drive only, so the shortcut is the bridge.
+# Shared Drive works fine - Colab mounts My Drive only, so the shortcut is the bridge.
 #
 # Re-running is cheap: if the data is already unpacked, this does nothing.
 
@@ -170,13 +170,13 @@ else:
 #
 # Two datasets are involved and they are **not** the same thing:
 #
-# * **the provided catalogue** — Trực's `ColabDataset`, which is the provided
-#   training data de-duplicated: 38,617 → 37,745 rows.
-# * **the externally collected images** — `A2_ExternalData`, added to *training
-#   only* in §7.
+# * **the provided catalogue** - Trực's `ColabDataset`, which is the provided
+#   training data de-duplicated: 38,617 -> 37,745 rows.
+# * **the externally collected images** - `A2_ExternalData`, added to *training
+#   only* in section 7.
 #
 # On Colab a folder someone shared with you sits under *Shared with me*, which is
-# **not mounted**. Right-click it in Drive → **Add shortcut to Drive** first.
+# **not mounted**. Right-click it in Drive -> **Add shortcut to Drive** first.
 
 # %%
 def _first_dir(candidates, must_contain=None):
@@ -188,7 +188,7 @@ def _first_dir(candidates, must_contain=None):
             return c
     raise FileNotFoundError(
         "not found. Tried:\n  " + "\n  ".join(tried)
-        + "\n\nOn Colab: 'Shared with me' is NOT mounted — right-click the folder in "
+        + "\n\nOn Colab: 'Shared with me' is NOT mounted - right-click the folder in "
           "Drive, 'Add shortcut to Drive', then re-run."
     )
 
@@ -217,7 +217,7 @@ try:
     ], must_contain="ExternalCosmetics")
 except FileNotFoundError as exc:
     EXTERNAL_ROOT = None
-    print("external data not found — §7 will be skipped\n", exc)
+    print("external data not found - section 7 will be skipped\n", exc)
 
 print("catalogue :", DATA_ROOT)
 print("external  :", EXTERNAL_ROOT)
@@ -227,7 +227,7 @@ print("external  :", EXTERNAL_ROOT)
 #
 # `ColabDataset` ships the raw catalogue columns, so `filename`, `path` and
 # `group_id` are added here. `group_id = id` is correct **because** this file is
-# already one row per product — the de-duplication that produced it is what makes
+# already one row per product - the de-duplication that produced it is what makes
 # the assumption safe, and the assertion below is what checks it rather than
 # trusting it.
 #
@@ -242,7 +242,7 @@ from sklearn.model_selection import train_test_split
 RANDOM_STATE = SEED
 
 def make_split(frame, target, validation_share=0.2, random_state=RANDOM_STATE):
-    """Copy of src/preprocessing.make_split — whole groups stay on one side."""
+    """Copy of src/preprocessing.make_split - whole groups stay on one side."""
     if target not in frame.columns:
         raise KeyError(f"{target!r} is not a column of the frame passed in.")
     frame = frame.loc[frame[target].notna()].reset_index(drop=True)
@@ -268,7 +268,7 @@ def make_split_forward(frame, target, validation_share=0.2):
 
     The graded test set is the 5,829 highest ids, so the real task is extrapolation
     forward along a catalogue that was added to over time, not interpolation inside
-    a shuffled pool. A random split silently assumes the two are the same. §8
+    a shuffled pool. A random split silently assumes the two are the same. Section 8
     measures how far apart they actually are.
     """
     frame = frame.loc[frame[target].notna()].sort_values("id").reset_index(drop=True)
@@ -289,7 +289,7 @@ print(f"{len(frame):,} rows, {frame['articleType'].nunique()} articleTypes")
 print(frame[["id", "gender", "usage", "articleType"]].head(3).to_string(index=False))
 
 # %% [markdown]
-# ## 1 · What the task actually is
+# ## 1 - What the task actually is
 #
 # Before any model: the two targets look like one task but behave like two very
 # different ones, and every design decision later follows from this section.
@@ -304,7 +304,7 @@ def class_table(frame, col):
 for col in TARGETS:
     t = class_table(frame, col)
     ratio = t["n"].max() / t["n"].min()
-    print(f"=== {col} — {len(t)} classes, imbalance {ratio:,.0f}x ===")
+    print(f"=== {col} - {len(t)} classes, imbalance {ratio:,.0f}x ===")
     print(t.to_string(), "\n")
 
 # %% [markdown]
@@ -332,12 +332,12 @@ print(ceiling.to_string(index=False))
 
 # %% [markdown]
 # Read the `usage` rows carefully. **Four of its eight classes have under 100
-# training images** — `Home` 1, `Party` 13, `Travel` 25, `Smart Casual` 55. If
+# training images** - `Home` 1, `Party` 13, `Travel` 25, `Smart Casual` 55. If
 # those four are unlearnable then macro-F1 cannot exceed **0.500**, and a reported
 # 0.5 would mean the model got *everything else perfect*.
 #
 # This is the single most important fact about Task 3, and it says the interesting
-# work is not architecture search — it is what to do about four classes that the
+# work is not architecture search - it is what to do about four classes that the
 # data does not contain enough of to teach.
 
 # %% [markdown]
@@ -362,7 +362,7 @@ print(pd.DataFrame(rows).to_string(index=False))
 # evidence of this gap.
 
 # %% [markdown]
-# ### 1.3 "macro-F1" is two different numbers — which matters when comparing notebooks
+# ### 1.3 "macro-F1" is two different numbers - which matters when comparing notebooks
 #
 # `usage` has classes that can vanish from validation entirely (`Home` has one image
 # in the whole training set, so a grouped split puts it in train and nowhere else).
@@ -370,7 +370,7 @@ print(pd.DataFrame(rows).to_string(index=False))
 #
 # | | denominator | what it says |
 # |---|---|---|
-# | `macro_f1` | **all 8** classes | a label we cannot predict scores 0 — an honest description of the task |
+# | `macro_f1` | **all 8** classes | a label we cannot predict scores 0 - an honest description of the task |
 # | `macro_f1_in_val` | classes **present in validation** (7) | sklearn's default when `labels=` is not passed |
 #
 # Eight versus seven is a **~14% difference on the same predictions**, and neither
@@ -378,19 +378,19 @@ print(pd.DataFrame(rows).to_string(index=False))
 # next to it.
 #
 # This matters for more than tidiness: a teammate's Task 3 figures are reported as
-# *"combined val macro-F1"* — 0.6312 for the combined-recipe CNN (gender 0.78,
+# *"combined val macro-F1"* - 0.6312 for the combined-recipe CNN (gender 0.78,
 # `usage` 0.49) and 0.6563 for BBN (`usage` 0.55). Putting a number from this
 # notebook beside those is only meaningful if three things match: the **denominator**
 # above, the **split**, and whether "combined" means the mean of the two targets.
 # Confirm all three before claiming one approach beat another.
 
 # %% [markdown]
-# ## 2 · One model or two? — deciding before training, not after
+# ## 2 - One model or two? - deciding before training, not after
 #
 # The brief leaves this open. It is tempting to settle it by training both and
 # keeping the winner, but that answers "which scored higher on this seed", not
 # "which is the right design". Two properties of the data decide it in advance,
-# and the training runs in §5 then test the prediction.
+# and the training runs in section 5 then test the prediction.
 
 # %%
 g = sorted(frame["gender"].dropna().unique())
@@ -409,11 +409,11 @@ print(f"\njoint classes with fewer than 10 rows: {len(tiny)} of {occurring}")
 print(tiny.to_string())
 
 # %% [markdown]
-# **Property 1 — a joint label multiplies the sparsity.** `usage` alone has one
+# **Property 1 - a joint label multiplies the sparsity.** `usage` alone has one
 # class under 10 images. Crossed with `gender` it has six. A combined model does
 # not merely inherit the long tail, it lengthens it.
 #
-# **Property 2 — the two labels barely inform each other.** If knowing `gender`
+# **Property 2 - the two labels barely inform each other.** If knowing `gender`
 # told you most of `usage`, a joint label would be capturing a real structure and
 # the extra sparsity might be worth paying for. Measured as entropy:
 
@@ -442,24 +442,24 @@ print(pd.DataFrame(rows).to_string(index=False))
 # design **B** pays a large, measurable cost in sparsity to capture very little.
 #
 # **The same table also argues for design C.** `articleType` removes **66.8%** of
-# the uncertainty in `usage` and **43.1%** in `gender` — far more than either
+# the uncertainty in `usage` and **43.1%** in `gender` - far more than either
 # target tells you about the other. The two tasks are not related to each other
 # directly; they are both largely determined by a third thing, *what the garment
 # is*, which is exactly what a convolutional backbone can see. That is a concrete
 # reason to expect a **shared backbone with separate heads** to work: the sharing
 # should happen in the features, not in the label.
 #
-# > **Prediction recorded before training:** C ≈ A > B, with B losing most on
-# > `usage` macro-F1. §5 either confirms this or the reasoning above is wrong, and
+# > **Prediction recorded before training:** C ~ A > B, with B losing most on
+# > `usage` macro-F1. Section 5 either confirms this or the reasoning above is wrong, and
 # > both outcomes are worth reporting.
 
 # %% [markdown]
-# ## 3 · Baselines
+# ## 3 - Baselines
 #
 # Two floors. Nothing below these counts as having learned anything.
 #
-# * **majority** — predict the most common class. Bounds *accuracy*.
-# * **1-NN on downscaled pixels** — no training, no parameters. Bounds *macro-F1*:
+# * **majority** - predict the most common class. Bounds *accuracy*.
+# * **1-NN on downscaled pixels** - no training, no parameters. Bounds *macro-F1*:
 #   whatever this scores is available from raw pixel similarity alone, so a CNN
 #   that does not beat it has not earned its complexity.
 
@@ -542,10 +542,10 @@ def record(name, target, split, y_true, y_pred, labels=None, **extra):
     return s
 
 # %% [markdown]
-# ### 3.0 The split — the team's frozen file, not one generated here
+# ### 3.0 The split - the team's frozen file, not one generated here
 #
 # The repo's rule 2 is that everyone evaluates on the same split. That split is a
-# **file**, `splits/train_val_grouped_sha256.csv`, not a function call — and the
+# **file**, `splits/train_val_grouped_sha256.csv`, not a function call - and the
 # difference matters more than it looks. Regenerating a stratified split from a seed
 # reproduces it only if everyone runs the same scikit-learn version; the split this
 # notebook generated for itself overlapped the team's by **15.6%**, so every number
@@ -558,7 +558,7 @@ def record(name, target, split, y_true, y_pred, labels=None, **extra):
 # **15% validation**, not 20%, and **one split shared by both targets** rather than a
 # separate stratified draw per target. `Home` (1 training image) lands in train and is
 # absent from validation, so `usage` averages over 7 of 8 classes unless the
-# denominator is stated — see §1.3.
+# denominator is stated - see section 1.3.
 
 # %%
 SHARED_SPLIT_NAME = "train_val_grouped_sha256.csv"
@@ -571,7 +571,7 @@ def find_shared_split():
     where the notebook lives in `notebooks/Task3/` and the file in `splits/`. Run from
     the repo, the search missed, the notebook printed a warning nobody was watching,
     and a full 106-minute run produced numbers on a locally generated split -- which
-    section 3.0 measured as overlapping the team's by only 15.6%. So: walk up from the
+    Section 3.0 measured as overlapping the team's by only 15.6%. So: walk up from the
     working directory rather than guessing a depth, and treat the fallback as an error.
     """
     here = Path.cwd().resolve()
@@ -687,7 +687,7 @@ for t in TARGETS:
 # rediscovered that similar-looking products share a label"*. Its per-class
 # breakdown also says something the aggregate cannot: a class where 1-NN scores
 # **zero despite having training images** is not starved, it is not visually
-# distinguishable at 60×80 — and no amount of extra data will fix that one.
+# distinguishable at 60x80 - and no amount of extra data will fix that one.
 
 # %%
 for t in TARGETS:
@@ -702,56 +702,56 @@ for t in TARGETS:
           .round(3).to_string())
 
 # %% [markdown]
-# ## 4 · One convolutional body, three ways of attaching labels to it
+# ## 4 - One convolutional body, three ways of attaching labels to it
 #
 # Everything below shares this body. No pretrained weights (repo rule 4), so the
 # comparison is between designs rather than between checkpoints someone else
 # trained.
 #
-# 80×60 → 40×30 → 20×15 → 10×7 → global average → 128 features. Small on purpose:
-# a 60×80 thumbnail does not carry enough detail to justify a deep network, and a
+# 80x60 -> 40x30 -> 20x15 -> 10x7 -> global average -> 128 features. Small on purpose:
+# a 60x80 thumbnail does not carry enough detail to justify a deep network, and a
 # small model makes eight training runs affordable, which is what actually buys the
 # evidence.
 #
 # ### Layers and hyper-parameters
 #
-# `conv_block(cin, cout)` is Conv3×3 → BatchNorm → ReLU, twice, then MaxPool2. Three
-# of them, then a global average pool. The same `Net` class serves A, B and C — only
-# the `heads` dict differs — so no accidental difference in the body can confound §5.
+# `conv_block(cin, cout)` is Conv3x3 -> BatchNorm -> ReLU, twice, then MaxPool2. Three
+# of them, then a global average pool. The same `Net` class serves A, B and C - only
+# the `heads` dict differs - so no accidental difference in the body can confound section 5.
 #
 # | # | layer | output | parameters |
 # |---|---|---|---|
-# | | input | 3 × 80 × 60 | — |
-# | 1 | `conv_block(3, 32)` | 32 × 40 × 30 | 10,208 |
-# | 2 | `conv_block(32, 64)` | 64 × 20 × 15 | 55,552 |
-# | 3 | `conv_block(64, 128)` | 128 × 10 × 7 | 221,696 |
-# | 4 | `AdaptiveAvgPool2d(1)` | 128 | — |
-# | 5 | `Dropout(0.2)` | 128 | — |
-# | 6a | `Linear(128, 5)` — `gender` head | 5 | 645 |
-# | 6b | `Linear(128, 8)` — `usage` head | 8 | 1,032 |
+# | | input | 3 x 80 x 60 | - |
+# | 1 | `conv_block(3, 32)` | 32 x 40 x 30 | 10,208 |
+# | 2 | `conv_block(32, 64)` | 64 x 20 x 15 | 55,552 |
+# | 3 | `conv_block(64, 128)` | 128 x 10 x 7 | 221,696 |
+# | 4 | `AdaptiveAvgPool2d(1)` | 128 | - |
+# | 5 | `Dropout(0.2)` | 128 | - |
+# | 6a | `Linear(128, 5)` - `gender` head | 5 | 645 |
+# | 6b | `Linear(128, 8)` - `usage` head | 8 | 1,032 |
 # | | **total (design C)** | | **289,133** |
 #
-# **The body is 287,456 of those 289,133 parameters — 99.4%.** That single number is
+# **The body is 287,456 of those 289,133 parameters - 99.4%.** That single number is
 # the argument for C: the second head costs 1,032 parameters, so answering a second
 # question is nearly free, while design A duplicates the body for 577k in total.
 #
 # | hyper-parameter | value | why this value |
 # |---|---|---|
 # | optimiser | Adam | no schedule tuning needed to get a usable baseline; the comparison is between designs, not optimisers |
-# | learning rate | `1e-3` | Adam's default region; held fixed across A/B/C/D so §5 measures the design |
+# | learning rate | `1e-3` | Adam's default region; held fixed across A/B/C/D so section 5 measures the design |
 # | schedule | `CosineAnnealingLR(T_max=epochs)` | decays to ~0 by the last epoch, so the final weights are not mid-oscillation |
-# | epochs | 20 | validation curves are flat well before this (§5); the peak-to-final gap is 0.000–0.007 |
+# | epochs | 20 | validation curves are flat well before this (section 5); the peak-to-final gap is 0.000-0.007 |
 # | batch size | 256 | the whole 543 MB image array sits on the GPU, so large batches cost nothing |
-# | dropout | 0.2 | one regulariser on 289k parameters and 32k rows; §5's curves show no overfitting to correct |
-# | augmentation | random horizontal flip | a mirrored garment is the same garment, the same `gender` and the same `usage` — safe here, and it would not be for a target that depended on printed text |
-# | class weights | `1 / sqrt(n)`, `usage` only | `1/n` gives `Home`'s single image ~29,000× the pull of a `Casual` row; sqrt keeps the direction and tempers it (§6). `gender`'s smallest class has 483 rows and needs none |
-# | checkpoint | best mean macro-F1 over the reported targets | never accuracy, for the reason in §1.2 |
+# | dropout | 0.2 | one regulariser on 289k parameters and 32k rows; section 5's curves show no overfitting to correct |
+# | augmentation | random horizontal flip | a mirrored garment is the same garment, the same `gender` and the same `usage` - safe here, and it would not be for a target that depended on printed text |
+# | class weights | `1 / sqrt(n)`, `usage` only | `1/n` gives `Home`'s single image ~29,000x the pull of a `Casual` row; sqrt keeps the direction and tempers it (section 6). `gender`'s smallest class has 483 rows and needs none |
+# | checkpoint | best mean macro-F1 over the reported targets | never accuracy, for the reason in section 1.2 |
 #
 # Every value above is held **constant across all four designs**, deliberately: tuning
-# per design would mean §5's differences could no longer be attributed to the design.
+# per design would mean section 5's differences could no longer be attributed to the design.
 # Sensitivity to lr, dropout and epochs is measured separately in
-# `experiment_hyperparams.py`, as a sensitivity table rather than a search — picking
-# the best of N on the validation set this notebook quotes is the selection bias §10.1
+# `experiment_hyperparams.py`, as a sensitivity table rather than a search - picking
+# the best of N on the validation set this notebook quotes is the selection bias section 10.1
 # already warns about.
 
 # %%
@@ -821,7 +821,7 @@ def encode(series, key):
     return torch.tensor([IDX[key][v] for v in series], dtype=torch.long)
 
 
-# Normalisation from the TRAINING rows only — using all rows would leak validation
+# Normalisation from the TRAINING rows only - using all rows would leak validation
 # statistics into the model's input scaling.
 _tr, _va = splits[("gender", "primary")]
 # A 5,000-row sample, not all 30,196: the full float32 copy would be ~1.7 GB and the
@@ -832,13 +832,13 @@ _stats = X_all[_sample].astype(np.float32) / 255.0
 
 # dtype=np.float64 is NOT optional here. Reducing over (0,1,2) sums 24 million
 # float32 values per channel, and float32 stops resolving +1 past 2**24 =
-# 16,777,216 — so the running sum silently saturates and every channel returns
+# 16,777,216 - so the running sum silently saturates and every channel returns
 # 16777216/24000000 = 0.699, identical to the last digit. That equal-across-channels
 # result is what exposed it; the numbers are simply wrong, not merely imprecise.
 _mean = _stats.mean(axis=(0, 1, 2), dtype=np.float64)
 _std = _stats.std(axis=(0, 1, 2), dtype=np.float64)
 assert len(set(np.round(_mean, 6))) > 1, (
-    "all three channel means are identical — the accumulator saturated again")
+    "all three channel means are identical - the accumulator saturated again")
 
 MEAN = torch.tensor(_mean, dtype=torch.float32, device=DEVICE).view(1, 3, 1, 1)
 STD = torch.tensor(_std, dtype=torch.float32, device=DEVICE).view(1, 3, 1, 1)
@@ -891,7 +891,7 @@ def class_weights(series, key, scheme="inverse_sqrt"):
     """Weight rare classes up. sqrt rather than 1/n on purpose: with `Home` at a
     single image, a pure 1/n weight gives that one row ~29,000x the pull of a
     Casual row and the model chases it into noise. sqrt keeps the direction and
-    tempers the magnitude — itself a choice worth reporting, and §6 measures it."""
+    tempers the magnitude - itself a choice worth reporting, and section 6 measures it."""
     counts = np.array([max((series == c).sum(), 1) for c in CLASSES[key]], dtype=np.float64)
     w = 1.0 / np.sqrt(counts) if scheme == "inverse_sqrt" else 1.0 / counts
     w = w / w.mean()
@@ -905,7 +905,7 @@ def train_model(name, heads, tr, va, epochs=EPOCHS, weighted=False, lr=1e-3,
     torch.manual_seed(SEED); np.random.seed(SEED); random.seed(SEED)
     model = Net(heads).to(DEVICE)
     if init_backbone is not None:
-        # Start from a backbone trained on another task (§10.3). Only the body is
+        # Start from a backbone trained on another task (section 10.3). Only the body is
         # copied; the heads stay randomly initialised because their label spaces
         # differ, and the whole thing is then fine-tuned rather than frozen -- with
         # 32,000 rows there is enough data to move the features, and freezing would
@@ -949,7 +949,7 @@ def train_model(name, heads, tr, va, epochs=EPOCHS, weighted=False, lr=1e-3,
     return model, pd.DataFrame(hist)
 
 # %% [markdown]
-# ## 5 · A vs B vs C
+# ## 5 - A vs B vs C
 #
 # Same body, same seed, same 20 epochs, same rows. The only difference is how the
 # labels attach.
@@ -958,16 +958,16 @@ def train_model(name, heads, tr, va, epochs=EPOCHS, weighted=False, lr=1e-3,
 tr, va = splits[("gender", "primary")]
 MODELS, HIST = {}, {}
 
-print("A · two independent models")
+print("A - two independent models")
 for t in TARGETS:
     print(f"  --- {t} ---")
     MODELS[("A", t)], HIST[("A", t)] = train_model(f"A_{t}", {t: len(CLASSES[t])}, tr, va)
 
-print("\nB · one model, 24 joint gender x usage classes")
+print("\nB - one model, 24 joint gender x usage classes")
 MODELS[("B", "pair")], HIST[("B", "pair")] = train_model(
     "B_pair", {"pair": len(CLASSES["pair"])}, tr, va)
 
-print("\nC · one shared backbone, two heads")
+print("\nC - one shared backbone, two heads")
 MODELS[("C", "multi")], HIST[("C", "multi")] = train_model(
     "C_multi", {t: len(CLASSES[t]) for t in TARGETS}, tr, va)
 
@@ -1004,46 +1004,46 @@ print()
 print(comparison.to_string(index=False))
 
 # %% [markdown]
-# ### 5.1 What the comparison showed — and what running it four times did to the claim
+# ### 5.1 What the comparison showed - and what running it four times did to the claim
 #
-# §2 registered **C ≈ A > B, with B losing most on `usage`**. It was wrong, and the shape
+# Section 2 registered **C ~ A > B, with B losing most on `usage`**. It was wrong, and the shape
 # of how it was wrong is the finding.
 #
 # | design | params | gender | usage | both correct |
 # |---|---|---|---|---|
-# | A — two models | 576,589 | **0.7488** | 0.4081 | **0.8075** |
-# | B — joint label | 290,552 | 0.7271 | **0.4083** | 0.8071 |
-# | C — shared body | 289,133 | 0.7174 | 0.4066 | 0.8037 |
+# | A - two models | 576,589 | **0.7488** | 0.4081 | **0.8075** |
+# | B - joint label | 290,552 | 0.7271 | **0.4083** | 0.8071 |
+# | C - shared body | 289,133 | 0.7174 | 0.4066 | 0.8037 |
 #
-# **Why §2's reasoning came out backwards.** It measured that `gender` and `usage` share
+# **Why section 2's reasoning came out backwards.** It measured that `gender` and `usage` share
 # only ~10% of each other's entropy, and concluded a *joint label* would pay sparsity for
 # nothing. That was half the implication. Near-independence argues against sharing the
 # **features** too: if two tasks have little in common, one backbone serving both mostly
 # suffers interference, and A's two separate backbones avoid it entirely. The measurement
-# was right and the inference from it was incomplete — which is more useful to report
+# was right and the inference from it was incomplete - which is more useful to report
 # than a prediction that happened to land.
 #
 # #### One table cannot rank three designs
 #
-# This notebook has been run end to end four times on this split — three on Colab, one on
-# different hardware and a different library stack. §9.2 does the arithmetic. What matters
+# This notebook has been run end to end four times on this split - three on Colab, one on
+# different hardware and a different library stack. Section 9.2 does the arithmetic. What matters
 # here is that **the ranking in any single table is partly an artefact of the run**:
 #
-# * **A leads on macro-F1 in all four runs, on both targets — 8 of 8.** Its margin over
+# * **A leads on macro-F1 in all four runs, on both targets - 8 of 8.** Its margin over
 #   B on `gender` also keeps its size across platforms (+0.025 mean, spread 0.020). That
 #   is the one design claim this notebook will defend.
 # * **Its margin on `usage` is real in sign and unreliable in size**: +0.0054, +0.0059,
 #   +0.0069 on Colab, then **+0.0015** on other hardware. Note that in *this* table B is
-#   ahead of A on `usage` by 0.0002 — which is what an unreliable margin looks like.
+#   ahead of A on `usage` by 0.0002 - which is what an unreliable margin looks like.
 # * **B versus C is not resolvable.** The sign flips on both targets. Do not quote a
 #   three-way ordering from this table; an earlier version of this notebook quoted
 #   "A > B > C, 4 out of 4" from two runs, and the next two runs disagreed with it and
 #   with each other.
 # * **`both correct` ranks the designs differently again**, and it is not an independent
-#   measurement — §10.5 shows it is the product of the two accuracies to within 0.0023.
+#   measurement - section 10.5 shows it is the product of the two accuracies to within 0.0023.
 #
 # The cheapest defence against all of this was available from the start: run it more than
-# once, and preferably somewhere else. §9.4 asks for a deliberate seed sweep, which is
+# once, and preferably somewhere else. Section 9.4 asks for a deliberate seed sweep, which is
 # wider still.
 # %%
 fig_hist = pd.concat([h.assign(run=f"{k[0]} {k[1]}") for k, h in HIST.items()])
@@ -1059,28 +1059,28 @@ try:
                 continue
             ax.plot(h["epoch"], h[col], label=f"{k[0]} {k[1]}", marker="o", ms=3)
     for ax, t in zip(axes, TARGETS):
-        ax.set_title(f"{t} — validation macro-F1 by epoch")
+        ax.set_title(f"{t} - validation macro-F1 by epoch")
         ax.set_xlabel("epoch"); ax.set_ylabel("macro-F1"); ax.grid(alpha=.3); ax.legend(fontsize=8)
     plt.tight_layout(); plt.show()
 except ImportError:
     print(fig_hist.to_string(index=False))
 
 # %% [markdown]
-# ## 6 · Class-weighted loss — does it help the tail or just move the damage?
+# ## 6 - Class-weighted loss - does it help the tail or just move the damage?
 #
 # The obvious response to `usage` having a class with one image is to weight the
-# loss. One variable changes: the winning design from §5, trained again with
+# loss. One variable changes: the winning design from section 5, trained again with
 # `weight = 1/sqrt(n)` per class.
 #
 # Weighting cannot manufacture information. What it can do is trade head-class
-# precision for tail-class recall — and because macro-F1 counts a 1-image class
+# precision for tail-class recall - and because macro-F1 counts a 1-image class
 # exactly as much as a 29,000-image one, that trade can raise macro-F1 while making
 # the model worse at almost every row it will actually see. Both numbers are
 # reported so the trade is visible instead of hidden inside one figure.
 
 # %%
-# Sections 6-9 all carry design C forward, because §2 predicted it and §5 is expected
-# to confirm it. If the §5 table says otherwise, swap the head spec on the next line
+# Sections 6-9 all carry design C forward, because section 2 predicted it and section 5 is expected
+# to confirm it. If the section 5 table says otherwise, swap the head spec on the next line
 # for the design that won -- {"pair": len(CLASSES["pair"])} for B, or run the two
 # single-target models separately for A -- and re-run from here. Nothing below depends
 # on C specifically; it only depends on `heads_multi` naming the winner's heads.
@@ -1123,7 +1123,7 @@ for tag, model in [("unweighted", MODELS[("C", "multi")]), ("weighted", MODELS[(
     print(rep[["train n", "support", "precision", "recall", "f1-score"]].round(3).to_string())
 
 # %% [markdown]
-# ## 7 · The externally collected data — a prediction, then the measurement
+# ## 7 - The externally collected data - a prediction, then the measurement
 #
 # 1,899 extra images were collected for this assignment (`docs/EXTERNAL_DATA_USAGE.md`).
 # Every one of them is `gender=Women`, `usage=Casual`.
@@ -1131,13 +1131,13 @@ for tag, model in [("unweighted", MODELS[("C", "multi")]), ("weighted", MODELS[(
 # **Recorded before the run:** this should do nothing for `gender` and should
 # *hurt* `usage`.
 #
-# * `Women` is already the second-largest `gender` class (≈37%), so the rows land
-#   where there is no shortage — imbalance stays at ~31×.
+# * `Women` is already the second-largest `gender` class (~37%), so the rows land
+#   where there is no shortage - imbalance stays at ~31x.
 # * `Casual` is already the `usage` **majority** at 76.7%. Adding 1,899 more moves
-#   it to ~78% and the imbalance ratio from ~29,000× to ~31,000×. The whole
+#   it to ~78% and the imbalance ratio from ~29,000x to ~31,000x. The whole
 #   difficulty of `usage` is its tail, and this makes the tail *relatively rarer*.
 #
-# Collecting data that turns out not to help is not a wasted experiment — it is a
+# Collecting data that turns out not to help is not a wasted experiment - it is a
 # measured negative result, and reporting it is worth more than quietly dropping
 # it. What follows tests whether the reasoning above is right.
 
@@ -1169,7 +1169,7 @@ if EXT_OK:
     del X_ext
     print("image array now:", X_all.shape)
 else:
-    print("external data unavailable — section skipped")
+    print("external data unavailable - section skipped")
 
 # %% [markdown]
 # The external rows join **training only**. Validation stays 100% provided
@@ -1178,8 +1178,8 @@ else:
 # values, for the same reason.
 #
 # > **Note the padding count printed above.** `ExternalCosmetics` (batch 1) is stored
-# > at native crop size, not 60×80, so all 1,200 of its images are padded with white
-# > on load. `ExternalCosmetics2` and the evaluation set are already 60×80 and pass
+# > at native crop size, not 60x80, so all 1,200 of its images are padded with white
+# > on load. `ExternalCosmetics2` and the evaluation set are already 60x80 and pass
 # > through untouched. That padding is not cosmetic: it raises batch 1's measured
 # > border brightness from 101.5 to **201.2** against the catalogue's 247.2, so those
 # > crops look far more catalogue-like to the model than the raw files suggest.
@@ -1242,9 +1242,9 @@ if EXT_OK:
     print('    the verdict -- do not read a sign off this single table.')
 
 # %% [markdown]
-# ## 8 · Two harder tests than the random validation split
+# ## 8 - Two harder tests than the random validation split
 #
-# ### 8.1 The forward split — what the graded test set actually looks like
+# ### 8.1 The forward split - what the graded test set actually looks like
 #
 # The provided test set is the **5,829 highest ids**. The catalogue was built up
 # over time, so predicting it is extrapolation forward, not interpolation inside a
@@ -1293,7 +1293,7 @@ print(pd.DataFrame(rows).pivot(index="target", columns="evaluated on",
 #
 # 261 openly-licensed photographs collected from outside the provided data
 # entirely, gated to zero overlap with both the provided train and test sets, and
-# hand-labelled for all four targets. This is the brief's §3.3 — *"data collected
+# hand-labelled for all four targets. This is the brief's section 3.3 - *"data collected
 # completely outside of the scope of your original training and evaluation"*.
 #
 # No model in this project has seen them, and that is their whole value. **The gap
@@ -1302,7 +1302,7 @@ print(pd.DataFrame(rows).pivot(index="target", columns="evaluated on",
 # convention (white background, single centred product, consistent lighting).
 #
 # Two limits to carry into the report: the labels come from a single annotator, and
-# `usage=Home` has 4 images here against **1** in the entire provided training set —
+# `usage=Home` has 4 images here against **1** in the entire provided training set -
 # so this set can measure a class the provided data cannot teach.
 #
 # > **The label distribution of this set is very different from the catalogue's, and
@@ -1323,7 +1323,7 @@ print(pd.DataFrame(rows).pivot(index="target", columns="evaluated on",
 # > photographs were perfect catalogue cut-outs.
 # >
 # > The two can be partly separated. `usage=Casual` is the one class whose share
-# > barely moves (76.7% -> 63.6%), and its F1 falls **0.932 -> 0.731** — that drop is
+# > barely moves (76.7% -> 63.6%), and its F1 falls **0.932 -> 0.731** - that drop is
 # > attributable to the images, not the prior. Quote that number when the claim is
 # > about domain gap, and the macro-F1 when the claim is about the long tail. Do not
 # > use the macro-F1 collapse alone as a measure of generalisation.
@@ -1346,7 +1346,7 @@ if EVAL_OK:
     for t in TARGETS:
         print(f"  {t}: {dict(ev[t].value_counts())}")
 else:
-    print("independent evaluation set unavailable — section skipped")
+    print("independent evaluation set unavailable - section skipped")
 
 # %%
 if EVAL_OK:
@@ -1374,16 +1374,16 @@ if EVAL_OK:
             ev[t], pred_ev[t], output_dict=True, zero_division=0)).T.round(3).to_string())
 
 # %% [markdown]
-# ## 9 · Results, and what they say
+# ## 9 - Results, and what they say
 #
 # ### 9.1 On the per-target split, as a robustness check
 #
 # Everything above used the team's frozen split file, so the numbers sit directly
 # beside a teammate's. This section retrains the chosen design under
-# `preprocessing.make_split(frame, target)` instead — a 20% validation share drawn
+# `preprocessing.make_split(frame, target)` instead - a 20% validation share drawn
 # separately per target, rather than 15% shared by both.
 #
-# It is a robustness check, not a second headline. If a conclusion from §5–§7 flips
+# It is a robustness check, not a second headline. If a conclusion from section 5-section 7 flips
 # when the split changes, that conclusion was an artefact of one draw and the report
 # should say so; if the numbers move but the ordering holds, the finding survives a
 # change that touches every row.
@@ -1410,7 +1410,7 @@ try:
         ax.set_yticklabels([f"{c} ({n})" for c, n in
                             zip(CLASSES[t], [int((va[t] == c).sum()) for c in CLASSES[t]])],
                            fontsize=8)
-        ax.set_title(f"{t} — row-normalised (true label, n in val)")
+        ax.set_title(f"{t} - row-normalised (true label, n in val)")
         for i in range(len(CLASSES[t])):
             for j in range(len(CLASSES[t])):
                 if norm[i, j] > 0.01:
@@ -1448,7 +1448,7 @@ results.to_csv(OUT, index=False)
 print(f"\nsaved -> {OUT}")
 
 # %% [markdown]
-# ### 9.2 Reproducibility — three runs to estimate, a fourth to test
+# ### 9.2 Reproducibility - three runs to estimate, a fourth to test
 #
 # This notebook has been run end to end four times on the team's frozen split, with the
 # same seed, the same 20 epochs and the same validation rows. The runs are deliberately
@@ -1459,21 +1459,21 @@ print(f"\nsaved -> {OUT}")
 # | 1, 2, 3 | Colab | Tesla T4 | Colab's pinned torch |
 # | **4** | a local machine | RTX 4070 Laptop | torch 2.14.0+cu126, Windows |
 #
-# Runs 1–3 isolate **GPU non-determinism alone**. Run 4 additionally changes the GPU
+# Runs 1-3 isolate **GPU non-determinism alone**. Run 4 additionally changes the GPU
 # architecture, the operating system and the whole library stack, so it is used here as a
-# **held-out portability test**: effect sizes are estimated from runs 1–3, and run 4 asks
+# **held-out portability test**: effect sizes are estimated from runs 1-3, and run 4 asks
 # whether they survive a change of platform. That is a stricter question than "did it
 # reproduce", and it is the one that matters to anyone re-running this from the repo.
 #
-# The controls make the comparison legitimate. The two untrained baselines — majority
-# class and 1-NN on pixels — return **0.1412, 0.5335, 0.1080 and 0.3265 in all four runs,
+# The controls make the comparison legitimate. The two untrained baselines - majority
+# class and 1-NN on pixels - return **0.1412, 0.5335, 0.1080 and 0.3265 in all four runs,
 # identical to four decimal places**. The data, the split and the metric are therefore
 # provably the same on both platforms, so every difference below belongs to training.
 #
 # Two kinds of spread matter here, and conflating them is easy:
 #
-# * **Marginal spread** — how much *one* configuration's score moves between runs.
-# * **Paired spread** — how much the *difference between two* configurations moves, when
+# * **Marginal spread** - how much *one* configuration's score moves between runs.
+# * **Paired spread** - how much the *difference between two* configurations moves, when
 #   both were trained inside the same run.
 #
 # The second is smaller, because two designs trained in one run share the data ordering
@@ -1481,8 +1481,8 @@ print(f"\nsaved -> {OUT}")
 # this notebook used the marginal spread to dismiss every effect under 0.01, which was
 # too blunt.
 #
-# The portability test then punished the opposite error. On runs 1–3 the `A − C`
-# difference on `usage` was +0.0054, +0.0059, +0.0069 — a spread of 0.0015 — and this
+# The portability test then punished the opposite error. On runs 1-3 the `A - C`
+# difference on `usage` was +0.0054, +0.0059, +0.0069 - a spread of 0.0015 - and this
 # notebook called it the most reproducible effect it had. Run 4 measured **+0.0015**: the
 # sign held, the magnitude fell fourfold. **A tight spread across runs on one machine is
 # not a small error bar; it is a small sample of one platform.** That is the single most
@@ -1505,9 +1505,9 @@ print(f"\nsaved -> {OUT}")
 #
 # So the configuration's real spread is about 0.035, not the 0.0363-wide band that
 # looked like four measurements and was closer to one. This is the same error as the
-# `A − C` case above, made in the opposite direction and against this notebook's own
+# `A - C` case above, made in the opposite direction and against this notebook's own
 # headline: **repeating a run is not the same as sampling a configuration.** Quote
-# `usage` for this design as **0.44–0.47 across seeds**, not as a single 0.4674.
+# `usage` for this design as **0.44-0.47 across seeds**, not as a single 0.4674.
 # %%
 # The three runs' shared-val macro-F1, transcribed from task3_results.csv of each.
 # Literal on purpose: a past run cannot be recomputed, and pretending otherwise by
@@ -1602,25 +1602,25 @@ for a, b, name in PAIRS:
 paired = pd.DataFrame(rows)
 print(paired.to_string(index=False))
 print("\n  'consistent' = same sign every run AND spread smaller than the mean.")
-print("  Those are the only effects §9.3 states as findings; the rest are reported")
+print("  Those are the only effects section 9.3 states as findings; the rest are reported")
 print("  as unresolved, which is a result too.")
 # %% [markdown]
 # ### 9.3 What this notebook found
 #
 # Numbers are from run 4 unless stated, all on the team's frozen split
 # `train_val_grouped_sha256.csv` (37,745 rows, 15% validation), so they sit directly
-# beside a teammate's. Effects are called by the test in §9.2: **same sign in every run,
+# beside a teammate's. Effects are called by the test in section 9.2: **same sign in every run,
 # spread below the mean, and the sign holding on the held-out platform.** Anything else
 # is reported as unresolved, which is also a result.
 #
-# One reading note. The table printed by §9.2 labels an effect `consistent` using
-# **runs 1–3 only**, because those are the estimate; the portability test is applied
+# One reading note. The table printed by section 9.2 labels an effect `consistent` using
+# **runs 1-3 only**, because those are the estimate; the portability test is applied
 # here, in the findings. So an effect can be `consistent` in that table and still be
-# demoted below — `A − C` on `usage` is exactly that case, and finding 3 says why.
+# demoted below - `A - C` on `usage` is exactly that case, and finding 3 says why.
 #
 # **1. `gender` and `usage` are not one task.** `gender` has five classes, smallest 483;
 # `usage` has eight, smallest **1**. Best `gender` macro-F1 **0.7488**, best `usage`
-# **0.4674** — though §9.2's seed sweep puts that second figure at **0.44–0.47**
+# **0.4674** - though section 9.2's seed sweep puts that second figure at **0.44-0.47**
 # depending on initialisation, so read it as a range, not a score. The gap between the
 # two targets is not model quality: half of `usage`'s classes have almost no training
 # data.
@@ -1634,24 +1634,24 @@ print("  as unresolved, which is a result too.")
 #
 # | | Colab mean | Colab spread | run 4 | verdict |
 # |---|---|---|---|---|
-# | A − B, `gender` | +0.0264 | 0.0202 | +0.0217 | **holds, in sign and size** |
-# | A − C, `gender` | +0.0221 | 0.0310 | +0.0314 | sign holds, size unmeasured |
-# | A − C, `usage` | +0.0061 | 0.0015 | +0.0015 | sign holds, size collapses |
-# | A − B, `usage` | +0.0051 | 0.0063 | **−0.0002** | **fails portability** |
+# | A - B, `gender` | +0.0264 | 0.0202 | +0.0217 | **holds, in sign and size** |
+# | A - C, `gender` | +0.0221 | 0.0310 | +0.0314 | sign holds, size unmeasured |
+# | A - C, `usage` | +0.0061 | 0.0015 | +0.0015 | sign holds, size collapses |
+# | A - B, `usage` | +0.0051 | 0.0063 | **-0.0002** | **fails portability** |
 #
 # A beats B on `gender` by a margin that keeps its size across platforms, and beats
 # everything else by a margin whose *sign* is reliable and whose *size* is not. It pays
-# **2× the parameters** for that, and finding 8 shows a 289k-parameter alternative that
-# matches it. **B versus C stays unresolved** — the sign flips on both targets.
+# **2x the parameters** for that, and finding 8 shows a 289k-parameter alternative that
+# matches it. **B versus C stays unresolved** - the sign flips on both targets.
 #
-# §2's entropy measurement was right and the inference drawn from it was incomplete:
+# Section 2's entropy measurement was right and the inference drawn from it was incomplete:
 # near-independent targets argue against sharing **features**, not only against merging
 # labels.
 #
 # **4. Class weighting is the only large effect here, and the only one that survives
 # everything.** On `usage` it is **+0.0813** on Colab (+0.0619, +0.0973, +0.0846) and
-# **+0.0608** on the held-out platform — four runs, two platforms, one sign, and an
-# order of magnitude above anything in §10. On `gender` it is a wash; the sign flips. Which tail class it rescues
+# **+0.0608** on the held-out platform - four runs, two platforms, one sign, and an
+# order of magnitude above anything in section 10. On `gender` it is a wash; the sign flips. Which tail class it rescues
 # is unstable too:
 #
 # | usage class | train n | val n | unweighted | weighted | weighted, run 3 |
@@ -1659,38 +1659,38 @@ print("  as unresolved, which is a result too.")
 # | `Party` | 10 | 3 | 0.000 | 0.000 | 0.000 |
 # | `Travel` | 22 | 3 | 0.000 | **0.286** | 0.500 |
 # | `Smart Casual` | 46 | 9 | 0.000 | **0.250** | 0.167 |
-# | `Home` | 1 | 0 | — | — | — |
+# | `Home` | 1 | 0 | - | - | - |
 # | `Casual` | 24,662 | 4,306 | 0.933 | 0.918 | 0.919 |
 # | `Sports` | 3,300 | 614 | 0.669 | 0.654 | 0.666 |
 #
 # The aggregate is solid; the per-class rescues are not. With **3 to 9 validation items**
-# in those classes, one item changing hands moves that class's F1 by 0.1–0.3.
+# in those classes, one item changing hands moves that class's F1 by 0.1-0.3.
 #
-# **5. §1.1's ceiling arithmetic predicted the outcome.** It put `usage` macro-F1 at
+# **5. Section 1.1's ceiling arithmetic predicted the outcome.** It put `usage` macro-F1 at
 # **0.500** if the four classes under 100 images stayed unlearnable. Four runs measured
-# 0.4657, 0.5020, 0.4853 and **0.4674** — mean **0.4801**. Because macro-F1 divides by 8,
+# 0.4657, 0.5020, 0.4853 and **0.4674** - mean **0.4801**. Because macro-F1 divides by 8,
 # each class that never comes alive costs **0.125** whatever the model does, and `Home`
 # and `Party` never came alive in any run.
 #
-# **6. The external data has no measurable effect on either target.** §7 predicted no
+# **6. The external data has no measurable effect on either target.** section 7 predicted no
 # gain, because all 1,899 rows carry the majority class of both targets and adding them
-# makes `usage` imbalance *worse* (24,662× → 26,561×). Four runs agree with that
+# makes `usage` imbalance *worse* (24,662x -> 26,561x). Four runs agree with that
 # prediction and disagree with each other about the sign:
 #
-# | | split generated here | team split, runs 1–3 | team split, run 4 |
+# | | split generated here | team split, runs 1-3 | team split, run 4 |
 # |---|---|---|---|
-# | `usage` | −0.0063 | +0.0050, −0.0026, +0.0064 | −0.0007 |
-# | `gender` | +0.0092 | −0.0016, −0.0210, −0.0171 | **+0.0124** |
+# | `usage` | -0.0063 | +0.0050, -0.0026, +0.0064 | -0.0007 |
+# | `gender` | +0.0092 | -0.0016, -0.0210, -0.0171 | **+0.0124** |
 #
 # Two earlier readings of this table are withdrawn. The first called the data *harmful*
 # from a single negative `usage` delta. The second, written when all three Colab runs
-# came out negative on `gender`, called it a "possible small cost on `gender`" — and run
+# came out negative on `gender`, called it a "possible small cost on `gender`" - and run
 # 4, on different hardware, measured **+0.0124**. Three same-signed runs on one platform
 # were not evidence of a sign. The defensible claim is **"collected, tested, no
-# effect"** — which is exactly what §7 predicted before any of it was measured, and is
+# effect"** - which is exactly what section 7 predicted before any of it was measured, and is
 # why that section records the prediction first.
 #
-# **7. The random split flatters the model; the independent photographs demolish it —
+# **7. The random split flatters the model; the independent photographs demolish it -
 # but only the first half of that is a clean measurement.**
 #
 # | | `gender` | `usage` |
@@ -1702,93 +1702,93 @@ print("  as unresolved, which is a result too.")
 #
 # The forward split costs **0.138** on `gender` and is the honest estimate of the graded
 # score, because it *is* the high-id region. It is also the steadiest number in the
-# notebook: 0.5815, 0.5729, 0.5813, 0.5791 across four runs — a range of 0.0086, on two
+# notebook: 0.5815, 0.5729, 0.5813, 0.5791 across four runs - a range of 0.0086, on two
 # platforms.
 #
 # The independent set costs **0.587**, putting `gender` below its majority baseline
-# (0.1306 against 0.1412) with accuracy falling 0.8968 → **0.2605**. The collapse is real
+# (0.1306 against 0.1412) with accuracy falling 0.8968 -> **0.2605**. The collapse is real
 # but **not purely a domain gap**: this set is 32.6% `Unisex` against the catalogue's
 # 5.4%, and 9.2% `Party` against 0.03%, because rare classes were deliberately
 # over-collected so they could be measured at all. A model trained on 5% `Unisex` rarely
-# predicts it — F1 **0.000 on 85 items** — and that one class alone removes 0.2 from a
+# predicts it - F1 **0.000 on 85 items** - and that one class alone removes 0.2 from a
 # five-class macro average.
 #
 # The cleanest number separating the two effects is `usage=Casual`, the one class whose
-# share barely moves (76.7% → 63.6%): F1 **0.933 → 0.746**. That **0.19** is attributable
+# share barely moves (76.7% -> 63.6%): F1 **0.933 -> 0.746**. That **0.19** is attributable
 # to the photographs. Use it for claims about generalisation, and the macro-F1 for claims
-# about the long tail — not the other way round.
+# about the long tail - not the other way round.
 #
 # **8. A 289k-parameter stack beats the 577k-parameter design on `usage` every time it
 # was measured.** `C + logit adjustment + TTA` adds two forward passes and no retraining.
-# Against A on `usage`: **0.4143 vs 0.4106, 0.4126 vs 0.4076, 0.4133 vs 0.4081** — three
-# for three. On `gender` A wins two of three. Given finding 3 — A's margin is reliable in
-# sign but not in size — **the 2× parameter cost is not justified by this evidence.** The
-# caveat in §9.4 about how τ is chosen applies. See §10.5.
+# Against A on `usage`: **0.4143 vs 0.4106, 0.4126 vs 0.4076, 0.4133 vs 0.4081** - three
+# for three. On `gender` A wins two of three. Given finding 3 - A's margin is reliable in
+# sign but not in size - **the 2x parameter cost is not justified by this evidence.** The
+# caveat in section 9.4 about how tau is chosen applies. See section 10.5.
 #
 # ### 9.4 What would be worth doing next
 #
 # * **The seed sweep is now partly done, and it widened the error bars.** Three
-#   independent seeds of the chosen configuration (§9.2) spread **0.0358** on `usage`
-#   and **0.0299** on `gender` — as wide as the marginal spread, and wider than the
+#   independent seeds of the chosen configuration (section 9.2) spread **0.0358** on `usage`
+#   and **0.0299** on `gender` - as wide as the marginal spread, and wider than the
 #   paired differences suggested. Five seeds per design, rather than three for one
-#   design, is what would settle the `gender` A − C margin.
+#   design, is what would settle the `gender` A - C margin.
 # * **Add a third split, because every number here is selected on the one it is
 #   reported on.** Two mechanisms do this. `train_model` returns the checkpoint with the
-#   best mean validation F1, so each reported score is a peak by construction — visible
+#   best mean validation F1, so each reported score is a peak by construction - visible
 #   in the gap between `C weighted`'s best gender epoch (0.7399) and its reported score
-#   (0.7360), which came from the best *mean* epoch instead. And §10.1 picks τ by argmax
+#   (0.7360), which came from the best *mean* epoch instead. And section 10.1 picks tau by argmax
 #   on that same validation set, so its gain **cannot be negative by construction**. The
 #   bias is small and applies to every design equally, so the comparisons above stand;
-#   the absolute values are upper bounds, and findings 8 and §10.1 lean on it most.
-# * **Combine class weighting with the §10 levers.** Weighting is +0.081 on `usage`,
-#   logit adjustment +0.008, and both correct the class prior — one in the loss, one at
+#   the absolute values are upper bounds, and findings 8 and section 10.1 lean on it most.
+# * **Combine class weighting with the section 10 levers.** Weighting is +0.081 on `usage`,
+#   logit adjustment +0.008, and both correct the class prior - one in the loss, one at
 #   inference. They have never been measured together, and they may not add.
 # * **Re-score the independent set with matched label priors**, by reweighting or by
 #   sampling a subset with the catalogue's distribution. That separates the image domain
 #   gap from the annotation prior and would settle how much of the 0.587 is real.
-# * **`Home` and `Party` are unfixable by modelling** — 1 and 10 training images, 0 and 3
+# * **`Home` and `Party` are unfixable by modelling** - 1 and 10 training images, 0 and 3
 #   in validation, 0.000 F1 in all four runs. Either collect images, merge them into a
 #   documented "other" class, or report them as a known **0.250** of the macro-F1 that no
 #   model can earn. Choosing openly beats a quiet zero.
 # %% [markdown]
-# ## 10 · Trying to improve it, and finding where the improvement stops
+# ## 10 - Trying to improve it, and finding where the improvement stops
 #
-# §9 established two things that decide what is worth attempting here.
+# Section 9 established two things that decide what is worth attempting here.
 #
 # **`usage` accuracy is already at the ceiling its labels allow.** An oracle told the true
 # `articleType` and nothing else scores **0.8945**; giving it all six metadata fields
 # moves it to 0.8928, i.e. nowhere; the best CNN in this run scores **0.8972** from
-# 60×80 pixels, slightly *above* the oracle. The residual is products of the same type
-# carrying different labels — `Tshirts` are 86% `Casual` and 14% `Sports`, and at this
+# 60x80 pixels, slightly *above* the oracle. The residual is products of the same type
+# carrying different labels - `Tshirts` are 86% `Casual` and 14% `Sports`, and at this
 # resolution those are frequently the same picture. No architecture recovers that.
-# §10.5 measures both ceilings properly.
+# Section 10.5 measures both ceilings properly.
 #
 # **More epochs cannot help, though not because of dramatic overfitting.** Training loss
-# falls monotonically (1.3203 → 0.4404 for design C) while validation F1 flattens after
-# roughly epoch 15: across the eight training runs in run 4, the peak epoch is 17–20 and
+# falls monotonically (1.3203 -> 0.4404 for design C) while validation F1 flattens after
+# roughly epoch 15: across the eight training runs in run 4, the peak epoch is 17-20 and
 # the peak-to-final gap is **0.0000 to 0.0070**. An earlier version of this section called
 # that overfitting and cited a 0.003 drop; the flat curve is the more accurate reading.
 # And since `train_model` already returns the best checkpoint by mean validation F1, the
-# reported score is a peak by construction — so lengthening the schedule cannot move it.
+# reported score is a peak by construction - so lengthening the schedule cannot move it.
 #
 # So accuracy is spent. **macro-F1 is not:** with `Home` and `Party` unreachable the
 # ceiling is 6/8 = **0.750** against a measured 0.4674, and the slack sits in the classes
-# class weighting already partly rescues — `Smart Casual`, `Travel`, `Sports`, `Formal`.
+# class weighting already partly rescues - `Smart Casual`, `Travel`, `Sports`, `Formal`.
 # And because accuracy has nothing left to gain, **spending accuracy to buy macro-F1 is
 # close to free when macro-F1 is the graded metric**. Three attempts follow, cheapest
-# first, and §10.5 explains why each one is small.
+# first, and section 10.5 explains why each one is small.
 # %% [markdown]
-# ### 10.1 Logit adjustment — the whole trade-off curve without retraining
+# ### 10.1 Logit adjustment - the whole trade-off curve without retraining
 #
 # Class weighting attacks the imbalance during training, so every setting costs a run.
 # The same trade-off can be made at *inference*: shift each class's logit by its log
 # prior before taking the argmax.
 #
 # ```
-# prediction = argmax( logit − τ · log P(class) )
+# prediction = argmax( logit - tau - log P(class) )
 # ```
 #
-# τ = 0 is the untouched model; τ = 1 fully removes the training prior. One trained
+# tau = 0 is the untouched model; tau = 1 fully removes the training prior. One trained
 # model gives the entire curve for the cost of a few forward passes, which is why this
 # is first: if the curve is flat there is nothing to buy and the retraining ideas
 # below are not worth starting.
@@ -1802,7 +1802,7 @@ def train_prior(frame_tr, target):
 
 @torch.no_grad()
 def logits_of(model, fr, heads, bs=512, tta=False):
-    """Raw logits, optionally averaged with the mirrored image (see §10.2)."""
+    """Raw logits, optionally averaged with the mirrored image (see section 10.2)."""
     model.eval()
     rows = torch.as_tensor(fr["_row"].values, device=X_t.device)
     acc = {k: [] for k in heads}
@@ -1856,7 +1856,7 @@ for t in TARGETS:
 # ### 10.2 Test-time augmentation
 #
 # One extra forward pass per image: average the softmax over the image and its mirror.
-# It cannot fix a label ambiguity, so the expected gain is small — but §4 already
+# It cannot fix a label ambiguity, so the expected gain is small - but section 4 already
 # trains with random horizontal flips, so the model has been taught that a mirrored
 # garment is the same garment, and averaging over both views is the matching decision
 # rule. Cheap enough that not testing it would be the odd choice.
@@ -1886,16 +1886,16 @@ for t in TARGETS:
            va[t], adjusted(tta_logits[t], t, tau, PRIOR[t]), labels=CLASSES[t])
 
 # %% [markdown]
-# ### 10.3 Transfer from `articleType` — the one idea §2 predicted should work
+# ### 10.3 Transfer from `articleType` - the one idea section 2 predicted should work
 #
-# §2 measured how much each thing explains about the targets:
+# Section 2 measured how much each thing explains about the targets:
 #
 # | | explains `usage` | explains `gender` |
 # |---|---|---|
 # | the other target | 11.5% | 9.5% |
 # | **`articleType`** | **66.8%** | **43.1%** |
 #
-# §5 then found that sharing a backbone *between* `gender` and `usage` **hurt** — C
+# Section 5 then found that sharing a backbone *between* `gender` and `usage` **hurt** - C
 # came last on both splits. That is consistent with the top row: two targets with ~10%
 # mutual information have almost nothing to share, so one body serving both mostly
 # suffers interference.
@@ -1905,8 +1905,8 @@ for t in TARGETS:
 # labelled rows to learn from. So: train the backbone on `articleType` first, then
 # fine-tune it for `gender` and `usage`.
 #
-# This is the same "share the features" idea that failed in §5, aimed at a task that
-# the measurements say actually shares something. If it fails too, then the 60×80
+# This is the same "share the features" idea that failed in section 5, aimed at a task that
+# the measurements say actually shares something. If it fails too, then the 60x80
 # backbone simply has no transferable capacity left, and that is the finding.
 
 # %%
@@ -1918,7 +1918,7 @@ pretrained, pre_hist = train_model(
     "pretrain_articleType", {"articleType": len(CLASSES["articleType"])}, tr, va,
     epochs=max(8, EPOCHS // 2))
 print(f"\npretraining reached articleType macro-F1 "
-      f"{pre_hist['val_articleType'].max():.4f} — only a means to an end, not a Task 1 entry")
+      f"{pre_hist['val_articleType'].max():.4f} - only a means to an end, not a Task 1 entry")
 
 MODELS[("D", "transfer")], HIST[("D", "transfer")] = train_model(
     "D_transfer", heads_multi, tr, va, init_backbone=pretrained.backbone)
@@ -1945,8 +1945,8 @@ print(transfer_tbl.to_string())
 # %% [markdown]
 # ### 10.4 Everything, in one table
 #
-# §9 wrote `task3_results.csv` before this section existed, so it is rewritten here
-# with the §10 rows included. Sorted by target then macro-F1, so the top row per
+# Section 9 wrote `task3_results.csv` before this section existed, so it is rewritten here
+# with the section 10 rows included. Sorted by target then macro-F1, so the top row per
 # target is the best configuration found anywhere in the notebook.
 
 # %%
@@ -1971,19 +1971,19 @@ for t in TARGETS:
           f"vs plain C {ref:.4f}   gain {b.macro_f1 - ref:+.4f}   acc {b.accuracy:.4f}")
 
 # %% [markdown]
-# ### 10.5 Why the improvements are small — the ceiling, measured two ways
+# ### 10.5 Why the improvements are small - the ceiling, measured two ways
 #
-# §10.1–10.3 tried three standard levers. Pooled over the runs that measured them
-# (§9.2), each is worth between **+0.003 and +0.008** on `usage` and nothing that
-# survives a sign test on `gender` — against class weighting's +0.081, which §6 had
+# Section 10.1-10.3 tried three standard levers. Pooled over the runs that measured them
+# (section 9.2), each is worth between **+0.003 and +0.008** on `usage` and nothing that
+# survives a sign test on `gender` - against class weighting's +0.081, which section 6 had
 # already found. Before calling that a failure of effort, it is worth measuring what
 # the task allows at all. Two measurements do that, and neither needs a GPU.
 #
-# **Measurement 1 — metadata oracles.** Give a predictor one metadata field for free,
+# **Measurement 1 - metadata oracles.** Give a predictor one metadata field for free,
 # let it memorise the modal target per value on training rows only, and score it on
 # validation. It cannot be beaten by any model that sees only that field, so it bounds
 # how much the field says about the target. The interesting comparison is against the
-# CNN, which sees none of it and only ever sees 60×80 pixels.
+# CNN, which sees none of it and only ever sees 60x80 pixels.
 
 # %%
 print("=== metadata oracles: what the catalogue alone determines ===")
@@ -2046,11 +2046,11 @@ for t in TARGETS:
           f"CNN minus oracle: {best.accuracy - _ceiling:+.4f}")
 
 # %% [markdown]
-# **Measurement 2 — is `both correct` a wall or a product?** The team's headline number
+# **Measurement 2 - is `both correct` a wall or a product?** The team's headline number
 # is the fraction of validation items where *both* labels are right. If the two targets'
 # errors were independent, that number would simply be the product of the two
-# accuracies, and "raising it" would mean raising one of the factors — there would be
-# nothing joint to optimise. §2 measured the targets as nearly independent, so this is a
+# accuracies, and "raising it" would mean raising one of the factors - there would be
+# nothing joint to optimise. Section 2 measured the targets as nearly independent, so this is a
 # testable prediction rather than a guess.
 
 # %%
@@ -2061,18 +2061,18 @@ _chk = comparison.assign(
 print(_chk[["design", "gender acc", "usage acc", "predicted",
             "both correct", "residual"]].to_string(index=False))
 print(f"\n  largest residual {_chk.residual.abs().max():.4f} across "
-      f"{len(_chk)} designs — the two heads' errors are close to independent,")
+      f"{len(_chk)} designs - the two heads' errors are close to independent,")
 print("  so 'both correct' has no slack of its own: it moves only when a factor moves.")
 
 # %% [markdown]
 # #### What the two measurements say
 #
-# **`usage` accuracy is finished.** An oracle handed the true `articleType` — 121 groups,
-# every validation row covered — reaches **0.8945**. Adding five more metadata fields
-# moves it to **0.8928**, i.e. nowhere. The CNN, from 60×80 pixels alone, reaches
+# **`usage` accuracy is finished.** An oracle handed the true `articleType` - 121 groups,
+# every validation row covered - reaches **0.8945**. Adding five more metadata fields
+# moves it to **0.8928**, i.e. nowhere. The CNN, from 60x80 pixels alone, reaches
 # **0.8972**, *above* the oracle. The network has already recovered as much of the
 # garment's identity as the label depends on, and the oracle numbers are deterministic:
-# they came out identical on both platforms. The residual 10% is not a modelling gap —
+# they came out identical on both platforms. The residual 10% is not a modelling gap -
 # two identical T-shirts are `Casual` or `Sports` by a marketing decision that is not
 # photographed. `usage` is partly a label about the product page, not the product.
 #
@@ -2087,72 +2087,72 @@ print("  so 'both correct' has no slack of its own: it moves only when a factor 
 # ceiling set by the labels, so raising the headline means raising `gender` accuracy and
 # nothing else.
 #
-# **What the three levers are worth.** Judged by §9.2's test — same sign every run,
-# spread below the mean, sign holding on the held-out platform — they split cleanly by
+# **What the three levers are worth.** Judged by section 9.2's test - same sign every run,
+# spread below the mean, sign holding on the held-out platform - they split cleanly by
 # target:
 #
-# | lever | `usage`: Colab → run 4 | `gender`: Colab → run 4 |
+# | lever | `usage`: Colab -> run 4 | `gender`: Colab -> run 4 |
 # |---|---|---|
-# | logit adjustment (§10.1) | **+0.0079 → +0.0044** | +0.0039 → +0.0214, one run gained nothing |
-# | mirror TTA (§10.2) | **+0.0029 → +0.0023** | sign flips on Colab |
-# | `articleType` transfer (§10.3) | +0.0060 → **+0.0001** | +0.0109 → +0.0109 |
-# | *class weighting (§6, for scale)* | **+0.0813 → +0.0608** | sign flips on Colab |
+# | logit adjustment (section 10.1) | **+0.0079 -> +0.0044** | +0.0039 -> +0.0214, one run gained nothing |
+# | mirror TTA (section 10.2) | **+0.0029 -> +0.0023** | sign flips on Colab |
+# | `articleType` transfer (section 10.3) | +0.0060 -> **+0.0001** | +0.0109 -> +0.0109 |
+# | *class weighting (section 6, for scale)* | **+0.0813 -> +0.0608** | sign flips on Colab |
 #
 # On `usage` all three keep their sign across the platform change and all three are
-# **tiny** — transfer nearly vanishes there, +0.0060 → +0.0001. Stacked, logit
+# **tiny** - transfer nearly vanishes there, +0.0060 -> +0.0001. Stacked, logit
 # adjustment plus TTA moved plain C by +0.0096 and +0.0119 on Colab and **+0.0067** on
 # the held-out platform. On `gender` not one survives a sign test on Colab.
-# And the honest comparison is the last row — class weighting is worth **ten times**
-# the best of them on the same target, and §6 had it before this section began.
+# And the honest comparison is the last row - class weighting is worth **ten times**
+# the best of them on the same target, and section 6 had it before this section began.
 #
-# One caveat belongs on §10.1 specifically: τ is chosen by argmax on the validation set
+# One caveat belongs on section 10.1 specifically: tau is chosen by argmax on the validation set
 # it is then scored on, so its gain **cannot come out negative** and these figures are
 # upper bounds. TTA and transfer are fixed rules with no such selection, so their smaller
 # numbers are the more trustworthy ones.
 #
-# Two of the three levers are **inference-time corrections of the class prior** — which
+# Two of the three levers are **inference-time corrections of the class prior** - which
 # is what class weighting does during training. Measured against each other on the same
 # split: in the loss, **+0.081**; at inference, **+0.008**. Same idea, tenfold
 # difference, and the cheap version loses.
 #
-# Logit adjustment is also visibly a trade rather than a gain. Past τ=0.5 on `usage`,
-# accuracy falls off a cliff — 0.8799, then 0.6315, then 0.3061 — while macro-F1 declines
+# Logit adjustment is also visibly a trade rather than a gain. Past tau=0.5 on `usage`,
+# accuracy falls off a cliff - 0.8799, then 0.6315, then 0.3061 - while macro-F1 declines
 # too, so no operating point buys tail recall cheaply.
 #
 # **But the cheap stack does replace the expensive design.** `C + logit adjustment + TTA`
 # is 289k parameters plus two forward passes and no retraining; A is 577k parameters and
 # two full models. The stack beat A on `usage` in all three runs that measured both, and
-# on `gender` in one of three. Since §9.3 finding 3 shows A's `gender` margin is reliable
-# in sign but not in size, **the 2× parameter cost is not justified by this evidence.**
+# on `gender` in one of three. Since section 9.3 finding 3 shows A's `gender` margin is reliable
+# in sign but not in size, **the 2x parameter cost is not justified by this evidence.**
 #
-# **The honest summary of §10: the levers work on the target that needed them least.**
+# **The honest summary of section 10: the levers work on the target that needed them least.**
 # `usage` gains a reproducible +0.01 from all three combined, against +0.081 from class
 # weighting and the 0.125-per-class that `Home` and `Party` cost unconditionally. The
-# gains that would matter are not in the optimiser, the loss or the inference rule — they
+# gains that would matter are not in the optimiser, the loss or the inference rule - they
 # are in the 79 training images spread across `Home`, `Party`, `Travel` and `Smart
-# Casual`, and §9.4 says what to do about that. Reporting a measured ceiling is a more
+# Casual`, and section 9.4 says what to do about that. Reporting a measured ceiling is a more
 # useful result than a fourth lever, which is why this section is titled *finding where
 # the improvement stops*.
 
 # %% [markdown]
-# ## 11 · Ultimate judgement
+# ## 11 - Ultimate judgement
 #
 # ### Evaluation criteria
 #
 # Fixed before the comparisons, so the winner is not chosen by the yardstick:
 #
 # 1. **macro-F1, not accuracy.** Predicting `Casual` for every row scores 76.7%
-#    accuracy on `usage` and macro-F1 **0.109** (§1.2).
+#    accuracy on `usage` and macro-F1 **0.109** (section 1.2).
 # 2. **Both macro-F1 conventions reported.** `Home` has no validation instance, so
 #    averaging over 8 classes and over the 7 present differ by ~14% on identical
-#    predictions (§1.3). Mixing the two silently rewards a model for declining to
+#    predictions (section 1.3). Mixing the two silently rewards a model for declining to
 #    predict a class.
 # 3. **Every effect judged against measured noise.** Repeat runs of one configuration
-#    spread **0.007** on `gender` and **0.047** on `usage` (§9.2). A difference smaller
+#    spread **0.007** on `gender` and **0.047** on `usage` (section 9.2). A difference smaller
 #    than its target's spread is not a result.
-# 4. **Robustness, not just the random split** — the forward split by id, which is how
-#    the graded test set was actually cut, and 261 independently photographed items (§8).
-# 5. **Parameter cost**, since two of the designs differ 2× in size.
+# 4. **Robustness, not just the random split** - the forward split by id, which is how
+#    the graded test set was actually cut, and 261 independently photographed items (section 8).
+# 5. **Parameter cost**, since two of the designs differ 2x in size.
 #
 # ### Model performance summary
 #
@@ -2171,20 +2171,20 @@ print("  so 'both correct' has no slack of its own: it moves only when a factor 
 #
 # ### Analysis of models
 #
-# **A leads `gender` and the lead is real** — 0.013–0.025, the same sign in all four
+# **A leads `gender` and the lead is real** - 0.013-0.025, the same sign in all four
 # runs, against a `gender` spread of only 0.007. We do not dismiss it as noise.
 #
-# **Class weighting gains `usage` two to four times more than that** — +0.081 on Colab,
+# **Class weighting gains `usage` two to four times more than that** - +0.081 on Colab,
 # +0.061 locally, the only effect that survived every check across two platforms.
 #
 # So C trades ~0.02 on one target for ~0.08 on the other and lifts the mean of the two
 # by about +0.03, at half A's parameters. **B is eliminated on structure, not score:**
 # the joint label turns one rare `usage` class into six combinations under 10 rows, and
-# 16 of 40 `gender × usage` pairs have no training example at all, so B cannot ever
+# 16 of 40 `gender x usage` pairs have no training example at all, so B cannot ever
 # predict them.
 #
 # The cheap inference stack (logit adjustment + TTA) posts the best `gender` number, but
-# §10.1's caveat applies: τ is chosen by argmax on the same validation set it is scored
+# Section 10.1's caveat applies: tau is chosen by argmax on the same validation set it is scored
 # on, so its gain cannot come out negative and is an upper bound.
 #
 # ### Beyond performance metrics
@@ -2194,36 +2194,36 @@ print("  so 'both correct' has no slack of its own: it moves only when a factor 
 #
 # **1. The decision was made from information theory before training, then checked.**
 # Knowing `gender` removes only 11.5% of `usage`'s uncertainty and knowing `usage`
-# removes 9.5% of `gender`'s — the targets are nearly independent. But `articleType`
+# removes 9.5% of `gender`'s - the targets are nearly independent. But `articleType`
 # removes **66.8%** and **43.1%**. They are related *through the garment*, not through
 # each other, which argues for sharing at the features and not at the label: one body,
-# two heads (§2). §5 then measured it.
+# two heads (section 2). Section 5 then measured it.
 #
 # **2. `usage` is at the ceiling its labels allow, and we measured the ceiling.** An
 # oracle handed the true `articleType` reaches 0.8945 accuracy where the CNN reaches
 # 0.8972, and its macro-F1 is **0.3872** with F1 exactly **0.0000** on all four rare
-# classes (§10.5). The cause is in the labels: 710 backpacks are labelled `Casual` 616
+# classes (section 10.5). The cause is in the labels: 710 backpacks are labelled `Casual` 616
 # times and `Travel` 11 times; 345 dresses, `Casual` 337 and `Party` 7. Photographs of
 # the two groups are drawn from the same product categories, so no image model and no
 # volume of extra data can separate them. `usage` macro-F1 near 0.47 is not an
-# under-trained model — it is four structurally unlearnable classes each costing a fixed
+# under-trained model - it is four structurally unlearnable classes each costing a fixed
 # 0.125 of an 8-class average.
 #
 # **3. `gender` is the opposite case, and that is why the image matters.** Its best
-# metadata oracle reaches 0.8002 accuracy against the CNN's 0.9057 — **the pixels are
+# metadata oracle reaches 0.8002 accuracy against the CNN's 0.9057 - **the pixels are
 # worth +10.6 points** there. The two targets are different kinds of problem, which is
 # the technical reason not to merge them into one label.
 #
 # **4. Three conclusions were retired by their own data.** That the external data hurt
 # `gender`; a strict A > B > C ranking; and, after this notebook, that a 215-image
-# external `Party` set helps — it moved the macro +0.007 while `Party` F1 stayed 0.0000
+# external `Party` set helps - it moved the macro +0.007 while `Party` F1 stayed 0.0000
 # in all nine models trained, and the movement decomposed entirely onto `Travel`, a
 # class the new data never touched. Two externally collected sets were measured and
 # rejected on evidence rather than dropped quietly.
 #
 # ### Final judgement
 #
-# > **Design C — one shared convolutional body, two heads — with a class-weighted loss
+# > **Design C - one shared convolutional body, two heads - with a class-weighted loss
 # > on `usage` and mirror test-time augmentation. 289,133 parameters.**
 # >
 # > Validation macro-F1 **`gender` 0.7202, `usage` 0.4676**. The shipped checkpoint is
@@ -2232,6 +2232,6 @@ print("  so 'both correct' has no slack of its own: it moves only when a factor 
 #
 # It is recommended because it takes the larger of two real effects, costs half of A's
 # parameters, and is the only configuration whose advantage reproduced across two
-# platforms. What would raise the score is not in the optimiser or the loss — it is the
+# platforms. What would raise the score is not in the optimiser or the loss - it is the
 # 79 training images spread across `Home`, `Party`, `Travel` and `Smart Casual`, and the
-# consistency of the labels attached to them (§9.4).
+# consistency of the labels attached to them (section 9.4).
