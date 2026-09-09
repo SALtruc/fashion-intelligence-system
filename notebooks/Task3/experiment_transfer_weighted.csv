@@ -1,0 +1,7 @@
+arm,repeat,gender macroF1,gender acc,usage macroF1,usage acc,minutes
+C_weighted,51,0.6096,0.851,0.3502,0.8674,9.8
+D_weighted,51,0.6117,0.8564,0.3521,0.8674,9.8
+C_weighted,52,0.6086,0.8507,0.353,0.875,9.9
+D_weighted,52,0.6349,0.8532,0.3369,0.8307,10.0
+C_weighted,53,0.5936,0.8475,0.3523,0.8651,10.0
+D_weighted,53,0.5848,0.851,0.3459,0.8597,10.0

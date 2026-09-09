@@ -225,6 +225,53 @@ not what the rule was about.
 
 ---
 
+**B7. The two best ingredients, combined** — `D articleType-pretrained` is the
+strongest `gender` model the notebook measures and `C weighted` the strongest `usage`
+one, and they had only ever been measured apart. This measures them together over
+3 paired repeats, **on the forward split** rather than on the validation split this
+report quotes. That choice is the whole design: `epochs=30` won the sweep by +0.019 on
+random validation and then measured −0.002 on the forward split, so a candidate tested
+only where it was chosen cannot be told apart from its own selection. The rule and a
+prediction were both fixed before the run.
+
+| repeat | `gender` C | `gender` D | Δ | `usage` C | `usage` D | Δ |
+|---|---|---|---|---|---|---|
+| 51 | 0.6096 | 0.6117 | +0.0021 | 0.3502 | 0.3521 | +0.0019 |
+| 52 | 0.6086 | 0.6349 | +0.0263 | 0.3530 | 0.3369 | -0.0161 |
+| 53 | 0.5936 | 0.5848 | -0.0088 | 0.3523 | 0.3459 | -0.0064 |
+| **mean** | **0.6039** | **0.6105** | **+0.0065** | **0.3518** | **0.3450** | **-0.0069** |
+
+Verdict: **KEEP `C weighted`**. Of the three pre-committed conditions — `gender` up in every repeat (no), the mean above the C arm's own spread of 0.0160 (no), `usage` down by no more than its spread of 0.0028 (no) — **0 of 3** held.
+
+The interesting part is not the verdict but where the effect went, and the mechanism
+check answers it. The diagnostic localised `gender`'s loss to one class: Unisex, F1
+0.529 on random validation and 0.235 on the forward
+split, and the sole class where an `articleType → modal gender` lookup beats the CNN.
+Design D carries exactly that signal, so if the story is right Unisex should rise.
+It does: `Unisex` F1 moves +0.0152 on average (+0.0039, +0.0245, +0.0173) from a C-arm level of 0.2349. The direction is right and the size is not.
+
+| `gender` class | C | D | Δ |
+|---|---|---|---|
+| Boys | 0.5942 | 0.5789 | -0.0153 |
+| Girls | 0.4366 | 0.4638 | +0.0272 |
+| Men | 0.8626 | 0.8657 | +0.0030 |
+| Unisex | 0.2349 | 0.2502 | +0.0152 |
+| Women | 0.8913 | 0.8938 | +0.0025 |
+
+`Unisex` improves in **every** repeat, yet the macro average they feed does not: `gender` is up in 2 of 3 and its mean of +0.0065 sits below the arm's own spread. The gains are small and `Boys` loses -0.0153, so five class-level movements average out to almost nothing. The hypothesis is confirmed where it was made — at the class — and still does not produce a model worth submitting.
+
+There is also a reason to prefer C beyond the averages. Across the same repeats the D arm's own `gender` spread is **0.0501** against C's **0.0160**, 3.1x as wide — its worst repeat (0.5848) falls below every C run. What gets submitted is one training run, not a mean over three, so an arm that swings that far is the worse deliverable even where its average is level. The likely cause is visible upstream: each D repeat inherits whatever its own pre-training produced, and that pre-training is the weak, high-variance task described below.
+
+Two measurements explain the weakness, and neither is visible on a random split.
+First, the forward split's training rows cover only **101 of 121** article types against the random split's 121 of 121, so 20 classes have no training example at all and the pre-training task is capped at 0.835 before the model makes a single error; the absent classes are the ones appearing only among the high ids, which
+is precisely what the model has to generalise to. Second, the pre-training reached articleType macro-F1 0.2064 here against 0.3104 on the random split — the same code, a harder task. **So design D's
+advantage, as measured in §10.3, is partly an artefact of a random split showing the
+pre-training every article type in the catalogue.** The way the graded test set is
+actually cut does not. That is a qualification on our own reported result, not on
+someone else's.
+
+---
+
 ## Notes for Trực — not for the report
 
 * If Section A is too long, cut from the bottom. The order is deliberate: judgement and

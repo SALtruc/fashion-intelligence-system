@@ -150,6 +150,48 @@ if DIAG.is_file():
 uni_fwd = f"{c_g.index.size and float(pc[(pc['class'] == 'Unisex') & (pc.arm == 'C_weighted')].f1.mean()):.3f}" \
     if pc is not None else ""
 
+# The class-level picture, which is the actual result: a class can improve in every
+# repeat while the macro average it feeds does not. Stating only the average would
+# hide that, and stating only Unisex would overclaim it.
+cls_tbl = cls_story = stability = ""
+if pc is not None:
+    m = (pc[pc.repeat.isin(piv.index)]
+         .pivot_table(index="class", columns="arm", values="f1"))
+    if {"C_weighted", "D_weighted"} <= set(m.columns):
+        m["delta"] = m["D_weighted"] - m["C_weighted"]
+        cls_tbl = ("\n| `gender` class | C | D | Δ |\n|---|---|---|---|\n" + "\n".join(
+            f"| {c} | {m.loc[c, 'C_weighted']:.4f} | {m.loc[c, 'D_weighted']:.4f} "
+            f"| {m.loc[c, 'delta']:+.4f} |" for c in m.index) + "\n")
+        wide = pc[pc.repeat.isin(piv.index)].pivot_table(
+            index=["class", "repeat"], columns="arm", values="f1")
+        wide["d"] = wide["D_weighted"] - wide["C_weighted"]
+        always = [c for c in m.index if (wide.xs(c)["d"] > 0).all()]
+        worst = m["delta"].idxmin()
+        n_up = int((dg > 0).sum())
+        cls_story = (
+            f"{'`' + '`, `'.join(always) + '`'} "
+            f"{'improves' if len(always) == 1 else 'improve'} in **every** repeat, "
+            f"yet the "
+            f"macro average they feed does not: `gender` is up in {n_up} of {len(dg)} "
+            f"and its mean of {dg.mean():+.4f} sits below the arm's own spread. The "
+            f"gains are small and `{worst}` loses {m.loc[worst, 'delta']:+.4f}, so "
+            f"five class-level movements average out to almost nothing. The "
+            f"hypothesis is confirmed where it was made — at the class — and still "
+            f"does not produce a model worth submitting.")
+d_g = piv["gender macroF1"]["D_weighted"]
+band_dg = d_g.max() - d_g.min()
+if band_g > 0:
+    stability = (
+        f"There is also a reason to prefer C beyond the averages. Across the same "
+        f"repeats the D arm's own `gender` spread is **{band_dg:.4f}** against C's "
+        f"**{band_g:.4f}**, {band_dg / band_g:.1f}x as wide — its worst repeat "
+        f"({d_g.min():.4f}) falls below every C run. What gets submitted is one "
+        f"training run, not a mean over three, so an arm that swings that far is the "
+        f"worse deliverable even where its average is level. The likely cause is "
+        f"visible upstream: each D repeat inherits whatever its own pre-training "
+        f"produced, and that pre-training is the weak, high-variance task described "
+        f"below.")
+
 rows = "\n".join(
     f"| {r} | {c_g[r]:.4f} | {piv['gender macroF1']['D_weighted'][r]:.4f} | "
     f"{dg[r]:+.4f} | {c_u[r]:.4f} | "
@@ -174,12 +216,16 @@ prediction were both fixed before the run.
 
 Verdict: {verdict}. {rule}
 
-The interesting part is not the verdict but why the effect is this small, and the
-mechanism check tells the two apart. The diagnostic localised `gender`'s loss to one
-class: Unisex, F1 {uni_rand or "0.53"} on random validation and {uni_fwd or "much lower"}
-on the forward split, and the sole class where an `articleType → modal gender` lookup
-beats the CNN. Design D carries exactly that signal, so if the story is right Unisex
-should rise. {uni} The transfer is real and too weak to change a decision.
+The interesting part is not the verdict but where the effect went, and the mechanism
+check answers it. The diagnostic localised `gender`'s loss to one class: Unisex, F1
+{uni_rand or "0.53"} on random validation and {uni_fwd or "much lower"} on the forward
+split, and the sole class where an `articleType → modal gender` lookup beats the CNN.
+Design D carries exactly that signal, so if the story is right Unisex should rise.
+{uni}
+{cls_tbl}
+{cls_story}
+
+{stability}
 
 Two measurements explain the weakness, and neither is visible on a random split.
 First, {cov}; the absent classes are the ones appearing only among the high ids, which
