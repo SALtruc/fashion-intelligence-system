@@ -21,3 +21,7 @@ __pycache__/
 .venv/
 venv/
 .mypy_cache/
+# Task 3: the notebook writes these beside the tracked *_nguyen.csv copies.
+# Byte-identical duplicates -- keep one of each in git, not two.
+notebooks/Task3/task3_history.csv
+notebooks/Task3/task3_results.csv
