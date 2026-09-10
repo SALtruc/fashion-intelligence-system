@@ -26,7 +26,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from results_io import load_wide
+from results_io import load_wide, read_report, report_path
 
 HERE = Path(__file__).resolve().parent
 
@@ -42,7 +42,7 @@ ROOT = _repo_root()
 RES = ROOT / "results" / "task3"
 CSV = RES / "sota_comparison.csv"
 PC = RES / "sota_comparison_perclass.csv"
-REPORT = ROOT / "notebooks" / "Task3" / "REPORT_TASK3.md"
+REPORT = report_path()
 
 LARGE = ["Casual", "Ethnic", "Formal", "Sports"]
 OURS = "C_weighted (ours)"
@@ -221,7 +221,7 @@ if args.append:
     if pc is None:
         raise SystemExit("refusing to append without the per-class data: the section's "
                          "conclusion depends on it")
-    t = io.open(REPORT, encoding="utf-8").read().replace("\r\n", "\n")
+    t = read_report()
     if "**B9. Measured against a pre-trained backbone**" in t:
         raise SystemExit("B9 already present -- edit it, do not append")
     i = t.find("## Notes for Tr")
