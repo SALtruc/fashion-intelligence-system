@@ -58,7 +58,7 @@ MELTED = ("pretrained_comparison", "pretrained_comparison_perclass",
           "scratch_vs_pretrained", "scratch_vs_pretrained_perclass",
           "ensemble", "ensemble_perclass", "ensemble_confirm",
           "gender_ceiling_diagnostic", "gender_confusion",
-          "ensemble_diversity")
+          "ensemble_diversity", "external_shipped")
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--check", action="store_true", help="verify only, write nothing")
@@ -221,6 +221,9 @@ new += melt("ensemble_forward_perclass", "ensemble_perclass",
 for sp in ("forward", "random"):
     new += melt(f"ensemble_confirm_{sp}", "ensemble_confirm",
                 {"id": "arm", "kind": "variant", "split": "split"})
+new += melt("external_shipped", "external_shipped",
+            {"model": "arm", "split": "split", "tta": "tta",
+             "labels": "variant", "target": "target"})
 new += melt("diagnose_gender_ceiling", "gender_ceiling_diagnostic",
             {"target": "target", "class": "class"})
 

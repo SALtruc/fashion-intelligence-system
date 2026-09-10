@@ -2381,6 +2381,38 @@ ensemble_confirm,all,ensemble6,,random,,,,epochs,20
 ensemble_confirm,all,ensemble6,,random,,,,n,6
 ensemble_confirm,all,ensemble6,,random,,gender,,macroF1,0.7438
 ensemble_confirm,all,ensemble6,,random,,usage,,macroF1,0.423
+external_shipped,C_weighted (shipped),all,,independent eval,False,gender,,n_images,261
+external_shipped,C_weighted (shipped),all,,independent eval,False,gender,,n_labels,5
+external_shipped,C_weighted (shipped),all,,independent eval,False,gender,,macro_f1,0.1446
+external_shipped,C_weighted (shipped),all,,independent eval,False,gender,,accuracy,0.2529
+external_shipped,C_weighted (shipped),all,,independent eval,False,usage,,n_images,261
+external_shipped,C_weighted (shipped),all,,independent eval,False,usage,,n_labels,8
+external_shipped,C_weighted (shipped),all,,independent eval,False,usage,,macro_f1,0.1286
+external_shipped,C_weighted (shipped),all,,independent eval,False,usage,,accuracy,0.5441
+external_shipped,C_weighted (shipped),present,,independent eval,False,gender,,n_images,261
+external_shipped,C_weighted (shipped),present,,independent eval,False,gender,,n_labels,5
+external_shipped,C_weighted (shipped),present,,independent eval,False,gender,,macro_f1,0.1446
+external_shipped,C_weighted (shipped),present,,independent eval,False,gender,,accuracy,0.2529
+external_shipped,C_weighted (shipped),present,,independent eval,False,usage,,n_images,261
+external_shipped,C_weighted (shipped),present,,independent eval,False,usage,,n_labels,7
+external_shipped,C_weighted (shipped),present,,independent eval,False,usage,,macro_f1,0.147
+external_shipped,C_weighted (shipped),present,,independent eval,False,usage,,accuracy,0.5441
+external_shipped,C_weighted (shipped),all,,independent eval,True,gender,,n_images,261
+external_shipped,C_weighted (shipped),all,,independent eval,True,gender,,n_labels,5
+external_shipped,C_weighted (shipped),all,,independent eval,True,gender,,macro_f1,0.1429
+external_shipped,C_weighted (shipped),all,,independent eval,True,gender,,accuracy,0.2529
+external_shipped,C_weighted (shipped),all,,independent eval,True,usage,,n_images,261
+external_shipped,C_weighted (shipped),all,,independent eval,True,usage,,n_labels,8
+external_shipped,C_weighted (shipped),all,,independent eval,True,usage,,macro_f1,0.14
+external_shipped,C_weighted (shipped),all,,independent eval,True,usage,,accuracy,0.5632
+external_shipped,C_weighted (shipped),present,,independent eval,True,gender,,n_images,261
+external_shipped,C_weighted (shipped),present,,independent eval,True,gender,,n_labels,5
+external_shipped,C_weighted (shipped),present,,independent eval,True,gender,,macro_f1,0.1429
+external_shipped,C_weighted (shipped),present,,independent eval,True,gender,,accuracy,0.2529
+external_shipped,C_weighted (shipped),present,,independent eval,True,usage,,n_images,261
+external_shipped,C_weighted (shipped),present,,independent eval,True,usage,,n_labels,7
+external_shipped,C_weighted (shipped),present,,independent eval,True,usage,,macro_f1,0.16
+external_shipped,C_weighted (shipped),present,,independent eval,True,usage,,accuracy,0.5632
 gender_ceiling_diagnostic,,,,,,gender,Boys,train_n,496
 gender_ceiling_diagnostic,,,,,,gender,Boys,val_n,93
 gender_ceiling_diagnostic,,,,,,gender,Boys,precision,0.5748
