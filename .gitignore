@@ -1,17 +1,18 @@
-# datasets — share via Drive, too big for git
+# Raw course data is intentionally absent from this checkout. Keep it out of Git if restored locally.
 datasets/**/*.csv
 datasets/**/*.jpg
 
-preprocessed_datasets/**/*.csv
-preprocessed_datasets/**/*.jpg
+# preprocessed_datasets is tracked on purpose. The manifests define the splits every
+# notebook reads, so a fresh checkout has to land on the same rows without re-running
+# the EDA notebook first. 16 MB of text, and no images are written here.
 
-# artifacts — share via Drive, too big for git
+# Generated run evidence stays local; keep lightweight placeholders and READMEs tracked.
 artifacts/**
 !artifacts/**/
 !artifacts/**/.gitkeep
 !artifacts/**/README.md
 
-# junk
+# Local environments, caches and generated bundles.
 __MACOSX/
 .DS_Store
 Thumbs.db
@@ -20,4 +21,16 @@ __pycache__/
 *.pyc
 .venv/
 venv/
-.mypy_cache/
+datasets.zip
+/kaggle/
+
+# Generated model binaries and archives stay local; result tables and figures remain tracked.
+/models/**/*.joblib
+/models/**/*.npy
+/models/**/*.npz
+/models/**/*.pt
+/outputs/**/*.joblib
+/outputs/**/*.npy
+/outputs/**/*.npz
+/outputs/**/*.pt
+/outputs/**/*.zip

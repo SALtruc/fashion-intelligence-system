@@ -1,0 +1,31 @@
+{
+  "purpose": "pretrained reference comparison; not submittable, not independent data",
+  "reporting_rows": 7568,
+  "training_rows": 30278,
+  "classes": 124,
+  "native_image_size": [
+    60,
+    80
+  ],
+  "best_submittable_macro_f1": 0.7653827317142766,
+  "best_pretrained_macro_f1": 0.8219109724945514,
+  "finetune_ran": true,
+  "finetune_epochs": 5,
+  "backbones": {
+    "siglip2": {
+      "requested": "google/siglip2-base-patch16-224",
+      "resolved": "google/siglip2-base-patch16-224",
+      "is_fallback": false,
+      "signal": "image-text contrastive",
+      "params": 92884224
+    },
+    "convnext": {
+      "requested": "facebook/convnext-base-224-22k",
+      "resolved": "facebook/convnext-base-224-22k",
+      "is_fallback": false,
+      "signal": "supervised in21k, convolutional",
+      "params": 87566464
+    }
+  },
+  "skipped": []
+}

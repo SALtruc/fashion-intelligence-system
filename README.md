@@ -1,112 +1,102 @@
-# Machine Learning Assignment 2 — Fashion Intelligence System
+# Fashion Intelligence System — COSC2753 Assignment 2
 
-COSC2753 Machine Learning · Assignment 2 (2026B) · RMIT
-**Due: Sat 12 Sep 2026, 23:59 (Canvas)** — worth 40% of the course.
+Task 1 delivery updated 10 September 2026. The completed executed notebook is
+`notebooks/task1-sota.ipynb`; its organized Task 1 outputs are under `models/task1/`.
+The selected from-scratch ResNet/resample achieves **0.7654 reporting macro-F1** and
+**87.35% accuracy** on 7,568 images across 110 observed classes. See the notebook's
+conclusion for uncertainty, rare-class coverage and pilot-history limitations.
 
-## Repo structure
+## Try the saved model (no retraining)
 
-```
-datasets/         # FashionDataset (train 38,617 rows / test 5,829 images) — share via Drive
-models/           # model weights (gitignored) — share via Drive
-notebooks/        # eda.ipynb, task1_*.ipynb ... task4_*.ipynb
-src/              # shared code: data loading, split, metrics
-splits/           # fixed stratified train/val split — EVERYONE evaluates on this
-predictions/      # prediction CSVs in styles_prediction.csv format
-```
+Use Python 3.12 with NumPy, Pillow, PyTorch and Tkinter available. The project environment
+from `uv sync --frozen` supplies these packages. From this folder:
 
-## Ground rules
-
-1. **Datasets are NOT committed** (gitignored) — share via Drive.
-2. **Evaluate on the shared split in `splits/`** — never make your own val split, or results aren't comparable.
-3. **Metrics: macro-F1 + accuracy + confusion matrix** (data is heavily imbalanced — accuracy alone lies).
-4. **No pretrained weights** in submitted models (ImageNet etc. only allowed for comparison).
-5. **Model weights are NOT committed** (gitignored) — share via Drive.
-6. Log every experiment in the shared experiments sheet so it can go in the report comparison table.
-7. Prediction files must keep the exact `styles_prediction.csv` format: `id,gender,articleType,season,usage`.
-
-## Setup
-
-Clone the repository and change into the project directory:
-
-```bash
-git clone https://github.com/SALtruc/Machine-Learning-Assignment-2.git
-
-cd Machine-Learning-Assignment-2
+```console
+python task1_demo.py
 ```
 
-Before setting up the project, make sure [`uv`](https://docs.astral.sh/uv/getting-started/installation/) is installed globally and available on your `PATH`:
+The native desktop interface lets you choose a JPG/PNG, inspect suggestions, review the
+label and export it. It runs locally on CPU and needs no web service or pretrained downloads.
+Python's Windows installer includes Tk; on Linux install your distribution's `python3-tk`
+package and use a graphical desktop. The tested local PyTorch version is recorded in the
+validation JSON.
 
-```bash
-# macOS/Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
+Single-image prediction and template-based batch inference:
 
-# Windows PowerShell
-irm https://astral.sh/uv/install.ps1 | iex
+```console
+python -m src.task1_inference --image datasets/test/images_test/IMAGE_ID.jpg
+python -m src.task1_inference --template datasets/test/styles_prediction.csv --image-dir datasets/test/images_test --output outputs/task1_cpu_predictions.csv
 ```
 
-Verify the installation, then run the following from the repository root. This creates `.venv` and installs the locked dependencies:
+Replace IMAGE_ID with a real file ID. `--artifacts PATH` accepts another compatible run's
+`models/task1` directory. CPU inference uses FP32; the Kaggle run used mixed precision.
+Small numerical/runtime differences are possible. Do not overwrite the original evaluated
+prediction file merely because a new CPU export exists. Other template columns and ID order
+are preserved. GUI review exports have a different, human-review schema and are not the
+assignment submission CSV.
 
-```bash
-uv --version
+## Reproduce training
+
+The original project environment is specified by `pyproject.toml` and `uv.lock`:
+
+```console
 uv sync --frozen
-```
-
-## Run the finalized EDA
-
-Before running the notebook, confirm the training dataset has this structure:
-
-```text
-datasets/
-└── train/
-    ├── styles_train.csv
-    └── images_train/
-        ├── 1163.jpg
-        └── ...
-```
-
-### Run interactively
-
-Start Jupyter Notebook from the repository root:
-
-```bash
 uv run jupyter notebook
 ```
 
-Open `notebooks/00_eda_and_preprocessing.ipynb`, select the project's `.venv` kernel if
-prompted, then choose **Kernel → Restart Kernel and Run All Cells**. Press
-`Ctrl+S` to save the cell outputs in the notebook.
+The existing lock requires Python 3.12.0 exactly; the recorded Kaggle run used Python 3.12.13.
+Keep these environment differences visible when comparing reruns. The saved-model demo runs from the same environment and does not retrain.
 
-The image validation and duplicate-detection sections process approximately
-38,000 images, so a complete run may take several minutes.
+Place the course-provided data here:
 
-### Run from the command line
-
-To execute every cell in a fresh kernel and save the outputs to a separate
-notebook, run the following from the repository root.
-
-Windows PowerShell:
-
-```powershell
-uv run jupyter nbconvert `
-  --to notebook `
-  --execute "notebooks\00_eda_and_preprocessing.ipynb" `
-  --output "00_eda_and_preprocessing_executed.ipynb" `
-  --ExecutePreprocessor.timeout=-1
+```text
+datasets/train/styles_train.csv
+datasets/train/images_train/<id>.jpg
+datasets/test/styles_prediction.csv
+datasets/test/images_test/<id>.jpg
 ```
 
-macOS or Linux:
+1. Run `notebooks/00_eda_and_preprocessing.ipynb` to produce the audited manifest.
+2. Open `notebooks/task1-sota.ipynb`. Set `KAGGLE=False` in the first code cell locally;
+   the preserved executed copy has `KAGGLE=True` because the recorded run was on Kaggle.
+3. Leave `RUN_QUICK=False` for performance evaluation. Execute Run All. GPU training is
+   recommended; CPU training requires the notebook's explicit `ALLOW_CPU` option. References
+   can be disabled with `RUN_PRETRAINED=False`; enabling them needs internet and more compute.
+4. Outputs are written to a fresh `outputs/task1_full_*` locally, or `/kaggle/working/` on Kaggle.
+   Section 8 contains run-specific post-run prose: update its numbers after any rerun.
 
-```bash
-uv run jupyter nbconvert \
-  --to notebook \
-  --execute notebooks/00_eda_and_preprocessing.ipynb \
-  --output 00_eda_and_preprocessing_executed.ipynb \
-  --ExecutePreprocessor.timeout=-1
+The older `01_task1_article_type_classification.ipynb` is retained as an earlier source copy;
+it is not the reviewed executed deliverable. The old Kaggle bundle generator was retired after the reviewed run; use `task1-sota.ipynb` for any deliberate rerun.
+
+## Evidence and packaging
+
+- `models/task1/`: canonical organized models, tables, figures, predictions and metadata.
+- `predictions/task1/task1_predictions.csv`: canonical Task 1 prediction copy.
+- `splits/task1/`: canonical fit, tuning and reporting membership tables.
+- `outputs/figures/task1/`: report figure copies.
+- `artifacts/task1/kaggle-full-16ay9832/`: runtime, telemetry and organization manifest.
+- The raw Kaggle download was removed after canonical hashes were verified.
+- `docs/REPORT_TASK1.md`: current Task 1 report material; combine and format with the other tasks.
+- `docs/INDEPENDENT_EVALUATION_TASK1.md`: published-work comparison with comparability limits.
+- `docs/TASK1_PATCH_NOTES.md`: distinction between original evidence and post-run additions.
+- `scripts/validate_task1_delivery.py`: artifact, sampled inference and GUI integration checks.
+- `scripts/organize_kaggle_results.py`: copies a raw Kaggle download into the canonical layout with SHA-256 checks.
+- `scripts/build_task1_submission.py`: builds a Task 1 handoff ZIP containing code, models and evidence.
+
+```console
+python scripts/validate_task1_delivery.py
+python scripts/build_task1_submission.py
 ```
 
-The executed notebook is saved as
-`notebooks/00_eda_and_preprocessing_executed.ipynb`. If execution immediately raises a
-`FileNotFoundError`, verify that `datasets/train/styles_train.csv` and
-`datasets/train/images_train/` exist.
+The validator needs the supplied image directories and a graphical Tk installation; it does
+not retrain. The builder includes the existing audited manifest but not course data or the test template; supply those separately using the course data layout above for retraining. The app can classify a chosen
+local image from the archive without those datasets. The handoff ZIP includes every original manifest-listed artifact, including reference embeddings,
+so the original integrity checks remain reproducible.
 
-> Dataset is for educational use in this course only. Keep this repo **private**.
+## Remaining assignment work
+
+Task 1 is not the complete four-task assignment. Tasks 2–4, the combined prediction CSV,
+all group details, and the final length-checked PDF report remain separate work. See
+`SUBMISSION.md`. No external-image robustness claim or guaranteed rubric grade is made.
+
+
