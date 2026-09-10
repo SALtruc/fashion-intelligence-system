@@ -69,8 +69,7 @@ datasets/test/images_test/<id>.jpg
    Section 8 contains run-specific post-run prose: update its numbers after any rerun.
 
 The older `01_task1_article_type_classification.ipynb` is retained as an earlier source copy;
-it is not the reviewed executed deliverable. Existing Kaggle generation utilities target older
-source paths and should not overwrite `task1-sota.ipynb` without a deliberate source update.
+it is not the reviewed executed deliverable. The old Kaggle bundle generator was retired after the reviewed run; use `task1-sota.ipynb` for any deliberate rerun.
 
 ## Evidence and packaging
 
