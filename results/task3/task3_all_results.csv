@@ -1,0 +1,2541 @@
+source,arm,variant,rep,split,tta,target,class,metric,value
+model_comparison,C shared body,,,forward split,,gender,,macro_f1,0.5848
+model_comparison,C shared body,,,forward split,,gender,,macro_f1_in_val,0.5848
+model_comparison,C shared body,,,forward split,,gender,,n_classes,5
+model_comparison,C shared body,,,forward split,,gender,,n_in_val,5
+model_comparison,C shared body,,,forward split,,gender,,accuracy,0.8678
+model_comparison,C shared body,,,forward split,,gender,,weighted_f1,0.8663
+model_comparison,C shared body,,,independent eval,,gender,,macro_f1,0.1292
+model_comparison,C shared body,,,independent eval,,gender,,macro_f1_in_val,0.1292
+model_comparison,C shared body,,,independent eval,,gender,,n_classes,5
+model_comparison,C shared body,,,independent eval,,gender,,n_in_val,5
+model_comparison,C shared body,,,independent eval,,gender,,accuracy,0.2605
+model_comparison,C shared body,,,independent eval,,gender,,weighted_f1,0.2205
+model_comparison,C shared body,,,per-target split,,gender,,macro_f1,0.6794
+model_comparison,C shared body,,,per-target split,,gender,,macro_f1_in_val,0.6794
+model_comparison,C shared body,,,per-target split,,gender,,n_classes,5
+model_comparison,C shared body,,,per-target split,,gender,,n_in_val,5
+model_comparison,C shared body,,,per-target split,,gender,,accuracy,0.882
+model_comparison,C shared body,,,per-target split,,gender,,weighted_f1,0.8818
+model_comparison,D articleType-pretrained,,,shared val,,gender,,macro_f1,0.746
+model_comparison,D articleType-pretrained,,,shared val,,gender,,macro_f1_in_val,0.746
+model_comparison,D articleType-pretrained,,,shared val,,gender,,n_classes,5
+model_comparison,D articleType-pretrained,,,shared val,,gender,,n_in_val,5
+model_comparison,D articleType-pretrained,,,shared val,,gender,,accuracy,0.903
+model_comparison,D articleType-pretrained,,,shared val,,gender,,weighted_f1,0.9026
+model_comparison,A two models,,,shared val,,gender,,macro_f1,0.744
+model_comparison,A two models,,,shared val,,gender,,macro_f1_in_val,0.744
+model_comparison,A two models,,,shared val,,gender,,n_classes,5
+model_comparison,A two models,,,shared val,,gender,,n_in_val,5
+model_comparison,A two models,,,shared val,,gender,,accuracy,0.9071
+model_comparison,A two models,,,shared val,,gender,,weighted_f1,0.904
+model_comparison,C weighted,,,shared val,,gender,,macro_f1,0.7365
+model_comparison,C weighted,,,shared val,,gender,,macro_f1_in_val,0.7365
+model_comparison,C weighted,,,shared val,,gender,,n_classes,5
+model_comparison,C weighted,,,shared val,,gender,,n_in_val,5
+model_comparison,C weighted,,,shared val,,gender,,accuracy,0.8829
+model_comparison,C weighted,,,shared val,,gender,,weighted_f1,0.8852
+model_comparison,C + logit adj + TTA,,,shared val,,gender,,macro_f1,0.7359
+model_comparison,C + logit adj + TTA,,,shared val,,gender,,macro_f1_in_val,0.7359
+model_comparison,C + logit adj + TTA,,,shared val,,gender,,n_classes,5
+model_comparison,C + logit adj + TTA,,,shared val,,gender,,n_in_val,5
+model_comparison,C + logit adj + TTA,,,shared val,,gender,,accuracy,0.8945
+model_comparison,C + logit adj + TTA,,,shared val,,gender,,weighted_f1,0.8956
+model_comparison,C shared body,,,shared val,,gender,,macro_f1,0.728
+model_comparison,C shared body,,,shared val,,gender,,macro_f1_in_val,0.728
+model_comparison,C shared body,,,shared val,,gender,,n_classes,5
+model_comparison,C shared body,,,shared val,,gender,,n_in_val,5
+model_comparison,C shared body,,,shared val,,gender,,accuracy,0.8935
+model_comparison,C shared body,,,shared val,,gender,,weighted_f1,0.8948
+model_comparison,C unweighted,,,shared val,,gender,,macro_f1,0.728
+model_comparison,C unweighted,,,shared val,,gender,,macro_f1_in_val,0.728
+model_comparison,C unweighted,,,shared val,,gender,,n_classes,5
+model_comparison,C unweighted,,,shared val,,gender,,n_in_val,5
+model_comparison,C unweighted,,,shared val,,gender,,accuracy,0.8935
+model_comparison,C unweighted,,,shared val,,gender,,weighted_f1,0.8948
+model_comparison,C without external,,,shared val,,gender,,macro_f1,0.728
+model_comparison,C without external,,,shared val,,gender,,macro_f1_in_val,0.728
+model_comparison,C without external,,,shared val,,gender,,n_classes,5
+model_comparison,C without external,,,shared val,,gender,,n_in_val,5
+model_comparison,C without external,,,shared val,,gender,,accuracy,0.8935
+model_comparison,C without external,,,shared val,,gender,,weighted_f1,0.8948
+model_comparison,C shared body,,,shared val,,gender,,macro_f1,0.728
+model_comparison,C shared body,,,shared val,,gender,,macro_f1_in_val,0.728
+model_comparison,C shared body,,,shared val,,gender,,n_classes,5
+model_comparison,C shared body,,,shared val,,gender,,n_in_val,5
+model_comparison,C shared body,,,shared val,,gender,,accuracy,0.8935
+model_comparison,C shared body,,,shared val,,gender,,weighted_f1,0.8948
+model_comparison,C + logit adj,,,shared val,,gender,,macro_f1,0.728
+model_comparison,C + logit adj,,,shared val,,gender,,macro_f1_in_val,0.728
+model_comparison,C + logit adj,,,shared val,,gender,,n_classes,5
+model_comparison,C + logit adj,,,shared val,,gender,,n_in_val,5
+model_comparison,C + logit adj,,,shared val,,gender,,accuracy,0.8935
+model_comparison,C + logit adj,,,shared val,,gender,,weighted_f1,0.8948
+model_comparison,C + logit adj,,,shared val,,gender,,tau,0.0
+model_comparison,C from scratch,,,shared val,,gender,,macro_f1,0.728
+model_comparison,C from scratch,,,shared val,,gender,,macro_f1_in_val,0.728
+model_comparison,C from scratch,,,shared val,,gender,,n_classes,5
+model_comparison,C from scratch,,,shared val,,gender,,n_in_val,5
+model_comparison,C from scratch,,,shared val,,gender,,accuracy,0.8935
+model_comparison,C from scratch,,,shared val,,gender,,weighted_f1,0.8948
+model_comparison,C with external,,,shared val,,gender,,macro_f1,0.722
+model_comparison,C with external,,,shared val,,gender,,macro_f1_in_val,0.722
+model_comparison,C with external,,,shared val,,gender,,n_classes,5
+model_comparison,C with external,,,shared val,,gender,,n_in_val,5
+model_comparison,C with external,,,shared val,,gender,,accuracy,0.9004
+model_comparison,C with external,,,shared val,,gender,,weighted_f1,0.8961
+model_comparison,B joint label,,,shared val,,gender,,macro_f1,0.7201
+model_comparison,B joint label,,,shared val,,gender,,macro_f1_in_val,0.7201
+model_comparison,B joint label,,,shared val,,gender,,n_classes,5
+model_comparison,B joint label,,,shared val,,gender,,n_in_val,5
+model_comparison,B joint label,,,shared val,,gender,,accuracy,0.893
+model_comparison,B joint label,,,shared val,,gender,,weighted_f1,0.8895
+model_comparison,1-NN pixels,,,shared val,,gender,,macro_f1,0.5335
+model_comparison,1-NN pixels,,,shared val,,gender,,macro_f1_in_val,0.5335
+model_comparison,1-NN pixels,,,shared val,,gender,,n_classes,5
+model_comparison,1-NN pixels,,,shared val,,gender,,n_in_val,5
+model_comparison,1-NN pixels,,,shared val,,gender,,accuracy,0.7707
+model_comparison,1-NN pixels,,,shared val,,gender,,weighted_f1,0.7718
+model_comparison,majority,,,shared val,,gender,,macro_f1,0.1412
+model_comparison,majority,,,shared val,,gender,,macro_f1_in_val,0.1412
+model_comparison,majority,,,shared val,,gender,,n_classes,5
+model_comparison,majority,,,shared val,,gender,,n_in_val,5
+model_comparison,majority,,,shared val,,gender,,accuracy,0.5458
+model_comparison,majority,,,shared val,,gender,,weighted_f1,0.3855
+model_comparison,C shared body,,,forward split,,usage,,macro_f1,0.3588
+model_comparison,C shared body,,,forward split,,usage,,macro_f1_in_val,0.4784
+model_comparison,C shared body,,,forward split,,usage,,n_classes,8
+model_comparison,C shared body,,,forward split,,usage,,n_in_val,6
+model_comparison,C shared body,,,forward split,,usage,,accuracy,0.8957
+model_comparison,C shared body,,,forward split,,usage,,weighted_f1,0.8941
+model_comparison,C shared body,,,independent eval,,usage,,macro_f1,0.1124
+model_comparison,C shared body,,,independent eval,,usage,,macro_f1_in_val,0.1124
+model_comparison,C shared body,,,independent eval,,usage,,n_classes,7
+model_comparison,C shared body,,,independent eval,,usage,,n_in_val,7
+model_comparison,C shared body,,,independent eval,,usage,,accuracy,0.5747
+model_comparison,C shared body,,,independent eval,,usage,,weighted_f1,0.4778
+model_comparison,C shared body,,,per-target split,,usage,,macro_f1,0.4032
+model_comparison,C shared body,,,per-target split,,usage,,macro_f1_in_val,0.4608
+model_comparison,C shared body,,,per-target split,,usage,,n_classes,8
+model_comparison,C shared body,,,per-target split,,usage,,n_in_val,7
+model_comparison,C shared body,,,per-target split,,usage,,accuracy,0.8948
+model_comparison,C shared body,,,per-target split,,usage,,weighted_f1,0.8892
+model_comparison,C weighted,,,shared val,,usage,,macro_f1,0.4332
+model_comparison,C weighted,,,shared val,,usage,,macro_f1_in_val,0.4951
+model_comparison,C weighted,,,shared val,,usage,,n_classes,8
+model_comparison,C weighted,,,shared val,,usage,,n_in_val,7
+model_comparison,C weighted,,,shared val,,usage,,accuracy,0.8705
+model_comparison,C weighted,,,shared val,,usage,,weighted_f1,0.8717
+model_comparison,C + logit adj,,,shared val,,usage,,macro_f1,0.4256
+model_comparison,C + logit adj,,,shared val,,usage,,macro_f1_in_val,0.4864
+model_comparison,C + logit adj,,,shared val,,usage,,n_classes,8
+model_comparison,C + logit adj,,,shared val,,usage,,n_in_val,7
+model_comparison,C + logit adj,,,shared val,,usage,,accuracy,0.8636
+model_comparison,C + logit adj,,,shared val,,usage,,weighted_f1,0.8685
+model_comparison,C + logit adj,,,shared val,,usage,,tau,0.5
+model_comparison,D articleType-pretrained,,,shared val,,usage,,macro_f1,0.4105
+model_comparison,D articleType-pretrained,,,shared val,,usage,,macro_f1_in_val,0.4691
+model_comparison,D articleType-pretrained,,,shared val,,usage,,n_classes,8
+model_comparison,D articleType-pretrained,,,shared val,,usage,,n_in_val,7
+model_comparison,D articleType-pretrained,,,shared val,,usage,,accuracy,0.9
+model_comparison,D articleType-pretrained,,,shared val,,usage,,weighted_f1,0.8943
+model_comparison,C with external,,,shared val,,usage,,macro_f1,0.4076
+model_comparison,C with external,,,shared val,,usage,,macro_f1_in_val,0.4659
+model_comparison,C with external,,,shared val,,usage,,n_classes,8
+model_comparison,C with external,,,shared val,,usage,,n_in_val,7
+model_comparison,C with external,,,shared val,,usage,,accuracy,0.8952
+model_comparison,C with external,,,shared val,,usage,,weighted_f1,0.8898
+model_comparison,B joint label,,,shared val,,usage,,macro_f1,0.4067
+model_comparison,B joint label,,,shared val,,usage,,macro_f1_in_val,0.4648
+model_comparison,B joint label,,,shared val,,usage,,n_classes,8
+model_comparison,B joint label,,,shared val,,usage,,n_in_val,7
+model_comparison,B joint label,,,shared val,,usage,,accuracy,0.8954
+model_comparison,B joint label,,,shared val,,usage,,weighted_f1,0.8898
+model_comparison,C shared body,,,shared val,,usage,,macro_f1,0.4056
+model_comparison,C shared body,,,shared val,,usage,,macro_f1_in_val,0.4636
+model_comparison,C shared body,,,shared val,,usage,,n_classes,8
+model_comparison,C shared body,,,shared val,,usage,,n_in_val,7
+model_comparison,C shared body,,,shared val,,usage,,accuracy,0.8901
+model_comparison,C shared body,,,shared val,,usage,,weighted_f1,0.8862
+model_comparison,C unweighted,,,shared val,,usage,,macro_f1,0.4056
+model_comparison,C unweighted,,,shared val,,usage,,macro_f1_in_val,0.4636
+model_comparison,C unweighted,,,shared val,,usage,,n_classes,8
+model_comparison,C unweighted,,,shared val,,usage,,n_in_val,7
+model_comparison,C unweighted,,,shared val,,usage,,accuracy,0.8901
+model_comparison,C unweighted,,,shared val,,usage,,weighted_f1,0.8862
+model_comparison,C without external,,,shared val,,usage,,macro_f1,0.4056
+model_comparison,C without external,,,shared val,,usage,,macro_f1_in_val,0.4636
+model_comparison,C without external,,,shared val,,usage,,n_classes,8
+model_comparison,C without external,,,shared val,,usage,,n_in_val,7
+model_comparison,C without external,,,shared val,,usage,,accuracy,0.8901
+model_comparison,C without external,,,shared val,,usage,,weighted_f1,0.8862
+model_comparison,C shared body,,,shared val,,usage,,macro_f1,0.4056
+model_comparison,C shared body,,,shared val,,usage,,macro_f1_in_val,0.4636
+model_comparison,C shared body,,,shared val,,usage,,n_classes,8
+model_comparison,C shared body,,,shared val,,usage,,n_in_val,7
+model_comparison,C shared body,,,shared val,,usage,,accuracy,0.8901
+model_comparison,C shared body,,,shared val,,usage,,weighted_f1,0.8862
+model_comparison,C from scratch,,,shared val,,usage,,macro_f1,0.4056
+model_comparison,C from scratch,,,shared val,,usage,,macro_f1_in_val,0.4636
+model_comparison,C from scratch,,,shared val,,usage,,n_classes,8
+model_comparison,C from scratch,,,shared val,,usage,,n_in_val,7
+model_comparison,C from scratch,,,shared val,,usage,,accuracy,0.8901
+model_comparison,C from scratch,,,shared val,,usage,,weighted_f1,0.8862
+model_comparison,A two models,,,shared val,,usage,,macro_f1,0.4044
+model_comparison,A two models,,,shared val,,usage,,macro_f1_in_val,0.4622
+model_comparison,A two models,,,shared val,,usage,,n_classes,8
+model_comparison,A two models,,,shared val,,usage,,n_in_val,7
+model_comparison,A two models,,,shared val,,usage,,accuracy,0.8921
+model_comparison,A two models,,,shared val,,usage,,weighted_f1,0.8862
+model_comparison,C + logit adj + TTA,,,shared val,,usage,,macro_f1,0.4027
+model_comparison,C + logit adj + TTA,,,shared val,,usage,,macro_f1_in_val,0.4602
+model_comparison,C + logit adj + TTA,,,shared val,,usage,,n_classes,8
+model_comparison,C + logit adj + TTA,,,shared val,,usage,,n_in_val,7
+model_comparison,C + logit adj + TTA,,,shared val,,usage,,accuracy,0.8647
+model_comparison,C + logit adj + TTA,,,shared val,,usage,,weighted_f1,0.8698
+model_comparison,1-NN pixels,,,shared val,,usage,,macro_f1,0.3265
+model_comparison,1-NN pixels,,,shared val,,usage,,macro_f1_in_val,0.3732
+model_comparison,1-NN pixels,,,shared val,,usage,,n_classes,8
+model_comparison,1-NN pixels,,,shared val,,usage,,n_in_val,7
+model_comparison,1-NN pixels,,,shared val,,usage,,accuracy,0.7765
+model_comparison,1-NN pixels,,,shared val,,usage,,weighted_f1,0.7788
+model_comparison,majority,,,shared val,,usage,,macro_f1,0.108
+model_comparison,majority,,,shared val,,usage,,macro_f1_in_val,0.1234
+model_comparison,majority,,,shared val,,usage,,n_classes,8
+model_comparison,majority,,,shared val,,usage,,n_in_val,7
+model_comparison,majority,,,shared val,,usage,,accuracy,0.7606
+model_comparison,majority,,,shared val,,usage,,weighted_f1,0.6572
+training_history,A,gender,1,,,,,loss,0.6543594918417791
+training_history,A,gender,1,,,,,val_gender,0.3308911410311251
+training_history,A,gender,2,,,,,loss,0.4967867931609527
+training_history,A,gender,2,,,,,val_gender,0.240832647587928
+training_history,A,gender,3,,,,,loss,0.4456745066513163
+training_history,A,gender,3,,,,,val_gender,0.4708205823892856
+training_history,A,gender,4,,,,,loss,0.4147996280967944
+training_history,A,gender,4,,,,,val_gender,0.4978301338896396
+training_history,A,gender,5,,,,,loss,0.3907577779365587
+training_history,A,gender,5,,,,,val_gender,0.522445054566933
+training_history,A,gender,6,,,,,loss,0.3730499501939338
+training_history,A,gender,6,,,,,val_gender,0.655056392400773
+training_history,A,gender,7,,,,,loss,0.3558136324546028
+training_history,A,gender,7,,,,,val_gender,0.6832672103295632
+training_history,A,gender,8,,,,,loss,0.3417160516367219
+training_history,A,gender,8,,,,,val_gender,0.6763108366897237
+training_history,A,gender,9,,,,,loss,0.3298693171553356
+training_history,A,gender,9,,,,,val_gender,0.6002512320352171
+training_history,A,gender,10,,,,,loss,0.3138967523319497
+training_history,A,gender,10,,,,,val_gender,0.5104893118403858
+training_history,A,gender,11,,,,,loss,0.2949133254174297
+training_history,A,gender,11,,,,,val_gender,0.6753423383315276
+training_history,A,gender,12,,,,,loss,0.2824445270144007
+training_history,A,gender,12,,,,,val_gender,0.69220905717335
+training_history,A,gender,13,,,,,loss,0.27314789700413
+training_history,A,gender,13,,,,,val_gender,0.7172916349292549
+training_history,A,gender,14,,,,,loss,0.2559120648186071
+training_history,A,gender,14,,,,,val_gender,0.6289724827380736
+training_history,A,gender,15,,,,,loss,0.2430802106470884
+training_history,A,gender,15,,,,,val_gender,0.7376854982137698
+training_history,A,gender,16,,,,,loss,0.232651601656166
+training_history,A,gender,16,,,,,val_gender,0.7127598005284631
+training_history,A,gender,17,,,,,loss,0.2196705255584517
+training_history,A,gender,17,,,,,val_gender,0.7283672412841676
+training_history,A,gender,18,,,,,loss,0.2087264923127329
+training_history,A,gender,18,,,,,val_gender,0.7285963437888897
+training_history,A,gender,19,,,,,loss,0.2047702277940997
+training_history,A,gender,19,,,,,val_gender,0.7373541708611622
+training_history,A,gender,20,,,,,loss,0.201420658194072
+training_history,A,gender,20,,,,,val_gender,0.7439696289716128
+training_history,A,usage,1,,,,,loss,0.6795092886068803
+training_history,A,usage,1,,,,,val_usage,0.2674808648836027
+training_history,A,usage,2,,,,,loss,0.4527695586282763
+training_history,A,usage,2,,,,,val_usage,0.2658643565690712
+training_history,A,usage,3,,,,,loss,0.4053539558845689
+training_history,A,usage,3,,,,,val_usage,0.2467938693783747
+training_history,A,usage,4,,,,,loss,0.3760330212181635
+training_history,A,usage,4,,,,,val_usage,0.279876076402582
+training_history,A,usage,5,,,,,loss,0.36152291750465
+training_history,A,usage,5,,,,,val_usage,0.2840363752364109
+training_history,A,usage,6,,,,,loss,0.3402753339423427
+training_history,A,usage,6,,,,,val_usage,0.3183838208283561
+training_history,A,usage,7,,,,,loss,0.328930470763173
+training_history,A,usage,7,,,,,val_usage,0.3397089117908151
+training_history,A,usage,8,,,,,loss,0.3173397563146157
+training_history,A,usage,8,,,,,val_usage,0.3597005066699468
+training_history,A,usage,9,,,,,loss,0.3042669242612294
+training_history,A,usage,9,,,,,val_usage,0.3909062411309505
+training_history,A,usage,10,,,,,loss,0.288710855998135
+training_history,A,usage,10,,,,,val_usage,0.3825526527971788
+training_history,A,usage,11,,,,,loss,0.2769233040263596
+training_history,A,usage,11,,,,,val_usage,0.3719051242609087
+training_history,A,usage,12,,,,,loss,0.2650261979167887
+training_history,A,usage,12,,,,,val_usage,0.3732229684426295
+training_history,A,usage,13,,,,,loss,0.2526053956672298
+training_history,A,usage,13,,,,,val_usage,0.3795407744625979
+training_history,A,usage,14,,,,,loss,0.2400979226388445
+training_history,A,usage,14,,,,,val_usage,0.3904633277427238
+training_history,A,usage,15,,,,,loss,0.2265849565663787
+training_history,A,usage,15,,,,,val_usage,0.3806744265765137
+training_history,A,usage,16,,,,,loss,0.2168044743897121
+training_history,A,usage,16,,,,,val_usage,0.4041303928034339
+training_history,A,usage,17,,,,,loss,0.2053705191574345
+training_history,A,usage,17,,,,,val_usage,0.4044394410486542
+training_history,A,usage,18,,,,,loss,0.1952635324379553
+training_history,A,usage,18,,,,,val_usage,0.4010412766253847
+training_history,A,usage,19,,,,,loss,0.1917598183806616
+training_history,A,usage,19,,,,,val_usage,0.402500284413719
+training_history,A,usage,20,,,,,loss,0.1864697353313159
+training_history,A,usage,20,,,,,val_usage,0.4030385155446653
+training_history,B,pair,1,,,,,loss,1.378451335951807
+training_history,B,pair,1,,,,,val_gender,0.3608924611066066
+training_history,B,pair,1,,,,,val_usage,0.2948153743351166
+training_history,B,pair,2,,,,,loss,0.9619095270480024
+training_history,B,pair,2,,,,,val_gender,0.4650423723035127
+training_history,B,pair,2,,,,,val_usage,0.3111980371023981
+training_history,B,pair,3,,,,,loss,0.8582324516058355
+training_history,B,pair,3,,,,,val_gender,0.6106964424385775
+training_history,B,pair,3,,,,,val_usage,0.3265505571269613
+training_history,B,pair,4,,,,,loss,0.7925197224250801
+training_history,B,pair,4,,,,,val_gender,0.5474137234734574
+training_history,B,pair,4,,,,,val_usage,0.3436634736880639
+training_history,B,pair,5,,,,,loss,0.7541729896803655
+training_history,B,pair,5,,,,,val_gender,0.6228280044023498
+training_history,B,pair,5,,,,,val_usage,0.332878806257961
+training_history,B,pair,6,,,,,loss,0.7189842299278977
+training_history,B,pair,6,,,,,val_gender,0.3903346485536038
+training_history,B,pair,6,,,,,val_usage,0.1570082491132052
+training_history,B,pair,7,,,,,loss,0.6876396204137903
+training_history,B,pair,7,,,,,val_gender,0.4844429176612291
+training_history,B,pair,7,,,,,val_usage,0.3373810154789622
+training_history,B,pair,8,,,,,loss,0.6652187972855886
+training_history,B,pair,8,,,,,val_gender,0.633644478119798
+training_history,B,pair,8,,,,,val_usage,0.3758164807586058
+training_history,B,pair,9,,,,,loss,0.6388505753429286
+training_history,B,pair,9,,,,,val_gender,0.5545469357872236
+training_history,B,pair,9,,,,,val_usage,0.3328157065218498
+training_history,B,pair,10,,,,,loss,0.6129960686900999
+training_history,B,pair,10,,,,,val_gender,0.6558028551198087
+training_history,B,pair,10,,,,,val_usage,0.3731997725367411
+training_history,B,pair,11,,,,,loss,0.5875074566339499
+training_history,B,pair,11,,,,,val_gender,0.6873340639620656
+training_history,B,pair,11,,,,,val_usage,0.3847239056232858
+training_history,B,pair,12,,,,,loss,0.5612189222520582
+training_history,B,pair,12,,,,,val_gender,0.66307665108023
+training_history,B,pair,12,,,,,val_usage,0.372539277802112
+training_history,B,pair,13,,,,,loss,0.5394283272042683
+training_history,B,pair,13,,,,,val_gender,0.6806874132547418
+training_history,B,pair,13,,,,,val_usage,0.3840202730820374
+training_history,B,pair,14,,,,,loss,0.5207328421972054
+training_history,B,pair,14,,,,,val_gender,0.6423573822780824
+training_history,B,pair,14,,,,,val_usage,0.3904008845880844
+training_history,B,pair,15,,,,,loss,0.5026805601970408
+training_history,B,pair,15,,,,,val_gender,0.6585905623020293
+training_history,B,pair,15,,,,,val_usage,0.3944208818844611
+training_history,B,pair,16,,,,,loss,0.4822752765104548
+training_history,B,pair,16,,,,,val_gender,0.6983120019142193
+training_history,B,pair,16,,,,,val_usage,0.3992004170569919
+training_history,B,pair,17,,,,,loss,0.4645822602025203
+training_history,B,pair,17,,,,,val_gender,0.6935508019868021
+training_history,B,pair,17,,,,,val_usage,0.4047521237468086
+training_history,B,pair,18,,,,,loss,0.4504651821413148
+training_history,B,pair,18,,,,,val_gender,0.7201063562397809
+training_history,B,pair,18,,,,,val_usage,0.4067182946726044
+training_history,B,pair,19,,,,,loss,0.4468716389816934
+training_history,B,pair,19,,,,,val_gender,0.7156741951602346
+training_history,B,pair,19,,,,,val_usage,0.4042141847874293
+training_history,B,pair,20,,,,,loss,0.4399436737865064
+training_history,B,pair,20,,,,,val_gender,0.7186889269949328
+training_history,B,pair,20,,,,,val_usage,0.4070727198470486
+training_history,C,multi,1,,,,,loss,1.3223669329511154
+training_history,C,multi,1,,,,,val_gender,0.3711345142882538
+training_history,C,multi,1,,,,,val_usage,0.2863176217624517
+training_history,C,multi,2,,,,,loss,0.9572732833433204
+training_history,C,multi,2,,,,,val_gender,0.2400886653992069
+training_history,C,multi,2,,,,,val_usage,0.2176985528052809
+training_history,C,multi,3,,,,,loss,0.8643622003637812
+training_history,C,multi,3,,,,,val_gender,0.3923086896540442
+training_history,C,multi,3,,,,,val_usage,0.3229755821619614
+training_history,C,multi,4,,,,,loss,0.8078339539952237
+training_history,C,multi,4,,,,,val_gender,0.5244481710590267
+training_history,C,multi,4,,,,,val_usage,0.3635077728961969
+training_history,C,multi,5,,,,,loss,0.7724530140875938
+training_history,C,multi,5,,,,,val_gender,0.6078856264074558
+training_history,C,multi,5,,,,,val_usage,0.3666293055858759
+training_history,C,multi,6,,,,,loss,0.7312612232387906
+training_history,C,multi,6,,,,,val_gender,0.5680887565551365
+training_history,C,multi,6,,,,,val_usage,0.2006329183940599
+training_history,C,multi,7,,,,,loss,0.7003005610827926
+training_history,C,multi,7,,,,,val_gender,0.5883883993509987
+training_history,C,multi,7,,,,,val_usage,0.2774513722352292
+training_history,C,multi,8,,,,,loss,0.6714095366653577
+training_history,C,multi,8,,,,,val_gender,0.6752538976116378
+training_history,C,multi,8,,,,,val_usage,0.3772930736974018
+training_history,C,multi,9,,,,,loss,0.647596349949225
+training_history,C,multi,9,,,,,val_gender,0.62088249439124
+training_history,C,multi,9,,,,,val_usage,0.3575228244025868
+training_history,C,multi,10,,,,,loss,0.6231011367025495
+training_history,C,multi,10,,,,,val_gender,0.6048554900768149
+training_history,C,multi,10,,,,,val_usage,0.3613332358921952
+training_history,C,multi,11,,,,,loss,0.5951670932585484
+training_history,C,multi,11,,,,,val_gender,0.6045257523754762
+training_history,C,multi,11,,,,,val_usage,0.3518911198486354
+training_history,C,multi,12,,,,,loss,0.5786281921310387
+training_history,C,multi,12,,,,,val_gender,0.66101766600773
+training_history,C,multi,12,,,,,val_usage,0.3751436255021709
+training_history,C,multi,13,,,,,loss,0.5548742467247478
+training_history,C,multi,13,,,,,val_gender,0.675918380661819
+training_history,C,multi,13,,,,,val_usage,0.3927518714422774
+training_history,C,multi,14,,,,,loss,0.5298569874340809
+training_history,C,multi,14,,,,,val_gender,0.6821012407313976
+training_history,C,multi,14,,,,,val_usage,0.3955790742727792
+training_history,C,multi,15,,,,,loss,0.5085977853169362
+training_history,C,multi,15,,,,,val_gender,0.6937977548044839
+training_history,C,multi,15,,,,,val_usage,0.3747011261920601
+training_history,C,multi,16,,,,,loss,0.4919932900841226
+training_history,C,multi,16,,,,,val_gender,0.6962367314024005
+training_history,C,multi,16,,,,,val_usage,0.4014623075857482
+training_history,C,multi,17,,,,,loss,0.4685029537916154
+training_history,C,multi,17,,,,,val_gender,0.7279585223847512
+training_history,C,multi,17,,,,,val_usage,0.4056415131732412
+training_history,C,multi,18,,,,,loss,0.4534285117854294
+training_history,C,multi,18,,,,,val_gender,0.7228806145341072
+training_history,C,multi,18,,,,,val_usage,0.4030732032933023
+training_history,C,multi,19,,,,,loss,0.4481762104565894
+training_history,C,multi,19,,,,,val_gender,0.7199373516061364
+training_history,C,multi,19,,,,,val_usage,0.4038896496689066
+training_history,C,multi,20,,,,,loss,0.4431639034846762
+training_history,C,multi,20,,,,,val_gender,0.7240179135516591
+training_history,C,multi,20,,,,,val_usage,0.4045542188459926
+training_history,C,weighted,1,,,,,loss,2.047226232255342
+training_history,C,weighted,1,,,,,val_gender,0.3892725354685008
+training_history,C,weighted,1,,,,,val_usage,0.2992143310584179
+training_history,C,weighted,2,,,,,loss,1.589055811076253
+training_history,C,weighted,2,,,,,val_gender,0.5149232150444939
+training_history,C,weighted,2,,,,,val_usage,0.2932554476351124
+training_history,C,weighted,3,,,,,loss,1.444114662393818
+training_history,C,weighted,3,,,,,val_gender,0.4258412531702996
+training_history,C,weighted,3,,,,,val_usage,0.2682755806403106
+training_history,C,weighted,4,,,,,loss,1.323103128474128
+training_history,C,weighted,4,,,,,val_gender,0.6107102119462953
+training_history,C,weighted,4,,,,,val_usage,0.3534274842415307
+training_history,C,weighted,5,,,,,loss,1.2570034941597303
+training_history,C,weighted,5,,,,,val_gender,0.6104601462144179
+training_history,C,weighted,5,,,,,val_usage,0.3518184946613346
+training_history,C,weighted,6,,,,,loss,1.1968481685734496
+training_history,C,weighted,6,,,,,val_gender,0.6055080844677152
+training_history,C,weighted,6,,,,,val_usage,0.3721088262796861
+training_history,C,weighted,7,,,,,loss,1.140483917760189
+training_history,C,weighted,7,,,,,val_gender,0.5409460139275236
+training_history,C,weighted,7,,,,,val_usage,0.3292922011162291
+training_history,C,weighted,8,,,,,loss,1.0966629395682888
+training_history,C,weighted,8,,,,,val_gender,0.6554880020842668
+training_history,C,weighted,8,,,,,val_usage,0.3977860390297887
+training_history,C,weighted,9,,,,,loss,1.0521223262990893
+training_history,C,weighted,9,,,,,val_gender,0.64259944462575
+training_history,C,weighted,9,,,,,val_usage,0.3603406910769484
+training_history,C,weighted,10,,,,,loss,0.9974557694139184
+training_history,C,weighted,10,,,,,val_gender,0.6841669825233939
+training_history,C,weighted,10,,,,,val_usage,0.4000449058481196
+training_history,C,weighted,11,,,,,loss,0.9551003992505508
+training_history,C,weighted,11,,,,,val_gender,0.6416093175870833
+training_history,C,weighted,11,,,,,val_usage,0.4070859009054381
+training_history,C,weighted,12,,,,,loss,0.919625902782279
+training_history,C,weighted,12,,,,,val_gender,0.5834054397947239
+training_history,C,weighted,12,,,,,val_usage,0.3905586830383804
+training_history,C,weighted,13,,,,,loss,0.8796718158919293
+training_history,C,weighted,13,,,,,val_gender,0.6862061855554089
+training_history,C,weighted,13,,,,,val_usage,0.4118059026912379
+training_history,C,weighted,14,,,,,loss,0.8385425103511793
+training_history,C,weighted,14,,,,,val_gender,0.6723106746826207
+training_history,C,weighted,14,,,,,val_usage,0.408042344650955
+training_history,C,weighted,15,,,,,loss,0.8065457303035647
+training_history,C,weighted,15,,,,,val_gender,0.7166399426289984
+training_history,C,weighted,15,,,,,val_usage,0.4334123483924003
+training_history,C,weighted,16,,,,,loss,0.7699659981865521
+training_history,C,weighted,16,,,,,val_gender,0.6749274577216255
+training_history,C,weighted,16,,,,,val_usage,0.4389298430911483
+training_history,C,weighted,17,,,,,loss,0.7432862567553837
+training_history,C,weighted,17,,,,,val_gender,0.7035803168143656
+training_history,C,weighted,17,,,,,val_usage,0.4440529588610025
+training_history,C,weighted,18,,,,,loss,0.7204169126360096
+training_history,C,weighted,18,,,,,val_gender,0.7129981226868138
+training_history,C,weighted,18,,,,,val_usage,0.4434442808696771
+training_history,C,weighted,19,,,,,loss,0.7131223102829252
+training_history,C,weighted,19,,,,,val_gender,0.7322841803458963
+training_history,C,weighted,19,,,,,val_usage,0.4333933407551514
+training_history,C,weighted,20,,,,,loss,0.7028881686017068
+training_history,C,weighted,20,,,,,val_gender,0.7365298526195028
+training_history,C,weighted,20,,,,,val_usage,0.4332051828882768
+training_history,C,external,1,,,,,loss,1.2563333418392937
+training_history,C,external,1,,,,,val_gender,0.3946287620761358
+training_history,C,external,1,,,,,val_usage,0.2825964410445822
+training_history,C,external,2,,,,,loss,0.9133773899989024
+training_history,C,external,2,,,,,val_gender,0.3029191518476982
+training_history,C,external,2,,,,,val_usage,0.2138205528532469
+training_history,C,external,3,,,,,loss,0.8276570244176137
+training_history,C,external,3,,,,,val_gender,0.5503669133014137
+training_history,C,external,3,,,,,val_usage,0.2704373161162119
+training_history,C,external,4,,,,,loss,0.7618158565812734
+training_history,C,external,4,,,,,val_gender,0.3233400005182623
+training_history,C,external,4,,,,,val_usage,0.2098864649087821
+training_history,C,external,5,,,,,loss,0.7329717919884248
+training_history,C,external,5,,,,,val_gender,0.3397284502994406
+training_history,C,external,5,,,,,val_usage,0.3088396795899588
+training_history,C,external,6,,,,,loss,0.6988198388700814
+training_history,C,external,6,,,,,val_gender,0.402710948570221
+training_history,C,external,6,,,,,val_usage,0.3132607751728949
+training_history,C,external,7,,,,,loss,0.6634892153476134
+training_history,C,external,7,,,,,val_gender,0.6211258558832219
+training_history,C,external,7,,,,,val_usage,0.3841693575983089
+training_history,C,external,8,,,,,loss,0.6388647835288976
+training_history,C,external,8,,,,,val_gender,0.6190723358370943
+training_history,C,external,8,,,,,val_usage,0.3075959568342212
+training_history,C,external,9,,,,,loss,0.6074326275916229
+training_history,C,external,9,,,,,val_gender,0.5803385522851183
+training_history,C,external,9,,,,,val_usage,0.3914379356701608
+training_history,C,external,10,,,,,loss,0.5883977000708718
+training_history,C,external,10,,,,,val_gender,0.6256274816481731
+training_history,C,external,10,,,,,val_usage,0.3543562648655988
+training_history,C,external,11,,,,,loss,0.5649715174262823
+training_history,C,external,11,,,,,val_gender,0.6449998564146445
+training_history,C,external,11,,,,,val_usage,0.3690492611575036
+training_history,C,external,12,,,,,loss,0.5405410010143674
+training_history,C,external,12,,,,,val_gender,0.6308213891010107
+training_history,C,external,12,,,,,val_usage,0.3886232431774676
+training_history,C,external,13,,,,,loss,0.5224694016822857
+training_history,C,external,13,,,,,val_gender,0.6871483523686854
+training_history,C,external,13,,,,,val_usage,0.2973677742111971
+training_history,C,external,14,,,,,loss,0.4993733008740014
+training_history,C,external,14,,,,,val_gender,0.6475256397606332
+training_history,C,external,14,,,,,val_usage,0.3531948932449559
+training_history,C,external,15,,,,,loss,0.4758410618317343
+training_history,C,external,15,,,,,val_gender,0.7035044072439194
+training_history,C,external,15,,,,,val_usage,0.3843047286595046
+training_history,C,external,16,,,,,loss,0.4543946688510838
+training_history,C,external,16,,,,,val_gender,0.6721288354916269
+training_history,C,external,16,,,,,val_usage,0.3983971499894931
+training_history,C,external,17,,,,,loss,0.4395406201564693
+training_history,C,external,17,,,,,val_gender,0.7100463768545183
+training_history,C,external,17,,,,,val_usage,0.4065299790674306
+training_history,C,external,18,,,,,loss,0.4235037306768549
+training_history,C,external,18,,,,,val_gender,0.7067706082531013
+training_history,C,external,18,,,,,val_usage,0.4068935692805305
+training_history,C,external,19,,,,,loss,0.4191220530072246
+training_history,C,external,19,,,,,val_gender,0.7047852229005945
+training_history,C,external,19,,,,,val_usage,0.4077091146762266
+training_history,C,external,20,,,,,loss,0.4101206327352537
+training_history,C,external,20,,,,,val_gender,0.7220466524773724
+training_history,C,external,20,,,,,val_usage,0.4076333642186998
+training_history,C,forward,1,,,,,loss,1.3556624954781764
+training_history,C,forward,1,,,,,val_gender,0.2851568506457497
+training_history,C,forward,1,,,,,val_usage,0.182520736697461
+training_history,C,forward,2,,,,,loss,0.9941687670776048
+training_history,C,forward,2,,,,,val_gender,0.3171188623374701
+training_history,C,forward,2,,,,,val_usage,0.2852315224605306
+training_history,C,forward,3,,,,,loss,0.9038477623631646
+training_history,C,forward,3,,,,,val_gender,0.3785949113267385
+training_history,C,forward,3,,,,,val_usage,0.2733189773105763
+training_history,C,forward,4,,,,,loss,0.8370059697039633
+training_history,C,forward,4,,,,,val_gender,0.4643757262351301
+training_history,C,forward,4,,,,,val_usage,0.3050493458805106
+training_history,C,forward,5,,,,,loss,0.7912500225987588
+training_history,C,forward,5,,,,,val_gender,0.3955351306080589
+training_history,C,forward,5,,,,,val_usage,0.2051899075488447
+training_history,C,forward,6,,,,,loss,0.7607800391892405
+training_history,C,forward,6,,,,,val_gender,0.198766422548789
+training_history,C,forward,6,,,,,val_usage,0.312899252518605
+training_history,C,forward,7,,,,,loss,0.7191577648102708
+training_history,C,forward,7,,,,,val_gender,0.5224073961247937
+training_history,C,forward,7,,,,,val_usage,0.3279553463594226
+training_history,C,forward,8,,,,,loss,0.6897206575937785
+training_history,C,forward,8,,,,,val_gender,0.3628336657302174
+training_history,C,forward,8,,,,,val_usage,0.2521073173029446
+training_history,C,forward,9,,,,,loss,0.6629140493743134
+training_history,C,forward,9,,,,,val_gender,0.4348178545050548
+training_history,C,forward,9,,,,,val_usage,0.3118174604365312
+training_history,C,forward,10,,,,,loss,0.637783311790055
+training_history,C,forward,10,,,,,val_gender,0.425389003198296
+training_history,C,forward,10,,,,,val_usage,0.2982896743349437
+training_history,C,forward,11,,,,,loss,0.6109856894701928
+training_history,C,forward,11,,,,,val_gender,0.5362207664968579
+training_history,C,forward,11,,,,,val_usage,0.2859033227755083
+training_history,C,forward,12,,,,,loss,0.5861186274457
+training_history,C,forward,12,,,,,val_gender,0.5407082700738594
+training_history,C,forward,12,,,,,val_usage,0.3055124232642949
+training_history,C,forward,13,,,,,loss,0.5688133459562402
+training_history,C,forward,13,,,,,val_gender,0.5702167792165752
+training_history,C,forward,13,,,,,val_usage,0.3564189714902132
+training_history,C,forward,14,,,,,loss,0.5399299649027487
+training_history,C,forward,14,,,,,val_gender,0.5294938952979645
+training_history,C,forward,14,,,,,val_usage,0.3253663749123588
+training_history,C,forward,15,,,,,loss,0.5192560362316848
+training_history,C,forward,15,,,,,val_gender,0.5577346460013033
+training_history,C,forward,15,,,,,val_usage,0.3460315892712706
+training_history,C,forward,16,,,,,loss,0.4966852400441535
+training_history,C,forward,16,,,,,val_gender,0.513742894700741
+training_history,C,forward,16,,,,,val_usage,0.3613653959189766
+training_history,C,forward,17,,,,,loss,0.4832170619950703
+training_history,C,forward,17,,,,,val_gender,0.5621719956376323
+training_history,C,forward,17,,,,,val_usage,0.3488273161032666
+training_history,C,forward,18,,,,,loss,0.4673535830730759
+training_history,C,forward,18,,,,,val_gender,0.5802656199836153
+training_history,C,forward,18,,,,,val_usage,0.3494377195548271
+training_history,C,forward,19,,,,,loss,0.4558260477265075
+training_history,C,forward,19,,,,,val_gender,0.5848096726066968
+training_history,C,forward,19,,,,,val_usage,0.3588206463044689
+training_history,C,forward,20,,,,,loss,0.4530684114615796
+training_history,C,forward,20,,,,,val_gender,0.5748665264564234
+training_history,C,forward,20,,,,,val_usage,0.3619117917954258
+training_history,D,transfer,1,,,,,loss,1.103497753920898
+training_history,D,transfer,1,,,,,val_gender,0.2872002710238514
+training_history,D,transfer,1,,,,,val_usage,0.2413342711674576
+training_history,D,transfer,2,,,,,loss,0.8290089724471393
+training_history,D,transfer,2,,,,,val_gender,0.5682685521987733
+training_history,D,transfer,2,,,,,val_usage,0.3197230102979388
+training_history,D,transfer,3,,,,,loss,0.7683966176540473
+training_history,D,transfer,3,,,,,val_gender,0.5881709803485677
+training_history,D,transfer,3,,,,,val_usage,0.3247141771804356
+training_history,D,transfer,4,,,,,loss,0.7225790649202901
+training_history,D,transfer,4,,,,,val_gender,0.603477412032445
+training_history,D,transfer,4,,,,,val_usage,0.369233830928579
+training_history,D,transfer,5,,,,,loss,0.6941994575249734
+training_history,D,transfer,5,,,,,val_gender,0.5635157508452853
+training_history,D,transfer,5,,,,,val_usage,0.2537975667439508
+training_history,D,transfer,6,,,,,loss,0.6572628775122694
+training_history,D,transfer,6,,,,,val_gender,0.6688090387023343
+training_history,D,transfer,6,,,,,val_usage,0.264068582019147
+training_history,D,transfer,7,,,,,loss,0.6302591730882188
+training_history,D,transfer,7,,,,,val_gender,0.7009623674103296
+training_history,D,transfer,7,,,,,val_usage,0.3848083237651419
+training_history,D,transfer,8,,,,,loss,0.6078423543874648
+training_history,D,transfer,8,,,,,val_gender,0.6609612415100156
+training_history,D,transfer,8,,,,,val_usage,0.3884770632061177
+training_history,D,transfer,9,,,,,loss,0.5871873148925405
+training_history,D,transfer,9,,,,,val_gender,0.6127538526294714
+training_history,D,transfer,9,,,,,val_usage,0.3745199588865538
+training_history,D,transfer,10,,,,,loss,0.5665615432585821
+training_history,D,transfer,10,,,,,val_gender,0.5710864020972496
+training_history,D,transfer,10,,,,,val_usage,0.4015609001647047
+training_history,D,transfer,11,,,,,loss,0.5393118980355638
+training_history,D,transfer,11,,,,,val_gender,0.708283686398028
+training_history,D,transfer,11,,,,,val_usage,0.38708284184233
+training_history,D,transfer,12,,,,,loss,0.5183192729697295
+training_history,D,transfer,12,,,,,val_gender,0.6784873490523233
+training_history,D,transfer,12,,,,,val_usage,0.3989965428977708
+training_history,D,transfer,13,,,,,loss,0.4989747578865006
+training_history,D,transfer,13,,,,,val_gender,0.7009214714057919
+training_history,D,transfer,13,,,,,val_usage,0.4033578711447932
+training_history,D,transfer,14,,,,,loss,0.4779649951588467
+training_history,D,transfer,14,,,,,val_gender,0.7099955053706225
+training_history,D,transfer,14,,,,,val_usage,0.4090672129902838
+training_history,D,transfer,15,,,,,loss,0.4578149954423451
+training_history,D,transfer,15,,,,,val_gender,0.7369471610685872
+training_history,D,transfer,15,,,,,val_usage,0.3918628828077535
+training_history,D,transfer,16,,,,,loss,0.439930812785816
+training_history,D,transfer,16,,,,,val_gender,0.7360095437338595
+training_history,D,transfer,16,,,,,val_usage,0.4077694018551007
+training_history,D,transfer,17,,,,,loss,0.4232579790034387
+training_history,D,transfer,17,,,,,val_gender,0.7459919177755839
+training_history,D,transfer,17,,,,,val_usage,0.4104532759922083
+training_history,D,transfer,18,,,,,loss,0.4084384131722878
+training_history,D,transfer,18,,,,,val_gender,0.7430818265691734
+training_history,D,transfer,18,,,,,val_usage,0.4097794995814173
+training_history,D,transfer,19,,,,,loss,0.4044809753260787
+training_history,D,transfer,19,,,,,val_gender,0.73643957284289
+training_history,D,transfer,19,,,,,val_usage,0.4112897252483447
+training_history,D,transfer,20,,,,,loss,0.4010183835413045
+training_history,D,transfer,20,,,,,val_gender,0.7388154738716132
+training_history,D,transfer,20,,,,,val_usage,0.4114005509327453
+hyperparam_sweep,lr=0.0003,,42,,,,,lr,0.0003
+hyperparam_sweep,lr=0.0003,,42,,,,,dropout,0.2
+hyperparam_sweep,lr=0.0003,,42,,,,,bs,256
+hyperparam_sweep,lr=0.0003,,42,,,,,epochs,20
+hyperparam_sweep,lr=0.0003,,42,,,,,gender macroF1,0.6997
+hyperparam_sweep,lr=0.0003,,42,,,,,gender acc,0.8657
+hyperparam_sweep,lr=0.0003,,42,,,,,usage macroF1,0.4155
+hyperparam_sweep,lr=0.0003,,42,,,,,usage acc,0.8643
+hyperparam_sweep,lr=0.0003,,42,,,,,mean macroF1,0.5576
+hyperparam_sweep,lr=0.0003,,42,,,,,minutes,10.2
+hyperparam_sweep,lr=0.0003,,43,,,,,lr,0.0003
+hyperparam_sweep,lr=0.0003,,43,,,,,dropout,0.2
+hyperparam_sweep,lr=0.0003,,43,,,,,bs,256
+hyperparam_sweep,lr=0.0003,,43,,,,,epochs,20
+hyperparam_sweep,lr=0.0003,,43,,,,,gender macroF1,0.6931
+hyperparam_sweep,lr=0.0003,,43,,,,,gender acc,0.8707
+hyperparam_sweep,lr=0.0003,,43,,,,,usage macroF1,0.4465
+hyperparam_sweep,lr=0.0003,,43,,,,,usage acc,0.8601
+hyperparam_sweep,lr=0.0003,,43,,,,,mean macroF1,0.5698
+hyperparam_sweep,lr=0.0003,,43,,,,,minutes,10.5
+hyperparam_sweep,lr=0.003,,42,,,,,lr,0.003
+hyperparam_sweep,lr=0.003,,42,,,,,dropout,0.2
+hyperparam_sweep,lr=0.003,,42,,,,,bs,256
+hyperparam_sweep,lr=0.003,,42,,,,,epochs,20
+hyperparam_sweep,lr=0.003,,42,,,,,gender macroF1,0.7586
+hyperparam_sweep,lr=0.003,,42,,,,,gender acc,0.8829
+hyperparam_sweep,lr=0.003,,42,,,,,usage macroF1,0.4592
+hyperparam_sweep,lr=0.003,,42,,,,,usage acc,0.8758
+hyperparam_sweep,lr=0.003,,42,,,,,mean macroF1,0.6089
+hyperparam_sweep,lr=0.003,,42,,,,,minutes,10.0
+hyperparam_sweep,lr=0.003,,43,,,,,lr,0.003
+hyperparam_sweep,lr=0.003,,43,,,,,dropout,0.2
+hyperparam_sweep,lr=0.003,,43,,,,,bs,256
+hyperparam_sweep,lr=0.003,,43,,,,,epochs,20
+hyperparam_sweep,lr=0.003,,43,,,,,gender macroF1,0.7391
+hyperparam_sweep,lr=0.003,,43,,,,,gender acc,0.8827
+hyperparam_sweep,lr=0.003,,43,,,,,usage macroF1,0.4418
+hyperparam_sweep,lr=0.003,,43,,,,,usage acc,0.8688
+hyperparam_sweep,lr=0.003,,43,,,,,mean macroF1,0.5905
+hyperparam_sweep,lr=0.003,,43,,,,,minutes,10.1
+hyperparam_sweep,dropout=0.0,,42,,,,,lr,0.001
+hyperparam_sweep,dropout=0.0,,42,,,,,dropout,0.0
+hyperparam_sweep,dropout=0.0,,42,,,,,bs,256
+hyperparam_sweep,dropout=0.0,,42,,,,,epochs,20
+hyperparam_sweep,dropout=0.0,,42,,,,,gender macroF1,0.728
+hyperparam_sweep,dropout=0.0,,42,,,,,gender acc,0.8816
+hyperparam_sweep,dropout=0.0,,42,,,,,usage macroF1,0.4733
+hyperparam_sweep,dropout=0.0,,42,,,,,usage acc,0.8781
+hyperparam_sweep,dropout=0.0,,42,,,,,mean macroF1,0.6007
+hyperparam_sweep,dropout=0.0,,42,,,,,minutes,10.2
+hyperparam_sweep,dropout=0.0,,43,,,,,lr,0.001
+hyperparam_sweep,dropout=0.0,,43,,,,,dropout,0.0
+hyperparam_sweep,dropout=0.0,,43,,,,,bs,256
+hyperparam_sweep,dropout=0.0,,43,,,,,epochs,20
+hyperparam_sweep,dropout=0.0,,43,,,,,gender macroF1,0.7547
+hyperparam_sweep,dropout=0.0,,43,,,,,gender acc,0.8839
+hyperparam_sweep,dropout=0.0,,43,,,,,usage macroF1,0.4145
+hyperparam_sweep,dropout=0.0,,43,,,,,usage acc,0.8726
+hyperparam_sweep,dropout=0.0,,43,,,,,mean macroF1,0.5846
+hyperparam_sweep,dropout=0.0,,43,,,,,minutes,9.9
+hyperparam_sweep,dropout=0.4,,42,,,,,lr,0.001
+hyperparam_sweep,dropout=0.4,,42,,,,,dropout,0.4
+hyperparam_sweep,dropout=0.4,,42,,,,,bs,256
+hyperparam_sweep,dropout=0.4,,42,,,,,epochs,20
+hyperparam_sweep,dropout=0.4,,42,,,,,gender macroF1,0.7136
+hyperparam_sweep,dropout=0.4,,42,,,,,gender acc,0.8756
+hyperparam_sweep,dropout=0.4,,42,,,,,usage macroF1,0.4558
+hyperparam_sweep,dropout=0.4,,42,,,,,usage acc,0.8728
+hyperparam_sweep,dropout=0.4,,42,,,,,mean macroF1,0.5847
+hyperparam_sweep,dropout=0.4,,42,,,,,minutes,10.0
+hyperparam_sweep,dropout=0.4,,43,,,,,lr,0.001
+hyperparam_sweep,dropout=0.4,,43,,,,,dropout,0.4
+hyperparam_sweep,dropout=0.4,,43,,,,,bs,256
+hyperparam_sweep,dropout=0.4,,43,,,,,epochs,20
+hyperparam_sweep,dropout=0.4,,43,,,,,gender macroF1,0.7411
+hyperparam_sweep,dropout=0.4,,43,,,,,gender acc,0.8793
+hyperparam_sweep,dropout=0.4,,43,,,,,usage macroF1,0.4288
+hyperparam_sweep,dropout=0.4,,43,,,,,usage acc,0.8666
+hyperparam_sweep,dropout=0.4,,43,,,,,mean macroF1,0.5849
+hyperparam_sweep,dropout=0.4,,43,,,,,minutes,10.3
+hyperparam_sweep,epochs=30,,42,,,,,lr,0.001
+hyperparam_sweep,epochs=30,,42,,,,,dropout,0.2
+hyperparam_sweep,epochs=30,,42,,,,,bs,256
+hyperparam_sweep,epochs=30,,42,,,,,epochs,30
+hyperparam_sweep,epochs=30,,42,,,,,gender macroF1,0.7555
+hyperparam_sweep,epochs=30,,42,,,,,gender acc,0.8903
+hyperparam_sweep,epochs=30,,42,,,,,usage macroF1,0.434
+hyperparam_sweep,epochs=30,,42,,,,,usage acc,0.8786
+hyperparam_sweep,epochs=30,,42,,,,,mean macroF1,0.5948
+hyperparam_sweep,epochs=30,,42,,,,,minutes,15.5
+hyperparam_sweep,epochs=30,,43,,,,,lr,0.001
+hyperparam_sweep,epochs=30,,43,,,,,dropout,0.2
+hyperparam_sweep,epochs=30,,43,,,,,bs,256
+hyperparam_sweep,epochs=30,,43,,,,,epochs,30
+hyperparam_sweep,epochs=30,,43,,,,,gender macroF1,0.7464
+hyperparam_sweep,epochs=30,,43,,,,,gender acc,0.8884
+hyperparam_sweep,epochs=30,,43,,,,,usage macroF1,0.4763
+hyperparam_sweep,epochs=30,,43,,,,,usage acc,0.868
+hyperparam_sweep,epochs=30,,43,,,,,mean macroF1,0.6113
+hyperparam_sweep,epochs=30,,43,,,,,minutes,15.5
+hyperparam_summary,lr=0.0003,,,,,,,n_seeds,2
+hyperparam_summary,lr=0.0003,,,,,,,gender,0.6964
+hyperparam_summary,lr=0.0003,,,,,,,gender delta,-0.0353
+hyperparam_summary,lr=0.0003,,,,,,,gender beats_noise,True
+hyperparam_summary,lr=0.0003,,,,,,,usage,0.431
+hyperparam_summary,lr=0.0003,,,,,,,usage delta,-0.0184
+hyperparam_summary,lr=0.0003,,,,,,,usage beats_noise,False
+hyperparam_summary,lr=0.003,,,,,,,n_seeds,2
+hyperparam_summary,lr=0.003,,,,,,,gender,0.7489
+hyperparam_summary,lr=0.003,,,,,,,gender delta,0.0171
+hyperparam_summary,lr=0.003,,,,,,,gender beats_noise,True
+hyperparam_summary,lr=0.003,,,,,,,usage,0.4505
+hyperparam_summary,lr=0.003,,,,,,,usage delta,0.0011
+hyperparam_summary,lr=0.003,,,,,,,usage beats_noise,False
+hyperparam_summary,dropout=0.0,,,,,,,n_seeds,2
+hyperparam_summary,dropout=0.0,,,,,,,gender,0.7413
+hyperparam_summary,dropout=0.0,,,,,,,gender delta,0.0096
+hyperparam_summary,dropout=0.0,,,,,,,gender beats_noise,False
+hyperparam_summary,dropout=0.0,,,,,,,usage,0.4439
+hyperparam_summary,dropout=0.0,,,,,,,usage delta,-0.0055
+hyperparam_summary,dropout=0.0,,,,,,,usage beats_noise,False
+hyperparam_summary,dropout=0.4,,,,,,,n_seeds,2
+hyperparam_summary,dropout=0.4,,,,,,,gender,0.7273
+hyperparam_summary,dropout=0.4,,,,,,,gender delta,-0.0044
+hyperparam_summary,dropout=0.4,,,,,,,gender beats_noise,False
+hyperparam_summary,dropout=0.4,,,,,,,usage,0.4423
+hyperparam_summary,dropout=0.4,,,,,,,usage delta,-0.0071
+hyperparam_summary,dropout=0.4,,,,,,,usage beats_noise,False
+hyperparam_summary,epochs=30,,,,,,,n_seeds,2
+hyperparam_summary,epochs=30,,,,,,,gender,0.751
+hyperparam_summary,epochs=30,,,,,,,gender delta,0.0192
+hyperparam_summary,epochs=30,,,,,,,gender beats_noise,True
+hyperparam_summary,epochs=30,,,,,,,usage,0.4551
+hyperparam_summary,epochs=30,,,,,,,usage delta,0.0057
+hyperparam_summary,epochs=30,,,,,,,usage beats_noise,False
+epochs_confirmation,,epochs=20.0,45.0,,,,,gender macroF1,0.5877
+epochs_confirmation,,epochs=20.0,45.0,,,,,gender acc,0.8442
+epochs_confirmation,,epochs=20.0,45.0,,,,,usage macroF1,0.3471
+epochs_confirmation,,epochs=20.0,45.0,,,,,usage acc,0.8547
+epochs_confirmation,,epochs=20.0,45.0,,,,,minutes,9.5
+epochs_confirmation,,epochs=30.0,45.0,,,,,gender macroF1,0.5929
+epochs_confirmation,,epochs=30.0,45.0,,,,,gender acc,0.8473
+epochs_confirmation,,epochs=30.0,45.0,,,,,usage macroF1,0.3505
+epochs_confirmation,,epochs=30.0,45.0,,,,,usage acc,0.875
+epochs_confirmation,,epochs=30.0,45.0,,,,,minutes,14.3
+epochs_confirmation,,epochs=20.0,46.0,,,,,gender macroF1,0.5937
+epochs_confirmation,,epochs=20.0,46.0,,,,,gender acc,0.8455
+epochs_confirmation,,epochs=20.0,46.0,,,,,usage macroF1,0.343
+epochs_confirmation,,epochs=20.0,46.0,,,,,usage acc,0.8523
+epochs_confirmation,,epochs=20.0,46.0,,,,,minutes,9.5
+epochs_confirmation,,epochs=30.0,46.0,,,,,gender macroF1,0.578
+epochs_confirmation,,epochs=30.0,46.0,,,,,gender acc,0.8217
+epochs_confirmation,,epochs=30.0,46.0,,,,,usage macroF1,0.3545
+epochs_confirmation,,epochs=30.0,46.0,,,,,usage acc,0.8651
+epochs_confirmation,,epochs=30.0,46.0,,,,,minutes,14.3
+epochs_confirmation,,epochs=20.0,47.0,,,,,gender macroF1,0.5834
+epochs_confirmation,,epochs=20.0,47.0,,,,,gender acc,0.8394
+epochs_confirmation,,epochs=20.0,47.0,,,,,usage macroF1,0.3399
+epochs_confirmation,,epochs=20.0,47.0,,,,,usage acc,0.8542
+epochs_confirmation,,epochs=20.0,47.0,,,,,minutes,9.5
+epochs_confirmation,,epochs=30.0,47.0,,,,,gender macroF1,0.5891
+epochs_confirmation,,epochs=30.0,47.0,,,,,gender acc,0.8542
+epochs_confirmation,,epochs=30.0,47.0,,,,,usage macroF1,0.3457
+epochs_confirmation,,epochs=30.0,47.0,,,,,usage acc,0.8591
+epochs_confirmation,,epochs=30.0,47.0,,,,,minutes,14.3
+transfer_weighted,C_weighted,,51,,,,,gender macroF1,0.6096
+transfer_weighted,C_weighted,,51,,,,,gender acc,0.851
+transfer_weighted,C_weighted,,51,,,,,usage macroF1,0.3502
+transfer_weighted,C_weighted,,51,,,,,usage acc,0.8674
+transfer_weighted,C_weighted,,51,,,,,minutes,9.8
+transfer_weighted,D_weighted,,51,,,,,gender macroF1,0.6117
+transfer_weighted,D_weighted,,51,,,,,gender acc,0.8564
+transfer_weighted,D_weighted,,51,,,,,usage macroF1,0.3521
+transfer_weighted,D_weighted,,51,,,,,usage acc,0.8674
+transfer_weighted,D_weighted,,51,,,,,minutes,9.8
+transfer_weighted,C_weighted,,52,,,,,gender macroF1,0.6086
+transfer_weighted,C_weighted,,52,,,,,gender acc,0.8507
+transfer_weighted,C_weighted,,52,,,,,usage macroF1,0.353
+transfer_weighted,C_weighted,,52,,,,,usage acc,0.875
+transfer_weighted,C_weighted,,52,,,,,minutes,9.9
+transfer_weighted,D_weighted,,52,,,,,gender macroF1,0.6349
+transfer_weighted,D_weighted,,52,,,,,gender acc,0.8532
+transfer_weighted,D_weighted,,52,,,,,usage macroF1,0.3369
+transfer_weighted,D_weighted,,52,,,,,usage acc,0.8307
+transfer_weighted,D_weighted,,52,,,,,minutes,10.0
+transfer_weighted,C_weighted,,53,,,,,gender macroF1,0.5936
+transfer_weighted,C_weighted,,53,,,,,gender acc,0.8475
+transfer_weighted,C_weighted,,53,,,,,usage macroF1,0.3523
+transfer_weighted,C_weighted,,53,,,,,usage acc,0.8651
+transfer_weighted,C_weighted,,53,,,,,minutes,10.0
+transfer_weighted,D_weighted,,53,,,,,gender macroF1,0.5848
+transfer_weighted,D_weighted,,53,,,,,gender acc,0.851
+transfer_weighted,D_weighted,,53,,,,,usage macroF1,0.3459
+transfer_weighted,D_weighted,,53,,,,,usage acc,0.8597
+transfer_weighted,D_weighted,,53,,,,,minutes,10.0
+transfer_weighted_perclass,C_weighted,,51,,,,Boys,val_n,93
+transfer_weighted_perclass,C_weighted,,51,,,,Boys,precision,0.68
+transfer_weighted_perclass,C_weighted,,51,,,,Boys,recall,0.5484
+transfer_weighted_perclass,C_weighted,,51,,,,Boys,f1,0.6071
+transfer_weighted_perclass,C_weighted,,51,,,,Girls,val_n,62
+transfer_weighted_perclass,C_weighted,,51,,,,Girls,precision,0.4727
+transfer_weighted_perclass,C_weighted,,51,,,,Girls,recall,0.4194
+transfer_weighted_perclass,C_weighted,,51,,,,Girls,f1,0.4444
+transfer_weighted_perclass,C_weighted,,51,,,,Men,val_n,3242
+transfer_weighted_perclass,C_weighted,,51,,,,Men,precision,0.9088
+transfer_weighted_perclass,C_weighted,,51,,,,Men,recall,0.8242
+transfer_weighted_perclass,C_weighted,,51,,,,Men,f1,0.8644
+transfer_weighted_perclass,C_weighted,,51,,,,Unisex,val_n,161
+transfer_weighted_perclass,C_weighted,,51,,,,Unisex,precision,0.1702
+transfer_weighted_perclass,C_weighted,,51,,,,Unisex,recall,0.4037
+transfer_weighted_perclass,C_weighted,,51,,,,Unisex,f1,0.2394
+transfer_weighted_perclass,C_weighted,,51,,,,Women,val_n,3991
+transfer_weighted_perclass,C_weighted,,51,,,,Women,precision,0.8811
+transfer_weighted_perclass,C_weighted,,51,,,,Women,recall,0.9045
+transfer_weighted_perclass,C_weighted,,51,,,,Women,f1,0.8927
+transfer_weighted_perclass,D_weighted,,51,,,,Boys,val_n,93
+transfer_weighted_perclass,D_weighted,,51,,,,Boys,precision,0.6351
+transfer_weighted_perclass,D_weighted,,51,,,,Boys,recall,0.5054
+transfer_weighted_perclass,D_weighted,,51,,,,Boys,f1,0.5629
+transfer_weighted_perclass,D_weighted,,51,,,,Girls,val_n,62
+transfer_weighted_perclass,D_weighted,,51,,,,Girls,precision,0.5778
+transfer_weighted_perclass,D_weighted,,51,,,,Girls,recall,0.4194
+transfer_weighted_perclass,D_weighted,,51,,,,Girls,f1,0.486
+transfer_weighted_perclass,D_weighted,,51,,,,Men,val_n,3242
+transfer_weighted_perclass,D_weighted,,51,,,,Men,precision,0.9097
+transfer_weighted_perclass,D_weighted,,51,,,,Men,recall,0.83
+transfer_weighted_perclass,D_weighted,,51,,,,Men,f1,0.8681
+transfer_weighted_perclass,D_weighted,,51,,,,Unisex,val_n,161
+transfer_weighted_perclass,D_weighted,,51,,,,Unisex,precision,0.1753
+transfer_weighted_perclass,D_weighted,,51,,,,Unisex,recall,0.3975
+transfer_weighted_perclass,D_weighted,,51,,,,Unisex,f1,0.2433
+transfer_weighted_perclass,D_weighted,,51,,,,Women,val_n,3991
+transfer_weighted_perclass,D_weighted,,51,,,,Women,precision,0.8856
+transfer_weighted_perclass,D_weighted,,51,,,,Women,recall,0.9113
+transfer_weighted_perclass,D_weighted,,51,,,,Women,f1,0.8982
+transfer_weighted_perclass,C_weighted,,52,,,,Boys,val_n,93
+transfer_weighted_perclass,C_weighted,,52,,,,Boys,precision,0.6757
+transfer_weighted_perclass,C_weighted,,52,,,,Boys,recall,0.5376
+transfer_weighted_perclass,C_weighted,,52,,,,Boys,f1,0.5988
+transfer_weighted_perclass,C_weighted,,52,,,,Girls,val_n,62
+transfer_weighted_perclass,C_weighted,,52,,,,Girls,precision,0.5319
+transfer_weighted_perclass,C_weighted,,52,,,,Girls,recall,0.4032
+transfer_weighted_perclass,C_weighted,,52,,,,Girls,f1,0.4587
+transfer_weighted_perclass,C_weighted,,52,,,,Men,val_n,3242
+transfer_weighted_perclass,C_weighted,,52,,,,Men,precision,0.8935
+transfer_weighted_perclass,C_weighted,,52,,,,Men,recall,0.8408
+transfer_weighted_perclass,C_weighted,,52,,,,Men,f1,0.8664
+transfer_weighted_perclass,C_weighted,,52,,,,Unisex,val_n,161
+transfer_weighted_perclass,C_weighted,,52,,,,Unisex,precision,0.1635
+transfer_weighted_perclass,C_weighted,,52,,,,Unisex,recall,0.3789
+transfer_weighted_perclass,C_weighted,,52,,,,Unisex,f1,0.2285
+transfer_weighted_perclass,C_weighted,,52,,,,Women,val_n,3991
+transfer_weighted_perclass,C_weighted,,52,,,,Women,precision,0.8891
+transfer_weighted_perclass,C_weighted,,52,,,,Women,recall,0.892
+transfer_weighted_perclass,C_weighted,,52,,,,Women,f1,0.8906
+transfer_weighted_perclass,D_weighted,,52,,,,Boys,val_n,93
+transfer_weighted_perclass,D_weighted,,52,,,,Boys,precision,0.7778
+transfer_weighted_perclass,D_weighted,,52,,,,Boys,recall,0.5269
+transfer_weighted_perclass,D_weighted,,52,,,,Boys,f1,0.6282
+transfer_weighted_perclass,D_weighted,,52,,,,Girls,val_n,62
+transfer_weighted_perclass,D_weighted,,52,,,,Girls,precision,0.6667
+transfer_weighted_perclass,D_weighted,,52,,,,Girls,recall,0.4516
+transfer_weighted_perclass,D_weighted,,52,,,,Girls,f1,0.5385
+transfer_weighted_perclass,D_weighted,,52,,,,Men,val_n,3242
+transfer_weighted_perclass,D_weighted,,52,,,,Men,precision,0.8866
+transfer_weighted_perclass,D_weighted,,52,,,,Men,recall,0.8442
+transfer_weighted_perclass,D_weighted,,52,,,,Men,f1,0.8649
+transfer_weighted_perclass,D_weighted,,52,,,,Unisex,val_n,161
+transfer_weighted_perclass,D_weighted,,52,,,,Unisex,precision,0.1869
+transfer_weighted_perclass,D_weighted,,52,,,,Unisex,recall,0.3913
+transfer_weighted_perclass,D_weighted,,52,,,,Unisex,f1,0.253
+transfer_weighted_perclass,D_weighted,,52,,,,Women,val_n,3991
+transfer_weighted_perclass,D_weighted,,52,,,,Women,precision,0.8866
+transfer_weighted_perclass,D_weighted,,52,,,,Women,recall,0.893
+transfer_weighted_perclass,D_weighted,,52,,,,Women,f1,0.8898
+transfer_weighted_perclass,C_weighted,,53,,,,Boys,val_n,93
+transfer_weighted_perclass,C_weighted,,53,,,,Boys,precision,0.6714
+transfer_weighted_perclass,C_weighted,,53,,,,Boys,recall,0.5054
+transfer_weighted_perclass,C_weighted,,53,,,,Boys,f1,0.5767
+transfer_weighted_perclass,C_weighted,,53,,,,Girls,val_n,62
+transfer_weighted_perclass,C_weighted,,53,,,,Girls,precision,0.4286
+transfer_weighted_perclass,C_weighted,,53,,,,Girls,recall,0.3871
+transfer_weighted_perclass,C_weighted,,53,,,,Girls,f1,0.4068
+transfer_weighted_perclass,C_weighted,,53,,,,Men,val_n,3242
+transfer_weighted_perclass,C_weighted,,53,,,,Men,precision,0.9053
+transfer_weighted_perclass,C_weighted,,53,,,,Men,recall,0.8137
+transfer_weighted_perclass,C_weighted,,53,,,,Men,f1,0.8571
+transfer_weighted_perclass,C_weighted,,53,,,,Unisex,val_n,161
+transfer_weighted_perclass,C_weighted,,53,,,,Unisex,precision,0.1723
+transfer_weighted_perclass,C_weighted,,53,,,,Unisex,recall,0.3789
+transfer_weighted_perclass,C_weighted,,53,,,,Unisex,f1,0.2369
+transfer_weighted_perclass,C_weighted,,53,,,,Women,val_n,3991
+transfer_weighted_perclass,C_weighted,,53,,,,Women,precision,0.8732
+transfer_weighted_perclass,C_weighted,,53,,,,Women,recall,0.909
+transfer_weighted_perclass,C_weighted,,53,,,,Women,f1,0.8907
+transfer_weighted_perclass,D_weighted,,53,,,,Boys,val_n,93
+transfer_weighted_perclass,D_weighted,,53,,,,Boys,precision,0.5783
+transfer_weighted_perclass,D_weighted,,53,,,,Boys,recall,0.5161
+transfer_weighted_perclass,D_weighted,,53,,,,Boys,f1,0.5455
+transfer_weighted_perclass,D_weighted,,53,,,,Girls,val_n,62
+transfer_weighted_perclass,D_weighted,,53,,,,Girls,precision,0.4255
+transfer_weighted_perclass,D_weighted,,53,,,,Girls,recall,0.3226
+transfer_weighted_perclass,D_weighted,,53,,,,Girls,f1,0.367
+transfer_weighted_perclass,D_weighted,,53,,,,Men,val_n,3242
+transfer_weighted_perclass,D_weighted,,53,,,,Men,precision,0.9131
+transfer_weighted_perclass,D_weighted,,53,,,,Men,recall,0.8199
+transfer_weighted_perclass,D_weighted,,53,,,,Men,f1,0.864
+transfer_weighted_perclass,D_weighted,,53,,,,Unisex,val_n,161
+transfer_weighted_perclass,D_weighted,,53,,,,Unisex,precision,0.1818
+transfer_weighted_perclass,D_weighted,,53,,,,Unisex,recall,0.4224
+transfer_weighted_perclass,D_weighted,,53,,,,Unisex,f1,0.2542
+transfer_weighted_perclass,D_weighted,,53,,,,Women,val_n,3991
+transfer_weighted_perclass,D_weighted,,53,,,,Women,precision,0.8781
+transfer_weighted_perclass,D_weighted,,53,,,,Women,recall,0.9095
+transfer_weighted_perclass,D_weighted,,53,,,,Women,f1,0.8935
+external_party,base,,42,,,,,gender macroF1,0.7304
+external_party,base,,42,,,,,gender acc,0.8693
+external_party,base,,42,,,,,usage macroF1,0.4454
+external_party,base,,42,,,,,usage acc,0.8677
+external_party,base,,42,,,,,F1 Casual,0.9137
+external_party,base,,42,,,,,F1 Ethnic,0.8508
+external_party,base,,42,,,,,F1 Formal,0.7592
+external_party,base,,42,,,,,F1 Home,0.0
+external_party,base,,42,,,,,F1 Party,0.0
+external_party,base,,42,,,,,F1 Smart Casual,0.1538
+external_party,base,,42,,,,,F1 Sports,0.6637
+external_party,base,,42,,,,,F1 Travel,0.2222
+external_party,base,,42,,,,,k,1
+external_party,base,,42,,,,,c,0
+external_party,base,,42,,,,,PartyFP from Casual,1
+external_party,base,,42,,,,,extHO recall,0.0
+external_party,base,,42,,,,,extHO n,41
+external_party,base,,42,,,,,minutes,9.4
+external_party,party,,42,,,,,gender macroF1,0.7423
+external_party,party,,42,,,,,gender acc,0.8873
+external_party,party,,42,,,,,usage macroF1,0.4769
+external_party,party,,42,,,,,usage acc,0.8728
+external_party,party,,42,,,,,F1 Casual,0.9173
+external_party,party,,42,,,,,F1 Ethnic,0.8519
+external_party,party,,42,,,,,F1 Formal,0.751
+external_party,party,,42,,,,,F1 Home,0.0
+external_party,party,,42,,,,,F1 Party,0.0
+external_party,party,,42,,,,,F1 Smart Casual,0.125
+external_party,party,,42,,,,,F1 Sports,0.6699
+external_party,party,,42,,,,,F1 Travel,0.5
+external_party,party,,42,,,,,k,3
+external_party,party,,42,,,,,c,0
+external_party,party,,42,,,,,PartyFP from Casual,3
+external_party,party,,42,,,,,extHO recall,0.8537
+external_party,party,,42,,,,,extHO n,41
+external_party,party,,42,,,,,minutes,10.2
+external_party,party_fixedw,,42,,,,,gender macroF1,0.7361
+external_party,party_fixedw,,42,,,,,gender acc,0.882
+external_party,party_fixedw,,42,,,,,usage macroF1,0.4647
+external_party,party_fixedw,,42,,,,,usage acc,0.8679
+external_party,party_fixedw,,42,,,,,F1 Casual,0.9138
+external_party,party_fixedw,,42,,,,,F1 Ethnic,0.8503
+external_party,party_fixedw,,42,,,,,F1 Formal,0.7517
+external_party,party_fixedw,,42,,,,,F1 Home,0.0
+external_party,party_fixedw,,42,,,,,F1 Party,0.0
+external_party,party_fixedw,,42,,,,,F1 Smart Casual,0.1429
+external_party,party_fixedw,,42,,,,,F1 Sports,0.6587
+external_party,party_fixedw,,42,,,,,F1 Travel,0.4
+external_party,party_fixedw,,42,,,,,k,11
+external_party,party_fixedw,,42,,,,,c,0
+external_party,party_fixedw,,42,,,,,PartyFP from Casual,10
+external_party,party_fixedw,,42,,,,,extHO recall,0.9756
+external_party,party_fixedw,,42,,,,,extHO n,41
+external_party,party_fixedw,,42,,,,,minutes,10.2
+external_party,base,,43,,,,,gender macroF1,0.7338
+external_party,base,,43,,,,,gender acc,0.8799
+external_party,base,,43,,,,,usage macroF1,0.4882
+external_party,base,,43,,,,,usage acc,0.8716
+external_party,base,,43,,,,,F1 Casual,0.9165
+external_party,base,,43,,,,,F1 Ethnic,0.855
+external_party,base,,43,,,,,F1 Formal,0.7463
+external_party,base,,43,,,,,F1 Home,0.0
+external_party,base,,43,,,,,F1 Party,0.0
+external_party,base,,43,,,,,F1 Smart Casual,0.1538
+external_party,base,,43,,,,,F1 Sports,0.6629
+external_party,base,,43,,,,,F1 Travel,0.5714
+external_party,base,,43,,,,,k,4
+external_party,base,,43,,,,,c,0
+external_party,base,,43,,,,,PartyFP from Casual,3
+external_party,base,,43,,,,,extHO recall,0.0
+external_party,base,,43,,,,,extHO n,41
+external_party,base,,43,,,,,minutes,10.1
+external_party,party,,43,,,,,gender macroF1,0.7198
+external_party,party,,43,,,,,gender acc,0.8739
+external_party,party,,43,,,,,usage macroF1,0.4716
+external_party,party,,43,,,,,usage acc,0.8657
+external_party,party,,43,,,,,F1 Casual,0.9137
+external_party,party,,43,,,,,F1 Ethnic,0.8622
+external_party,party,,43,,,,,F1 Formal,0.6887
+external_party,party,,43,,,,,F1 Home,0.0
+external_party,party,,43,,,,,F1 Party,0.0
+external_party,party,,43,,,,,F1 Smart Casual,0.1538
+external_party,party,,43,,,,,F1 Sports,0.6546
+external_party,party,,43,,,,,F1 Travel,0.5
+external_party,party,,43,,,,,k,2
+external_party,party,,43,,,,,c,0
+external_party,party,,43,,,,,PartyFP from Casual,2
+external_party,party,,43,,,,,extHO recall,0.878
+external_party,party,,43,,,,,extHO n,41
+external_party,party,,43,,,,,minutes,10.2
+external_party,party_fixedw,,43,,,,,gender macroF1,0.733
+external_party,party_fixedw,,43,,,,,gender acc,0.8772
+external_party,party_fixedw,,43,,,,,usage macroF1,0.415
+external_party,party_fixedw,,43,,,,,usage acc,0.8684
+external_party,party_fixedw,,43,,,,,F1 Casual,0.9146
+external_party,party_fixedw,,43,,,,,F1 Ethnic,0.8341
+external_party,party_fixedw,,43,,,,,F1 Formal,0.7418
+external_party,party_fixedw,,43,,,,,F1 Home,0.0
+external_party,party_fixedw,,43,,,,,F1 Party,0.0
+external_party,party_fixedw,,43,,,,,F1 Smart Casual,0.1667
+external_party,party_fixedw,,43,,,,,F1 Sports,0.6629
+external_party,party_fixedw,,43,,,,,F1 Travel,0.0
+external_party,party_fixedw,,43,,,,,k,6
+external_party,party_fixedw,,43,,,,,c,0
+external_party,party_fixedw,,43,,,,,PartyFP from Casual,4
+external_party,party_fixedw,,43,,,,,extHO recall,0.9268
+external_party,party_fixedw,,43,,,,,extHO n,41
+external_party,party_fixedw,,43,,,,,minutes,10.2
+external_party,base,,44,,,,,gender macroF1,0.7268
+external_party,base,,44,,,,,gender acc,0.8801
+external_party,base,,44,,,,,usage macroF1,0.4417
+external_party,base,,44,,,,,usage acc,0.8732
+external_party,base,,44,,,,,F1 Casual,0.9169
+external_party,base,,44,,,,,F1 Ethnic,0.8536
+external_party,base,,44,,,,,F1 Formal,0.7592
+external_party,base,,44,,,,,F1 Home,0.0
+external_party,base,,44,,,,,F1 Party,0.0
+external_party,base,,44,,,,,F1 Smart Casual,0.3333
+external_party,base,,44,,,,,F1 Sports,0.6709
+external_party,base,,44,,,,,F1 Travel,0.0
+external_party,base,,44,,,,,k,5
+external_party,base,,44,,,,,c,0
+external_party,base,,44,,,,,PartyFP from Casual,4
+external_party,base,,44,,,,,extHO recall,0.0
+external_party,base,,44,,,,,extHO n,41
+external_party,base,,44,,,,,minutes,10.1
+external_party,party,,44,,,,,gender macroF1,0.724
+external_party,party,,44,,,,,gender acc,0.8786
+external_party,party,,44,,,,,usage macroF1,0.4475
+external_party,party,,44,,,,,usage acc,0.8707
+external_party,party,,44,,,,,F1 Casual,0.9161
+external_party,party,,44,,,,,F1 Ethnic,0.8585
+external_party,party,,44,,,,,F1 Formal,0.7371
+external_party,party,,44,,,,,F1 Home,0.0
+external_party,party,,44,,,,,F1 Party,0.0
+external_party,party,,44,,,,,F1 Smart Casual,0.1818
+external_party,party,,44,,,,,F1 Sports,0.6644
+external_party,party,,44,,,,,F1 Travel,0.2222
+external_party,party,,44,,,,,k,3
+external_party,party,,44,,,,,c,0
+external_party,party,,44,,,,,PartyFP from Casual,3
+external_party,party,,44,,,,,extHO recall,0.9024
+external_party,party,,44,,,,,extHO n,41
+external_party,party,,44,,,,,minutes,10.2
+external_party,party_fixedw,,44,,,,,gender macroF1,0.7188
+external_party,party_fixedw,,44,,,,,gender acc,0.8763
+external_party,party_fixedw,,44,,,,,usage macroF1,0.4342
+external_party,party_fixedw,,44,,,,,usage acc,0.865
+external_party,party_fixedw,,44,,,,,F1 Casual,0.9118
+external_party,party_fixedw,,44,,,,,F1 Ethnic,0.8564
+external_party,party_fixedw,,44,,,,,F1 Formal,0.7368
+external_party,party_fixedw,,44,,,,,F1 Home,0.0
+external_party,party_fixedw,,44,,,,,F1 Party,0.0
+external_party,party_fixedw,,44,,,,,F1 Smart Casual,0.1333
+external_party,party_fixedw,,44,,,,,F1 Sports,0.653
+external_party,party_fixedw,,44,,,,,F1 Travel,0.1818
+external_party,party_fixedw,,44,,,,,k,6
+external_party,party_fixedw,,44,,,,,c,0
+external_party,party_fixedw,,44,,,,,PartyFP from Casual,6
+external_party,party_fixedw,,44,,,,,extHO recall,0.9268
+external_party,party_fixedw,,44,,,,,extHO n,41
+external_party,party_fixedw,,44,,,,,minutes,10.2
+external_catalog,base,,42,,,,,gender macroF1,0.7382
+external_catalog,base,,42,,,,,gender macroF1_inval,0.7382
+external_catalog,base,,42,,,,,gender acc,0.8808
+external_catalog,base,,42,,,,,usage macroF1,0.4529
+external_catalog,base,,42,,,,,usage macroF1_inval,0.5176
+external_catalog,base,,42,,,,,usage acc,0.8744
+external_catalog,base,,42,,,,,F1 Casual,0.9181
+external_catalog,base,,42,,,,,F1 Ethnic,0.8568
+external_catalog,base,,42,,,,,F1 Formal,0.7545
+external_catalog,base,,42,,,,,F1 Home,0.0
+external_catalog,base,,42,,,,,F1 Party,0.0
+external_catalog,base,,42,,,,,F1 Smart Casual,0.1333
+external_catalog,base,,42,,,,,F1 Sports,0.6752
+external_catalog,base,,42,,,,,F1 Travel,0.2857
+external_catalog,base,,42,,,,,k Party,2
+external_catalog,base,,42,,,,,c Party,0
+external_catalog,base,,42,,,,,k Smart Casual,6
+external_catalog,base,,42,,,,,c Smart Casual,1
+external_catalog,base,,42,,,,,k Travel,4
+external_catalog,base,,42,,,,,c Travel,1
+external_catalog,base,,42,,,,,extHO acc,0.0
+external_catalog,base,,42,,,,,extHO n,114
+external_catalog,base,,42,,,,,minutes,9.5
+external_catalog,catalog,,42,,,,,gender macroF1,0.7438
+external_catalog,catalog,,42,,,,,gender macroF1_inval,0.7438
+external_catalog,catalog,,42,,,,,gender acc,0.8834
+external_catalog,catalog,,42,,,,,usage macroF1,0.445
+external_catalog,catalog,,42,,,,,usage macroF1_inval,0.5086
+external_catalog,catalog,,42,,,,,usage acc,0.8741
+external_catalog,catalog,,42,,,,,F1 Casual,0.9176
+external_catalog,catalog,,42,,,,,F1 Ethnic,0.8589
+external_catalog,catalog,,42,,,,,F1 Formal,0.7646
+external_catalog,catalog,,42,,,,,F1 Home,0.0
+external_catalog,catalog,,42,,,,,F1 Party,0.0
+external_catalog,catalog,,42,,,,,F1 Smart Casual,0.1818
+external_catalog,catalog,,42,,,,,F1 Sports,0.6704
+external_catalog,catalog,,42,,,,,F1 Travel,0.1667
+external_catalog,catalog,,42,,,,,k Party,3
+external_catalog,catalog,,42,,,,,c Party,0
+external_catalog,catalog,,42,,,,,k Smart Casual,2
+external_catalog,catalog,,42,,,,,c Smart Casual,1
+external_catalog,catalog,,42,,,,,k Travel,9
+external_catalog,catalog,,42,,,,,c Travel,1
+external_catalog,catalog,,42,,,,,extHO acc,0.9825
+external_catalog,catalog,,42,,,,,extHO n,114
+external_catalog,catalog,,42,,,,,minutes,9.6
+external_catalog,base,,43,,,,,gender macroF1,0.7329
+external_catalog,base,,43,,,,,gender macroF1_inval,0.7329
+external_catalog,base,,43,,,,,gender acc,0.8862
+external_catalog,base,,43,,,,,usage macroF1,0.4441
+external_catalog,base,,43,,,,,usage macroF1_inval,0.5076
+external_catalog,base,,43,,,,,usage acc,0.8525
+external_catalog,base,,43,,,,,F1 Casual,0.9014
+external_catalog,base,,43,,,,,F1 Ethnic,0.8261
+external_catalog,base,,43,,,,,F1 Formal,0.7232
+external_catalog,base,,43,,,,,F1 Home,0.0
+external_catalog,base,,43,,,,,F1 Party,0.0
+external_catalog,base,,43,,,,,F1 Smart Casual,0.1538
+external_catalog,base,,43,,,,,F1 Sports,0.6627
+external_catalog,base,,43,,,,,F1 Travel,0.2857
+external_catalog,base,,43,,,,,k Party,1
+external_catalog,base,,43,,,,,c Party,0
+external_catalog,base,,43,,,,,k Smart Casual,17
+external_catalog,base,,43,,,,,c Smart Casual,2
+external_catalog,base,,43,,,,,k Travel,4
+external_catalog,base,,43,,,,,c Travel,1
+external_catalog,base,,43,,,,,extHO acc,0.0
+external_catalog,base,,43,,,,,extHO n,114
+external_catalog,base,,43,,,,,minutes,9.4
+external_catalog,catalog,,43,,,,,gender macroF1,0.7117
+external_catalog,catalog,,43,,,,,gender macroF1_inval,0.7117
+external_catalog,catalog,,43,,,,,gender acc,0.8696
+external_catalog,catalog,,43,,,,,usage macroF1,0.4297
+external_catalog,catalog,,43,,,,,usage macroF1_inval,0.491
+external_catalog,catalog,,43,,,,,usage acc,0.8597
+external_catalog,catalog,,43,,,,,F1 Casual,0.9115
+external_catalog,catalog,,43,,,,,F1 Ethnic,0.8176
+external_catalog,catalog,,43,,,,,F1 Formal,0.6014
+external_catalog,catalog,,43,,,,,F1 Home,0.0
+external_catalog,catalog,,43,,,,,F1 Party,0.0
+external_catalog,catalog,,43,,,,,F1 Smart Casual,0.0
+external_catalog,catalog,,43,,,,,F1 Sports,0.6066
+external_catalog,catalog,,43,,,,,F1 Travel,0.5
+external_catalog,catalog,,43,,,,,k Party,0
+external_catalog,catalog,,43,,,,,c Party,0
+external_catalog,catalog,,43,,,,,k Smart Casual,2
+external_catalog,catalog,,43,,,,,c Smart Casual,0
+external_catalog,catalog,,43,,,,,k Travel,1
+external_catalog,catalog,,43,,,,,c Travel,1
+external_catalog,catalog,,43,,,,,extHO acc,0.9474
+external_catalog,catalog,,43,,,,,extHO n,114
+external_catalog,catalog,,43,,,,,minutes,9.7
+external_catalog,base,,44,,,,,gender macroF1,0.7283
+external_catalog,base,,44,,,,,gender macroF1_inval,0.7283
+external_catalog,base,,44,,,,,gender acc,0.8801
+external_catalog,base,,44,,,,,usage macroF1,0.4242
+external_catalog,base,,44,,,,,usage macroF1_inval,0.4848
+external_catalog,base,,44,,,,,usage acc,0.8737
+external_catalog,base,,44,,,,,F1 Casual,0.9175
+external_catalog,base,,44,,,,,F1 Ethnic,0.8632
+external_catalog,base,,44,,,,,F1 Formal,0.748
+external_catalog,base,,44,,,,,F1 Home,0.0
+external_catalog,base,,44,,,,,F1 Party,0.0
+external_catalog,base,,44,,,,,F1 Smart Casual,0.2
+external_catalog,base,,44,,,,,F1 Sports,0.665
+external_catalog,base,,44,,,,,F1 Travel,0.0
+external_catalog,base,,44,,,,,k Party,4
+external_catalog,base,,44,,,,,c Party,0
+external_catalog,base,,44,,,,,k Smart Casual,1
+external_catalog,base,,44,,,,,c Smart Casual,1
+external_catalog,base,,44,,,,,k Travel,1
+external_catalog,base,,44,,,,,c Travel,0
+external_catalog,base,,44,,,,,extHO acc,0.0
+external_catalog,base,,44,,,,,extHO n,114
+external_catalog,base,,44,,,,,minutes,9.6
+external_catalog,catalog,,44,,,,,gender macroF1,0.7289
+external_catalog,catalog,,44,,,,,gender macroF1_inval,0.7289
+external_catalog,catalog,,44,,,,,gender acc,0.8797
+external_catalog,catalog,,44,,,,,usage macroF1,0.4254
+external_catalog,catalog,,44,,,,,usage macroF1_inval,0.4861
+external_catalog,catalog,,44,,,,,usage acc,0.8638
+external_catalog,catalog,,44,,,,,F1 Casual,0.9103
+external_catalog,catalog,,44,,,,,F1 Ethnic,0.8431
+external_catalog,catalog,,44,,,,,F1 Formal,0.75
+external_catalog,catalog,,44,,,,,F1 Home,0.0
+external_catalog,catalog,,44,,,,,F1 Party,0.0
+external_catalog,catalog,,44,,,,,F1 Smart Casual,0.1053
+external_catalog,catalog,,44,,,,,F1 Sports,0.6608
+external_catalog,catalog,,44,,,,,F1 Travel,0.1333
+external_catalog,catalog,,44,,,,,k Party,5
+external_catalog,catalog,,44,,,,,c Party,0
+external_catalog,catalog,,44,,,,,k Smart Casual,10
+external_catalog,catalog,,44,,,,,c Smart Casual,1
+external_catalog,catalog,,44,,,,,k Travel,12
+external_catalog,catalog,,44,,,,,c Travel,1
+external_catalog,catalog,,44,,,,,extHO acc,0.9912
+external_catalog,catalog,,44,,,,,extHO n,114
+external_catalog,catalog,,44,,,,,minutes,10.1
+gender_ceiling,,,,,,gender,Boys,train_n,496
+gender_ceiling,,,,,,gender,Boys,val_n,93
+gender_ceiling,,,,,,gender,Boys,precision,0.5748
+gender_ceiling,,,,,,gender,Boys,recall,0.7849
+gender_ceiling,,,,,,gender,Boys,f1,0.6636
+gender_ceiling,,,,,,gender,Girls,train_n,417
+gender_ceiling,,,,,,gender,Girls,val_n,66
+gender_ceiling,,,,,,gender,Girls,precision,0.5488
+gender_ceiling,,,,,,gender,Girls,recall,0.6818
+gender_ceiling,,,,,,gender,Girls,f1,0.6081
+gender_ceiling,,,,,,gender,Men,train_n,17459
+gender_ceiling,,,,,,gender,Men,val_n,3090
+gender_ceiling,,,,,,gender,Men,precision,0.9181
+gender_ceiling,,,,,,gender,Men,recall,0.9071
+gender_ceiling,,,,,,gender,Men,f1,0.9126
+gender_ceiling,,,,,,gender,Unisex,train_n,1750
+gender_ceiling,,,,,,gender,Unisex,val_n,305
+gender_ceiling,,,,,,gender,Unisex,precision,0.4175
+gender_ceiling,,,,,,gender,Unisex,recall,0.7213
+gender_ceiling,,,,,,gender,Unisex,f1,0.5288
+gender_ceiling,,,,,,gender,Women,train_n,11962
+gender_ceiling,,,,,,gender,Women,val_n,2107
+gender_ceiling,,,,,,gender,Women,precision,0.9434
+gender_ceiling,,,,,,gender,Women,recall,0.8382
+gender_ceiling,,,,,,gender,Women,f1,0.8877
+gender_ceiling,,,,,,usage,Casual,train_n,24662
+gender_ceiling,,,,,,usage,Casual,val_n,4306
+gender_ceiling,,,,,,usage,Casual,precision,0.9339
+gender_ceiling,,,,,,usage,Casual,recall,0.8957
+gender_ceiling,,,,,,usage,Casual,f1,0.9144
+gender_ceiling,,,,,,usage,Ethnic,train_n,2182
+gender_ceiling,,,,,,usage,Ethnic,val_n,383
+gender_ceiling,,,,,,usage,Ethnic,precision,0.8717
+gender_ceiling,,,,,,usage,Ethnic,recall,0.8695
+gender_ceiling,,,,,,usage,Ethnic,f1,0.8706
+gender_ceiling,,,,,,usage,Formal,train_n,1861
+gender_ceiling,,,,,,usage,Formal,val_n,343
+gender_ceiling,,,,,,usage,Formal,precision,0.7208
+gender_ceiling,,,,,,usage,Formal,recall,0.828
+gender_ceiling,,,,,,usage,Formal,f1,0.7707
+gender_ceiling,,,,,,usage,Home,train_n,1
+gender_ceiling,,,,,,usage,Home,val_n,0
+gender_ceiling,,,,,,usage,Home,precision,0.0
+gender_ceiling,,,,,,usage,Home,recall,0.0
+gender_ceiling,,,,,,usage,Home,f1,0.0
+gender_ceiling,,,,,,usage,Party,train_n,10
+gender_ceiling,,,,,,usage,Party,val_n,3
+gender_ceiling,,,,,,usage,Party,precision,0.0
+gender_ceiling,,,,,,usage,Party,recall,0.0
+gender_ceiling,,,,,,usage,Party,f1,0.0
+gender_ceiling,,,,,,usage,Smart Casual,train_n,46
+gender_ceiling,,,,,,usage,Smart Casual,val_n,9
+gender_ceiling,,,,,,usage,Smart Casual,precision,0.3333
+gender_ceiling,,,,,,usage,Smart Casual,recall,0.1111
+gender_ceiling,,,,,,usage,Smart Casual,f1,0.1667
+gender_ceiling,,,,,,usage,Sports,train_n,3300
+gender_ceiling,,,,,,usage,Sports,val_n,614
+gender_ceiling,,,,,,usage,Sports,precision,0.5984
+gender_ceiling,,,,,,usage,Sports,recall,0.7231
+gender_ceiling,,,,,,usage,Sports,f1,0.6549
+gender_ceiling,,,,,,usage,Travel,train_n,22
+gender_ceiling,,,,,,usage,Travel,val_n,3
+gender_ceiling,,,,,,usage,Travel,precision,0.25
+gender_ceiling,,,,,,usage,Travel,recall,0.6667
+gender_ceiling,,,,,,usage,Travel,f1,0.3636
+pretrained_comparison,resnet18_frozen,,,,,,,params,6669
+pretrained_comparison,resnet18_frozen,,,,,,,minutes,0.5
+pretrained_comparison,resnet18_frozen,,,,,gender,,macroF1,0.7146
+pretrained_comparison,resnet18_frozen,,,,,gender,,acc,0.8506
+pretrained_comparison,resnet18_frozen,,,,,usage,,macroF1,0.4134
+pretrained_comparison,resnet18_frozen,,,,,usage,,acc,0.8562
+pretrained_comparison,resnet18_finetune,,,,,,,params,11183181
+pretrained_comparison,resnet18_finetune,,,,,,,minutes,18.8
+pretrained_comparison,resnet18_finetune,,,,,gender,,macroF1,0.8228
+pretrained_comparison,resnet18_finetune,,,,,gender,,acc,0.9272
+pretrained_comparison,resnet18_finetune,,,,,usage,,macroF1,0.5964
+pretrained_comparison,resnet18_finetune,,,,,usage,,acc,0.9267
+pretrained_comparison,C_weighted (ours),,,,,,,params,289133
+pretrained_comparison,C_weighted (ours),,,,,,,minutes,9.7
+pretrained_comparison,C_weighted (ours),,,,,gender,,macroF1,0.7211
+pretrained_comparison,C_weighted (ours),,,,,gender,,acc,0.8688
+pretrained_comparison,C_weighted (ours),,,,,usage,,macroF1,0.4497
+pretrained_comparison,C_weighted (ours),,,,,usage,,acc,0.8657
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Boys,val_n,93
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Boys,precision,0.5968
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Boys,recall,0.7957
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Boys,f1,0.682
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Girls,val_n,66
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Girls,precision,0.5432
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Girls,recall,0.6667
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Girls,f1,0.5986
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Men,val_n,3090
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Men,precision,0.8955
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Men,recall,0.8877
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Men,f1,0.8916
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Unisex,val_n,305
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Unisex,precision,0.5
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Unisex,recall,0.5967
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Unisex,f1,0.5441
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Women,val_n,2107
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Women,precision,0.8733
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Women,recall,0.841
+pretrained_comparison_perclass,resnet18_frozen,,,,,gender,Women,f1,0.8569
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Casual,val_n,4306
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Casual,precision,0.9217
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Casual,recall,0.8911
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Casual,f1,0.9061
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Ethnic,val_n,383
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Ethnic,precision,0.7933
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Ethnic,recall,0.8616
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Ethnic,f1,0.826
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Formal,val_n,343
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Formal,precision,0.6775
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Formal,recall,0.7901
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Formal,f1,0.7295
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Home,val_n,0
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Home,precision,0.0
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Home,recall,0.0
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Home,f1,0.0
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Party,val_n,3
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Party,precision,0.0
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Party,recall,0.0
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Party,f1,0.0
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Smart Casual,val_n,9
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Smart Casual,precision,0.15
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Smart Casual,recall,0.3333
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Smart Casual,f1,0.2069
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Sports,val_n,614
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Sports,precision,0.617
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Sports,recall,0.6612
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Sports,f1,0.6384
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Travel,val_n,3
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Travel,precision,0.0
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Travel,recall,0.0
+pretrained_comparison_perclass,resnet18_frozen,,,,,usage,Travel,f1,0.0
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Boys,val_n,93
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Boys,precision,0.7938
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Boys,recall,0.828
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Boys,f1,0.8105
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Girls,val_n,66
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Girls,precision,0.6757
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Girls,recall,0.7576
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Girls,f1,0.7143
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Men,val_n,3090
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Men,precision,0.9376
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Men,recall,0.9631
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Men,f1,0.9502
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Unisex,val_n,305
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Unisex,precision,0.7067
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Unisex,recall,0.6951
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Unisex,f1,0.7008
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Women,val_n,2107
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Women,precision,0.9593
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Women,recall,0.9179
+pretrained_comparison_perclass,resnet18_finetune,,,,,gender,Women,f1,0.9382
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Casual,val_n,4306
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Casual,precision,0.9482
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Casual,recall,0.957
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Casual,f1,0.9526
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Ethnic,val_n,383
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Ethnic,precision,0.9568
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Ethnic,recall,0.9243
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Ethnic,f1,0.9402
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Formal,val_n,343
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Formal,precision,0.8219
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Formal,recall,0.8746
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Formal,f1,0.8475
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Home,val_n,0
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Home,precision,0.0
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Home,recall,0.0
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Home,f1,0.0
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Party,val_n,3
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Party,precision,0.0
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Party,recall,0.0
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Party,f1,0.0
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Smart Casual,val_n,9
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Smart Casual,precision,0.4444
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Smart Casual,recall,0.4444
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Smart Casual,f1,0.4444
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Sports,val_n,614
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Sports,precision,0.8172
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Sports,recall,0.7573
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Sports,f1,0.7861
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Travel,val_n,3
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Travel,precision,1.0
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Travel,recall,0.6667
+pretrained_comparison_perclass,resnet18_finetune,,,,,usage,Travel,f1,0.8
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Boys,val_n,93
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Boys,precision,0.5794
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Boys,recall,0.7849
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Boys,f1,0.6667
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Girls,val_n,66
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Girls,precision,0.5422
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Girls,recall,0.6818
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Girls,f1,0.604
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Men,val_n,3090
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Men,precision,0.9186
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Men,recall,0.9094
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Men,f1,0.914
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Unisex,val_n,305
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Unisex,precision,0.4384
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Unisex,recall,0.6885
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Unisex,f1,0.5357
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Women,val_n,2107
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Women,precision,0.93
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Women,recall,0.8448
+pretrained_comparison_perclass,C_weighted (ours),,,,,gender,Women,f1,0.8854
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Casual,val_n,4306
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Casual,precision,0.9352
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Casual,recall,0.8888
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Casual,f1,0.9114
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Ethnic,val_n,383
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Ethnic,precision,0.8342
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Ethnic,recall,0.8799
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Ethnic,f1,0.8564
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Formal,val_n,343
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Formal,precision,0.719
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Formal,recall,0.828
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Formal,f1,0.7696
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Home,val_n,0
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Home,precision,0.0
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Home,recall,0.0
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Home,f1,0.0
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Party,val_n,3
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Party,precision,0.0
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Party,recall,0.0
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Party,f1,0.0
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Smart Casual,val_n,9
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Smart Casual,precision,0.5
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Smart Casual,recall,0.1111
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Smart Casual,f1,0.1818
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Sports,val_n,614
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Sports,precision,0.5934
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Sports,recall,0.7345
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Sports,f1,0.6565
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Travel,val_n,3
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Travel,precision,0.1667
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Travel,recall,0.3333
+pretrained_comparison_perclass,C_weighted (ours),,,,,usage,Travel,f1,0.2222
+scratch_vs_pretrained,resnet18_scratch,,,random,False,,,params,11183181
+scratch_vs_pretrained,resnet18_scratch,,,random,False,,,epochs,20
+scratch_vs_pretrained,resnet18_scratch,,,random,False,,,lr,0.001
+scratch_vs_pretrained,resnet18_scratch,,,random,False,,,minutes,49.9
+scratch_vs_pretrained,resnet18_scratch,,,random,False,gender,,macroF1,0.765
+scratch_vs_pretrained,resnet18_scratch,,,random,False,gender,,acc,0.8915
+scratch_vs_pretrained,resnet18_scratch,,,random,False,usage,,macroF1,0.5149
+scratch_vs_pretrained,resnet18_scratch,,,random,False,usage,,acc,0.8968
+scratch_vs_pretrained,resnet18_scratch,,,random,True,,,params,11183181
+scratch_vs_pretrained,resnet18_scratch,,,random,True,,,epochs,20
+scratch_vs_pretrained,resnet18_scratch,,,random,True,,,lr,0.001
+scratch_vs_pretrained,resnet18_scratch,,,random,True,,,minutes,50.1
+scratch_vs_pretrained,resnet18_scratch,,,random,True,gender,,macroF1,0.7669
+scratch_vs_pretrained,resnet18_scratch,,,random,True,gender,,acc,0.8975
+scratch_vs_pretrained,resnet18_scratch,,,random,True,usage,,macroF1,0.5157
+scratch_vs_pretrained,resnet18_scratch,,,random,True,usage,,acc,0.8986
+scratch_vs_pretrained,resnet18_scratch,,,forward,False,,,params,11183181
+scratch_vs_pretrained,resnet18_scratch,,,forward,False,,,epochs,20
+scratch_vs_pretrained,resnet18_scratch,,,forward,False,,,lr,0.001
+scratch_vs_pretrained,resnet18_scratch,,,forward,False,,,minutes,47.6
+scratch_vs_pretrained,resnet18_scratch,,,forward,False,gender,,macroF1,0.5982
+scratch_vs_pretrained,resnet18_scratch,,,forward,False,gender,,acc,0.8504
+scratch_vs_pretrained,resnet18_scratch,,,forward,False,usage,,macroF1,0.3545
+scratch_vs_pretrained,resnet18_scratch,,,forward,False,usage,,acc,0.8824
+scratch_vs_pretrained,resnet18_scratch,,,forward,True,,,params,11183181
+scratch_vs_pretrained,resnet18_scratch,,,forward,True,,,epochs,20
+scratch_vs_pretrained,resnet18_scratch,,,forward,True,,,lr,0.001
+scratch_vs_pretrained,resnet18_scratch,,,forward,True,,,minutes,47.8
+scratch_vs_pretrained,resnet18_scratch,,,forward,True,gender,,macroF1,0.5871
+scratch_vs_pretrained,resnet18_scratch,,,forward,True,gender,,acc,0.853
+scratch_vs_pretrained,resnet18_scratch,,,forward,True,usage,,macroF1,0.3543
+scratch_vs_pretrained,resnet18_scratch,,,forward,True,usage,,acc,0.8829
+scratch_vs_pretrained,resnet18_finetune,,,forward,False,,,params,11183181
+scratch_vs_pretrained,resnet18_finetune,,,forward,False,,,epochs,8
+scratch_vs_pretrained,resnet18_finetune,,,forward,False,,,lr,0.0003
+scratch_vs_pretrained,resnet18_finetune,,,forward,False,,,minutes,19.1
+scratch_vs_pretrained,resnet18_finetune,,,forward,False,gender,,macroF1,0.6543
+scratch_vs_pretrained,resnet18_finetune,,,forward,False,gender,,acc,0.8965
+scratch_vs_pretrained,resnet18_finetune,,,forward,False,usage,,macroF1,0.3724
+scratch_vs_pretrained,resnet18_finetune,,,forward,False,usage,,acc,0.8944
+scratch_vs_pretrained,resnet18_finetune,,,forward,True,,,params,11183181
+scratch_vs_pretrained,resnet18_finetune,,,forward,True,,,epochs,8
+scratch_vs_pretrained,resnet18_finetune,,,forward,True,,,lr,0.0003
+scratch_vs_pretrained,resnet18_finetune,,,forward,True,,,minutes,19.3
+scratch_vs_pretrained,resnet18_finetune,,,forward,True,gender,,macroF1,0.6691
+scratch_vs_pretrained,resnet18_finetune,,,forward,True,gender,,acc,0.9
+scratch_vs_pretrained,resnet18_finetune,,,forward,True,usage,,macroF1,0.3768
+scratch_vs_pretrained,resnet18_finetune,,,forward,True,usage,,acc,0.8981
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,gender,Boys,val_n,93
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,gender,Boys,f1,0.7749
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,gender,Girls,val_n,66
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,gender,Girls,f1,0.6438
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,gender,Men,val_n,3090
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,gender,Men,f1,0.9254
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,gender,Unisex,val_n,305
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,gender,Unisex,f1,0.5727
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,gender,Women,val_n,2107
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,gender,Women,f1,0.9083
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Casual,val_n,4306
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Casual,f1,0.9333
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Ethnic,val_n,383
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Ethnic,f1,0.8972
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Formal,val_n,343
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Formal,f1,0.7923
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Home,val_n,0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Home,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Party,val_n,3
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Party,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Smart Casual,val_n,9
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Smart Casual,f1,0.5
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Sports,val_n,614
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Sports,f1,0.7106
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Travel,val_n,3
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,False,usage,Travel,f1,0.2857
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,gender,Boys,val_n,93
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,gender,Boys,f1,0.7755
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,gender,Girls,val_n,66
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,gender,Girls,f1,0.6294
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,gender,Men,val_n,3090
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,gender,Men,f1,0.9313
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,gender,Unisex,val_n,305
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,gender,Unisex,f1,0.5854
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,gender,Women,val_n,2107
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,gender,Women,f1,0.9132
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Casual,val_n,4306
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Casual,f1,0.9346
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Ethnic,val_n,383
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Ethnic,f1,0.904
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Formal,val_n,343
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Formal,f1,0.7962
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Home,val_n,0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Home,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Party,val_n,3
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Party,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Smart Casual,val_n,9
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Smart Casual,f1,0.4444
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Sports,val_n,614
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Sports,f1,0.7133
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Travel,val_n,3
+scratch_vs_pretrained_perclass,resnet18_scratch,,,random,True,usage,Travel,f1,0.3333
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,gender,Boys,val_n,93
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,gender,Boys,f1,0.5867
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,gender,Girls,val_n,62
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,gender,Girls,f1,0.4222
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,gender,Men,val_n,3242
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,gender,Men,f1,0.865
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,gender,Unisex,val_n,161
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,gender,Unisex,f1,0.2282
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,gender,Women,val_n,3991
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,gender,Women,f1,0.8891
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Casual,val_n,6421
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Casual,f1,0.9303
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Ethnic,val_n,543
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Ethnic,f1,0.6817
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Formal,val_n,276
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Formal,f1,0.6289
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Home,val_n,0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Home,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Party,val_n,10
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Party,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Smart Casual,val_n,20
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Smart Casual,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Sports,val_n,279
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Sports,f1,0.5949
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Travel,val_n,0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,False,usage,Travel,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,gender,Boys,val_n,93
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,gender,Boys,f1,0.5906
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,gender,Girls,val_n,62
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,gender,Girls,f1,0.3678
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,gender,Men,val_n,3242
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,gender,Men,f1,0.8695
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,gender,Unisex,val_n,161
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,gender,Unisex,f1,0.2162
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,gender,Women,val_n,3991
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,gender,Women,f1,0.8914
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Casual,val_n,6421
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Casual,f1,0.9306
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Ethnic,val_n,543
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Ethnic,f1,0.6803
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Formal,val_n,276
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Formal,f1,0.6364
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Home,val_n,0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Home,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Party,val_n,10
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Party,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Smart Casual,val_n,20
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Smart Casual,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Sports,val_n,279
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Sports,f1,0.5871
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Travel,val_n,0
+scratch_vs_pretrained_perclass,resnet18_scratch,,,forward,True,usage,Travel,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,gender,Boys,val_n,93
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,gender,Boys,f1,0.6309
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,gender,Girls,val_n,62
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,gender,Girls,f1,0.4948
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,gender,Men,val_n,3242
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,gender,Men,f1,0.9066
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,gender,Unisex,val_n,161
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,gender,Unisex,f1,0.3095
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,gender,Women,val_n,3991
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,gender,Women,f1,0.9298
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Casual,val_n,6421
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Casual,f1,0.9369
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Ethnic,val_n,543
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Ethnic,f1,0.7432
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Formal,val_n,276
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Formal,f1,0.6771
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Home,val_n,0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Home,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Party,val_n,10
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Party,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Smart Casual,val_n,20
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Smart Casual,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Sports,val_n,279
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Sports,f1,0.6216
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Travel,val_n,0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,False,usage,Travel,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,gender,Boys,val_n,93
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,gender,Boys,f1,0.6316
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,gender,Girls,val_n,62
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,gender,Girls,f1,0.551
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,gender,Men,val_n,3242
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,gender,Men,f1,0.9095
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,gender,Unisex,val_n,161
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,gender,Unisex,f1,0.3221
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,gender,Women,val_n,3991
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,gender,Women,f1,0.9315
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Casual,val_n,6421
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Casual,f1,0.9393
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Ethnic,val_n,543
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Ethnic,f1,0.7442
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Formal,val_n,276
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Formal,f1,0.6911
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Home,val_n,0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Home,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Party,val_n,10
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Party,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Smart Casual,val_n,20
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Smart Casual,f1,0.0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Sports,val_n,279
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Sports,f1,0.6395
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Travel,val_n,0
+scratch_vs_pretrained_perclass,resnet18_finetune,,,forward,True,usage,Travel,f1,0.0
+ensemble,member_r0,single,,forward,False,,,members,1
+ensemble,member_r0,single,,forward,False,,,epochs,20
+ensemble,member_r0,single,,forward,False,,,minutes,10.5
+ensemble,member_r0,single,,forward,False,gender,,macroF1,0.5943
+ensemble,member_r0,single,,forward,False,gender,,acc,0.8396
+ensemble,member_r0,single,,forward,False,usage,,macroF1,0.3478
+ensemble,member_r0,single,,forward,False,usage,,acc,0.8628
+ensemble,member_r0,single,,forward,True,,,members,1
+ensemble,member_r0,single,,forward,True,,,epochs,20
+ensemble,member_r0,single,,forward,True,,,minutes,10.5
+ensemble,member_r0,single,,forward,True,gender,,macroF1,0.5939
+ensemble,member_r0,single,,forward,True,gender,,acc,0.8441
+ensemble,member_r0,single,,forward,True,usage,,macroF1,0.3476
+ensemble,member_r0,single,,forward,True,usage,,acc,0.864
+ensemble,member_r1,single,,forward,False,,,members,1
+ensemble,member_r1,single,,forward,False,,,epochs,20
+ensemble,member_r1,single,,forward,False,,,minutes,10.7
+ensemble,member_r1,single,,forward,False,gender,,macroF1,0.5954
+ensemble,member_r1,single,,forward,False,gender,,acc,0.8385
+ensemble,member_r1,single,,forward,False,usage,,macroF1,0.3455
+ensemble,member_r1,single,,forward,False,usage,,acc,0.8616
+ensemble,member_r1,single,,forward,True,,,members,1
+ensemble,member_r1,single,,forward,True,,,epochs,20
+ensemble,member_r1,single,,forward,True,,,minutes,10.7
+ensemble,member_r1,single,,forward,True,gender,,macroF1,0.5966
+ensemble,member_r1,single,,forward,True,gender,,acc,0.8434
+ensemble,member_r1,single,,forward,True,usage,,macroF1,0.3466
+ensemble,member_r1,single,,forward,True,usage,,acc,0.8632
+ensemble,member_r2,single,,forward,False,,,members,1
+ensemble,member_r2,single,,forward,False,,,epochs,20
+ensemble,member_r2,single,,forward,False,,,minutes,10.1
+ensemble,member_r2,single,,forward,False,gender,,macroF1,0.5886
+ensemble,member_r2,single,,forward,False,gender,,acc,0.8323
+ensemble,member_r2,single,,forward,False,usage,,macroF1,0.3531
+ensemble,member_r2,single,,forward,False,usage,,acc,0.8813
+ensemble,member_r2,single,,forward,True,,,members,1
+ensemble,member_r2,single,,forward,True,,,epochs,20
+ensemble,member_r2,single,,forward,True,,,minutes,10.1
+ensemble,member_r2,single,,forward,True,gender,,macroF1,0.6011
+ensemble,member_r2,single,,forward,True,gender,,acc,0.8369
+ensemble,member_r2,single,,forward,True,usage,,macroF1,0.3551
+ensemble,member_r2,single,,forward,True,usage,,acc,0.8818
+ensemble,member_s43,single,,forward,False,,,members,1
+ensemble,member_s43,single,,forward,False,,,epochs,20
+ensemble,member_s43,single,,forward,False,,,minutes,8.7
+ensemble,member_s43,single,,forward,False,gender,,macroF1,0.5892
+ensemble,member_s43,single,,forward,False,gender,,acc,0.8473
+ensemble,member_s43,single,,forward,False,usage,,macroF1,0.3478
+ensemble,member_s43,single,,forward,False,usage,,acc,0.8585
+ensemble,member_s43,single,,forward,True,,,members,1
+ensemble,member_s43,single,,forward,True,,,epochs,20
+ensemble,member_s43,single,,forward,True,,,minutes,8.7
+ensemble,member_s43,single,,forward,True,gender,,macroF1,0.5915
+ensemble,member_s43,single,,forward,True,gender,,acc,0.8508
+ensemble,member_s43,single,,forward,True,usage,,macroF1,0.3483
+ensemble,member_s43,single,,forward,True,usage,,acc,0.8592
+ensemble,member_s44,single,,forward,False,,,members,1
+ensemble,member_s44,single,,forward,False,,,epochs,20
+ensemble,member_s44,single,,forward,False,,,minutes,8.7
+ensemble,member_s44,single,,forward,False,gender,,macroF1,0.57
+ensemble,member_s44,single,,forward,False,gender,,acc,0.8353
+ensemble,member_s44,single,,forward,False,usage,,macroF1,0.3448
+ensemble,member_s44,single,,forward,False,usage,,acc,0.8632
+ensemble,member_s44,single,,forward,True,,,members,1
+ensemble,member_s44,single,,forward,True,,,epochs,20
+ensemble,member_s44,single,,forward,True,,,minutes,8.7
+ensemble,member_s44,single,,forward,True,gender,,macroF1,0.5723
+ensemble,member_s44,single,,forward,True,gender,,acc,0.8402
+ensemble,member_s44,single,,forward,True,usage,,macroF1,0.3498
+ensemble,member_s44,single,,forward,True,usage,,acc,0.867
+ensemble,ens_A_repeats,ensemble,,forward,False,,,members,3
+ensemble,ens_A_repeats,ensemble,,forward,False,,,epochs,20
+ensemble,ens_A_repeats,ensemble,,forward,False,,,minutes,0.0
+ensemble,ens_A_repeats,ensemble,,forward,False,gender,,macroF1,0.6008
+ensemble,ens_A_repeats,ensemble,,forward,False,gender,,acc,0.8422
+ensemble,ens_A_repeats,ensemble,,forward,False,usage,,macroF1,0.35
+ensemble,ens_A_repeats,ensemble,,forward,False,usage,,acc,0.8707
+ensemble,ens_A_repeats,ensemble,,forward,True,,,members,3
+ensemble,ens_A_repeats,ensemble,,forward,True,,,epochs,20
+ensemble,ens_A_repeats,ensemble,,forward,True,,,minutes,0.0
+ensemble,ens_A_repeats,ensemble,,forward,True,gender,,macroF1,0.604
+ensemble,ens_A_repeats,ensemble,,forward,True,gender,,acc,0.845
+ensemble,ens_A_repeats,ensemble,,forward,True,usage,,macroF1,0.3505
+ensemble,ens_A_repeats,ensemble,,forward,True,usage,,acc,0.8711
+ensemble,ens_B_seeds,ensemble,,forward,False,,,members,3
+ensemble,ens_B_seeds,ensemble,,forward,False,,,epochs,20
+ensemble,ens_B_seeds,ensemble,,forward,False,,,minutes,0.0
+ensemble,ens_B_seeds,ensemble,,forward,False,gender,,macroF1,0.6011
+ensemble,ens_B_seeds,ensemble,,forward,False,gender,,acc,0.8506
+ensemble,ens_B_seeds,ensemble,,forward,False,usage,,macroF1,0.3522
+ensemble,ens_B_seeds,ensemble,,forward,False,usage,,acc,0.8677
+ensemble,ens_B_seeds,ensemble,,forward,True,,,members,3
+ensemble,ens_B_seeds,ensemble,,forward,True,,,epochs,20
+ensemble,ens_B_seeds,ensemble,,forward,True,,,minutes,0.0
+ensemble,ens_B_seeds,ensemble,,forward,True,gender,,macroF1,0.6107
+ensemble,ens_B_seeds,ensemble,,forward,True,gender,,acc,0.8531
+ensemble,ens_B_seeds,ensemble,,forward,True,usage,,macroF1,0.354
+ensemble,ens_B_seeds,ensemble,,forward,True,usage,,acc,0.8691
+ensemble_perclass,member_r0,single,,,False,gender,Boys,val_n,93
+ensemble_perclass,member_r0,single,,,False,gender,Boys,f1,0.5783
+ensemble_perclass,member_r0,single,,,False,gender,Girls,val_n,62
+ensemble_perclass,member_r0,single,,,False,gender,Girls,f1,0.4122
+ensemble_perclass,member_r0,single,,,False,gender,Men,val_n,3242
+ensemble_perclass,member_r0,single,,,False,gender,Men,f1,0.8509
+ensemble_perclass,member_r0,single,,,False,gender,Unisex,val_n,161
+ensemble_perclass,member_r0,single,,,False,gender,Unisex,f1,0.2464
+ensemble_perclass,member_r0,single,,,False,gender,Women,val_n,3991
+ensemble_perclass,member_r0,single,,,False,gender,Women,f1,0.8837
+ensemble_perclass,member_r0,single,,,False,usage,Casual,val_n,6421
+ensemble_perclass,member_r0,single,,,False,usage,Casual,f1,0.9175
+ensemble_perclass,member_r0,single,,,False,usage,Ethnic,val_n,543
+ensemble_perclass,member_r0,single,,,False,usage,Ethnic,f1,0.6437
+ensemble_perclass,member_r0,single,,,False,usage,Formal,val_n,276
+ensemble_perclass,member_r0,single,,,False,usage,Formal,f1,0.6483
+ensemble_perclass,member_r0,single,,,False,usage,Home,val_n,0
+ensemble_perclass,member_r0,single,,,False,usage,Home,f1,0.0
+ensemble_perclass,member_r0,single,,,False,usage,Party,val_n,10
+ensemble_perclass,member_r0,single,,,False,usage,Party,f1,0.0
+ensemble_perclass,member_r0,single,,,False,usage,Smart Casual,val_n,20
+ensemble_perclass,member_r0,single,,,False,usage,Smart Casual,f1,0.0
+ensemble_perclass,member_r0,single,,,False,usage,Sports,val_n,279
+ensemble_perclass,member_r0,single,,,False,usage,Sports,f1,0.5727
+ensemble_perclass,member_r0,single,,,False,usage,Travel,val_n,0
+ensemble_perclass,member_r0,single,,,False,usage,Travel,f1,0.0
+ensemble_perclass,member_r0,single,,,True,gender,Boys,val_n,93
+ensemble_perclass,member_r0,single,,,True,gender,Boys,f1,0.5833
+ensemble_perclass,member_r0,single,,,True,gender,Girls,val_n,62
+ensemble_perclass,member_r0,single,,,True,gender,Girls,f1,0.3939
+ensemble_perclass,member_r0,single,,,True,gender,Men,val_n,3242
+ensemble_perclass,member_r0,single,,,True,gender,Men,f1,0.8569
+ensemble_perclass,member_r0,single,,,True,gender,Unisex,val_n,161
+ensemble_perclass,member_r0,single,,,True,gender,Unisex,f1,0.2486
+ensemble_perclass,member_r0,single,,,True,gender,Women,val_n,3991
+ensemble_perclass,member_r0,single,,,True,gender,Women,f1,0.8867
+ensemble_perclass,member_r0,single,,,True,usage,Casual,val_n,6421
+ensemble_perclass,member_r0,single,,,True,usage,Casual,f1,0.9184
+ensemble_perclass,member_r0,single,,,True,usage,Ethnic,val_n,543
+ensemble_perclass,member_r0,single,,,True,usage,Ethnic,f1,0.6366
+ensemble_perclass,member_r0,single,,,True,usage,Formal,val_n,276
+ensemble_perclass,member_r0,single,,,True,usage,Formal,f1,0.6481
+ensemble_perclass,member_r0,single,,,True,usage,Home,val_n,0
+ensemble_perclass,member_r0,single,,,True,usage,Home,f1,0.0
+ensemble_perclass,member_r0,single,,,True,usage,Party,val_n,10
+ensemble_perclass,member_r0,single,,,True,usage,Party,f1,0.0
+ensemble_perclass,member_r0,single,,,True,usage,Smart Casual,val_n,20
+ensemble_perclass,member_r0,single,,,True,usage,Smart Casual,f1,0.0
+ensemble_perclass,member_r0,single,,,True,usage,Sports,val_n,279
+ensemble_perclass,member_r0,single,,,True,usage,Sports,f1,0.5775
+ensemble_perclass,member_r0,single,,,True,usage,Travel,val_n,0
+ensemble_perclass,member_r0,single,,,True,usage,Travel,f1,0.0
+ensemble_perclass,member_r1,single,,,False,gender,Boys,val_n,93
+ensemble_perclass,member_r1,single,,,False,gender,Boys,f1,0.568
+ensemble_perclass,member_r1,single,,,False,gender,Girls,val_n,62
+ensemble_perclass,member_r1,single,,,False,gender,Girls,f1,0.4118
+ensemble_perclass,member_r1,single,,,False,gender,Men,val_n,3242
+ensemble_perclass,member_r1,single,,,False,gender,Men,f1,0.8503
+ensemble_perclass,member_r1,single,,,False,gender,Unisex,val_n,161
+ensemble_perclass,member_r1,single,,,False,gender,Unisex,f1,0.2634
+ensemble_perclass,member_r1,single,,,False,gender,Women,val_n,3991
+ensemble_perclass,member_r1,single,,,False,gender,Women,f1,0.8835
+ensemble_perclass,member_r1,single,,,False,usage,Casual,val_n,6421
+ensemble_perclass,member_r1,single,,,False,usage,Casual,f1,0.9165
+ensemble_perclass,member_r1,single,,,False,usage,Ethnic,val_n,543
+ensemble_perclass,member_r1,single,,,False,usage,Ethnic,f1,0.6354
+ensemble_perclass,member_r1,single,,,False,usage,Formal,val_n,276
+ensemble_perclass,member_r1,single,,,False,usage,Formal,f1,0.6178
+ensemble_perclass,member_r1,single,,,False,usage,Home,val_n,0
+ensemble_perclass,member_r1,single,,,False,usage,Home,f1,0.0
+ensemble_perclass,member_r1,single,,,False,usage,Party,val_n,10
+ensemble_perclass,member_r1,single,,,False,usage,Party,f1,0.0
+ensemble_perclass,member_r1,single,,,False,usage,Smart Casual,val_n,20
+ensemble_perclass,member_r1,single,,,False,usage,Smart Casual,f1,0.0
+ensemble_perclass,member_r1,single,,,False,usage,Sports,val_n,279
+ensemble_perclass,member_r1,single,,,False,usage,Sports,f1,0.5942
+ensemble_perclass,member_r1,single,,,False,usage,Travel,val_n,0
+ensemble_perclass,member_r1,single,,,False,usage,Travel,f1,0.0
+ensemble_perclass,member_r1,single,,,True,gender,Boys,val_n,93
+ensemble_perclass,member_r1,single,,,True,gender,Boys,f1,0.5614
+ensemble_perclass,member_r1,single,,,True,gender,Girls,val_n,62
+ensemble_perclass,member_r1,single,,,True,gender,Girls,f1,0.4088
+ensemble_perclass,member_r1,single,,,True,gender,Men,val_n,3242
+ensemble_perclass,member_r1,single,,,True,gender,Men,f1,0.8567
+ensemble_perclass,member_r1,single,,,True,gender,Unisex,val_n,161
+ensemble_perclass,member_r1,single,,,True,gender,Unisex,f1,0.2706
+ensemble_perclass,member_r1,single,,,True,gender,Women,val_n,3991
+ensemble_perclass,member_r1,single,,,True,gender,Women,f1,0.8855
+ensemble_perclass,member_r1,single,,,True,usage,Casual,val_n,6421
+ensemble_perclass,member_r1,single,,,True,usage,Casual,f1,0.9174
+ensemble_perclass,member_r1,single,,,True,usage,Ethnic,val_n,543
+ensemble_perclass,member_r1,single,,,True,usage,Ethnic,f1,0.6362
+ensemble_perclass,member_r1,single,,,True,usage,Formal,val_n,276
+ensemble_perclass,member_r1,single,,,True,usage,Formal,f1,0.6325
+ensemble_perclass,member_r1,single,,,True,usage,Home,val_n,0
+ensemble_perclass,member_r1,single,,,True,usage,Home,f1,0.0
+ensemble_perclass,member_r1,single,,,True,usage,Party,val_n,10
+ensemble_perclass,member_r1,single,,,True,usage,Party,f1,0.0
+ensemble_perclass,member_r1,single,,,True,usage,Smart Casual,val_n,20
+ensemble_perclass,member_r1,single,,,True,usage,Smart Casual,f1,0.0
+ensemble_perclass,member_r1,single,,,True,usage,Sports,val_n,279
+ensemble_perclass,member_r1,single,,,True,usage,Sports,f1,0.587
+ensemble_perclass,member_r1,single,,,True,usage,Travel,val_n,0
+ensemble_perclass,member_r1,single,,,True,usage,Travel,f1,0.0
+ensemble_perclass,member_r2,single,,,False,gender,Boys,val_n,93
+ensemble_perclass,member_r2,single,,,False,gender,Boys,f1,0.5466
+ensemble_perclass,member_r2,single,,,False,gender,Girls,val_n,62
+ensemble_perclass,member_r2,single,,,False,gender,Girls,f1,0.4386
+ensemble_perclass,member_r2,single,,,False,gender,Men,val_n,3242
+ensemble_perclass,member_r2,single,,,False,gender,Men,f1,0.8571
+ensemble_perclass,member_r2,single,,,False,gender,Unisex,val_n,161
+ensemble_perclass,member_r2,single,,,False,gender,Unisex,f1,0.2172
+ensemble_perclass,member_r2,single,,,False,gender,Women,val_n,3991
+ensemble_perclass,member_r2,single,,,False,gender,Women,f1,0.8835
+ensemble_perclass,member_r2,single,,,False,usage,Casual,val_n,6421
+ensemble_perclass,member_r2,single,,,False,usage,Casual,f1,0.9305
+ensemble_perclass,member_r2,single,,,False,usage,Ethnic,val_n,543
+ensemble_perclass,member_r2,single,,,False,usage,Ethnic,f1,0.6597
+ensemble_perclass,member_r2,single,,,False,usage,Formal,val_n,276
+ensemble_perclass,member_r2,single,,,False,usage,Formal,f1,0.6291
+ensemble_perclass,member_r2,single,,,False,usage,Home,val_n,0
+ensemble_perclass,member_r2,single,,,False,usage,Home,f1,0.0
+ensemble_perclass,member_r2,single,,,False,usage,Party,val_n,10
+ensemble_perclass,member_r2,single,,,False,usage,Party,f1,0.0
+ensemble_perclass,member_r2,single,,,False,usage,Smart Casual,val_n,20
+ensemble_perclass,member_r2,single,,,False,usage,Smart Casual,f1,0.0
+ensemble_perclass,member_r2,single,,,False,usage,Sports,val_n,279
+ensemble_perclass,member_r2,single,,,False,usage,Sports,f1,0.6052
+ensemble_perclass,member_r2,single,,,False,usage,Travel,val_n,0
+ensemble_perclass,member_r2,single,,,False,usage,Travel,f1,0.0
+ensemble_perclass,member_r2,single,,,True,gender,Boys,val_n,93
+ensemble_perclass,member_r2,single,,,True,gender,Boys,f1,0.5697
+ensemble_perclass,member_r2,single,,,True,gender,Girls,val_n,62
+ensemble_perclass,member_r2,single,,,True,gender,Girls,f1,0.4602
+ensemble_perclass,member_r2,single,,,True,gender,Men,val_n,3242
+ensemble_perclass,member_r2,single,,,True,gender,Men,f1,0.8616
+ensemble_perclass,member_r2,single,,,True,gender,Unisex,val_n,161
+ensemble_perclass,member_r2,single,,,True,gender,Unisex,f1,0.2286
+ensemble_perclass,member_r2,single,,,True,gender,Women,val_n,3991
+ensemble_perclass,member_r2,single,,,True,gender,Women,f1,0.8854
+ensemble_perclass,member_r2,single,,,True,usage,Casual,val_n,6421
+ensemble_perclass,member_r2,single,,,True,usage,Casual,f1,0.9309
+ensemble_perclass,member_r2,single,,,True,usage,Ethnic,val_n,543
+ensemble_perclass,member_r2,single,,,True,usage,Ethnic,f1,0.6511
+ensemble_perclass,member_r2,single,,,True,usage,Formal,val_n,276
+ensemble_perclass,member_r2,single,,,True,usage,Formal,f1,0.6418
+ensemble_perclass,member_r2,single,,,True,usage,Home,val_n,0
+ensemble_perclass,member_r2,single,,,True,usage,Home,f1,0.0
+ensemble_perclass,member_r2,single,,,True,usage,Party,val_n,10
+ensemble_perclass,member_r2,single,,,True,usage,Party,f1,0.0
+ensemble_perclass,member_r2,single,,,True,usage,Smart Casual,val_n,20
+ensemble_perclass,member_r2,single,,,True,usage,Smart Casual,f1,0.0
+ensemble_perclass,member_r2,single,,,True,usage,Sports,val_n,279
+ensemble_perclass,member_r2,single,,,True,usage,Sports,f1,0.6172
+ensemble_perclass,member_r2,single,,,True,usage,Travel,val_n,0
+ensemble_perclass,member_r2,single,,,True,usage,Travel,f1,0.0
+ensemble_perclass,member_s43,single,,,False,gender,Boys,val_n,93
+ensemble_perclass,member_s43,single,,,False,gender,Boys,f1,0.5514
+ensemble_perclass,member_s43,single,,,False,gender,Girls,val_n,62
+ensemble_perclass,member_s43,single,,,False,gender,Girls,f1,0.4
+ensemble_perclass,member_s43,single,,,False,gender,Men,val_n,3242
+ensemble_perclass,member_s43,single,,,False,gender,Men,f1,0.8603
+ensemble_perclass,member_s43,single,,,False,gender,Unisex,val_n,161
+ensemble_perclass,member_s43,single,,,False,gender,Unisex,f1,0.2451
+ensemble_perclass,member_s43,single,,,False,gender,Women,val_n,3991
+ensemble_perclass,member_s43,single,,,False,gender,Women,f1,0.8894
+ensemble_perclass,member_s43,single,,,False,usage,Casual,val_n,6421
+ensemble_perclass,member_s43,single,,,False,usage,Casual,f1,0.9146
+ensemble_perclass,member_s43,single,,,False,usage,Ethnic,val_n,543
+ensemble_perclass,member_s43,single,,,False,usage,Ethnic,f1,0.6261
+ensemble_perclass,member_s43,single,,,False,usage,Formal,val_n,276
+ensemble_perclass,member_s43,single,,,False,usage,Formal,f1,0.6391
+ensemble_perclass,member_s43,single,,,False,usage,Home,val_n,0
+ensemble_perclass,member_s43,single,,,False,usage,Home,f1,0.0
+ensemble_perclass,member_s43,single,,,False,usage,Party,val_n,10
+ensemble_perclass,member_s43,single,,,False,usage,Party,f1,0.0
+ensemble_perclass,member_s43,single,,,False,usage,Smart Casual,val_n,20
+ensemble_perclass,member_s43,single,,,False,usage,Smart Casual,f1,0.0
+ensemble_perclass,member_s43,single,,,False,usage,Sports,val_n,279
+ensemble_perclass,member_s43,single,,,False,usage,Sports,f1,0.6024
+ensemble_perclass,member_s43,single,,,False,usage,Travel,val_n,0
+ensemble_perclass,member_s43,single,,,False,usage,Travel,f1,0.0
+ensemble_perclass,member_s43,single,,,True,gender,Boys,val_n,93
+ensemble_perclass,member_s43,single,,,True,gender,Boys,f1,0.5574
+ensemble_perclass,member_s43,single,,,True,gender,Girls,val_n,62
+ensemble_perclass,member_s43,single,,,True,gender,Girls,f1,0.4122
+ensemble_perclass,member_s43,single,,,True,gender,Men,val_n,3242
+ensemble_perclass,member_s43,single,,,True,gender,Men,f1,0.8665
+ensemble_perclass,member_s43,single,,,True,gender,Unisex,val_n,161
+ensemble_perclass,member_s43,single,,,True,gender,Unisex,f1,0.2302
+ensemble_perclass,member_s43,single,,,True,gender,Women,val_n,3991
+ensemble_perclass,member_s43,single,,,True,gender,Women,f1,0.8914
+ensemble_perclass,member_s43,single,,,True,usage,Casual,val_n,6421
+ensemble_perclass,member_s43,single,,,True,usage,Casual,f1,0.9149
+ensemble_perclass,member_s43,single,,,True,usage,Ethnic,val_n,543
+ensemble_perclass,member_s43,single,,,True,usage,Ethnic,f1,0.6339
+ensemble_perclass,member_s43,single,,,True,usage,Formal,val_n,276
+ensemble_perclass,member_s43,single,,,True,usage,Formal,f1,0.6319
+ensemble_perclass,member_s43,single,,,True,usage,Home,val_n,0
+ensemble_perclass,member_s43,single,,,True,usage,Home,f1,0.0
+ensemble_perclass,member_s43,single,,,True,usage,Party,val_n,10
+ensemble_perclass,member_s43,single,,,True,usage,Party,f1,0.0
+ensemble_perclass,member_s43,single,,,True,usage,Smart Casual,val_n,20
+ensemble_perclass,member_s43,single,,,True,usage,Smart Casual,f1,0.0
+ensemble_perclass,member_s43,single,,,True,usage,Sports,val_n,279
+ensemble_perclass,member_s43,single,,,True,usage,Sports,f1,0.6055
+ensemble_perclass,member_s43,single,,,True,usage,Travel,val_n,0
+ensemble_perclass,member_s43,single,,,True,usage,Travel,f1,0.0
+ensemble_perclass,member_s44,single,,,False,gender,Boys,val_n,93
+ensemble_perclass,member_s44,single,,,False,gender,Boys,f1,0.5434
+ensemble_perclass,member_s44,single,,,False,gender,Girls,val_n,62
+ensemble_perclass,member_s44,single,,,False,gender,Girls,f1,0.3404
+ensemble_perclass,member_s44,single,,,False,gender,Men,val_n,3242
+ensemble_perclass,member_s44,single,,,False,gender,Men,f1,0.8487
+ensemble_perclass,member_s44,single,,,False,gender,Unisex,val_n,161
+ensemble_perclass,member_s44,single,,,False,gender,Unisex,f1,0.2322
+ensemble_perclass,member_s44,single,,,False,gender,Women,val_n,3991
+ensemble_perclass,member_s44,single,,,False,gender,Women,f1,0.8851
+ensemble_perclass,member_s44,single,,,False,usage,Casual,val_n,6421
+ensemble_perclass,member_s44,single,,,False,usage,Casual,f1,0.9176
+ensemble_perclass,member_s44,single,,,False,usage,Ethnic,val_n,543
+ensemble_perclass,member_s44,single,,,False,usage,Ethnic,f1,0.6435
+ensemble_perclass,member_s44,single,,,False,usage,Formal,val_n,276
+ensemble_perclass,member_s44,single,,,False,usage,Formal,f1,0.6132
+ensemble_perclass,member_s44,single,,,False,usage,Home,val_n,0
+ensemble_perclass,member_s44,single,,,False,usage,Home,f1,0.0
+ensemble_perclass,member_s44,single,,,False,usage,Party,val_n,10
+ensemble_perclass,member_s44,single,,,False,usage,Party,f1,0.0
+ensemble_perclass,member_s44,single,,,False,usage,Smart Casual,val_n,20
+ensemble_perclass,member_s44,single,,,False,usage,Smart Casual,f1,0.0
+ensemble_perclass,member_s44,single,,,False,usage,Sports,val_n,279
+ensemble_perclass,member_s44,single,,,False,usage,Sports,f1,0.584
+ensemble_perclass,member_s44,single,,,False,usage,Travel,val_n,0
+ensemble_perclass,member_s44,single,,,False,usage,Travel,f1,0.0
+ensemble_perclass,member_s44,single,,,True,gender,Boys,val_n,93
+ensemble_perclass,member_s44,single,,,True,gender,Boys,f1,0.5287
+ensemble_perclass,member_s44,single,,,True,gender,Girls,val_n,62
+ensemble_perclass,member_s44,single,,,True,gender,Girls,f1,0.3429
+ensemble_perclass,member_s44,single,,,True,gender,Men,val_n,3242
+ensemble_perclass,member_s44,single,,,True,gender,Men,f1,0.8535
+ensemble_perclass,member_s44,single,,,True,gender,Unisex,val_n,161
+ensemble_perclass,member_s44,single,,,True,gender,Unisex,f1,0.2487
+ensemble_perclass,member_s44,single,,,True,gender,Women,val_n,3991
+ensemble_perclass,member_s44,single,,,True,gender,Women,f1,0.8879
+ensemble_perclass,member_s44,single,,,True,usage,Casual,val_n,6421
+ensemble_perclass,member_s44,single,,,True,usage,Casual,f1,0.9199
+ensemble_perclass,member_s44,single,,,True,usage,Ethnic,val_n,543
+ensemble_perclass,member_s44,single,,,True,usage,Ethnic,f1,0.6523
+ensemble_perclass,member_s44,single,,,True,usage,Formal,val_n,276
+ensemble_perclass,member_s44,single,,,True,usage,Formal,f1,0.6314
+ensemble_perclass,member_s44,single,,,True,usage,Home,val_n,0
+ensemble_perclass,member_s44,single,,,True,usage,Home,f1,0.0
+ensemble_perclass,member_s44,single,,,True,usage,Party,val_n,10
+ensemble_perclass,member_s44,single,,,True,usage,Party,f1,0.0
+ensemble_perclass,member_s44,single,,,True,usage,Smart Casual,val_n,20
+ensemble_perclass,member_s44,single,,,True,usage,Smart Casual,f1,0.0
+ensemble_perclass,member_s44,single,,,True,usage,Sports,val_n,279
+ensemble_perclass,member_s44,single,,,True,usage,Sports,f1,0.5948
+ensemble_perclass,member_s44,single,,,True,usage,Travel,val_n,0
+ensemble_perclass,member_s44,single,,,True,usage,Travel,f1,0.0
+ensemble_perclass,ens_A_repeats,ensemble,,,False,gender,Boys,val_n,93
+ensemble_perclass,ens_A_repeats,ensemble,,,False,gender,Boys,f1,0.5732
+ensemble_perclass,ens_A_repeats,ensemble,,,False,gender,Girls,val_n,62
+ensemble_perclass,ens_A_repeats,ensemble,,,False,gender,Girls,f1,0.4333
+ensemble_perclass,ens_A_repeats,ensemble,,,False,gender,Men,val_n,3242
+ensemble_perclass,ens_A_repeats,ensemble,,,False,gender,Men,f1,0.8568
+ensemble_perclass,ens_A_repeats,ensemble,,,False,gender,Unisex,val_n,161
+ensemble_perclass,ens_A_repeats,ensemble,,,False,gender,Unisex,f1,0.2524
+ensemble_perclass,ens_A_repeats,ensemble,,,False,gender,Women,val_n,3991
+ensemble_perclass,ens_A_repeats,ensemble,,,False,gender,Women,f1,0.8881
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Casual,val_n,6421
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Casual,f1,0.9231
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Ethnic,val_n,543
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Ethnic,f1,0.6478
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Formal,val_n,276
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Formal,f1,0.6338
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Home,val_n,0
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Home,f1,0.0
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Party,val_n,10
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Party,f1,0.0
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Smart Casual,val_n,20
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Smart Casual,f1,0.0
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Sports,val_n,279
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Sports,f1,0.5949
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Travel,val_n,0
+ensemble_perclass,ens_A_repeats,ensemble,,,False,usage,Travel,f1,0.0
+ensemble_perclass,ens_A_repeats,ensemble,,,True,gender,Boys,val_n,93
+ensemble_perclass,ens_A_repeats,ensemble,,,True,gender,Boys,f1,0.5854
+ensemble_perclass,ens_A_repeats,ensemble,,,True,gender,Girls,val_n,62
+ensemble_perclass,ens_A_repeats,ensemble,,,True,gender,Girls,f1,0.4375
+ensemble_perclass,ens_A_repeats,ensemble,,,True,gender,Men,val_n,3242
+ensemble_perclass,ens_A_repeats,ensemble,,,True,gender,Men,f1,0.8606
+ensemble_perclass,ens_A_repeats,ensemble,,,True,gender,Unisex,val_n,161
+ensemble_perclass,ens_A_repeats,ensemble,,,True,gender,Unisex,f1,0.2471
+ensemble_perclass,ens_A_repeats,ensemble,,,True,gender,Women,val_n,3991
+ensemble_perclass,ens_A_repeats,ensemble,,,True,gender,Women,f1,0.8895
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Casual,val_n,6421
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Casual,f1,0.9232
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Ethnic,val_n,543
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Ethnic,f1,0.6445
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Formal,val_n,276
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Formal,f1,0.6441
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Home,val_n,0
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Home,f1,0.0
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Party,val_n,10
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Party,f1,0.0
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Smart Casual,val_n,20
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Smart Casual,f1,0.0
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Sports,val_n,279
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Sports,f1,0.5924
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Travel,val_n,0
+ensemble_perclass,ens_A_repeats,ensemble,,,True,usage,Travel,f1,0.0
+ensemble_perclass,ens_B_seeds,ensemble,,,False,gender,Boys,val_n,93
+ensemble_perclass,ens_B_seeds,ensemble,,,False,gender,Boys,f1,0.5765
+ensemble_perclass,ens_B_seeds,ensemble,,,False,gender,Girls,val_n,62
+ensemble_perclass,ens_B_seeds,ensemble,,,False,gender,Girls,f1,0.4237
+ensemble_perclass,ens_B_seeds,ensemble,,,False,gender,Men,val_n,3242
+ensemble_perclass,ens_B_seeds,ensemble,,,False,gender,Men,f1,0.8626
+ensemble_perclass,ens_B_seeds,ensemble,,,False,gender,Unisex,val_n,161
+ensemble_perclass,ens_B_seeds,ensemble,,,False,gender,Unisex,f1,0.2505
+ensemble_perclass,ens_B_seeds,ensemble,,,False,gender,Women,val_n,3991
+ensemble_perclass,ens_B_seeds,ensemble,,,False,gender,Women,f1,0.8923
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Casual,val_n,6421
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Casual,f1,0.9204
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Ethnic,val_n,543
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Ethnic,f1,0.6479
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Formal,val_n,276
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Formal,f1,0.6491
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Home,val_n,0
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Home,f1,0.0
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Party,val_n,10
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Party,f1,0.0
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Smart Casual,val_n,20
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Smart Casual,f1,0.0
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Sports,val_n,279
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Sports,f1,0.6003
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Travel,val_n,0
+ensemble_perclass,ens_B_seeds,ensemble,,,False,usage,Travel,f1,0.0
+ensemble_perclass,ens_B_seeds,ensemble,,,True,gender,Boys,val_n,93
+ensemble_perclass,ens_B_seeds,ensemble,,,True,gender,Boys,f1,0.5747
+ensemble_perclass,ens_B_seeds,ensemble,,,True,gender,Girls,val_n,62
+ensemble_perclass,ens_B_seeds,ensemble,,,True,gender,Girls,f1,0.4538
+ensemble_perclass,ens_B_seeds,ensemble,,,True,gender,Men,val_n,3242
+ensemble_perclass,ens_B_seeds,ensemble,,,True,gender,Men,f1,0.8655
+ensemble_perclass,ens_B_seeds,ensemble,,,True,gender,Unisex,val_n,161
+ensemble_perclass,ens_B_seeds,ensemble,,,True,gender,Unisex,f1,0.2662
+ensemble_perclass,ens_B_seeds,ensemble,,,True,gender,Women,val_n,3991
+ensemble_perclass,ens_B_seeds,ensemble,,,True,gender,Women,f1,0.8936
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Casual,val_n,6421
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Casual,f1,0.9214
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Ethnic,val_n,543
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Ethnic,f1,0.6452
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Formal,val_n,276
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Formal,f1,0.6631
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Home,val_n,0
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Home,f1,0.0
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Party,val_n,10
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Party,f1,0.0
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Smart Casual,val_n,20
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Smart Casual,f1,0.0
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Sports,val_n,279
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Sports,f1,0.6019
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Travel,val_n,0
+ensemble_perclass,ens_B_seeds,ensemble,,,True,usage,Travel,f1,0.0
+ensemble_confirm,42,member,,forward,,,,epochs,20
+ensemble_confirm,42,member,,forward,,,,n,1
+ensemble_confirm,42,member,,forward,,gender,,macroF1,0.5838
+ensemble_confirm,42,member,,forward,,usage,,macroF1,0.3514
+ensemble_confirm,43,member,,forward,,,,epochs,20
+ensemble_confirm,43,member,,forward,,,,n,1
+ensemble_confirm,43,member,,forward,,gender,,macroF1,0.5729
+ensemble_confirm,43,member,,forward,,usage,,macroF1,0.3537
+ensemble_confirm,44,member,,forward,,,,epochs,20
+ensemble_confirm,44,member,,forward,,,,n,1
+ensemble_confirm,44,member,,forward,,gender,,macroF1,0.565
+ensemble_confirm,44,member,,forward,,usage,,macroF1,0.352
+ensemble_confirm,45,member,,forward,,,,epochs,20
+ensemble_confirm,45,member,,forward,,,,n,1
+ensemble_confirm,45,member,,forward,,gender,,macroF1,0.5843
+ensemble_confirm,45,member,,forward,,usage,,macroF1,0.3507
+ensemble_confirm,46,member,,forward,,,,epochs,20
+ensemble_confirm,46,member,,forward,,,,n,1
+ensemble_confirm,46,member,,forward,,gender,,macroF1,0.5723
+ensemble_confirm,46,member,,forward,,usage,,macroF1,0.3512
+ensemble_confirm,47,member,,forward,,,,epochs,20
+ensemble_confirm,47,member,,forward,,,,n,1
+ensemble_confirm,47,member,,forward,,gender,,macroF1,0.5542
+ensemble_confirm,47,member,,forward,,usage,,macroF1,0.3529
+ensemble_confirm,42+43+44,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,42+43+44,ensemble3,,forward,,,,n,3
+ensemble_confirm,42+43+44,ensemble3,,forward,,gender,,macroF1,0.5962
+ensemble_confirm,42+43+44,ensemble3,,forward,,usage,,macroF1,0.3544
+ensemble_confirm,42+43+45,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,42+43+45,ensemble3,,forward,,,,n,3
+ensemble_confirm,42+43+45,ensemble3,,forward,,gender,,macroF1,0.603
+ensemble_confirm,42+43+45,ensemble3,,forward,,usage,,macroF1,0.355
+ensemble_confirm,42+43+46,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,42+43+46,ensemble3,,forward,,,,n,3
+ensemble_confirm,42+43+46,ensemble3,,forward,,gender,,macroF1,0.5994
+ensemble_confirm,42+43+46,ensemble3,,forward,,usage,,macroF1,0.3566
+ensemble_confirm,42+43+47,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,42+43+47,ensemble3,,forward,,,,n,3
+ensemble_confirm,42+43+47,ensemble3,,forward,,gender,,macroF1,0.5927
+ensemble_confirm,42+43+47,ensemble3,,forward,,usage,,macroF1,0.355
+ensemble_confirm,42+44+45,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,42+44+45,ensemble3,,forward,,,,n,3
+ensemble_confirm,42+44+45,ensemble3,,forward,,gender,,macroF1,0.5999
+ensemble_confirm,42+44+45,ensemble3,,forward,,usage,,macroF1,0.3539
+ensemble_confirm,42+44+46,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,42+44+46,ensemble3,,forward,,,,n,3
+ensemble_confirm,42+44+46,ensemble3,,forward,,gender,,macroF1,0.591
+ensemble_confirm,42+44+46,ensemble3,,forward,,usage,,macroF1,0.3551
+ensemble_confirm,42+44+47,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,42+44+47,ensemble3,,forward,,,,n,3
+ensemble_confirm,42+44+47,ensemble3,,forward,,gender,,macroF1,0.5937
+ensemble_confirm,42+44+47,ensemble3,,forward,,usage,,macroF1,0.3566
+ensemble_confirm,42+45+46,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,42+45+46,ensemble3,,forward,,,,n,3
+ensemble_confirm,42+45+46,ensemble3,,forward,,gender,,macroF1,0.5985
+ensemble_confirm,42+45+46,ensemble3,,forward,,usage,,macroF1,0.3543
+ensemble_confirm,42+45+47,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,42+45+47,ensemble3,,forward,,,,n,3
+ensemble_confirm,42+45+47,ensemble3,,forward,,gender,,macroF1,0.5967
+ensemble_confirm,42+45+47,ensemble3,,forward,,usage,,macroF1,0.3543
+ensemble_confirm,42+46+47,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,42+46+47,ensemble3,,forward,,,,n,3
+ensemble_confirm,42+46+47,ensemble3,,forward,,gender,,macroF1,0.5949
+ensemble_confirm,42+46+47,ensemble3,,forward,,usage,,macroF1,0.3578
+ensemble_confirm,43+44+45,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,43+44+45,ensemble3,,forward,,,,n,3
+ensemble_confirm,43+44+45,ensemble3,,forward,,gender,,macroF1,0.5894
+ensemble_confirm,43+44+45,ensemble3,,forward,,usage,,macroF1,0.3538
+ensemble_confirm,43+44+46,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,43+44+46,ensemble3,,forward,,,,n,3
+ensemble_confirm,43+44+46,ensemble3,,forward,,gender,,macroF1,0.5892
+ensemble_confirm,43+44+46,ensemble3,,forward,,usage,,macroF1,0.3556
+ensemble_confirm,43+44+47,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,43+44+47,ensemble3,,forward,,,,n,3
+ensemble_confirm,43+44+47,ensemble3,,forward,,gender,,macroF1,0.5869
+ensemble_confirm,43+44+47,ensemble3,,forward,,usage,,macroF1,0.3561
+ensemble_confirm,43+45+46,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,43+45+46,ensemble3,,forward,,,,n,3
+ensemble_confirm,43+45+46,ensemble3,,forward,,gender,,macroF1,0.5945
+ensemble_confirm,43+45+46,ensemble3,,forward,,usage,,macroF1,0.3561
+ensemble_confirm,43+45+47,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,43+45+47,ensemble3,,forward,,,,n,3
+ensemble_confirm,43+45+47,ensemble3,,forward,,gender,,macroF1,0.5969
+ensemble_confirm,43+45+47,ensemble3,,forward,,usage,,macroF1,0.3542
+ensemble_confirm,43+46+47,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,43+46+47,ensemble3,,forward,,,,n,3
+ensemble_confirm,43+46+47,ensemble3,,forward,,gender,,macroF1,0.5818
+ensemble_confirm,43+46+47,ensemble3,,forward,,usage,,macroF1,0.3575
+ensemble_confirm,44+45+46,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,44+45+46,ensemble3,,forward,,,,n,3
+ensemble_confirm,44+45+46,ensemble3,,forward,,gender,,macroF1,0.5869
+ensemble_confirm,44+45+46,ensemble3,,forward,,usage,,macroF1,0.3547
+ensemble_confirm,44+45+47,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,44+45+47,ensemble3,,forward,,,,n,3
+ensemble_confirm,44+45+47,ensemble3,,forward,,gender,,macroF1,0.5886
+ensemble_confirm,44+45+47,ensemble3,,forward,,usage,,macroF1,0.3545
+ensemble_confirm,44+46+47,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,44+46+47,ensemble3,,forward,,,,n,3
+ensemble_confirm,44+46+47,ensemble3,,forward,,gender,,macroF1,0.5863
+ensemble_confirm,44+46+47,ensemble3,,forward,,usage,,macroF1,0.3565
+ensemble_confirm,45+46+47,ensemble3,,forward,,,,epochs,20
+ensemble_confirm,45+46+47,ensemble3,,forward,,,,n,3
+ensemble_confirm,45+46+47,ensemble3,,forward,,gender,,macroF1,0.5881
+ensemble_confirm,45+46+47,ensemble3,,forward,,usage,,macroF1,0.3547
+ensemble_confirm,all,ensemble6,,forward,,,,epochs,20
+ensemble_confirm,all,ensemble6,,forward,,,,n,6
+ensemble_confirm,all,ensemble6,,forward,,gender,,macroF1,0.5992
+ensemble_confirm,all,ensemble6,,forward,,usage,,macroF1,0.3556
+ensemble_confirm,42,member,,random,,,,epochs,20
+ensemble_confirm,42,member,,random,,,,n,1
+ensemble_confirm,42,member,,random,,gender,,macroF1,0.7237
+ensemble_confirm,42,member,,random,,usage,,macroF1,0.4481
+ensemble_confirm,43,member,,random,,,,epochs,20
+ensemble_confirm,43,member,,random,,,,n,1
+ensemble_confirm,43,member,,random,,gender,,macroF1,0.7443
+ensemble_confirm,43,member,,random,,usage,,macroF1,0.4482
+ensemble_confirm,44,member,,random,,,,epochs,20
+ensemble_confirm,44,member,,random,,,,n,1
+ensemble_confirm,44,member,,random,,gender,,macroF1,0.7339
+ensemble_confirm,44,member,,random,,usage,,macroF1,0.4341
+ensemble_confirm,45,member,,random,,,,epochs,20
+ensemble_confirm,45,member,,random,,,,n,1
+ensemble_confirm,45,member,,random,,gender,,macroF1,0.7468
+ensemble_confirm,45,member,,random,,usage,,macroF1,0.4517
+ensemble_confirm,46,member,,random,,,,epochs,20
+ensemble_confirm,46,member,,random,,,,n,1
+ensemble_confirm,46,member,,random,,gender,,macroF1,0.7457
+ensemble_confirm,46,member,,random,,usage,,macroF1,0.4303
+ensemble_confirm,47,member,,random,,,,epochs,20
+ensemble_confirm,47,member,,random,,,,n,1
+ensemble_confirm,47,member,,random,,gender,,macroF1,0.7496
+ensemble_confirm,47,member,,random,,usage,,macroF1,0.4313
+ensemble_confirm,42+43+44,ensemble3,,random,,,,epochs,20
+ensemble_confirm,42+43+44,ensemble3,,random,,,,n,3
+ensemble_confirm,42+43+44,ensemble3,,random,,gender,,macroF1,0.7375
+ensemble_confirm,42+43+44,ensemble3,,random,,usage,,macroF1,0.4554
+ensemble_confirm,42+43+45,ensemble3,,random,,,,epochs,20
+ensemble_confirm,42+43+45,ensemble3,,random,,,,n,3
+ensemble_confirm,42+43+45,ensemble3,,random,,gender,,macroF1,0.7481
+ensemble_confirm,42+43+45,ensemble3,,random,,usage,,macroF1,0.4715
+ensemble_confirm,42+43+46,ensemble3,,random,,,,epochs,20
+ensemble_confirm,42+43+46,ensemble3,,random,,,,n,3
+ensemble_confirm,42+43+46,ensemble3,,random,,gender,,macroF1,0.7447
+ensemble_confirm,42+43+46,ensemble3,,random,,usage,,macroF1,0.4598
+ensemble_confirm,42+43+47,ensemble3,,random,,,,epochs,20
+ensemble_confirm,42+43+47,ensemble3,,random,,,,n,3
+ensemble_confirm,42+43+47,ensemble3,,random,,gender,,macroF1,0.7464
+ensemble_confirm,42+43+47,ensemble3,,random,,usage,,macroF1,0.4225
+ensemble_confirm,42+44+45,ensemble3,,random,,,,epochs,20
+ensemble_confirm,42+44+45,ensemble3,,random,,,,n,3
+ensemble_confirm,42+44+45,ensemble3,,random,,gender,,macroF1,0.7399
+ensemble_confirm,42+44+45,ensemble3,,random,,usage,,macroF1,0.4232
+ensemble_confirm,42+44+46,ensemble3,,random,,,,epochs,20
+ensemble_confirm,42+44+46,ensemble3,,random,,,,n,3
+ensemble_confirm,42+44+46,ensemble3,,random,,gender,,macroF1,0.7472
+ensemble_confirm,42+44+46,ensemble3,,random,,usage,,macroF1,0.4595
+ensemble_confirm,42+44+47,ensemble3,,random,,,,epochs,20
+ensemble_confirm,42+44+47,ensemble3,,random,,,,n,3
+ensemble_confirm,42+44+47,ensemble3,,random,,gender,,macroF1,0.7471
+ensemble_confirm,42+44+47,ensemble3,,random,,usage,,macroF1,0.4229
+ensemble_confirm,42+45+46,ensemble3,,random,,,,epochs,20
+ensemble_confirm,42+45+46,ensemble3,,random,,,,n,3
+ensemble_confirm,42+45+46,ensemble3,,random,,gender,,macroF1,0.7493
+ensemble_confirm,42+45+46,ensemble3,,random,,usage,,macroF1,0.4545
+ensemble_confirm,42+45+47,ensemble3,,random,,,,epochs,20
+ensemble_confirm,42+45+47,ensemble3,,random,,,,n,3
+ensemble_confirm,42+45+47,ensemble3,,random,,gender,,macroF1,0.7464
+ensemble_confirm,42+45+47,ensemble3,,random,,usage,,macroF1,0.4527
+ensemble_confirm,42+46+47,ensemble3,,random,,,,epochs,20
+ensemble_confirm,42+46+47,ensemble3,,random,,,,n,3
+ensemble_confirm,42+46+47,ensemble3,,random,,gender,,macroF1,0.7479
+ensemble_confirm,42+46+47,ensemble3,,random,,usage,,macroF1,0.4558
+ensemble_confirm,43+44+45,ensemble3,,random,,,,epochs,20
+ensemble_confirm,43+44+45,ensemble3,,random,,,,n,3
+ensemble_confirm,43+44+45,ensemble3,,random,,gender,,macroF1,0.7465
+ensemble_confirm,43+44+45,ensemble3,,random,,usage,,macroF1,0.4175
+ensemble_confirm,43+44+46,ensemble3,,random,,,,epochs,20
+ensemble_confirm,43+44+46,ensemble3,,random,,,,n,3
+ensemble_confirm,43+44+46,ensemble3,,random,,gender,,macroF1,0.7555
+ensemble_confirm,43+44+46,ensemble3,,random,,usage,,macroF1,0.4236
+ensemble_confirm,43+44+47,ensemble3,,random,,,,epochs,20
+ensemble_confirm,43+44+47,ensemble3,,random,,,,n,3
+ensemble_confirm,43+44+47,ensemble3,,random,,gender,,macroF1,0.7451
+ensemble_confirm,43+44+47,ensemble3,,random,,usage,,macroF1,0.4217
+ensemble_confirm,43+45+46,ensemble3,,random,,,,epochs,20
+ensemble_confirm,43+45+46,ensemble3,,random,,,,n,3
+ensemble_confirm,43+45+46,ensemble3,,random,,gender,,macroF1,0.7482
+ensemble_confirm,43+45+46,ensemble3,,random,,usage,,macroF1,0.4415
+ensemble_confirm,43+45+47,ensemble3,,random,,,,epochs,20
+ensemble_confirm,43+45+47,ensemble3,,random,,,,n,3
+ensemble_confirm,43+45+47,ensemble3,,random,,gender,,macroF1,0.7486
+ensemble_confirm,43+45+47,ensemble3,,random,,usage,,macroF1,0.4424
+ensemble_confirm,43+46+47,ensemble3,,random,,,,epochs,20
+ensemble_confirm,43+46+47,ensemble3,,random,,,,n,3
+ensemble_confirm,43+46+47,ensemble3,,random,,gender,,macroF1,0.7656
+ensemble_confirm,43+46+47,ensemble3,,random,,usage,,macroF1,0.4023
+ensemble_confirm,44+45+46,ensemble3,,random,,,,epochs,20
+ensemble_confirm,44+45+46,ensemble3,,random,,,,n,3
+ensemble_confirm,44+45+46,ensemble3,,random,,gender,,macroF1,0.7462
+ensemble_confirm,44+45+46,ensemble3,,random,,usage,,macroF1,0.4235
+ensemble_confirm,44+45+47,ensemble3,,random,,,,epochs,20
+ensemble_confirm,44+45+47,ensemble3,,random,,,,n,3
+ensemble_confirm,44+45+47,ensemble3,,random,,gender,,macroF1,0.7531
+ensemble_confirm,44+45+47,ensemble3,,random,,usage,,macroF1,0.4557
+ensemble_confirm,44+46+47,ensemble3,,random,,,,epochs,20
+ensemble_confirm,44+46+47,ensemble3,,random,,,,n,3
+ensemble_confirm,44+46+47,ensemble3,,random,,gender,,macroF1,0.7542
+ensemble_confirm,44+46+47,ensemble3,,random,,usage,,macroF1,0.4275
+ensemble_confirm,45+46+47,ensemble3,,random,,,,epochs,20
+ensemble_confirm,45+46+47,ensemble3,,random,,,,n,3
+ensemble_confirm,45+46+47,ensemble3,,random,,gender,,macroF1,0.7495
+ensemble_confirm,45+46+47,ensemble3,,random,,usage,,macroF1,0.4349
+ensemble_confirm,all,ensemble6,,random,,,,epochs,20
+ensemble_confirm,all,ensemble6,,random,,,,n,6
+ensemble_confirm,all,ensemble6,,random,,gender,,macroF1,0.7438
+ensemble_confirm,all,ensemble6,,random,,usage,,macroF1,0.423
+gender_ceiling_diagnostic,,,,,,gender,Boys,train_n,496
+gender_ceiling_diagnostic,,,,,,gender,Boys,val_n,93
+gender_ceiling_diagnostic,,,,,,gender,Boys,precision,0.5748
+gender_ceiling_diagnostic,,,,,,gender,Boys,recall,0.7849
+gender_ceiling_diagnostic,,,,,,gender,Boys,f1,0.6636
+gender_ceiling_diagnostic,,,,,,gender,Girls,train_n,417
+gender_ceiling_diagnostic,,,,,,gender,Girls,val_n,66
+gender_ceiling_diagnostic,,,,,,gender,Girls,precision,0.5488
+gender_ceiling_diagnostic,,,,,,gender,Girls,recall,0.6818
+gender_ceiling_diagnostic,,,,,,gender,Girls,f1,0.6081
+gender_ceiling_diagnostic,,,,,,gender,Men,train_n,17459
+gender_ceiling_diagnostic,,,,,,gender,Men,val_n,3090
+gender_ceiling_diagnostic,,,,,,gender,Men,precision,0.9181
+gender_ceiling_diagnostic,,,,,,gender,Men,recall,0.9071
+gender_ceiling_diagnostic,,,,,,gender,Men,f1,0.9126
+gender_ceiling_diagnostic,,,,,,gender,Unisex,train_n,1750
+gender_ceiling_diagnostic,,,,,,gender,Unisex,val_n,305
+gender_ceiling_diagnostic,,,,,,gender,Unisex,precision,0.4175
+gender_ceiling_diagnostic,,,,,,gender,Unisex,recall,0.7213
+gender_ceiling_diagnostic,,,,,,gender,Unisex,f1,0.5288
+gender_ceiling_diagnostic,,,,,,gender,Women,train_n,11962
+gender_ceiling_diagnostic,,,,,,gender,Women,val_n,2107
+gender_ceiling_diagnostic,,,,,,gender,Women,precision,0.9434
+gender_ceiling_diagnostic,,,,,,gender,Women,recall,0.8382
+gender_ceiling_diagnostic,,,,,,gender,Women,f1,0.8877
+gender_ceiling_diagnostic,,,,,,usage,Casual,train_n,24662
+gender_ceiling_diagnostic,,,,,,usage,Casual,val_n,4306
+gender_ceiling_diagnostic,,,,,,usage,Casual,precision,0.9339
+gender_ceiling_diagnostic,,,,,,usage,Casual,recall,0.8957
+gender_ceiling_diagnostic,,,,,,usage,Casual,f1,0.9144
+gender_ceiling_diagnostic,,,,,,usage,Ethnic,train_n,2182
+gender_ceiling_diagnostic,,,,,,usage,Ethnic,val_n,383
+gender_ceiling_diagnostic,,,,,,usage,Ethnic,precision,0.8717
+gender_ceiling_diagnostic,,,,,,usage,Ethnic,recall,0.8695
+gender_ceiling_diagnostic,,,,,,usage,Ethnic,f1,0.8706
+gender_ceiling_diagnostic,,,,,,usage,Formal,train_n,1861
+gender_ceiling_diagnostic,,,,,,usage,Formal,val_n,343
+gender_ceiling_diagnostic,,,,,,usage,Formal,precision,0.7208
+gender_ceiling_diagnostic,,,,,,usage,Formal,recall,0.828
+gender_ceiling_diagnostic,,,,,,usage,Formal,f1,0.7707
+gender_ceiling_diagnostic,,,,,,usage,Home,train_n,1
+gender_ceiling_diagnostic,,,,,,usage,Home,val_n,0
+gender_ceiling_diagnostic,,,,,,usage,Home,precision,0.0
+gender_ceiling_diagnostic,,,,,,usage,Home,recall,0.0
+gender_ceiling_diagnostic,,,,,,usage,Home,f1,0.0
+gender_ceiling_diagnostic,,,,,,usage,Party,train_n,10
+gender_ceiling_diagnostic,,,,,,usage,Party,val_n,3
+gender_ceiling_diagnostic,,,,,,usage,Party,precision,0.0
+gender_ceiling_diagnostic,,,,,,usage,Party,recall,0.0
+gender_ceiling_diagnostic,,,,,,usage,Party,f1,0.0
+gender_ceiling_diagnostic,,,,,,usage,Smart Casual,train_n,46
+gender_ceiling_diagnostic,,,,,,usage,Smart Casual,val_n,9
+gender_ceiling_diagnostic,,,,,,usage,Smart Casual,precision,0.3333
+gender_ceiling_diagnostic,,,,,,usage,Smart Casual,recall,0.1111
+gender_ceiling_diagnostic,,,,,,usage,Smart Casual,f1,0.1667
+gender_ceiling_diagnostic,,,,,,usage,Sports,train_n,3300
+gender_ceiling_diagnostic,,,,,,usage,Sports,val_n,614
+gender_ceiling_diagnostic,,,,,,usage,Sports,precision,0.5984
+gender_ceiling_diagnostic,,,,,,usage,Sports,recall,0.7231
+gender_ceiling_diagnostic,,,,,,usage,Sports,f1,0.6549
+gender_ceiling_diagnostic,,,,,,usage,Travel,train_n,22
+gender_ceiling_diagnostic,,,,,,usage,Travel,val_n,3
+gender_ceiling_diagnostic,,,,,,usage,Travel,precision,0.25
+gender_ceiling_diagnostic,,,,,,usage,Travel,recall,0.6667
+gender_ceiling_diagnostic,,,,,,usage,Travel,f1,0.3636
+ensemble_diversity,,,42v43,forward,,gender,,disagreement,0.09524
+ensemble_diversity,,,42v44,forward,,gender,,disagreement,0.09524
+ensemble_diversity,,,42v45,forward,,gender,,disagreement,0.10544
+ensemble_diversity,,,42v46,forward,,gender,,disagreement,0.09922
+ensemble_diversity,,,42v47,forward,,gender,,disagreement,0.09776
+ensemble_diversity,,,43v44,forward,,gender,,disagreement,0.09736
+ensemble_diversity,,,43v45,forward,,gender,,disagreement,0.09856
+ensemble_diversity,,,43v46,forward,,gender,,disagreement,0.10213
+ensemble_diversity,,,43v47,forward,,gender,,disagreement,0.10001
+ensemble_diversity,,,44v45,forward,,gender,,disagreement,0.10531
+ensemble_diversity,,,44v46,forward,,gender,,disagreement,0.0975
+ensemble_diversity,,,44v47,forward,,gender,,disagreement,0.10332
+ensemble_diversity,,,45v46,forward,,gender,,disagreement,0.10544
+ensemble_diversity,,,45v47,forward,,gender,,disagreement,0.10465
+ensemble_diversity,,,46v47,forward,,gender,,disagreement,0.1024
+ensemble_diversity,,,mean,forward,,gender,,disagreement,0.10064
+ensemble_diversity,,,n_rows,forward,,gender,,val_rows,7549.0
+ensemble_diversity,,,42v43,forward,,usage,,disagreement,0.05749
+ensemble_diversity,,,42v44,forward,,usage,,disagreement,0.06094
+ensemble_diversity,,,42v45,forward,,usage,,disagreement,0.06014
+ensemble_diversity,,,42v46,forward,,usage,,disagreement,0.05776
+ensemble_diversity,,,42v47,forward,,usage,,disagreement,0.05882
+ensemble_diversity,,,43v44,forward,,usage,,disagreement,0.05908
+ensemble_diversity,,,43v45,forward,,usage,,disagreement,0.06398
+ensemble_diversity,,,43v46,forward,,usage,,disagreement,0.06041
+ensemble_diversity,,,43v47,forward,,usage,,disagreement,0.06888
+ensemble_diversity,,,44v45,forward,,usage,,disagreement,0.06001
+ensemble_diversity,,,44v46,forward,,usage,,disagreement,0.05974
+ensemble_diversity,,,44v47,forward,,usage,,disagreement,0.06173
+ensemble_diversity,,,45v46,forward,,usage,,disagreement,0.06213
+ensemble_diversity,,,45v47,forward,,usage,,disagreement,0.05431
+ensemble_diversity,,,46v47,forward,,usage,,disagreement,0.06491
+ensemble_diversity,,,mean,forward,,usage,,disagreement,0.06069
+ensemble_diversity,,,n_rows,forward,,usage,,val_rows,7549.0
+ensemble_diversity,,,42v43,random,,gender,,disagreement,0.09928
+ensemble_diversity,,,42v44,random,,gender,,disagreement,0.08179
+ensemble_diversity,,,42v45,random,,gender,,disagreement,0.07825
+ensemble_diversity,,,42v46,random,,gender,,disagreement,0.08408
+ensemble_diversity,,,42v47,random,,gender,,disagreement,0.0809
+ensemble_diversity,,,43v44,random,,gender,,disagreement,0.07048
+ensemble_diversity,,,43v45,random,,gender,,disagreement,0.0749
+ensemble_diversity,,,43v46,random,,gender,,disagreement,0.07031
+ensemble_diversity,,,43v47,random,,gender,,disagreement,0.07137
+ensemble_diversity,,,44v45,random,,gender,,disagreement,0.06412
+ensemble_diversity,,,44v46,random,,gender,,disagreement,0.06183
+ensemble_diversity,,,44v47,random,,gender,,disagreement,0.06536
+ensemble_diversity,,,45v46,random,,gender,,disagreement,0.06094
+ensemble_diversity,,,45v47,random,,gender,,disagreement,0.06748
+ensemble_diversity,,,46v47,random,,gender,,disagreement,0.06819
+ensemble_diversity,,,mean,random,,gender,,disagreement,0.07329
+ensemble_diversity,,,n_rows,random,,gender,,val_rows,5661.0
+ensemble_diversity,,,42v43,random,,usage,,disagreement,0.10405
+ensemble_diversity,,,42v44,random,,usage,,disagreement,0.07225
+ensemble_diversity,,,42v45,random,,usage,,disagreement,0.08779
+ensemble_diversity,,,42v46,random,,usage,,disagreement,0.0862
+ensemble_diversity,,,42v47,random,,usage,,disagreement,0.09009
+ensemble_diversity,,,43v44,random,,usage,,disagreement,0.07119
+ensemble_diversity,,,43v45,random,,usage,,disagreement,0.06889
+ensemble_diversity,,,43v46,random,,usage,,disagreement,0.07278
+ensemble_diversity,,,43v47,random,,usage,,disagreement,0.0673
+ensemble_diversity,,,44v45,random,,usage,,disagreement,0.06077
+ensemble_diversity,,,44v46,random,,usage,,disagreement,0.05653
+ensemble_diversity,,,44v47,random,,usage,,disagreement,0.06147
+ensemble_diversity,,,45v46,random,,usage,,disagreement,0.06024
+ensemble_diversity,,,45v47,random,,usage,,disagreement,0.05918
+ensemble_diversity,,,46v47,random,,usage,,disagreement,0.05988
+ensemble_diversity,,,mean,random,,usage,,disagreement,0.07191
+ensemble_diversity,,,n_rows,random,,usage,,val_rows,5661.0
+gender_confusion,,,,,,gender,Boys,predicted_Boys,73
+gender_confusion,,,,,,gender,Boys,predicted_Girls,3
+gender_confusion,,,,,,gender,Boys,predicted_Men,8
+gender_confusion,,,,,,gender,Boys,predicted_Unisex,7
+gender_confusion,,,,,,gender,Boys,predicted_Women,2
+gender_confusion,,,,,,gender,Girls,predicted_Boys,16
+gender_confusion,,,,,,gender,Girls,predicted_Girls,45
+gender_confusion,,,,,,gender,Girls,predicted_Men,1
+gender_confusion,,,,,,gender,Girls,predicted_Unisex,3
+gender_confusion,,,,,,gender,Girls,predicted_Women,1
+gender_confusion,,,,,,gender,Men,predicted_Boys,21
+gender_confusion,,,,,,gender,Men,predicted_Girls,6
+gender_confusion,,,,,,gender,Men,predicted_Men,2803
+gender_confusion,,,,,,gender,Men,predicted_Unisex,178
+gender_confusion,,,,,,gender,Men,predicted_Women,82
+gender_confusion,,,,,,gender,Unisex,predicted_Boys,6
+gender_confusion,,,,,,gender,Unisex,predicted_Girls,7
+gender_confusion,,,,,,gender,Unisex,predicted_Men,51
+gender_confusion,,,,,,gender,Unisex,predicted_Unisex,220
+gender_confusion,,,,,,gender,Unisex,predicted_Women,21
+gender_confusion,,,,,,gender,Women,predicted_Boys,11
+gender_confusion,,,,,,gender,Women,predicted_Girls,21
+gender_confusion,,,,,,gender,Women,predicted_Men,190
+gender_confusion,,,,,,gender,Women,predicted_Unisex,119
+gender_confusion,,,,,,gender,Women,predicted_Women,1766
