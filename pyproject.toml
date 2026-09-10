@@ -18,11 +18,16 @@ dependencies = [
     "faiss-cpu",
     "notebook>=7.6.2",
     "scikit-image>=0.26.0",
+    "transformers>=5.17.0",
+    "timm>=1.0.29",
+    "accelerate>=1.15.0",
+    "safetensors>=0.8.0",
 ]
 
-# pyflakes backs check 3 of scripts/check_task1_workers.py, which fails under --strict when it
-# is absent rather than distributing worker notebooks it could not check. `uv sync` installs
-# this group by default.
+# pyflakes is a development-only linter for notebook source. Nothing in the repository runs
+# it automatically now that the notebook generators are gone; it is kept because removing it
+# would require regenerating `uv.lock`, which `uv sync --frozen` verifies against.
+# `uv sync` installs this group by default.
 [dependency-groups]
 dev = [
     "pyflakes>=3.4.0",
