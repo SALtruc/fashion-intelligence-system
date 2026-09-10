@@ -19,6 +19,7 @@ together. Getting this backwards silently produces a frame with the right shape 
 wrong column names, which is why load_wide checks its own output against the columns
 the caller says it needs.
 """
+import io
 from pathlib import Path
 
 import pandas as pd
@@ -142,3 +143,38 @@ def forward_repeats(target, epochs=20):
         raise SystemExit(f"expected 3 forward repeats for {target} at {epochs} "
                          f"epochs, found {len(vals)}")
     return vals
+
+def report_path():
+    """Where the appendix file lives, tolerating either capitalisation.
+
+    The notebook folder was renamed Task3 -> task3 on main. Windows checkouts have
+    core.ignorecase set, so git tracks the lowercase name while the filesystem still
+    reports the old one; a hardcoded path is wrong on one platform or the other. The
+    directory is resolved by looking, not by assuming.
+    """
+    nb = ROOT / "notebooks"
+    for name in ("task3", "Task3"):
+        if (nb / name).is_dir():
+            return nb / name / "REPORT_TASK3.md"
+    return nb / "task3" / "REPORT_TASK3.md"
+
+
+def read_report():
+    """The appendix file's text, or an instruction instead of a traceback.
+
+    The file was removed from main in commit 69cd1931, right after the
+    notebooks/Task3 -> notebooks/task3 rename, so a generator run with --append now
+    fails. Whether it should come back is a team decision, not this module's, but the
+    person who hits the error should be told what happened rather than shown a
+    FileNotFoundError from inside a read call.
+    """
+    p = report_path()
+    if not p.is_file():
+        raise SystemExit("\n".join([
+            f"{p} does not exist.",
+            "It was deleted from main in commit 69cd1931 (message: fixxed), right after",
+            "the notebooks/Task3 to notebooks/task3 rename.",
+            f"To bring it back:  git show 4bbe7956:notebooks/Task3/REPORT_TASK3.md > {p}",
+            "Or drop --append and paste the section this script printed into whichever",
+            "document the report now lives in."]))
+    return io.open(p, encoding="utf-8").read().replace("\r\n", "\n")

@@ -28,7 +28,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from results_io import forward_repeats, load_wide
+from results_io import forward_repeats, load_wide, read_report, report_path
 
 HERE = Path(__file__).resolve().parent
 
@@ -42,7 +42,7 @@ def _repo_root():
 
 ROOT = _repo_root()
 RES = ROOT / "results" / "task3"
-REPORT = ROOT / "notebooks" / "Task3" / "REPORT_TASK3.md"
+REPORT = report_path()
 TARGETS = ["gender", "usage"]
 
 ap = argparse.ArgumentParser()
@@ -205,7 +205,7 @@ def rewrap(s, width=88):
 text = rewrap(text)
 print(text)
 if args.append:
-    t = io.open(REPORT, encoding="utf-8").read().replace("\r\n", "\n")
+    t = read_report()
     if "**B10." in t:
         raise SystemExit("B10 already present -- edit it, do not append")
     if "**B9." not in t:
