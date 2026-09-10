@@ -1,35 +1,38 @@
+> **Historical document — not the current Task 1 result or run instructions.**
+> Use [the current report](REPORT_TASK1.md), [README](../README.md), and [patch record](TASK1_PATCH_NOTES.md). This file is retained as development history.
+
 # Model inventory and remaining experiments
 
-Checked 6 September 2026. This file separates implemented Task 1 models from proposals for
+Checked 9 September 2026. This file separates implemented Task 1 models from proposals for
 unfinished tasks. The [report draft](REPORT_TASK1.md) contains saved results; the
 [pipeline guide](SUGGESTED_PIPELINE.md) describes how to reproduce the current code.
 
 ## Task 1: articleType
 
-The current source is `notebooks/Task1/01_task1_article_type.ipynb`. All learned models use
-random initialization and the supplied-only fixed Task 1 split. Images use the shared RGB,
+The source is `notebooks/Task1/02_task1_full_run.ipynb`. All learned models use random
+initialization and the same three-way Task 1 split. Images use the shared RGB,
 aspect-preserving, white-padded 60×80 transform.
 
-| Model or experiment | Current role |
-|---|---|
-| Majority and stratified-random predictors | Non-learning references |
-| HOG + linear SVM | Shape-feature baseline; C × class-weight grid available |
-| PlainCNN | Neural baseline; learning-rate × weight-decay grid available |
-| SmallResNet, plain cross-entropy | Stage-1 learned representation |
-| SmallResNet with decoupled classifier | Frozen-backbone, class-balanced stage-2 finalist |
-| Decoupled ResNet + horizontal-flip TTA | The selected model; the TTA row is scored in Section 7.1 |
-| Paired bootstrap over validation rows | Section 7.2's noise band; the bar every later comparison is read against |
-| Stage-2 sampler sweep and learning-rate × sampler grid | Investigate retraining strength; a qualifying sweep model can enter final selection |
-| Logit-adjusted and multi-task ResNet | Historical results retained; removed from the current worker job set |
+| Model | Role | Reporting macro-F1 |
+|---|---|---|
+| HOG + linear SVM | Shape-feature baseline, `C` grid of six | **0.6345 — selected** |
+| PlainCNN | Neural baseline, learning-rate × weight-decay grid of six | 0.5352 |
+| SmallResNet | Deeper neural contender, same grid | 0.4548 |
+| Paired stratified bootstrap | The noise band every comparison above is read against | all three pairs exclude zero |
 
-The current `FINAL_CHOICE = "auto"` compares the available decoupled ResNet, its flip-TTA
-variant and any qualifying sweep candidate by validation macro-F1. It does not automatically
-promote every tuning-grid winner. Review class-level errors, the Section 7.2 bootstrap band and
-cost before finalizing. Flip TTA uses two forward passes per image.
+Selection is on tuning macro-F1 alone, on an equal budget: six configurations per family at
+12 epochs, the best in each confirmed at 40, then all three refit and scored once on the
+reporting split. There is no bespoke extra stage for any one family.
 
-The saved result table predates the current four tuning grids. Existing historical rows are
-not evidence that the current grids completed. Dataset1 preparation has produced manifests,
-but no enriched training result is established by those exports.
+Retired with the unequal-budget layout: the decoupled stage-2 classifier, its sampler sweep
+and learning-rate × sampler grid, horizontal-flip TTA, the logit-adjusted and multi-task
+ResNet variants, and the majority/stratified-random reference rows. Their recorded numbers
+came from a protocol that no longer exists and are not comparable to the table above.
+
+Worth trying next, in rough order of expected value: a pretrained backbone as a clearly
+labelled comparison (the assignment forbids one as a submitted model but permits it as a
+comparison), HOG features fed to a non-linear classifier, and a HOG/CNN ensemble — the two
+families fail on different classes, so their errors are not fully correlated.
 
 ## Remaining tasks: proposals, not implementations
 

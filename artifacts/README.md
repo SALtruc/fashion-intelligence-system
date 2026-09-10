@@ -1,55 +1,55 @@
 # Artifact locations and handover
 
-Checked 6 September 2026. This directory is reserved for task artifacts. Current Task 1
-writes to **`models/task1/`, `predictions/` and `outputs/figures/`**, so copying `artifacts/`
-alone is insufficient.
+Checked 9 September 2026.
+
+A Task 1 run writes to **`models/task1/`**, not here, so copying `artifacts/` alone is not a
+handover. This directory holds preserved records of past runs: a run's evidence is kept by
+copying it aside, because the notebook overwrites `models/task1/` in place.
+
+## What is here
+
+- [`kaggle-full-run-20260909/`](kaggle-full-run-20260909/) — the recorded full-budget run:
+  the executed notebook with its outputs, its figures, the environment probe, and a zip of
+  every artifact the run produced. This is the evidence the report's numbers are quoted from.
+
+## What a completed run leaves behind
+
+Everything lands under `models/task1/`. Retain all of it:
 
 | Location | What to retain |
 |---|---|
-| `models/task1/task1_model.pt` | Exported model weights, class order, normalization, configuration and inference settings |
-| `models/task1/task1_ood_gate.pt` | Out-of-distribution gate fitted on the training split; applied unchanged by `02_independent_evaluation.ipynb` |
-| `models/task1/task1_classes.json` | Readable class-index mapping |
-| `models/task1/task1_config.json` | Recorded training and runtime configuration |
-| `models/task1/task1_results.csv` | Saved comparison table; includes historical experiments |
-| `models/task1/task1_lr_search.csv` | Historical learning-rate search, distinct from current grid outputs |
-| `models/task1/checkpoints/` | Per-job model banks and resumable epoch files |
-| `models/task1/runs/` | Historical per-machine result tables |
-| `predictions/task1_predictions.csv` | Partial submission: articleType only |
-| `predictions/task1_test_logits.npy` | Stored test scores |
-| `outputs/figures/` | Exported report figures |
-| `preprocessed_datasets/train_manifest.csv` | Shared EDA input to target-specific splits |
+| `models/task1/final/` | The three refitted models: `hog_svm_final.joblib`, `cnn_final.pt`, `resnet_final.pt` |
+| `models/task1/predictions/task1_predictions.csv` | Partial submission: `articleType` filled, the other three targets blank |
+| `models/task1/predictions/reporting_all_models.csv` | Per-row reporting predictions for all three families |
+| `models/task1/tables/` | Comparison, all 18 search arms, confirmed contenders, bootstrap intervals, per-epoch histories, split membership |
+| `models/task1/figures/` | The five report figures |
+| `models/task1/selection.json` | Which family won, under which rule, on what evidence |
+| `models/task1/deployment.json` | What to ship: artifact, class order, normalisation, HOG parameters |
+| `models/task1/run.json` | Protocol, input digest, and a SHA-256 of every file above |
+| `preprocessed_datasets/train_manifest.csv` | Shared EDA input to the target-specific splits |
 
-The `state_dict` alone does not reproduce a prediction: inference averages the softmax of the
-image and of its horizontal mirror when flip TTA is enabled, before selecting a class. Keep the
-recorded class order, normalization, image size and inference settings with the weights.
-
-The independent evaluation notebook loads three files from `models/task1/checkpoints/`:
-`model_resnet_decoupled.pt`, `model_seed_resnet___decoupled_1337.pt`, and
-`model_seed_resnet___decoupled_2024.pt`. It does not load the export as a generic selected model.
-Do not copy files from `checkpoints_invalid/` into the active directory.
+A `state_dict` alone does not reproduce a prediction. Each saved model carries its class
+order, normalisation statistics, image size and recipe alongside the weights; keep them
+together.
 
 ## Reproducible handover
 
-Include the source notebooks/scripts, `pyproject.toml`, `uv.lock`, the exact audited manifest,
-raw-data access, model files and their companion metadata. Record the source revision,
-hardware/runtime settings, seed, split parameters, class mapping and measured scores. The
-revision is recoverable: this is a Git working tree, so record the commit the run was made
-from rather than an invented identifier, and note whether the tree was dirty.
+Include the source notebooks, `pyproject.toml`, `uv.lock`, the exact audited manifest,
+raw-data access, and the model files with their companion metadata. Record the source
+revision, hardware and runtime settings, seed, split parameters, class mapping and measured
+scores. The revision is recoverable: this is a Git working tree, so record the commit the run
+was made from rather than an invented identifier, and note whether the tree was dirty.
+`run.json` already carries the protocol, the library versions and the input digest, which
+covers most of this — but it cannot know the commit, so record that separately.
 
-Task 1's supplied-only fingerprint is `e6b15f5c51de` for the recorded data and recipe.
-It hashes selected configuration/data summaries, not every image byte or runtime option.
-Matching fingerprints are necessary for reuse but do not prove full data identity or valid
-training; the quarantined sweep files demonstrate that limitation.
-
-Prepared dataset1 exports are a different data contract. Retain their versioned manifests,
-metadata and external images, and establish a separate enriched-run identity before training.
-See [the pipeline guide](../docs/SUGGESTED_PIPELINE.md).
+The input digest hashes the manifest file and the sorted ids of the three splits, not every
+image byte. A matching digest is strong evidence that two runs saw the same rows; it is not
+proof that the underlying image files were byte-identical.
 
 ## Ignore rules
 
 `.gitignore` excludes `artifacts/**` except directories, `.gitkeep` and README files. It also
-excludes raw/preprocessed dataset CSV/JPEG files. It does **not** currently exclude `models/`
-or `outputs/`, and does not exclude `predictions/`. Check actual inclusion before sharing an
-archive; a path's presence here does
-not establish its Git tracking status. Keep large files in the agreed private handover and
-include the final models required by the assignment submission.
+excludes raw and preprocessed dataset CSV/JPEG files. It does **not** exclude `models/` or
+`outputs/`. Not being excluded is not the same as being tracked — check actual inclusion with
+`git status` before assuming an archive contains a file. Keep large files in the agreed
+private handover and include the final models the assignment submission requires.

@@ -1,0 +1,4 @@
+# CPU inference and local GUI only. Python 3.12 recommended; tkinter ships with Windows Python.
+numpy==2.0.2
+Pillow>=10,<13
+torch==2.10.0

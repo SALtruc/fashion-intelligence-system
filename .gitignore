@@ -12,9 +12,6 @@ artifacts/**
 !artifacts/**/.gitkeep
 !artifacts/**/README.md
 
-# the Colab data bundle -- 590 MB, rebuilt from the checkout by scripts/make_colab_bundle.py
-task1_colab_data.zip
-
 # junk
 __MACOSX/
 .DS_Store
@@ -25,6 +22,3 @@ __pycache__/
 .venv/
 venv/
 datasets.zip
-
-# Full Kaggle bundle, rebuilt with --include-models
-task1_collab_full.zip

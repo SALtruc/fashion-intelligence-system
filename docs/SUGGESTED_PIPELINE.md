@@ -1,16 +1,19 @@
+> **Historical document — not the current Task 1 result or run instructions.**
+> Use [the current report](REPORT_TASK1.md), [README](../README.md), and [patch record](TASK1_PATCH_NOTES.md). This file is retained as development history.
+
 # Current pipeline and reproduction contract
 
-Checked 6 September 2026 against source and available artifacts. Task 1 is implemented;
-Tasks 2–4 and final prediction remain empty placeholders. This replaces the earlier generic
-proposal. Start with [the root README](../README.md) for environment and data setup.
+Checked 9 September 2026 against source and available artifacts. Task 1 is implemented;
+Tasks 2–4 and final prediction remain empty placeholders. Start with
+[the root README](../README.md) for environment and data setup.
 
 ## 1. Audit once, then split per target
 
-Run `notebooks/00_eda_and_preprocessing.ipynb`. It parses the supplied metadata, checks images,
-audits duplicates and labels, and writes `preprocessed_datasets/train_manifest.csv`.
-Keep raw images and metadata unchanged. Share the same manifest across worker machines.
+Run `notebooks/00_eda_and_preprocessing.ipynb`. It parses the supplied metadata, checks
+images, audits duplicates and labels, and writes `preprocessed_datasets/train_manifest.csv`.
+Keep raw images and metadata unchanged, and share that exact manifest across machines.
 
-`src/preprocessing.py` provides:
+`src/preprocessing.py` is the shared data-access module for notebook 00 and Tasks 2–4:
 
 | Function | Contract |
 |---|---|
@@ -21,103 +24,81 @@ Keep raw images and metadata unchanged. Share the same manifest across worker ma
 | `describe_split(...)` | Summarize target support and partition sizes |
 | `compute_normalisation(...)` | Fit image statistics on the supplied training frame |
 
+Task 1's notebook inlines the same transform constants so that it stands alone; notebook 00
+remains the source of truth for them.
+
 A universal split under `splits/` is not implemented. Missing labels are filtered per target,
-so one task's missing values do not discard usable rows from another. Within each task,
-keep eligible rows, seed, grouping and validation share fixed for every comparison.
+so one task's missing values do not discard usable rows from another. Within each task, keep
+eligible rows, seed, grouping and split shares fixed for every comparison.
 
-Task 1 has **37,846 supplied rows**, **30,278 train / 7,568 validation**, and **124 classes**.
-Only 110 classes appear in validation. Macro-F1 excludes the 14 absent classes; their quality
-is unmeasured. Support buckets use training counts: head ≥1,000, body 100–999, tail 10–99,
-rare <10. Exact-image grouping cannot rule out alternate views of the same product.
+## 2. Run the Task 1 notebook
 
-## 2. Train the supplied-only Task 1 workflow
+Run `notebooks/Task1/02_task1_full_run.ipynb` top to bottom. It is self-contained: it defines
+every transform, model, training loop and metric it uses, imports no project module, and
+reads no checkpoint written elsewhere. There is no worker, launcher or generator step.
 
-Run `notebooks/Task1/01_task1_article_type.ipynb`, or use its generated workers and then
-combine. See [PARALLEL_RUN.md](../notebooks/Task1/PARALLEL_RUN.md) for prerequisites.
+Task 1 has **37,846 labelled rows** and **124 classes**, split three ways and group-aware:
+**24,223 fit / 6,055 tuning / 7,568 reporting**. All 124 classes appear in fitting, 106 in
+tuning and 110 in reporting — a class with a single group cannot be split, so its rows go
+wholly to training and its quality goes unmeasured on the held-out splits. Macro-F1 is
+computed over the classes present in the split being scored. Support buckets use training
+counts: head ≥1,000, body 100–999, tail 10–99, rare <10. Exact-image grouping cannot rule
+out alternate views of the same product.
 
-The notebook caches standardized uint8 images, computes training-only normalization and
-applies per-sample training augmentation: horizontal flip, ±10° rotation, 8% translation
-and color jitter. Validation/test transforms are deterministic. Default training uses
-batch size 128, up to 40 epochs, learning rate 1e-3, weight decay 1e-4, three warmup epochs,
-label smoothing 0.05 and early stopping patience 8 on macro-F1. Stage 2 freezes the backbone
-and retrains the classifier for 10 epochs at learning rate 1e-2 with balanced sampling.
+The notebook caches standardized uint8 images on the device, computes normalisation from
+training rows only, and augments training only: horizontal flip, ±10° rotation, 8%
+translation and brightness/contrast jitter, applied on the GPU. Tuning and reporting
+transforms are deterministic. Training uses batch size 128, AdamW with three warmup epochs
+then cosine decay, label smoothing 0.05, class-balanced cross-entropy and early stopping on
+tuning macro-F1 with patience 8.
 
-`RESUME = True` restores compatible model banks. `QUICK_RUN = True` changes the data/budget
-and is only a structural check. Full training selects CUDA or Apple Silicon MPS, with CPU fallback refused by default.
-Mixed precision is currently enabled on CUDA, while the saved historical config records
-AMP disabled. Therefore current defaults should not be described as bit-identical reproduction
-of the historical run. Keep runtime settings with every result.
+`QUICK_RUN = True` reduces the data and the budget; it is a structural check only and its
+numbers must not be reported. Full training selects CUDA, then Apple Silicon MPS; CPU is
+refused unless `ALLOW_CPU = True`. Mixed precision, channels-last layout and the device-side
+image cache are CUDA-only paths, so record the runtime settings with every result.
 
-## 3. Compare models and tuning grids
+## 3. Compare models under the equal-budget protocol
 
-Current jobs cover HOG/SVM, PlainCNN, SmallResNet with decoupling, the fixed-split seed study,
-a five-value sampler sweep, and four grids:
+Three families — HOG/SVM, PlainCNN and SmallResNet — each get **six configurations on an
+equal budget**, and the winner is chosen on **tuning macro-F1 alone**. No family gets a
+bespoke extra stage the others do not; the retired layout gave the ResNet a sampler sweep
+and a stage-2 grid the other two never received, so its margin was partly a budget artefact.
 
-| Grid | Values | Output under `models/task1/` |
-|---|---|---|
-| HOG | C = 0.01, 0.1, 1.0 × class weight balanced/none | `task1_hog_search.csv` |
-| CNN | LR = 3e-4, 1e-3, 3e-3 × weight decay 1e-4, 1e-3; 12 epochs per arm | `task1_cnnsearch.csv` |
-| ResNet | Same LR/weight-decay grid and 12-epoch budget | `task1_lrsearch.csv` |
-| Stage 2 | LR = 3e-3, 1e-2, 3e-2 × sampler power 0.5, 1.0 | `task1_stage2_grid.csv` |
+| Family | Grid |
+|---|---|
+| HOG/SVM | `C` ∈ {0.003, 0.01, 0.03, 0.1, 0.3, 1.0} |
+| CNN | learning rate ∈ {3e-4, 1e-3, 3e-3} × weight decay ∈ {1e-4, 1e-3} |
+| ResNet | the same learning-rate × weight-decay grid |
 
-These output CSVs are not present in the checked snapshot. `task1_lr_search.csv` (with an
-extra underscore) is an older experiment and cannot stand in for `task1_lrsearch.csv`.
-A partial epoch checkpoint does not establish a completed grid result.
+The search runs at 12 epochs. The best recipe in each family is then confirmed at the full
+40-epoch budget, the confirmed contenders are compared, all three families are refit on
+fit + tuning, and only then is the reporting split touched. Ties break on accuracy, then on
+the candidate identifier.
 
-Report macro-F1, accuracy, balanced accuracy, weighted F1, top-5 and support buckets, then
-inspect errors, calibration and inference cost. The current final-selection candidates are
-the decoupled ResNet, its flip-TTA variant and any qualifying sampler-sweep winner. Historical
-logit-adjusted and multi-task results remain in saved CSVs but their jobs were removed.
+Report macro-F1, accuracy and the support-bucket breakdown, then quantify the differences
+with paired stratified bootstrap intervals and inspect the winner's largest confusions.
+`models/task1/tables/` holds `search_all_models.csv`, `selection_candidates.csv`,
+`task1_results.csv` and `paired_holdout_intervals.csv`; see
+[OUTPUT_ARTIFACTS.md](OUTPUT_ARTIFACTS.md) for the full layout.
 
-## 4. Optional dataset1 enrichment: preparation is complete, adoption is pending
+## 4. No external-data arm
 
-`notebooks/Task1/00_prepare_dataset1.ipynb` checks the retained dataset1 snapshot, freezes the
-supplied split and exports version **`c447dd49cbcb349c`** under
-`preprocessed_datasets/task1_dataset1/`. The folder contains:
+An earlier revision added 697 external crops to training and evaluated the model on 1,857
+more. The enrichment did not improve the deployed model on the reporting split, so both the
+data and the machinery that carried it — the preparation notebook, the arm split, the
+independent-evaluation notebook and their documentation — have been removed. Nothing in the
+current tree reads external imagery, and the out-of-domain failure that evaluation recorded
+is not reproducible here.
 
-- `train_manifest.csv`: 31,436 rows = 30,278 supplied + 1,158 dataset1 rows.
-- `validation_manifest.csv`: the unchanged 7,568 supplied validation rows.
-- `class_support.csv`: supplied, external and combined support.
-- `integration_metadata.json`: source/output hashes, split settings, classes and version.
+## 5. Export and finish the assignment
 
-External rows add 397 Eyeshadow, 384 Lipstick and 377 Nail Polish examples. Only articleType
-is retained as external supervision; unverified auxiliary labels are missing. `relative_path`
-is resolved against the repository root on each machine. Do not pass the combined training
-manifest back through `make_split`, replace the global EDA manifest, or use its external rows
-for independent evaluation after training on them.
+The notebook writes everything under `models/task1/`: the three refitted models in `final/`,
+the tables and figures, the predictions, and `selection.json`, `deployment.json` and
+`run.json`. `run.json` records the protocol, an input digest and a SHA-256 of every file,
+so a result can be traced back to the settings and the rows that produced it. A saved model
+carries its own class order and normalisation, so it can be loaded without the notebook.
 
-The current combine notebook/workers still call the supplied-only loader and split.
-To adopt enrichment, use the preparation notebook's loading example, fit normalization and
-class weights on combined training, retain supplied-only support buckets for comparable
-reporting, add the data version to cache/checkpoint identity, choose a separate output
-location and regenerate workers. Merely running preparation changes no trained model.
-The current fingerprint does not include the enriched metadata's complete data identity.
-
-Compare supplied-only and enriched runs on the exact same validation rows. Only eight
-validation images cover the three enriched classes, so per-class conclusions are fragile.
-Source/version/licence gaps remain documented in [the audit](EXTERNAL_DATA_AUDIT.md).
-
-## 5. External evaluation
-
-`02_independent_evaluation.ipynb` loads the three fixed supplied-only ResNet checkpoints,
-checks their fingerprints and averages softmax over members and horizontal mirrors.
-It checks external file hashes against the eligible supplied manifest, but this alone cannot
-prove independence from a future enriched training set or exclude related product views.
-Verify the complete training population before making a held-out claim.
-
-The recorded evaluation includes dataset1 (1,158 images) and dataset2 (699 images).
-Use [INDEPENDENT_EVALUATION_DATA.md](INDEPENDENT_EVALUATION_DATA.md) for provenance,
-label-quality limitations and the model-specific interpretation of those results.
-
-## 6. Export and finish the assignment
-
-The combine notebook writes `models/task1/task1_model.pt`, class/config JSON files, result
-CSVs, `predictions/task1_predictions.csv`, `predictions/task1_test_logits.npy` and the figures
-under `outputs/figures/`. The export
-includes the selected weights and the inference settings that reproduce them. The independent evaluation
-notebook instead requires the individual checkpoint files.
-
-Current predictions contain 5,829 articleType values; gender, season and usage are blank.
+Current predictions contain 5,829 `articleType` values; gender, season and usage are blank.
 Implement and evaluate the remaining tasks, then combine predictions using the supplied
 `id,gender,articleType,season,usage` template without changing ID order or adding an index.
 The final prediction notebook is currently empty and cannot perform this merge.

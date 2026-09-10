@@ -1,49 +1,56 @@
-# Machine Learning Assignment 2 — Fashion Intelligence System
+# Fashion Intelligence System — COSC2753 Assignment 2
 
-COSC2753 Machine Learning · Assignment 2 (2026B) · RMIT
+Task 1 delivery updated 10 September 2026. The completed executed notebook is
+`notebooks/task1-sota.ipynb`; its organized Task 1 outputs are under `models/task1/`.
+The selected from-scratch ResNet/resample achieves **0.7654 reporting macro-F1** and
+**87.35% accuracy** on 7,568 images across 110 observed classes. See the notebook's
+conclusion for uncertainty, rare-class coverage and pilot-history limitations.
 
-Documentation checked against the local source and artifacts on **6 September 2026**.
-Submission requirements and outstanding deliverables are in [SUBMISSION.md](SUBMISSION.md).
+## Try the saved model (no retraining)
 
-## Current state
+Use Python 3.12. From this folder:
 
-| Component | Entry point | Status |
-|---|---|---|
-| EDA and preprocessing | [00_eda_and_preprocessing.ipynb](notebooks/00_eda_and_preprocessing.ipynb) | Audits raw data and exports the shared manifest |
-| Task 1: article type | [01_task1_article_type.ipynb](notebooks/Task1/01_task1_article_type.ipynb) | Current training, comparison, tuning and prediction workflow |
-| Dataset1 preparation | [00_prepare_dataset1.ipynb](notebooks/Task1/00_prepare_dataset1.ipynb) | Versioned enriched manifests prepared; training still uses supplied data only |
-| External evaluation | [02_independent_evaluation.ipynb](notebooks/Task1/02_independent_evaluation.ipynb) | Evaluates the deployed supplied-only model on external imagery |
-| Tasks 2–4 and final prediction | `notebooks/02_*`, `03_*`, `04_*`, `05_*` | Empty placeholder files; not runnable |
+```console
+python -m pip install -r requirements-inference.txt
+python task1_demo.py
+```
 
-`notebooks/01_task1_article_type_classification.ipynb` is also empty. The older Colab
-edition has been removed: it carried a separate upload workflow and mirrored neither the
-current combine notebook nor the worker layout.
+On Windows, `launch_task1_demo.bat` uses the existing project environment if present.
+The native desktop interface lets you choose a JPG/PNG, inspect suggestions, review the
+label and export it. It runs locally on CPU and needs no web service or pretrained downloads.
+Python's Windows installer includes Tk; on Linux install your distribution's `python3-tk`
+package and use a graphical desktop. If your environment already has PyTorch, NumPy and
+Pillow, you can run directly. The tested local PyTorch version is recorded in the validation JSON;
+the minimal requirements use the original run's PyTorch 2.10 release.
 
-The saved Task 1 results report **0.7693 macro-F1** and **0.8774 accuracy** for the ResNet
-with decoupled classifier retraining, the model Section 8.7 now recommends and which the
-notebook scores again under horizontal-flip TTA. These are recorded supplied-only results,
-not results from dataset1 enrichment or the newer tuning grids, and they predate the removal
-of the seed-variance study. The [Task 1 report draft](docs/REPORT_TASK1.md) still describes
-the superseded three-seed ensemble and has to be rewritten against a fresh run.
+Single-image prediction and template-based batch inference:
 
-## Setup and data
+```console
+python -m src.task1_inference --image datasets/test/images_test/IMAGE_ID.jpg
+python -m src.task1_inference --template datasets/test/styles_prediction.csv --image-dir datasets/test/images_test --output outputs/task1_cpu_predictions.csv
+```
 
-From the project root, with `uv` installed:
+Replace IMAGE_ID with a real file ID. `--artifacts PATH` accepts another compatible run's
+`models/task1` directory. CPU inference uses FP32; the Kaggle run used mixed precision.
+Small numerical/runtime differences are possible. Do not overwrite the original evaluated
+prediction file merely because a new CPU export exists. Other template columns and ID order
+are preserved. GUI review exports have a different, human-review schema and are not the
+assignment submission CSV.
 
-```bash
+## Reproduce training
+
+The original project environment is specified by `pyproject.toml` and `uv.lock`:
+
+```console
 uv sync --frozen
 uv run jupyter notebook
 ```
 
-`pyproject.toml` requires **Python 3.12.0**. The lockfile selects dependencies; the default
-dev group includes `pyflakes` for worker checks. Linux and Windows use the explicit
-PyTorch CUDA 12.8 index; macOS uses the default package source. The training notebook
-selects CUDA, then Apple Silicon MPS, then CPU.
-Full training requires CUDA or MPS under the default `ALLOW_CPU = False`.
-AMP, channels-last layout and the on-device image cache are CUDA-only paths. `QUICK_RUN = True`
-enables a reduced CPU smoke run, whose metrics must not be used in the report.
+The existing lock requires Python 3.12.0 exactly; the recorded Kaggle run used Python 3.12.13.
+Keep these environment differences visible when comparing reruns. For the saved-model demo,
+the smaller inference requirements suffice.
 
-Place the course-provided data as follows; retain the raw files unchanged:
+Place the course-provided data here:
 
 ```text
 datasets/train/styles_train.csv
@@ -52,84 +59,49 @@ datasets/test/styles_prediction.csv
 datasets/test/images_test/<id>.jpg
 ```
 
-See [datasets/README.md](datasets/README.md) for counts and path details.
+1. Run `notebooks/00_eda_and_preprocessing.ipynb` to produce the audited manifest.
+2. Open `notebooks/task1-sota.ipynb`. Set `KAGGLE=False` in the first code cell locally;
+   the preserved executed copy has `KAGGLE=True` because the recorded run was on Kaggle.
+3. Leave `RUN_QUICK=False` for performance evaluation. Execute Run All. GPU training is
+   recommended; CPU training requires the notebook's explicit `ALLOW_CPU` option. References
+   can be disabled with `RUN_PRETRAINED=False`; enabling them needs internet and more compute.
+4. Outputs are written to a fresh `outputs/task1_full_*` locally, or `/kaggle/working/` on Kaggle.
+   Section 8 contains run-specific post-run prose: update its numbers after any rerun.
 
-## Run order
+The older `01_task1_article_type_classification.ipynb` is retained as an earlier source copy;
+it is not the reviewed executed deliverable. Existing Kaggle generation utilities target older
+source paths and should not overwrite `task1-sota.ipynb` without a deliberate source update.
 
-1. Run `notebooks/00_eda_and_preprocessing.ipynb` top to bottom. It writes
-   `preprocessed_datasets/train_manifest.csv`; share this exact manifest across machines.
-2. Run `notebooks/Task1/01_task1_article_type.ipynb` top to bottom on the training machine.
-   That is ~7 hours of training on one machine. To split it, follow the
-   [worker guide](notebooks/Task1/PARALLEL_RUN.md) — it carries machine setup, a per-job
-   resource profile and ready-made schedules for two and three machines (three machines reaches
-   the ~115-minute floor; a fourth adds nothing) — then run this notebook in combine mode
-   (`JOB_FILTER = None`, `RESUME = True`). Missing compatible checkpoints cause training to
-   run again.
-3. Run `notebooks/Task1/02_independent_evaluation.ipynb` with `model_resnet_decoupled.pt`
-   present. The checkpoint it loads must be the one being reported.
-4. Complete Tasks 2–4 and the final prediction workflow before submission.
+## Evidence and packaging
 
-To execute EDA from a shell and retain a separate executed notebook:
+- `models/task1/`: canonical organized models, tables, figures, predictions and metadata.
+- `predictions/task1/task1_predictions.csv`: canonical Task 1 prediction copy.
+- `splits/task1/`: canonical fit, tuning and reporting membership tables.
+- `outputs/figures/task1/`: report figure copies.
+- `artifacts/task1/kaggle-full-16ay9832/`: runtime, telemetry and organization manifest.
+- The raw Kaggle download was removed after canonical hashes were verified.
+- `docs/REPORT_TASK1.md`: current Task 1 report material; combine and format with the other tasks.
+- `docs/INDEPENDENT_EVALUATION_TASK1.md`: published-work comparison with comparability limits.
+- `docs/TASK1_PATCH_NOTES.md`: distinction between original evidence and post-run additions.
+- `scripts/validate_task1_delivery.py`: artifact, sampled inference and GUI integration checks.
+- `scripts/organize_kaggle_results.py`: copies a raw Kaggle download into the canonical layout with SHA-256 checks.
+- `scripts/build_task1_submission.py`: builds a Task 1 handoff ZIP containing code, models and evidence.
 
-```bash
-uv run jupyter nbconvert --to notebook --execute notebooks/00_eda_and_preprocessing.ipynb --output 00_eda_and_preprocessing_executed.ipynb --ExecutePreprocessor.timeout=-1
+```console
+python scripts/validate_task1_delivery.py
+python scripts/build_task1_submission.py
 ```
 
-The output is written beside the source notebook. A complete audit decodes about 38,000 images.
+The validator needs the supplied image directories and a graphical Tk installation; it does
+not retrain. The builder includes the existing audited manifest and test template but not raw
+course images; use the course data layout above for retraining. The app can classify a chosen
+local image from the archive without those datasets. The handoff ZIP includes every original manifest-listed artifact, including reference embeddings,
+so the original integrity checks remain reproducible.
 
-## Data and result contract
+## Remaining assignment work
 
-- Shared code is in [src/preprocessing.py](src/preprocessing.py). Images are converted to RGB,
-  resized with preserved aspect ratio and white padding to **60 × 80 (width × height)**.
-- EDA does not create a universal split. Each task filters its target and calls `make_split`;
-  all models for that target must use the same seed, eligible rows and group-aware split.
-  Task 1 uses 30,278 training and 7,568 validation rows; 110 of 124 classes are scoreable.
-  `splits/` is currently a placeholder.
-- Fit normalization and class weights on training rows; augment training only. Use macro-F1,
-  accuracy and class-level diagnostics. Submitted models use no pretrained weights.
-- Dataset1's prepared export has 31,436 training rows and the same 7,568 validation rows.
-  Adoption requires loader and checkpoint-identity changes; see the
-  [pipeline guide](docs/SUGGESTED_PIPELINE.md). It must then be excluded from held-out evaluation.
+Task 1 is not the complete four-task assignment. Tasks 2–4, the combined prediction CSV,
+all group details, and the final length-checked PDF report remain separate work. See
+`SUBMISSION.md`. No external-image robustness claim or guaranteed rubric grade is made.
 
-## Files to retain
 
-| Location | Contents |
-|---|---|
-| `models/task1/` | Exported model, classes, config, results and checkpoints |
-| `models/task1/runs/` | Historical worker result CSVs |
-| `models/task1/checkpoints_invalid/` | Quarantined invalid sweep checkpoints; never use for inference |
-| `predictions/` | Task 1 prediction CSV and test logits — the submission deliverable |
-| `outputs/figures/` | Report figures |
-| `preprocessed_datasets/` | Global EDA manifest and optional versioned dataset1 exports |
-| `artifacts/`, `splits/` | Reserved locations; current Task 1 uses the paths above |
-
-The combine notebook writes `predictions/task1_predictions.csv`: 5,829 rows with only
-`articleType` filled. The final file must preserve the template's IDs, order and header
-`id,gender,articleType,season,usage`, with all four targets completed. An older copy from a
-superseded notebook revision is still present at `outputs/task1_predictions.csv`; it is not
-the current output path.
-
-The current `.gitignore` excludes raw dataset CSV/JPEG files, preprocessed CSV/JPEG files
-and artifact contents (except README and `.gitkeep` files). **It does not exclude `models/`,
-`outputs/`, `predictions/`, or the external image collections.** Not being excluded is not the
-same as being committed: the external image collections are tracked, while `models/` and
-`outputs/` are not. Run `git status` before assuming an archive contains them. Keep the course
-data private and supply required files through the agreed submission route.
-
-## Documentation and checks
-
-- [Current models and remaining candidates](docs/SUGGESTED_MODEL.md)
-- [Pipeline and reproduction contract](docs/SUGGESTED_PIPELINE.md)
-- [External data audit](docs/EXTERNAL_DATA_AUDIT.md)
-- [Independent evaluation scope and provenance](docs/INDEPENDENT_EVALUATION_DATA.md)
-- [Artifact handover](artifacts/README.md)
-
-```bash
-uv run python scripts/check_task1_workers.py --strict
-uv run python scripts/make_task1_workers.py --check
-```
-
-Both commands validate the current workers without training. `--strict` also runs the
-optional `--legacy` gate, which reproduces the five hand-derived workers from the pinned
-revision `cd44bc8f16c5` and so needs repository history. It is skipped, not failed, where
-that history is absent.
