@@ -16,5 +16,8 @@ dependencies = [
     "scikit-learn",
     "torch",
     "torchvision",
-    "faiss-cpu",
+    "faiss-cpu; sys_platform == 'win32'",
+    "faiss-gpu; sys_platform == 'linux'",
+    "pytorch-metric-learning",
+    "transformers>=4.57,<5",
 ]

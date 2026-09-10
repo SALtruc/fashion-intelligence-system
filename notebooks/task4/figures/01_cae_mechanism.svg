@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="280" viewBox="0 0 960 280" role="img" aria-labelledby="title desc">
+  <title id="title">Convolutional autoencoder mechanism</title>
+  <desc id="desc">An image is encoded to a compact vector, decoded to a reconstruction, and trained using reconstruction error. The encoder vector is reused for cosine retrieval.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#475569"/></marker></defs>
+  <rect width="960" height="280" rx="18" fill="#f8fafc"/>
+  <text x="480" y="32" text-anchor="middle" font-family="Segoe UI,Arial" font-size="20" font-weight="700" fill="#0f172a">CAE: learn by reconstructing pixels, retrieve with the latent vector</text>
+  <g font-family="Segoe UI,Arial" fill="#0f172a" text-anchor="middle">
+    <rect x="35" y="79" width="135" height="100" rx="14" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/><text x="102" y="116" font-size="16" font-weight="700">Input x</text><text x="102" y="143" font-size="14">128×128 RGB</text>
+    <rect x="220" y="65" width="165" height="128" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="302" y="104" font-size="16" font-weight="700">Encoder</text><text x="302" y="130" font-size="14">ResNet-18</text><text x="302" y="155" font-size="14">spatial features</text>
+    <rect x="435" y="79" width="130" height="100" rx="50" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/><text x="500" y="116" font-size="16" font-weight="700">z</text><text x="500" y="142" font-size="14">512-D, L2 norm</text>
+    <rect x="615" y="65" width="150" height="128" rx="14" fill="#fae8ff" stroke="#c026d3" stroke-width="2"/><text x="690" y="104" font-size="16" font-weight="700">Decoder</text><text x="690" y="130" font-size="14">transpose conv</text><text x="690" y="155" font-size="14">upsampling</text>
+    <rect x="815" y="79" width="110" height="100" rx="14" fill="#fce7f3" stroke="#db2777" stroke-width="2"/><text x="870" y="116" font-size="16" font-weight="700">x̂</text><text x="870" y="143" font-size="14">reconstruction</text>
+    <rect x="405" y="220" width="190" height="42" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/><text x="500" y="246" font-size="14" font-weight="700">Cosine search uses z only</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5" fill="none" marker-end="url(#arrow)"><path d="M170 129 H215"/><path d="M385 129 H430"/><path d="M565 129 H610"/><path d="M765 129 H810"/><path d="M500 180 V215"/></g>
+  <path d="M870 184 C870 214 102 214 102 184" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+  <text x="480" y="213" text-anchor="middle" font-family="Segoe UI,Arial" font-size="14" fill="#b91c1c">training signal: MSE(x, x̂)</text>
+</svg>

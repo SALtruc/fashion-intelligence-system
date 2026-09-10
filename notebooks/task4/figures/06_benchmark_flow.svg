@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="280" viewBox="0 0 960 280" role="img" aria-labelledby="title desc">
+  <title id="title">Final retrieval benchmark flow</title>
+  <desc id="desc">Frozen checkpoints and a common gallery are evaluated on held-out queries using raw cosine ranking, optional reranking, ranking metrics, geometry diagnostics, and qualitative inspection.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#475569"/></marker></defs>
+  <rect width="960" height="280" rx="18" fill="#f8fafc"/>
+  <text x="480" y="32" text-anchor="middle" font-family="Segoe UI,Arial" font-size="20" font-weight="700" fill="#0f172a">Controlled hold-out comparison</text>
+  <g font-family="Segoe UI,Arial" font-size="14" fill="#0f172a" text-anchor="middle">
+    <rect x="25" y="73" width="145" height="105" rx="14" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/><text x="97" y="106" font-weight="700">Frozen inputs</text><text x="97" y="132">checkpoint</text><text x="97" y="154">common gallery</text>
+    <rect x="210" y="73" width="145" height="105" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/><text x="282" y="106" font-weight="700">Hold-out query</text><text x="282" y="132">encoder →</text><text x="282" y="154">512-D vector</text>
+    <rect x="395" y="73" width="145" height="105" rx="14" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/><text x="467" y="106" font-weight="700">Raw ranking</text><text x="467" y="132">exact cosine</text><text x="467" y="154">top-K</text>
+    <rect x="580" y="73" width="145" height="105" rx="14" fill="#fef3c7" stroke="#d97706" stroke-width="2"/><text x="652" y="106" font-weight="700">Optional rerank</text><text x="652" y="132">reciprocal sets</text><text x="652" y="154">+ HSV colour</text>
+    <rect x="765" y="60" width="170" height="131" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/><text x="850" y="91" font-weight="700">Evidence bundle</text><text x="850" y="117">P@K, R@K, mAP</text><text x="850" y="141">coverage + footprint</text><text x="850" y="165">geometry + examples</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5" fill="none" marker-end="url(#arrow)"><path d="M170 125 H205"/><path d="M355 125 H390"/><path d="M540 125 H575"/><path d="M725 125 H760"/></g>
+  <path d="M467 181 V223 H846 V196" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#arrow)"/><text x="650" y="245" text-anchor="middle" font-family="Segoe UI,Arial" font-size="14" fill="#475569">Report raw and reranked results separately</text>
+</svg>
