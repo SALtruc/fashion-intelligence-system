@@ -34,7 +34,7 @@
 # %% [markdown]
 # ### Task 3 investigation flow
 #
-# ![Task 3 investigation flow](../../notebooks/Task3/figures/00_task3_investigation_flow.svg)
+# ![Task 3 investigation flow](../../notebooks/task3/figures/00_task3_investigation_flow.svg)
 #
 # *Figure 1. Target analysis, controlled model comparison and increasingly difficult
 # evaluations lead to one deployment-aware decision. Original schematic based on the
@@ -475,7 +475,7 @@ print(pd.DataFrame(rows).to_string(index=False))
 # %% [markdown]
 # ### Research basis: hard parameter sharing
 #
-# ![Hard parameter sharing from Ruder](../../notebooks/Task3/figures/research/ruder_hard_parameter_sharing_fig1.png)
+# ![Hard parameter sharing from Ruder](../../notebooks/task3/figures/research/ruder_hard_parameter_sharing_fig1.png)
 #
 # *Research figure. Hard parameter sharing keeps a common feature extractor and gives
 # each task its own output layers. Reproduced from Fig. 1 of Ruder [3].*
@@ -496,7 +496,7 @@ print(pd.DataFrame(rows).to_string(index=False))
 # %% [markdown]
 # ### Model designs
 #
-# ![Three Task 3 model designs](../../notebooks/Task3/figures/01_multitask_designs.svg)
+# ![Three Task 3 model designs](../../notebooks/task3/figures/01_multitask_designs.svg)
 #
 # *Figure 2. A duplicates the feature extractor, B merges both targets into one sparse
 # label, and C shares visual features while keeping separate decisions. Original
@@ -624,7 +624,7 @@ def find_shared_split():
 
     The earlier version listed fixed paths, including `cwd.parent/"splits"`. That
     matches a flat working folder but is one level short of the repository layout,
-    where the notebook lives in `notebooks/Task3/` and the file in `splits/task3/`. Run from
+    where the notebook lives in `notebooks/task3/` and the file in `splits/task3/`. Run from
     the repo, the search missed, the notebook printed a warning nobody was watching,
     and a full 106-minute run produced numbers on a locally generated split -- which
     Section 3.0 measured as overlapping the team's by only 15.6%. So: walk up from the
@@ -1144,7 +1144,7 @@ except ImportError:
 # %% [markdown]
 # ### Research basis: learning from a long tail
 #
-# ![Long-tail reweighting from Cui et al.](../../notebooks/Task3/figures/research/cui_long_tail_reweighting_fig1.png)
+# ![Long-tail reweighting from Cui et al.](../../notebooks/task3/figures/research/cui_long_tail_reweighting_fig1.png)
 #
 # *Research figure. Head classes contain many partly redundant examples, whereas tail
 # classes cover far fewer examples; loss reweighting changes their relative influence.
@@ -1381,7 +1381,7 @@ print(pd.DataFrame(rows).pivot(index="target", columns="evaluated on",
 # %% [markdown]
 # ### Evaluation distributions
 #
-# ![Task 3 evaluation distributions](../../notebooks/Task3/figures/02_evaluation_protocol.svg)
+# ![Task 3 evaluation distributions](../../notebooks/task3/figures/02_evaluation_protocol.svg)
 #
 # *Figure 3. Random validation supports model development, the high-ID split tests the
 # direction of the graded set, and independently collected photographs expose a larger
@@ -1902,7 +1902,7 @@ print("  as unresolved, which is a result too.")
 # %% [markdown]
 # ### Research basis: correcting the decision rule after training
 #
-# ![Logit adjustment decision boundaries from Menon et al.](../../notebooks/Task3/figures/research/menon_logit_adjustment_fig2.png)
+# ![Logit adjustment decision boundaries from Menon et al.](../../notebooks/task3/figures/research/menon_logit_adjustment_fig2.png)
 #
 # *Research figure. Logit adjustment moves the separator toward the Bayes rule for
 # balanced error on a synthetic long-tailed problem. Reproduced from Fig. 2 of Menon
