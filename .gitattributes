@@ -1,0 +1,7 @@
+# The manifests under preprocessed_datasets/ are hashed byte-for-byte by
+# notebooks/Task1/00_prepare_dataset1.ipynb: base_manifest_sha256 feeds the version string
+# that names the output directory (task1_dataset1/<version>/), and the export step asserts
+# read_bytes() equality against what is already there. Line-ending conversion on checkout
+# would change those hashes, rename the directory every Task 1 notebook reads, and fail the
+# equality check. -text disables conversion in both directions so the bytes round-trip.
+preprocessed_datasets/** -text
