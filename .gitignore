@@ -1,4 +1,4 @@
-# datasets — share via Drive, too big for git
+# Raw course data is intentionally absent from this checkout. Keep it out of Git if restored locally.
 datasets/**/*.csv
 datasets/**/*.jpg
 
@@ -6,13 +6,13 @@ datasets/**/*.jpg
 # notebook reads, so a fresh checkout has to land on the same rows without re-running
 # the EDA notebook first. 16 MB of text, and no images are written here.
 
-# artifacts — share via Drive, too big for git
+# Generated run evidence stays local; keep lightweight placeholders and READMEs tracked.
 artifacts/**
 !artifacts/**/
 !artifacts/**/.gitkeep
 !artifacts/**/README.md
 
-# junk
+# Local environments, caches and generated bundles.
 __MACOSX/
 .DS_Store
 Thumbs.db
@@ -22,48 +22,15 @@ __pycache__/
 .venv/
 venv/
 datasets.zip
-kaggle
+/kaggle/
 
-# Generated model binaries and caches stay local; retain result tables and figures.
-/models/**/*.bin
-/models/**/*.ckpt
-/models/**/*.h5
-/models/**/*.hdf5
+# Generated model binaries and archives stay local; result tables and figures remain tracked.
 /models/**/*.joblib
 /models/**/*.npy
 /models/**/*.npz
-/models/**/*.onnx
-/models/**/*.pickle
-/models/**/*.pkl
 /models/**/*.pt
-/models/**/*.pth
-/models/**/*.safetensors
-/models/**/*.zip
-/outputs/**/*.bin
-/outputs/**/*.ckpt
-/outputs/**/*.h5
-/outputs/**/*.hdf5
 /outputs/**/*.joblib
 /outputs/**/*.npy
 /outputs/**/*.npz
-/outputs/**/*.onnx
-/outputs/**/*.pickle
-/outputs/**/*.pkl
 /outputs/**/*.pt
-/outputs/**/*.pth
-/outputs/**/*.safetensors
 /outputs/**/*.zip
-/predictions/**/*.bin
-/predictions/**/*.ckpt
-/predictions/**/*.h5
-/predictions/**/*.hdf5
-/predictions/**/*.joblib
-/predictions/**/*.npy
-/predictions/**/*.npz
-/predictions/**/*.onnx
-/predictions/**/*.pickle
-/predictions/**/*.pkl
-/predictions/**/*.pt
-/predictions/**/*.pth
-/predictions/**/*.safetensors
-/predictions/**/*.zip

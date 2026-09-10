@@ -8,20 +8,18 @@ conclusion for uncertainty, rare-class coverage and pilot-history limitations.
 
 ## Try the saved model (no retraining)
 
-Use Python 3.12. From this folder:
+Use Python 3.12 with NumPy, Pillow, PyTorch and Tkinter available. The project environment
+from `uv sync --frozen` supplies these packages. From this folder:
 
 ```console
-python -m pip install -r requirements-inference.txt
 python task1_demo.py
 ```
 
-On Windows, `launch_task1_demo.bat` uses the existing project environment if present.
 The native desktop interface lets you choose a JPG/PNG, inspect suggestions, review the
 label and export it. It runs locally on CPU and needs no web service or pretrained downloads.
 Python's Windows installer includes Tk; on Linux install your distribution's `python3-tk`
-package and use a graphical desktop. If your environment already has PyTorch, NumPy and
-Pillow, you can run directly. The tested local PyTorch version is recorded in the validation JSON;
-the minimal requirements use the original run's PyTorch 2.10 release.
+package and use a graphical desktop. The tested local PyTorch version is recorded in the
+validation JSON.
 
 Single-image prediction and template-based batch inference:
 
@@ -47,8 +45,7 @@ uv run jupyter notebook
 ```
 
 The existing lock requires Python 3.12.0 exactly; the recorded Kaggle run used Python 3.12.13.
-Keep these environment differences visible when comparing reruns. For the saved-model demo,
-the smaller inference requirements suffice.
+Keep these environment differences visible when comparing reruns. The saved-model demo runs from the same environment and does not retrain.
 
 Place the course-provided data here:
 
@@ -92,8 +89,7 @@ python scripts/build_task1_submission.py
 ```
 
 The validator needs the supplied image directories and a graphical Tk installation; it does
-not retrain. The builder includes the existing audited manifest and test template but not raw
-course images; use the course data layout above for retraining. The app can classify a chosen
+not retrain. The builder includes the existing audited manifest but not course data or the test template; supply those separately using the course data layout above for retraining. The app can classify a chosen
 local image from the archive without those datasets. The handoff ZIP includes every original manifest-listed artifact, including reference embeddings,
 so the original integrity checks remain reproducible.
 

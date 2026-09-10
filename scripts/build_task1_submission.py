@@ -14,14 +14,14 @@ def build(output):
     run_dir = ROOT / 'models/task1'
     run = json.loads((run_dir/'run.json').read_text())
     named = [
-        'README.md','SUBMISSION.md','pyproject.toml','uv.lock','requirements-inference.txt',
-        'task1_demo.py','launch_task1_demo.bat',
+        'README.md','SUBMISSION.md','pyproject.toml','uv.lock',
+        'task1_demo.py',
         'notebooks/task1-sota.ipynb','notebooks/00_eda_and_preprocessing.ipynb',
         'src/__init__.py','src/preprocessing.py','src/task1_models.py','src/task1_inference.py',
         'scripts/build_task1_submission.py','scripts/validate_task1_delivery.py',
         'docs/REPORT_TASK1.md','docs/INDEPENDENT_EVALUATION_TASK1.md',
         'docs/TASK1_PATCH_NOTES.md','docs/TASK1_DELIVERY_VALIDATION.json',
-        'preprocessed_datasets/train_manifest.csv','datasets/test/styles_prediction.csv',
+        'preprocessed_datasets/train_manifest.csv',
         'artifacts/task1/kaggle-full-16ay9832/task1_ddp_runtime.py',
     ]
     paths = [ROOT/name for name in named]
@@ -41,7 +41,7 @@ def build(output):
     manifest = {'scope':'Task 1 only; merge Tasks 2-4 before final submission.',
                 'run':'task1_full_16ay9832','source_notebook':'notebooks/task1-sota.ipynb',
                 'original_deployment_source_notebook_is_historical':True,
-                'datasets':'Raw course images are supplied separately in the README layout.',
+                'datasets':'Raw course data, including images and the test template, are supplied separately in the README layout.',
                 'files':{}}
     # Fixed ZIP timestamps and ordering make builds from identical inputs deterministic.
     def write(z,name,data):

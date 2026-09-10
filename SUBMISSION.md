@@ -36,8 +36,7 @@ The interface demonstrates integration but is not an empirical usability or depl
 ## Reproduction and integrity
 
 `README.md` gives both inference-only and full-training setup. The Task 1 package contains the
-executed notebook, EDA notebook, source, original run artifacts, audited manifest and prediction
-template. Supply course image directories in the documented layout for retraining and replay tests.
+executed notebook, EDA notebook, source, original run artifacts, audited manifest. Supply the course image directories and prediction template in the documented layout for retraining and replay tests.
 No newly collected external imagery is used. Run:
 
 ```console
