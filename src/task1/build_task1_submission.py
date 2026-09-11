@@ -11,7 +11,7 @@ RUN = ROOT / 'artifacts/task1/kaggle-full-16ay9832'
 
 def build(output):
     output = Path(output).resolve()
-    run_dir = ROOT / 'models/task1'
+    run_dir = ROOT / 'artifacts/task1'
     run = json.loads((run_dir/'run.json').read_text())
     named = [
         'README.md','pyproject.toml','uv.lock',

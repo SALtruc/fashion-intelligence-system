@@ -77,7 +77,7 @@ def main():
             'transform_matches_original':True,'template_preservation':True,
             'torch':torch.__version__,
             'note':'CPU FP32 replay on a representative sample; not a full retraining or external evaluation.'}
-    (ROOT/'models/task1/delivery_validation.json').write_text(json.dumps(result,indent=2)+'\n')
+    (ROOT/'artifacts/task1/delivery_validation.json').write_text(json.dumps(result,indent=2)+'\n')
     assert not mismatches,'Investigate replay differences before delivery.'
     print('Transform and prediction-template checks passed.',flush=True)
 

@@ -12,7 +12,7 @@ import torch
 from .task1_models import SmallResNet, PlainCNN
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_ARTIFACTS = ROOT / 'models' / 'task1'
+DEFAULT_ARTIFACTS = ROOT / 'artifacts' / 'task1'
 
 
 def load_image(path):

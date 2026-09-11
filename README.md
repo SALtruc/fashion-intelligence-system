@@ -64,11 +64,11 @@ is trained directly against the relevance labels the benchmark scores.
 
 **The class imbalance every design decision answers to**
 
-![Article-type class distribution](models/task1/figures/fig01_class_distribution.png)
+![Article-type class distribution](notebooks/task1/figures/fig01_class_distribution.png)
 
 **Task 1 — five models under one protocol, scored once on a held-out reporting split**
 
-![Task 1 reporting comparison](models/task1/figures/fig04_reporting_comparison.png)
+![Task 1 reporting comparison](notebooks/task1/figures/fig04_reporting_comparison.png)
 
 **Task 3 — three ways to attach two labels to one convolutional body**
 
@@ -101,8 +101,7 @@ is trained directly against the relevance labels the benchmark scores.
 │   └── task4/  train.csv · test.csv
 ├── preprocessed_datasets/
 │   └── train_manifest.csv                # the audited 37,847-row manifest all tasks read
-├── models/                               # per-task selection metadata, tables, figures
-├── artifacts/                            # trained weights & embeddings (gitignored — see below)
+├── artifacts/                            # weights, embeddings, per-task run metadata (gitignored)
 ├── predictions/                          # submission CSVs, plus task 3's consolidated result tables
 ├── tests/                                # self-tests for the shared code
 ├── docs/                                 # provenance for the externally collected sets
@@ -261,7 +260,8 @@ uv run jupyter nbconvert --to notebook --execute \
 **Two notebooks re-run cheaply without a GPU.** Task 3's Section 12 (figures and the
 hyper-parameter sensitivity table) and Task 4's Section 7 both read persisted result files and train
 nothing. Task 1 runs its pipeline in an embedded distributed runtime and renders the run's figures
-in its final cell; the full tables live under `models/task1/tables/`.
+in its final cell; the seven run figures are kept in `notebooks/task1/figures/` and the full tables
+under `artifacts/task1/tables/`, which travels with the weights on Drive rather than in git.
 
 **What each notebook needs before it will run.** Every notebook is saved with its outputs, so the
 results can be read without re-executing anything. To actually re-execute:

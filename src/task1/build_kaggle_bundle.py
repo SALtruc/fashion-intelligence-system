@@ -6,7 +6,7 @@ when running on Kaggle with `KAGGLE = True`:
   1. `datasets/` (train & test images + CSV manifests)
   2. `preprocessed_datasets/` (train_manifest.csv)
   3. `data/external_task1/` (60 independent evaluation images + labels)
-  4. `models/task1/` (verified tables, figures, metadata, and checkpoints)
+  4. `artifacts/task1/` (verified tables, metadata, and checkpoints)
 
 Usage:
     python src/task1/build_kaggle_bundle.py [--output task1_kaggle_bundle.zip]
@@ -108,7 +108,7 @@ def main():
                 files_to_pack.append((p, rel.as_posix()))
 
     # Models metadata and tables
-    models_dir = root / "models" / "task1"
+    models_dir = root / "artifacts" / "task1"
     if models_dir.is_dir():
         for p in models_dir.rglob("*"):
             if p.is_file():

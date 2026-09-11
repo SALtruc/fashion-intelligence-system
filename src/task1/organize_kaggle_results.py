@@ -63,7 +63,7 @@ def organize(source: Path, force: bool = False) -> Path:
     # The model artifact tree is the repository's canonical Task 1 output.
     for path in task_root.rglob("*"):
         if path.is_file():
-            copy_checked(path, ROOT / "models" / "task1" / path.relative_to(task_root), copied, force)
+            copy_checked(path, ROOT / "artifacts" / "task1" / path.relative_to(task_root), copied, force)
 
     # Make the submission prediction and exact split membership easy to find.
     copy_checked(task_root / "predictions" / "task1_predictions.csv",
@@ -84,14 +84,14 @@ def organize(source: Path, force: bool = False) -> Path:
     (provenance / "README.md").write_text(
         "# Kaggle Task 1 full run\n\n"
         "This folder contains the root-level runtime and telemetry files from the Kaggle download. "
-        "The verified model tree is under `models/task1/`. A source download is not modified by this script; " +
+        "The verified model tree is under `artifacts/task1/`. A source download is not modified by this script; " +
         "the large ZIP is not copied.\n",
     )
 
     manifest = {
         "source": str(source.relative_to(ROOT)),
         "source_preserved": True,
-        "canonical_model_root": "models/task1",
+        "canonical_model_root": "artifacts/task1",
         "canonical_prediction": "predictions/task1/task1_predictions.csv",
         "canonical_splits": "splits/task1/{fit,tuning,reporting}.csv",
         "canonical_figures": "outputs/figures/task1",

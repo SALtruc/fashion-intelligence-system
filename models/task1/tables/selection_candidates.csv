@@ -1,7 +1,0 @@
-candidate,family,regime,config,epochs,macro_f1,accuracy,weighted_f1,arm
-hog_svm_2,hog_svm,,{'C': 0.03},,0.672301202789038,0.8014863748967795,0.8058772398899199,hog_svm
-hog_svm_offset,hog_svm,,{'C': 0.03},,0.672301202789038,0.8014863748967795,0.8058772398899199,hog_svm_offset
-cnn_reweight_confirm,cnn,reweight,"{'lr': 0.0003, 'weight_decay': 0.0001}",40.0,0.5364159425462519,0.6378199834847234,0.6623835616144312,cnn_reweight
-cnn_resample_confirm,cnn,resample,"{'lr': 0.001, 'weight_decay': 0.0001}",36.0,0.7382317942668771,0.8379851362510322,0.8415031227506182,cnn_resample
-resnet_reweight_confirm,resnet,reweight,"{'lr': 0.0001, 'weight_decay': 0.0001}",36.0,0.529255597611797,0.6345169281585467,0.6649505465856415,resnet_reweight
-resnet_resample_confirm,resnet,resample,"{'lr': 0.001, 'weight_decay': 0.001}",40.0,0.7701515016431495,0.8642444260941371,0.865760339657908,resnet_resample
