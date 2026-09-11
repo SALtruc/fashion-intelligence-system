@@ -235,6 +235,13 @@ results can be read without re-executing anything. To actually re-execute:
 | `task4/00…06` | a GPU, and `artifacts/task4/` from the team Drive for `06` — it benchmarks five frozen checkpoints rather than training them |
 | `01_final_prediction` | the per-task prediction CSVs under `predictions/`; it trains nothing |
 
+> **Re-running Task 3, or Task 4's `00_preprocessing`, will not reproduce their saved numbers
+> exactly.** Both runs read a shared catalogue table of **37,745** rows that was staged on Drive
+> and is not in this repository; the audited manifest here holds **37,847** — the same images plus
+> 102 the earlier table had dropped. Every one of the 37,745 is present in the manifest, so nothing
+> is lost, but the splits are redrawn and the metrics move slightly. Task 4's notebooks `01`–`06`
+> are unaffected: they read the frozen `splits/task4/` CSVs, not the table.
+
 ---
 
 ## 🧠 What each task investigates
