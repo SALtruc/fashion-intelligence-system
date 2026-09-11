@@ -1,10 +1,10 @@
 # Task 2 model outputs
 
-The season classifier's weights and generated run output. `task2_model.pt` is **tracked in git** — the submitted DenseNet-121, so a clone can predict
+The season classifier's weights and generated run output. `submitted/task2_model.pt` is **tracked in git** — the submitted DenseNet-121, so a clone can predict
 without a Drive link. The three candidate checkpoints under `checkpoints/` are not: 94 MB of
 models the report quotes rather than re-runs. Get those from the team Drive.
 
-- `task2_model.pt` — the submitted model, DenseNet-121. Tracked.
+- `submitted/task2_model.pt` — the submitted model, DenseNet-121. Tracked.
 - `checkpoints/` — the three trained candidates the ultimate judgement compares:
   `model_densenet121.pt`, `model_efficientnet_b0.pt`, `model_random_forest.joblib`, plus the
   Random Forest's aligned validation scores and feature importances.

@@ -29,6 +29,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 # it is a submission deliverable, so it stays tracked under predictions/task2/ where
 # notebooks/01_final_prediction.ipynb looks for it.
 TASK2_MODEL_DIR = REPO_ROOT / "artifacts" / "task2"
+# The one model a prediction needs; the candidates it was selected over stay in
+# checkpoints/ and are not tracked.
+TASK2_SUBMITTED_DIR = TASK2_MODEL_DIR / "submitted"
 TASK2_CHECKPOINT_DIR = TASK2_MODEL_DIR / "checkpoints"
 TASK2_OUTPUT_DIR = TASK2_MODEL_DIR
 TASK2_FIGURE_DIR = TASK2_OUTPUT_DIR / "figures"
@@ -54,6 +57,7 @@ def ensure_task2_directories() -> None:
     """Create result directories, but never fabricate the prepared-data input folder."""
     for path in (
         TASK2_MODEL_DIR,
+        TASK2_SUBMITTED_DIR,
         TASK2_CHECKPOINT_DIR,
         TASK2_OUTPUT_DIR,
         TASK2_FIGURE_DIR,
@@ -858,7 +862,7 @@ def predict_test_set(checkpoint_path=None, output_path=None, batch_size: int = 2
     from src import data_paths
     from src.preprocessing import load_image_array
 
-    checkpoint_path = Path(checkpoint_path or TASK2_MODEL_DIR / "task2_model.pt")
+    checkpoint_path = Path(checkpoint_path or TASK2_SUBMITTED_DIR / "task2_model.pt")
     output_path = Path(output_path or TASK2_PREDICTION_PATH)
     if not checkpoint_path.is_file():
         raise FileNotFoundError(

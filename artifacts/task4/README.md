@@ -4,10 +4,10 @@ Four files are **tracked in git**, and together they are the whole visual-search
 
 | file | size | what it is |
 |---|---:|---|
-| `arcface_best.pt` | 45 MB | the ArcFace ResNet-18 encoder the hold-out benchmark chose |
-| `gallery_embeddings.npy` | 70 MB | the catalogue, 33,968 x 512, already encoded |
-| `gallery_ids.npy` | 0.3 MB | the catalogue ids, row-aligned with the embeddings |
-| `image_preprocessing.json` | 1 KB | the letterbox size and channel statistics inference must reproduce |
+| `submitted/arcface_best.pt` | 45 MB | the ArcFace ResNet-18 encoder the hold-out benchmark chose |
+| `submitted/gallery_embeddings.npy` | 70 MB | the catalogue, 33,968 x 512, already encoded |
+| `submitted/gallery_ids.npy` | 0.3 MB | the catalogue ids, row-aligned with the embeddings |
+| `submitted/image_preprocessing.json` | 1 KB | the letterbox size and channel statistics inference must reproduce |
 
 The gallery is here on purpose. **Retrieval ranks a query against a catalogue, so the
 encoder alone answers nothing** -- without these embeddings a clone could load the model
@@ -22,7 +22,7 @@ python src/task4/retrieve_topk.py --images datasets/test/images_test       # enc
 
 One thing to know about the gallery. The training run also left a gallery beside its
 checkpoint under `models/arcface/`, and that one is an earlier development population of
-30,389 items -- 3,579 short. The tracked pair above is the 33,968 the hold-out benchmark
+30,389 items -- 3,579 short. The tracked pair in `submitted/` is the 33,968 the hold-out benchmark
 actually scored, and every script and notebook reads it.
 
 Everything else here is gitignored and lives on the team Drive: the four losing candidates

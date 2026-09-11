@@ -102,7 +102,7 @@ is trained directly against the relevance labels the benchmark scores.
 │   └── task4/  train.csv · test.csv
 ├── preprocessed_datasets/
 │   └── train_manifest.csv                # the audited 37,847-row manifest all tasks read
-├── artifacts/                            # one submitted model per task (tracked); the rest on Drive
+├── artifacts/                            # task*/submitted/ is tracked; the rest is on Drive
 ├── predictions/                          # submission CSVs, plus task 3's consolidated result tables
 ├── tests/                                # self-tests for the shared code
 ├── docs/                                 # provenance for the externally collected sets
@@ -253,10 +253,10 @@ column is complete, and records a SHA-256 of each input in a manifest beside the
 
 | Task | Model in git | Run it alone |
 |---|---|---|
-| 1 · article type | `artifacts/task1/resnet_resample_final.pt` | `python -m src.task1.task1_inference --template <csv> --image-dir <dir> --output <csv>` |
-| 2 · season | `artifacts/task2/task2_model.pt` | `python -c "from src.task2_utils import predict_test_set; predict_test_set()"` |
-| 3 · gender & usage | `artifacts/task3/task3_gender_usage_C_weighted.pt` | `python src/task3/predict_test.py` |
-| 4 · visual search | `artifacts/task4/arcface_best.pt` + `gallery_embeddings.npy` | `python src/task4/retrieve_topk.py --images datasets/test/images_test` |
+| 1 · article type | `artifacts/task1/submitted/` | `python -m src.task1.task1_inference --template <csv> --image-dir <dir> --output <csv>` |
+| 2 · season | `artifacts/task2/submitted/` | `python -c "from src.task2_utils import predict_test_set; predict_test_set()"` |
+| 3 · gender & usage | `artifacts/task3/submitted/` | `python src/task3/predict_test.py` |
+| 4 · visual search | `artifacts/task4/submitted/` | `python src/task4/retrieve_topk.py --images datasets/test/images_test` |
 
 Task 4 is a retrieval system and therefore has **no column in `styles_prediction.csv`** — the
 brief asks it for the Top-K similar items, which is a ranking, not a label. It writes one row

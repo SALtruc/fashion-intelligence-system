@@ -15,7 +15,7 @@ Two ways in, because they answer different questions:
     # from the artefacts alone.
     python src/task4/retrieve_topk.py --from-saved-queries --top-k 10
 
-Both rank against `artifacts/task4/gallery_embeddings.npy`, the 33,968 catalogue items the
+Both rank against `artifacts/task4/submitted/gallery_embeddings.npy`, the 33,968 items the
 hold-out benchmark used -- not the smaller development gallery the training run left beside
 its checkpoint.
 """
@@ -46,12 +46,17 @@ def _resolve(name, *fallbacks):
     return TASK4 / name
 
 
-CHECKPOINT_PATH = _resolve("arcface_best.pt", "models/arcface/best.pt")
-CONFIG_PATH = _resolve("image_preprocessing.json", "configs/image_preprocessing.json")
-GALLERY_IDS = _resolve("gallery_ids.npy", "embeddings/arcface/gallery_ids.npy")
-GALLERY_EMBEDDINGS = _resolve("gallery_embeddings.npy", "embeddings/arcface/gallery_embeddings.npy")
-QUERY_IDS = _resolve("query_ids.npy", "embeddings/arcface/query_ids.npy")
-QUERY_EMBEDDINGS = _resolve("query_embeddings.npy", "embeddings/arcface/query_embeddings.npy")
+CHECKPOINT_PATH = _resolve("submitted/arcface_best.pt", "arcface_best.pt", "models/arcface/best.pt")
+CONFIG_PATH = _resolve("submitted/image_preprocessing.json", "image_preprocessing.json",
+                       "configs/image_preprocessing.json")
+GALLERY_IDS = _resolve("submitted/gallery_ids.npy", "gallery_ids.npy",
+                       "embeddings/arcface/gallery_ids.npy")
+GALLERY_EMBEDDINGS = _resolve("submitted/gallery_embeddings.npy", "gallery_embeddings.npy",
+                              "embeddings/arcface/gallery_embeddings.npy")
+QUERY_IDS = _resolve("submitted/query_ids.npy", "query_ids.npy",
+                     "embeddings/arcface/query_ids.npy")
+QUERY_EMBEDDINGS = _resolve("submitted/query_embeddings.npy", "query_embeddings.npy",
+                            "embeddings/arcface/query_embeddings.npy")
 DEFAULT_OUTPUT = ROOT / "predictions" / "task4" / "task4_retrieval_top10.csv"
 
 

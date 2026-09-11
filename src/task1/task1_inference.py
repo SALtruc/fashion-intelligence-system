@@ -12,7 +12,22 @@ import torch
 from .task1_models import SmallResNet, PlainCNN
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_ARTIFACTS = ROOT / 'artifacts' / 'task1'
+
+
+def _artifacts():
+    """The folder holding deployment.json.
+
+    submitted/ is where the four files a prediction needs live; the older flat and
+    Kaggle-shaped layouts are still accepted so a restore from Drive does not have to be
+    rearranged first."""
+    base = ROOT / 'artifacts' / 'task1'
+    for folder in ('submitted', '.', 'final', 'models'):
+        if (base / folder / 'deployment.json').is_file():
+            return (base / folder).resolve()
+    return base / 'submitted'
+
+
+DEFAULT_ARTIFACTS = _artifacts()
 
 
 def load_image(path):
@@ -45,8 +60,9 @@ class Predictor:
         name = self.deployment['artifact']
         if Path(name).name != name:
             raise ValueError('Expected a checkpoint basename in deployment metadata.')
-        candidates = [self.artifacts / folder / name for folder in ('final', 'models')]
-        candidates.append(self.artifacts / name)
+        candidates = [self.artifacts / name]
+        candidates += [self.artifacts / folder / name for folder in ('final', 'models')]
+        candidates += [self.artifacts.parent / folder / name for folder in ('final', 'models')]
         checkpoint_path = next((p for p in candidates if p.is_file()), None)
         if checkpoint_path is None:
             raise FileNotFoundError(

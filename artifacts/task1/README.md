@@ -4,17 +4,17 @@ This folder is the canonical organized copy of the verified Kaggle run `task1_fu
 populated by `src/task1/organize_kaggle_results.py`; the raw Kaggle download was removed after this
 canonical tree was verified.
 
-`resnet_resample_final.pt`, at the top of this folder, is **tracked in git**, with `deployment.json`, `selection.json`
+`submitted/` holds the four files a prediction needs, and is **tracked in git**, with `deployment.json`, `selection.json`
 and `run.json`, so `python -m src.task1.task1_inference` works from a clone alone. The other four
 candidates and the run evidence are gitignored and live on the team Drive. The seven run figures
 are tracked too, under `notebooks/task1/figures/`.
 
-The submitted checkpoint sits directly here; the four losing candidates stay in `models/`.
+The submitted checkpoint is in `submitted/`; the four losing candidates stay in `models/`.
 `run.json` keys them all under `final/` because that is where the Kaggle run wrote them, so the
 predictor searches `final/`, then `models/`, then this folder -- and the SHA-256 in `run.json` is
 what actually decides a file is the right one. All five verify.
 
-- `resnet_resample_final.pt` — the submitted model. Tracked.
+- `submitted/` — the submitted model with deployment.json, selection.json and run.json. Tracked.
 - `models/` — the four candidates it was selected over. Local only.
 - `predictions/` — reporting predictions, and the template-order submission copy whose SHA-256
   `run.json` records. The submitted file is `predictions/task1/task1_predictions.csv` at the

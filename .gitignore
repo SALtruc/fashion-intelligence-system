@@ -18,20 +18,10 @@ artifacts/**
 # to make a prediction. 120 MB total, every file well under GitHub's 100 MB ceiling.
 # Only the selected model per task: the losing candidates stay local, since the report
 # quotes their numbers rather than re-running them.
-!artifacts/task1/resnet_resample_final.pt
-!artifacts/task1/deployment.json
-!artifacts/task1/selection.json
-!artifacts/task1/run.json
-!artifacts/task2/task2_model.pt
-!artifacts/task3/task3_gender_usage_C_weighted.pt
-!artifacts/task4/arcface_best.pt
-!artifacts/task4/image_preprocessing.json
-# Retrieval ranks a query against a gallery, so the encoder alone answers nothing. These
-# two are what make Task 4 runnable from a clone: 33,968 catalogue embeddings and their ids.
-!artifacts/task4/gallery_embeddings.npy
-!artifacts/task4/gallery_ids.npy
-!artifacts/task4/query_embeddings.npy
-!artifacts/task4/query_ids.npy
+!artifacts/task1/submitted/**
+!artifacts/task2/submitted/**
+!artifacts/task3/submitted/**
+!artifacts/task4/submitted/**
 
 # Local environments, caches and generated bundles.
 __MACOSX/

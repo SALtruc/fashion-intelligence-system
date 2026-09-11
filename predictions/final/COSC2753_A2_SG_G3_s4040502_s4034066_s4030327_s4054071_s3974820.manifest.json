@@ -32,19 +32,19 @@
   "task4_ready": true,
   "task4_files": {
     "checkpoint": {
-      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\arcface_best.pt",
+      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\submitted\\arcface_best.pt",
       "sha256": "23cdd637274567944c00ad3cf42f42021fe0c0f87516dcebffef7bbcbc1a5cd7"
     },
     "gallery_embeddings": {
-      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\gallery_embeddings.npy",
+      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\submitted\\gallery_embeddings.npy",
       "sha256": "07bb1c94c76631f4abeda8dacc2a5ae055785243f420ef4528c7680a3f17bf59"
     },
     "gallery_ids": {
-      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\gallery_ids.npy",
+      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\submitted\\gallery_ids.npy",
       "sha256": "09f986f79b663d0a1d00ba9164b883dca5a246a5ee8ee89425b55af3c265f2a6"
     },
     "preprocessing": {
-      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\image_preprocessing.json",
+      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\submitted\\image_preprocessing.json",
       "sha256": "40e67d8c7a45dcc81473f831200189e7a49c41bbd203d9e00d1aaa2fd01409c1"
     }
   }

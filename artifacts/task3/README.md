@@ -1,6 +1,6 @@
 # Task 3 model outputs
 
-`task3_gender_usage_C_weighted.pt` is **tracked in git** — it is the submitted model, and a
+`submitted/task3_gender_usage_C_weighted.pt` is **tracked in git** — it is the submitted model, and a
 marker who clones this repository can run it without a Drive link:
 
 ```console
