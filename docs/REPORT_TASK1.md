@@ -38,8 +38,6 @@ There are 957 reporting errors. Tshirts to Tops (101), Casual Shoes to Sports Sh
 
 The frozen tuning rule selects **ResNet/resample**, with learning rate 0.001, weight decay 0.0001 and 40 refit epochs. We retain it for assisted catalogue tagging where batch processing can tolerate a larger model. Its checkpoint is 45.01 MB compared with CNN's 4.85 MB. Recorded GPU reporting-batch prediction times are 3.15 s and 0.48 s respectively; these exclude some pipeline overhead and are not a customer-facing CPU latency guarantee. CNN is a credible compact alternative, and the uncertain accuracy margin prevents a universal superiority claim.
 
-The local `task1_demo.py` interface loads the selected saved model, accepts a product photo, displays five suggestions and lets the user review or change the label before CSV export. A separate inference command preserves the assignment prediction template. The interface demonstrates integration without retraining. It is not a usability study. Scores are explicitly uncalibrated, and unknown inputs are not reliably rejected; the recommended workflow keeps a person responsible for the label.
-
 ## External context and limitations
 
 The [independent literature comparison](INDEPENDENT_EVALUATION_TASK1.md) contrasts this result with Condition-CNN and a ResNet-BERT fashion classifier. Differences in taxonomy, modalities, resolution, pretraining and evaluation protocols prevent a common leaderboard interpretation. This provides the literature-comparison route of independent evaluation; no fresh external-image test has been performed.
@@ -50,7 +48,7 @@ The final claim is limited to this supplied catalogue distribution and the 110 o
 
 ## Evidence and references
 
-Current tables, figures, selection and deployment records are under `models/task1/`. Use figure 03 for confirmation, 04 for reporting comparison, 05 for confusions and 07 for pretrained references. The original run records and predictions remain unchanged. Post-run software checks are in `TASK1_DELIVERY_VALIDATION.json`; packaging corrections are described in `TASK1_PATCH_NOTES.md`.
+Current tables, figures, selection, deployment metadata and run records are under `models/task1/`. Use figure 03 for confirmation, 04 for reporting comparison, 05 for confusions and 07 for pretrained references. The original run records and predictions remain unchanged.
 
 - Dalal, N. and Triggs, B. (2005). Histograms of Oriented Gradients for Human Detection. CVPR.
 - He, K. et al. (2016). Deep Residual Learning for Image Recognition. CVPR.

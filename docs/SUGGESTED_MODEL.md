@@ -1,5 +1,5 @@
 > **Historical document — not the current Task 1 result or run instructions.**
-> Use [the current report](REPORT_TASK1.md), [README](../README.md), and [patch record](TASK1_PATCH_NOTES.md). This file is retained as development history.
+> Use [the current report](REPORT_TASK1.md) and [README](../README.md). This file is retained as development history.
 
 # Model inventory and remaining experiments
 
@@ -9,7 +9,7 @@ unfinished tasks. The [report draft](REPORT_TASK1.md) contains saved results; th
 
 ## Task 1: articleType
 
-The source is `notebooks/Task1/02_task1_full_run.ipynb`. All learned models use random
+The source is `notebooks/task1/01_task1_article_type_classification.ipynb`. All learned models use random
 initialization and the same three-way Task 1 split. Images use the shared RGB,
 aspect-preserving, white-padded 60×80 transform.
 

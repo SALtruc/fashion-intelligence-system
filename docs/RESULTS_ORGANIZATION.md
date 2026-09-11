@@ -10,7 +10,7 @@ The verified Kaggle Task 1 run is now organized into the repository's canonical 
 | `outputs/figures/task1/` | Report figure copies |
 | `artifacts/task1/kaggle-full-16ay9832/` | Runtime, log, phase metadata, telemetry, and organization manifest |
 
-`src/task1_inference.py` defaults to `models/task1/`. The organizer script remains available for a future fresh Kaggle download:
+The organizer script remains available for a future fresh Kaggle download:
 
 ```console
 python scripts/organize_kaggle_results.py --source <download>/task1_full_*
