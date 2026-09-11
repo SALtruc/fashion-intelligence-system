@@ -34,6 +34,16 @@ try:
 except FileNotFoundError as exc:
     print("SKIPPED - the external images are not on this machine.\n")
     print(exc)
+    # Run directly, SystemExit is the right way to stop. Under pytest it is not:
+    # raising SystemExit while pytest imports a module ends the whole session with
+    # INTERNALERROR and takes every other test file down with it, so a machine
+    # without the images cannot run the test suite at all. pytest is imported here
+    # rather than at the top so the file still runs as a plain script without it.
+    if "pytest" in sys.modules:
+        import pytest
+
+        pytest.skip("the external images are not on this machine",
+                    allow_module_level=True)
     raise SystemExit(0)
 
 
