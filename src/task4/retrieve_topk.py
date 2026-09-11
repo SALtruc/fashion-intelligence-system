@@ -124,8 +124,13 @@ def encode_images(image_dir: Path, batch_size: int = 128):
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = ResNet18Encoder().to(device).eval()
-    state = torch.load(checkpoint_path, map_location="cpu")
-    model.load_state_dict(state.get("model_state_dict", state.get("state_dict", state)))
+    state = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+    state = state.get("model_state_dict", state.get("state_dict", state))
+    # The checkpoint carries the ArcFace margin head alongside the encoder. It is a training
+    # object -- the classification weights the margin loss learned -- and has no counterpart
+    # in the encoder, which exists only to produce embeddings. Loading it would raise.
+    state = {k: v for k, v in state.items() if not k.startswith("arcface_loss.")}
+    model.load_state_dict(state, strict=True)
 
     out = np.zeros((len(paths), 512), dtype=np.float32)
     with torch.no_grad():
