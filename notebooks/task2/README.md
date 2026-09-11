@@ -121,23 +121,22 @@ This records each labelled image ID, its frozen `train` or `validation` assignme
 
 ### `ExtraSeasonData/`
 
-`build_extra_season_data.py` samples genuine source annotations from `fnauman/fashion-second-hand-front-only-rgb`. It supports all four Task 2 labels, maps the source label `Autumn` to `Fall`, defaults to 200 images per class, and enforces a range of 100–200 images per class. During generation it hashes decoded RGB content, skips exact duplicates, and fills the quota from unused source rows. It stages the images, CSV, and ZIP before replacing the previous valid package. The generated CSV contains `id`, `season`, and `articleType`, while the matching JPEG files are stored in `extraSeasonImages/`.
+`build_extra_season_data.py` samples genuine source annotations from `fnauman/fashion-second-hand-front-only-rgb`. It supports all four Task 2 labels, maps the source label `Autumn` to `Fall`, and defaults to 125 images per class. Only article types available in every season are used, with exactly the same per-type counts in Fall, Spring, Summer, and Winter. This prevents article-type imbalance from becoming a shortcut in the external comparison. During generation it hashes decoded RGB content and replaces duplicates from the same season/type group. It stages the images, CSV, and ZIP before replacing the previous valid package.
 
-The current package was regenerated with seed 42. Four duplicate source
-candidates—three Spring and one Winter—were detected while their class quotas
-were being filled. All four were skipped and replaced before final IDs were
-assigned. The completed package contains:
+The current package was regenerated with seed 42. Two duplicate source
+candidates—one Fall Cardigan and one Winter Trousers item—were skipped and
+replaced without changing the matched design. The completed package contains:
 
 | Season | Images | Represented article types |
 |---|---:|---:|
-| Fall | 200 | 23 |
-| Spring | 200 | 24 |
-| Summer | 200 | 24 |
-| Winter | 200 | 22 |
-| **Total** | **800** | — |
+| Fall | 125 | 12 |
+| Spring | 125 | 12 |
+| Summer | 125 | 12 |
+| Winter | 125 | 12 |
+| **Total** | **500** | — |
 
-An independent integrity check confirmed 800 readable JPEGs, 800 unique file
-hashes, 800 unique decoded-pixel hashes, 800 matching CSV rows, and 800 matching
+An independent integrity check confirms 500 readable JPEGs, 500 unique file
+hashes, 500 unique decoded-pixel hashes, 500 matching CSV rows, and 500 matching
 ZIP members. Perceptual similarity is not used as an automatic deletion rule:
 different garments can have very similar low-resolution hashes because the
 source uses consistent white catalogue backgrounds.
@@ -152,12 +151,12 @@ Set-Location ExtraSeasonData
   --overwrite
 ```
 
-The builder first validates source metadata, then performs type-aware candidate
-ordering, content-hash duplicate rejection, replacement sampling, image staging,
-CSV creation, and ZIP creation. Only after every stage succeeds does it replace
-the earlier output package.
+The builder first validates source metadata, allocates a shared article-type
+quota, then performs content-hash duplicate rejection within each season/type
+group, image staging, CSV creation, and ZIP creation. Only after every stage
+succeeds does it replace the earlier output package.
 
-> **Current compatibility note:** ExtraSeasonData has now been regenerated with all four seasons, but Notebook 06 still contains the earlier Spring/Winter-only label validation. Notebook 06 must be updated to accept Fall and Summer before the current external package can be evaluated.
+Notebook 06 validates and evaluates all four seasons in the regenerated external package.
 
 ## Environment and execution
 
