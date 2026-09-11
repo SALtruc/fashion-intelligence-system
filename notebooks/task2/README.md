@@ -47,7 +47,7 @@ The current full-run evidence selects **DenseNet-121**.
 | Model | Accuracy | Macro-F1 | Balanced accuracy | Top-2 accuracy | Selection score |
 |---|---:|---:|---:|---:|---:|
 | DenseNet-121 | 0.7561 | 0.7515 | 0.7211 | 0.9344 | 0.7835 |
-| EfficientNet-B0 | 0.7511 | 0.7454 | 0.7102 | 0.9421 | 0.7795 |
+| EfficientNet-B0 | 0.7473 | 0.7452 | 0.7185 | 0.9392 | 0.7792 |
 | Random Forest | 0.6677 | 0.6840 | 0.6832 | 0.9296 | 0.7266 |
 | Majority baseline | 0.4933 | 0.1652 | 0.2500 | 0.6875 | 0.3844 |
 

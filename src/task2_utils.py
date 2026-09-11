@@ -151,7 +151,7 @@ def per_class_table(y_true, y_pred, classes) -> pd.DataFrame:
 
 
 def load_task2_prepared_data():
-    """Load Notebook 1's self-contained metadata and preprocessed arrays."""
+    """Load Notebook 01's self-contained metadata and preprocessed arrays."""
     if not TASK2_PREPROCESSED_DIR.is_dir():
         raise FileNotFoundError(
             "Required Task 2 prepared-data folder was not found: "
@@ -199,7 +199,7 @@ def load_task2_prepared_data():
 
 
 def prepared_namespace():
-    """Load Notebook 1 outputs and expose the commonly used derived values."""
+    """Load Notebook 01 outputs and expose the commonly used derived values."""
     data = load_task2_prepared_data()
     classes = data["classes"]
     y_train = data["y_train"]
