@@ -1,0 +1,61 @@
+filename,true,predicted,confidence,correct
+Backpacks/jakob-owens-BmH09wAkJa8-unsplash.jpg,Backpacks,Handbags,0.3971,False
+Backpacks/nick-linnen-VbJRsn2yb34-unsplash.jpg,Backpacks,Lounge Pants,0.1939,False
+Backpacks/sindre-aalberg-q1Wd5MJvcKo-unsplash.jpg,Backpacks,Skirts,0.3482,False
+Backpacks/sun-lingyan-_H0fjILH5Vw-unsplash.jpg,Backpacks,Sports Shoes,0.3259,False
+Backpacks/wiser-by-the-mile-SwWCo1k92M4-unsplash.jpg,Backpacks,Backpacks,0.3007,True
+Casual Shoes/agung-hendri-sJGlVPtFIJ4-unsplash.jpg,Casual Shoes,Clutches,0.7327,False
+Casual Shoes/mojtaba-fahiminia-t4g1gctAaKk-unsplash.jpg,Casual Shoes,Briefs,0.3852,False
+Casual Shoes/rauf-alvi-PiTfMhz1HiI-unsplash.jpg,Casual Shoes,Trunk,0.1175,False
+Casual Shoes/taylor-smith-mpHiSZS2-Yo-unsplash.jpg,Casual Shoes,Briefs,0.0986,False
+Casual Shoes/trendest-studio-XZ3EmAIWuz0-unsplash.jpg,Casual Shoes,Handbags,0.1975,False
+Dresses/anna-logacheva-d00FZ5Yfhxc-unsplash.jpg,Dresses,Shirts,0.6826,False
+Dresses/karen-willis-holmes-McLuTG2t4UQ-unsplash.jpg,Dresses,Briefs,0.3034,False
+Dresses/muhammad-nadir-cHLW0E2PrAc-unsplash.jpg,Dresses,Kurtas,0.0723,False
+Dresses/oleg-ivanov-sg_gRhbYXhc-unsplash.jpg,Dresses,Briefs,0.4647,False
+Dresses/sanskrutihomes-cRpcTf0VfuE-unsplash.jpg,Dresses,Briefs,0.0563,False
+Formal Shoes/arturo-yair-ochoa-pineda-4NPkEaVkXWE-unsplash.jpg,Formal Shoes,Watches,0.5341,False
+Formal Shoes/ayrus-hill-FkNIKhdnnjQ-unsplash.jpg,Formal Shoes,Casual Shoes,0.1833,False
+Formal Shoes/davinder-singh-2nST4hbvTkc-unsplash.jpg,Formal Shoes,Laptop Bag,0.1037,False
+Formal Shoes/jia-ye-erHlzWCN6zQ-unsplash.jpg,Formal Shoes,Wallets,0.3955,False
+Formal Shoes/noah-smith-LkuH3Txi_gs-unsplash.jpg,Formal Shoes,Laptop Bag,0.1929,False
+Handbags/arno-senoner-oCXVxwTFwqE-unsplash.jpg,Handbags,Messenger Bag,0.2493,False
+Handbags/arno-senoner-ZT16YkAYueo-unsplash.jpg,Handbags,Bra,0.2312,False
+Handbags/background-foto-pixell-design-wGTO-1EuXYY-unsplash.jpg,Handbags,Messenger Bag,0.2262,False
+Handbags/james-ree-ZmeFtu11Hpc-unsplash.jpg,Handbags,Handbags,0.4209,True
+Handbags/laura-chouette-CtOA9wbFAdQ-unsplash.jpg,Handbags,Handbags,0.6867,True
+Jeans/hans-QJfXnkKrtlo-unsplash.jpg,Jeans,Flip Flops,0.0861,False
+Jeans/jason-leung-EtOMMg1nSR8-unsplash.jpg,Jeans,Watches,0.1343,False
+Jeans/matthew-moloney-YeGao3uk8kI-unsplash.jpg,Jeans,Track Pants,0.3311,False
+Jeans/tuananh-blue-9yoXrG6Er_g-unsplash.jpg,Jeans,Wallets,0.0932,False
+Jeans/tuananh-blue-rJQCoHb8XxA-unsplash.jpg,Jeans,Jackets,0.4054,False
+Shirts/benjamin-r-WdhmRPvMn7A-unsplash.jpg,Shirts,Trunk,0.2346,False
+Shirts/mohamad-khosravi-OSS7Gd9whn8-unsplash.jpg,Shirts,Shirts,0.648,True
+Shirts/pixel-studios-teDbtpEoeJA-unsplash.jpg,Shirts,Jeans,0.1384,False
+Shirts/robert-richman-vcTKFYNZop4-unsplash.jpg,Shirts,Backpacks,0.6425,False
+Shirts/uji-kanggo-gumilang-G5huvwgdYhc-unsplash.jpg,Shirts,Briefs,0.1304,False
+Shorts/antonio-araujo-ViYFhC5McZQ-unsplash.jpg,Shorts,Wallets,0.5555,False
+Shorts/engin-akyurt-Hd4nlxLgIbA-unsplash.jpg,Shorts,Skirts,0.5236,False
+Shorts/laura-chouette-zU8hYK_yWLI-unsplash.jpg,Shorts,Tshirts,0.1126,False
+Shorts/tamara-bellis-BGmVdP6thkU-unsplash.jpg,Shorts,Socks,0.4153,False
+Shorts/tamara-bellis-jYdRUFgba8k-unsplash.jpg,Shorts,Clutches,0.1529,False
+Sports Shoes/daniel-storek-JM-qKEd1GMI-unsplash.jpg,Sports Shoes,Sports Shoes,0.1176,True
+Sports Shoes/imani-bahati-LxVxPA1LOVM-unsplash.jpg,Sports Shoes,Dresses,0.3568,False
+Sports Shoes/luis-felipe-lins-LG88A2XgIXY-unsplash.jpg,Sports Shoes,Handbags,0.3638,False
+Sports Shoes/mana-akbarzadegan-kLnlaZJ4SMA-unsplash.jpg,Sports Shoes,Watches,0.9201,False
+Sports Shoes/usama-akram-kP6knT7tjn4-unsplash.jpg,Sports Shoes,Handbags,0.1757,False
+Sunglasses/annie-williams-FlP6C5pkMKs-unsplash.jpg,Sunglasses,Tshirts,0.1019,False
+Sunglasses/charlesdeluvio-1-nx1QR5dTE-unsplash.jpg,Sunglasses,Perfume and Body Mist,0.1289,False
+Sunglasses/daniel-schludi-7J-ro9TbEp0-unsplash.jpg,Sunglasses,Briefs,0.2005,False
+Sunglasses/lucas-george-wendt-3xtCeUhqZWE-unsplash.jpg,Sunglasses,Handbags,0.3275,False
+Sunglasses/sebastian-coman-travel-dtOTQYmTEs0-unsplash.jpg,Sunglasses,Handbags,0.3874,False
+Tshirts/ace-maxwell-FT2QbOnmcMU-unsplash.jpg,Tshirts,Shirts,0.3916,False
+Tshirts/dj-tears-plk-AnfgcXYL6z8-unsplash.jpg,Tshirts,Lounge Tshirts,0.1204,False
+Tshirts/ivett-m-ZZC_3gb7Qtc-unsplash.jpg,Tshirts,Lounge Pants,0.2383,False
+Tshirts/mediamodifier-7cERndkOyDw-unsplash.jpg,Tshirts,Handbags,0.5815,False
+Tshirts/sadam-anwar-XYZYZXo531w-unsplash.jpg,Tshirts,Handbags,0.6263,False
+Watches/fabian-heimann-4R_WEmhx8og-unsplash.jpg,Watches,Handbags,0.667,False
+Watches/john-torcasio-TJrkkhdB39E-unsplash.jpg,Watches,Handbags,0.7693,False
+Watches/pat-taylor-12V36G17IbQ-unsplash.jpg,Watches,Trousers,0.1802,False
+Watches/ryan-waring-p2WUEFGrAdA-unsplash.jpg,Watches,Watches,0.2007,True
+Watches/yash-parashar-LWPPpkn6NEQ-unsplash.jpg,Watches,Briefs,0.1392,False
