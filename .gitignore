@@ -56,3 +56,11 @@ preprocessed_datasets/**/*.jpg
 Dataset/
 external_datasets/
 _UPLOAD_*/
+
+# Task 2 local datasets and generated NumPy caches - share via Drive, never Git.
+/ExtraSeasonData/
+/notebooks/task2/dataset1/
+/notebooks/task2/dataset2/
+/notebooks/task2/dataset3/
+/notebooks/task2/ExtraSeasonData/
+/preprocessed_datasets/task2/*.npy

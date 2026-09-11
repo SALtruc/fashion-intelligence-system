@@ -164,7 +164,7 @@ def make_split(frame, target, validation_share=0.2, random_state=RANDOM_STATE):
         )
 
     _, validation_groups = train_test_split(
-        splittable.index,
+        splittable.index.to_numpy(),
         test_size=validation_share,
         stratify=splittable.values,
         random_state=random_state,
