@@ -168,7 +168,11 @@ uv sync
 uv run jupyter notebook
 ```
 
-Use `QUICK_RUN = True` in the neural notebooks for a pipeline check. Use the full configuration for reported model comparisons. Notebook 06 additionally downloads the pinned external SigLIP checkpoint through Hugging Face, so it requires network access and sufficient checkpoint storage.
+Use `QUICK_RUN = True` in the neural notebooks for a pipeline check. Use the full configuration for reported model comparisons.
+
+Notebooks 03 and 04 intentionally set `ALLOW_CPU = False` for their full configurations. Full EfficientNet-B0 and DenseNet-121 training therefore requires a supported CUDA or Apple MPS accelerator and fails early when neither is available. This is a deliberate runtime safeguard against accidentally starting the reported training runs on an impractically slow CPU, not a missing fallback or an execution defect. `QUICK_RUN = True` automatically permits CPU execution for a small workflow check, but quick-run results must not be compared with the reported full-run results. Keep `ALLOW_CPU = False` for the full experiments.
+
+Notebook 06 additionally downloads the pinned external SigLIP checkpoint through Hugging Face, so it requires network access and sufficient checkpoint storage.
 
 ## Reproducibility rules
 
