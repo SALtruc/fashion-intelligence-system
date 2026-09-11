@@ -20,6 +20,7 @@ dependencies = [
     "scikit-image>=0.26.0",
     "joblib",
     "pillow",
+    "transformers>=4.50.3",
 ]
 
 # pyflakes backs check 3 of scripts/check_task1_workers.py, which fails under --strict when it
