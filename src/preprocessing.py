@@ -14,13 +14,19 @@ import pandas as pd
 from PIL import Image, ImageOps
 from sklearn.model_selection import train_test_split
 
+from src import data_paths
+
 # Anchored to this file rather than to the caller's working directory, so a notebook in
 # notebooks/ and a script run from the repository root both resolve to the same data.
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 
+# The image directories are resolved rather than assumed: src/data_paths.py accepts the
+# documented datasets/ layout, the folder the course archive unpacks to, a Colab mount and
+# $A2_DATA_ROOT, so a checkout works without anyone editing a constant here.
 MANIFEST = _REPO_ROOT / "preprocessed_datasets" / "train_manifest.csv"
-TRAIN_IMAGE_DIR = _REPO_ROOT / "datasets" / "train" / "images_train"
-TEST_IMAGE_DIR = _REPO_ROOT / "datasets" / "test" / "images_test"
+TRAIN_IMAGE_DIR = data_paths.train_images()
+TEST_IMAGE_DIR = data_paths.test_images()
+PREDICTION_TEMPLATE = data_paths.test_template()
 
 # The catalogue's modal image size, established in Section 3.1. The notebook derives this
 # from the data and asserts that the value it derived matches the constant below, so the

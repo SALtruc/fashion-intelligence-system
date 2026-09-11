@@ -74,9 +74,9 @@ Machine-Learning-Assignment-2/
 ├── src/task2_utils.py
 ├── splits/task2_season_split.csv
 ├── preprocessed_datasets/task2/
-├── models/task2/
-│   └── checkpoints/
-├── outputs/task2/
+├── predictions/task2/task2_predictions.csv
+├── artifacts/task2/            # gitignored, shared via Drive
+│   ├── checkpoints/
 │   ├── figures/
 │   └── independent_evaluation/
 └── ExtraSeasonData/
@@ -101,7 +101,7 @@ This records each labelled image ID, its frozen `train` or `validation` assignme
 - `task2_random_forest_train_features.npy` and `task2_random_forest_validation_features.npy`: aligned 2,007-column feature matrices.
 - `task2_baseline_validation_scores.npz`: validation evidence for the non-learned baselines.
 
-### `models/task2/`
+### `artifacts/task2/`  (gitignored, shared via the team Drive)
 
 - `checkpoints/model_random_forest.joblib` and `model_random_forest_scores.npz`: fitted forest and aligned validation evidence.
 - `checkpoints/model_efficientnet_b0.pt`: completed EfficientNet-B0 checkpoint.
@@ -112,10 +112,10 @@ This records each labelled image ID, its frozen `train` or `validation` assignme
 - `task2_training_summary.csv`: neural best epochs and training durations.
 - `task2_model.pt` or `task2_model.joblib`: the single selected package consumed by downstream notebooks. The current winner produces `task2_model.pt`.
 
-### `outputs/task2/`
+### `artifacts/task2/`, generated run output
 
 - `figures/confusion_matrix.png`, `calibration.png`, and `training_curves.png`: selected-model diagnostics.
-- `task2_predictions.csv`: final test metadata with the predicted `season` column.
+- `predictions/task2/task2_predictions.csv`: final test metadata with the predicted `season` column. This one is **tracked**, because it is a submission deliverable and `notebooks/01_final_prediction.ipynb` reads it.
 - `task2_test_scores.npy`: four-class test score matrix aligned with the prediction rows.
 - `independent_evaluation/`: Notebook 06 exports external model comparison, per-class results, prediction distributions, paired predictions, score arrays, and confusion matrices here when run.
 

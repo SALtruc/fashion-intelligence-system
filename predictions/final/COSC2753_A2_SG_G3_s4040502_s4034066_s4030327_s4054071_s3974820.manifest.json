@@ -1,0 +1,51 @@
+{
+  "group_id": "SG_G3",
+  "classification_file": "predictions\\final\\COSC2753_A2_SG_G3_s4040502_s4034066_s4030327_s4054071_s3974820.csv",
+  "classification_sha256": "3b6b69308bcd8c0aeca3726b89fc2629d5725fed0b01e7ff3a0a898fd0623eee",
+  "template": "D:\\Dowloads\\A2 Machine Learning\\Dataset\\FashionDataset\\test\\styles_prediction.csv",
+  "template_sha256": "7f83f219d0fb7f2ec86b8b5c0ba28c2cfadd8f8e6e85a36c9919c9ab5c41315e",
+  "rows": 5829,
+  "columns": [
+    "id",
+    "gender",
+    "articleType",
+    "season",
+    "usage"
+  ],
+  "sources": [
+    {
+      "task": "articleType",
+      "status": "READY",
+      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\predictions\\task1\\task1_predictions.csv"
+    },
+    {
+      "task": "season",
+      "status": "READY",
+      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\predictions\\task2\\task2_predictions.csv"
+    },
+    {
+      "task": "gender_usage",
+      "status": "READY",
+      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\predictions\\task3\\task3_gender_usage_nguyen.csv"
+    }
+  ],
+  "task4_ready": true,
+  "task4_files": {
+    "checkpoint": {
+      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\arcface_best.pt",
+      "sha256": "23cdd637274567944c00ad3cf42f42021fe0c0f87516dcebffef7bbcbc1a5cd7"
+    },
+    "gallery_embeddings": {
+      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\gallery_embeddings.npy",
+      "sha256": "07bb1c94c76631f4abeda8dacc2a5ae055785243f420ef4528c7680a3f17bf59"
+    },
+    "gallery_ids": {
+      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\gallery_ids.npy",
+      "sha256": "09f986f79b663d0a1d00ba9164b883dca5a246a5ee8ee89425b55af3c265f2a6"
+    },
+    "preprocessing": {
+      "path": "D:\\Dowloads\\Machine-Learning-Assignment-2\\artifacts\\task4\\image_preprocessing.json",
+      "sha256": "40e67d8c7a45dcc81473f831200189e7a49c41bbd203d9e00d1aaa2fd01409c1"
+    }
+  }
+}

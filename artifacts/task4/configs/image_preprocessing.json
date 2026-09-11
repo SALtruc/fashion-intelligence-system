@@ -1,0 +1,40 @@
+{
+    "input_color_mode": "RGB",
+    "resize": {
+        "method": "letterbox",
+        "target_size": [
+            128,
+            128
+        ],
+        "interpolation": "bilinear",
+        "padding_color_rgb": [
+            255,
+            255,
+            255
+        ],
+        "centering": [
+            0.5,
+            0.5
+        ]
+    },
+    "tensor": {
+        "layout": "CHW",
+        "dtype": "float32",
+        "value_range_before_normalization": [
+            0.0,
+            1.0
+        ]
+    },
+    "normalization": {
+        "mean_rgb": [
+            0.8862184286117554,
+            0.8741323947906494,
+            0.8695073127746582
+        ],
+        "std_rgb": [
+            0.23975732922554016,
+            0.251314252614975,
+            0.25460508465766907
+        ]
+    }
+}

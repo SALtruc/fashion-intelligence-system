@@ -1,55 +1,51 @@
-# Artifact locations and handover
+# Artifacts
 
-Checked 9 September 2026.
+Every task's trained weights and generated run output. One folder per task, and each has its
+own README saying what is inside and how to run it.
 
-A Task 1 run writes to **`models/task1/`**, not here, so copying `artifacts/` alone is not a
-handover. This directory holds preserved records of past runs: a run's evidence is kept by
-copying it aside, because the notebook overwrites `models/task1/` in place.
+## What is tracked
 
-## What is here
+Most of this tree is gitignored — the losing candidates, the run evidence, the training
+history and figures all travel on the team Drive. The exception is the **submitted model for
+each task**, which is committed, because the brief asks for a ZIP that runs on its own and a
+marker should not need a Drive link to make a prediction:
 
-- [`kaggle-full-run-20260909/`](kaggle-full-run-20260909/) — the recorded full-budget run:
-  the executed notebook with its outputs, its figures, the environment probe, and a zip of
-  every artifact the run produced. This is the evidence the report's numbers are quoted from.
+| file | size | run it with |
+|---|---:|---|
+| `task1/resnet_resample_final.pt` | 45 MB | `python -m src.task1.task1_inference` |
+| `task2/task2_model.pt` | 28 MB | `src.task2_utils.predict_test_set()` |
+| `task3/task3_gender_usage_C_weighted.pt` | 1 MB | `python src/task3/predict_test.py` |
+| `task4/arcface_best.pt` + `gallery_embeddings.npy` | 45 + 70 MB | `python src/task4/retrieve_topk.py` |
 
-## What a completed run leaves behind
+Task 4 needs two files rather than one: retrieval ranks a query against a catalogue, so the
+encoder without its gallery answers nothing.
 
-Everything lands under `models/task1/`. Retain all of it:
+Task 1 also tracks `deployment.json`, `selection.json` and `run.json` — the selection
+decision, what to ship, and a SHA-256 for every artifact the run produced. Task 4 tracks
+`image_preprocessing.json`, the letterbox size and channel statistics inference must
+reproduce exactly.
 
-| Location | What to retain |
-|---|---|
-| `models/task1/final/` | The three refitted models: `hog_svm_final.joblib`, `cnn_final.pt`, `resnet_final.pt` |
-| `models/task1/predictions/task1_predictions.csv` | Partial submission: `articleType` filled, the other three targets blank |
-| `models/task1/predictions/reporting_all_models.csv` | Per-row reporting predictions for all three families |
-| `models/task1/tables/` | Comparison, all 18 search arms, confirmed contenders, bootstrap intervals, per-epoch histories, split membership |
-| `models/task1/figures/` | The five report figures |
-| `models/task1/selection.json` | Which family won, under which rule, on what evidence |
-| `models/task1/deployment.json` | What to ship: artifact, class order, normalisation, HOG parameters |
-| `models/task1/run.json` | Protocol, input digest, and a SHA-256 of every file above |
-| `preprocessed_datasets/train_manifest.csv` | Shared EDA input to the target-specific splits |
+## A state_dict alone is not a model
 
-A `state_dict` alone does not reproduce a prediction. Each saved model carries its class
-order, normalisation statistics, image size and recipe alongside the weights; keep them
-together.
+Each checkpoint here carries its class order, normalisation statistics, image size and
+recipe alongside the weights, and the inference scripts read all of it rather than
+re-deriving anything. A statistic recomputed on the data being predicted is not a statistic
+any more. Keep the metadata with the weights.
 
-## Reproducible handover
+## Restoring the rest from Drive
 
-Include the source notebooks, `pyproject.toml`, `uv.lock`, the exact audited manifest,
-raw-data access, and the model files with their companion metadata. Record the source
-revision, hardware and runtime settings, seed, split parameters, class mapping and measured
-scores. The revision is recoverable: this is a Git working tree, so record the commit the run
-was made from rather than an invented identifier, and note whether the tree was dirty.
-`run.json` already carries the protocol, the library versions and the input digest, which
-covers most of this — but it cannot know the commit, so record that separately.
+The Drive folder mirrors this layout. Two things to watch when restoring:
 
-The input digest hashes the manifest file and the sorted ids of the three splits, not every
-image byte. A matching digest is strong evidence that two runs saw the same rows; it is not
-proof that the underlying image files were byte-identical.
+- **Check names against contents.** A previous copy of `artifacts/task1/` arrived with every
+  file at the top level misnamed — `task1_predictions.csv` was a 45 MB checkpoint,
+  `hog_svm_final.joblib` was a PNG. `run.json` records a SHA-256 for all 67 files; verify
+  against it rather than trusting a filename.
+- **Task 4 has two galleries.** The one beside the training checkpoint is an earlier
+  development population of 30,389 items. The tracked `task4/gallery_embeddings.npy` is the
+  33,968 the hold-out benchmark scored, and it is the one every script reads.
 
 ## Ignore rules
 
-`.gitignore` excludes `artifacts/**` except directories, `.gitkeep` and README files. It also
-excludes raw and preprocessed dataset CSV/JPEG files. It does **not** exclude `models/` or
-`outputs/`. Not being excluded is not the same as being tracked — check actual inclusion with
-`git status` before assuming an archive contains a file. Keep large files in the agreed
-private handover and include the final models the assignment submission requires.
+`.gitignore` excludes `artifacts/**` except directories, `.gitkeep`, README files, and the
+submitted models listed above. Not being excluded is not the same as being tracked — check
+with `git status` before assuming an archive contains a file.

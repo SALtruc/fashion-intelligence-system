@@ -23,12 +23,18 @@ from sklearn.metrics import accuracy_score, f1_score, recall_score
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-TASK2_MODEL_DIR = REPO_ROOT / "models" / "task2"
+# Weights and generated run output live under artifacts/, which is gitignored and shared
+# through the team Drive, exactly like Tasks 1, 3 and 4. The 121 MB of checkpoints this
+# task produces has no business in a Git repository. The prediction CSV is the exception:
+# it is a submission deliverable, so it stays tracked under predictions/task2/ where
+# notebooks/01_final_prediction.ipynb looks for it.
+TASK2_MODEL_DIR = REPO_ROOT / "artifacts" / "task2"
 TASK2_CHECKPOINT_DIR = TASK2_MODEL_DIR / "checkpoints"
-TASK2_OUTPUT_DIR = REPO_ROOT / "outputs" / "task2"
+TASK2_OUTPUT_DIR = TASK2_MODEL_DIR
 TASK2_FIGURE_DIR = TASK2_OUTPUT_DIR / "figures"
 TASK2_SPLIT_PATH = REPO_ROOT / "splits" / "task2_season_split.csv"
-TASK2_PREDICTION_PATH = REPO_ROOT / "predictions" / "task2_season_predictions.csv"
+TASK2_PREDICTION_DIR = REPO_ROOT / "predictions" / "task2"
+TASK2_PREDICTION_PATH = TASK2_PREDICTION_DIR / "task2_predictions.csv"
 TASK2_PREPROCESSED_DIR = REPO_ROOT / "preprocessed_datasets" / "task2"
 TASK2_METADATA_PATH = TASK2_PREPROCESSED_DIR / "task2_metadata.json"
 TASK2_BASELINE_SCORES_PATH = TASK2_PREPROCESSED_DIR / "task2_baseline_validation_scores.npz"
@@ -832,3 +838,66 @@ def extract_visual_features(image_uint8) -> np.ndarray:
         foreground[:, : width // 2].mean(), foreground[:, width // 2 :].mean(),
     ])
     return np.asarray(values, dtype=np.float32)
+
+
+def predict_test_set(checkpoint_path=None, output_path=None, batch_size: int = 256,
+                     device: str | None = None):
+    """Predict `season` for the test set straight from the saved checkpoint.
+
+    Notebook 07 does this as part of a longer narrative. This is the same computation as
+    one call, so the final-prediction notebook can run the selected model rather than
+    trusting a CSV somebody exported earlier and may have regenerated since.
+
+    Everything the model needs travels inside the checkpoint -- architecture config, class
+    order, image size, and the channel statistics fitted on the training rows. Nothing is
+    recomputed on the test images, because a statistic fitted to the data being predicted
+    is not a statistic any more.
+    """
+    import csv as _csv
+
+    from src import data_paths
+    from src.preprocessing import load_image_array
+
+    checkpoint_path = Path(checkpoint_path or TASK2_MODEL_DIR / "task2_model.pt")
+    output_path = Path(output_path or TASK2_PREDICTION_PATH)
+    if not checkpoint_path.is_file():
+        raise FileNotFoundError(
+            f"{checkpoint_path} is absent. artifacts/ is gitignored -- get it from the "
+            "team Drive, or rebuild it with notebooks/task2/."
+        )
+    package = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
+    classes = list(package["classes"])
+    size = tuple(package["image_target_size"])
+    mean = torch.tensor(package["normalisation_mean"]).view(1, 3, 1, 1)
+    std = torch.tensor(package["normalisation_std"]).view(1, 3, 1, 1)
+
+    device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
+    model = build_task2_neural_model(package["model_config"], len(classes))
+    model.load_state_dict(package["state_dict"])
+    model = model.to(device).eval()
+
+    template_path, image_dir = data_paths.test_template(), data_paths.test_images()
+    with open(template_path, encoding="utf-8-sig", newline="") as handle:
+        reader = _csv.DictReader(handle)
+        columns, rows = reader.fieldnames, list(reader)
+
+    predicted = []
+    with torch.no_grad():
+        for start in range(0, len(rows), batch_size):
+            batch = rows[start:start + batch_size]
+            arrays = np.stack([
+                load_image_array(Path(image_dir) / f"{row['id']}.jpg", size, scale=False)
+                for row in batch
+            ])
+            tensor = torch.from_numpy(arrays).permute(0, 3, 1, 2).float().div_(255.0)
+            tensor = ((tensor - mean) / std).to(device)
+            predicted.extend(model(tensor).argmax(dim=1).cpu().tolist())
+
+    for row, index in zip(rows, predicted):
+        row["season"] = classes[int(index)]
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, "w", encoding="utf-8", newline="") as handle:
+        writer = _csv.DictWriter(handle, fieldnames=columns)
+        writer.writeheader()
+        writer.writerows(rows)
+    return output_path

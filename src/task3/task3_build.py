@@ -238,8 +238,16 @@ def _repo_root():
 # pair independently is what lets one notebook serve both without a rename.
 _REPO = _repo_root()
 
+# A2_DATA_ROOT is the variable the README documents and src/data_paths.py honours, so
+# it has to work here too: a machine keeping the images on another drive sets it once,
+# not once per notebook. A2_TRAIN_TABLE and A2_TRAIN_IMAGES stay for pointing the two
+# halves at different places, which the Colab layout occasionally needs.
+_DATA_ROOT = Path(os.environ.get("A2_DATA_ROOT", "/nonexistent"))
+
 TRAIN_CSV = _first_path([
     os.environ.get("A2_TRAIN_TABLE", "/nonexistent"),
+    _DATA_ROOT / "train" / "styles_train.csv",
+    _DATA_ROOT / "preprocessed_datasets" / "train" / "styles_train.csv",
     _REPO / "preprocessed_datasets" / "train_manifest.csv",
     _REPO / "datasets" / "train" / "styles_train.csv",
     _REPO / "datasets" / "FashionDataset" / "train" / "styles_train.csv",
@@ -251,6 +259,8 @@ TRAIN_CSV = _first_path([
 
 TRAIN_IMG = _first_path([
     os.environ.get("A2_TRAIN_IMAGES", "/nonexistent"),
+    _DATA_ROOT / "train" / "images_train",
+    _DATA_ROOT / "preprocessed_datasets" / "train" / "images_train",
     _REPO / "datasets" / "train" / "images_train",
     _REPO / "datasets" / "FashionDataset" / "train" / "images_train",
     _REPO / "preprocessed_datasets" / "train" / "images_train",
@@ -2465,7 +2475,7 @@ def _wide(source):
     (model names, True/False flags), so the numeric coercion is not optional."""
     d = ALL[ALL.source == source].copy()
     d["value"] = pd.to_numeric(d.value, errors="coerce")
-    keys = ["run", "arm", "target", "class"]
+    keys = ["arm", "variant", "rep", "target", "class"]
     w = d.pivot_table(index=keys, columns="metric", values="value",
                       dropna=False, aggfunc="first").reset_index()
     # dropna=False is needed so index levels that are empty for this source survive,
@@ -2535,7 +2545,8 @@ else:
                        & (ALL.arm == "epochs=30")
                        & (ALL.metric == "gender delta")].value.iloc[0])
     ec = _wide("epochs_confirmation")
-    ec[["epochs", "seed"]] = ec.run.str.split(expand=True).astype(float)
+    ec["epochs"] = ec.variant.str.replace("epochs=", "", regex=False).astype(float)
+    ec["seed"] = ec.rep.astype(float)
     p = ec.pivot_table(index="seed", columns="epochs", values="gender macroF1")
     paired = (p[30.0] - p[20.0])
 
@@ -2571,8 +2582,8 @@ if ALL is None:
 else:
     h = ALL[ALL.source == "training_history"].copy()
     h["value"] = pd.to_numeric(h.value, errors="coerce")
-    h["epoch"] = pd.to_numeric(h.run.str.rsplit(" ", n=1).str[-1], errors="coerce")
-    h["curve"] = h.run.str.rsplit(" ", n=1).str[0]
+    h["epoch"] = pd.to_numeric(h.rep, errors="coerce")
+    h["curve"] = (h.arm.fillna("") + " " + h.variant.fillna("")).str.strip()
     h = h.dropna(subset=["value", "epoch"])
     fig, axes = plt.subplots(1, 2, figsize=(11, 4), sharex=True)
     for ax, metric in zip(axes, ("val_gender", "val_usage")):

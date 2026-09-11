@@ -1,0 +1,150 @@
+{
+  "rule": "highest tuning macro-F1; ties broken by accuracy, then candidate identifier",
+  "winner": "resnet_resample",
+  "winner_family": "resnet",
+  "contenders": [
+    {
+      "candidate": "hog_svm_2",
+      "family": "hog_svm",
+      "regime": null,
+      "config": {
+        "C": 0.03
+      },
+      "epochs": null,
+      "macro_f1": 0.672301202789038,
+      "accuracy": 0.8014863748967795,
+      "weighted_f1": 0.8058772398899199,
+      "arm": "hog_svm"
+    },
+    {
+      "candidate": "hog_svm_offset",
+      "family": "hog_svm",
+      "regime": null,
+      "config": {
+        "C": 0.03
+      },
+      "epochs": null,
+      "macro_f1": 0.672301202789038,
+      "accuracy": 0.8014863748967795,
+      "weighted_f1": 0.8058772398899199,
+      "arm": "hog_svm_offset"
+    },
+    {
+      "candidate": "cnn_reweight_confirm",
+      "family": "cnn",
+      "regime": "reweight",
+      "config": {
+        "lr": 0.0003,
+        "weight_decay": 0.0001
+      },
+      "epochs": 40,
+      "macro_f1": 0.5364159425462519,
+      "accuracy": 0.6378199834847234,
+      "weighted_f1": 0.6623835616144312,
+      "arm": "cnn_reweight"
+    },
+    {
+      "candidate": "cnn_resample_confirm",
+      "family": "cnn",
+      "regime": "resample",
+      "config": {
+        "lr": 0.001,
+        "weight_decay": 0.0001
+      },
+      "epochs": 36,
+      "macro_f1": 0.7382317942668771,
+      "accuracy": 0.8379851362510322,
+      "weighted_f1": 0.8415031227506182,
+      "arm": "cnn_resample"
+    },
+    {
+      "candidate": "resnet_reweight_confirm",
+      "family": "resnet",
+      "regime": "reweight",
+      "config": {
+        "lr": 0.0001,
+        "weight_decay": 0.0001
+      },
+      "epochs": 36,
+      "macro_f1": 0.529255597611797,
+      "accuracy": 0.6345169281585467,
+      "weighted_f1": 0.6649505465856415,
+      "arm": "resnet_reweight"
+    },
+    {
+      "candidate": "resnet_resample_confirm",
+      "family": "resnet",
+      "regime": "resample",
+      "config": {
+        "lr": 0.001,
+        "weight_decay": 0.001
+      },
+      "epochs": 40,
+      "macro_f1": 0.7701515016431495,
+      "accuracy": 0.8642444260941371,
+      "weighted_f1": 0.865760339657908,
+      "arm": "resnet_resample"
+    }
+  ],
+  "recipes": {
+    "hog_svm": {
+      "config": {
+        "C": 0.03
+      },
+      "epochs": null,
+      "regime": null
+    },
+    "hog_svm_offset": {
+      "config": {
+        "C": 0.03
+      },
+      "epochs": null,
+      "regime": null
+    },
+    "cnn_reweight": {
+      "config": {
+        "lr": 0.0003,
+        "weight_decay": 0.0001
+      },
+      "epochs": 40,
+      "regime": "reweight"
+    },
+    "cnn_resample": {
+      "config": {
+        "lr": 0.001,
+        "weight_decay": 0.0001
+      },
+      "epochs": 36,
+      "regime": "resample"
+    },
+    "resnet_reweight": {
+      "config": {
+        "lr": 0.0001,
+        "weight_decay": 0.0001
+      },
+      "epochs": 36,
+      "regime": "reweight"
+    },
+    "resnet_resample": {
+      "config": {
+        "lr": 0.001,
+        "weight_decay": 0.001
+      },
+      "epochs": 40,
+      "regime": "resample"
+    }
+  },
+  "svm_offset_tau": 0.0,
+  "tuning_normalisation": [
+    [
+      0.8492966890335083,
+      0.8324508666992188,
+      0.8266763687133789
+    ],
+    [
+      0.27163124084472656,
+      0.2831478714942932,
+      0.2869550585746765
+    ]
+  ]
+}

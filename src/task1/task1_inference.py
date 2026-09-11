@@ -38,11 +38,20 @@ class Predictor:
         self.arm = self.deployment['arm']
         if self.arm != selection['winner']:
             raise ValueError('Deployment and selection disagree about the selected model.')
-        # Original metadata records a basename; checkpoints live in final/.
+        # Original metadata records a basename, and run.json keys it under final/. The
+        # folder on Drive names that directory models/, so both are searched rather than
+        # asking whoever restores the artifacts to rename a directory first. The hash
+        # check below is what actually decides the file is the right one.
         name = self.deployment['artifact']
         if Path(name).name != name:
             raise ValueError('Expected a checkpoint basename in deployment metadata.')
-        checkpoint_path = self.artifacts / 'final' / name
+        candidates = [self.artifacts / folder / name for folder in ('final', 'models')]
+        candidates.append(self.artifacts / name)
+        checkpoint_path = next((p for p in candidates if p.is_file()), None)
+        if checkpoint_path is None:
+            raise FileNotFoundError(
+                f'{name} not found under {self.artifacts}. Looked in: '
+                + ', '.join(str(p.parent) for p in candidates))
         run = json.loads((self.artifacts / 'run.json').read_text())
         self.sha256 = hashlib.sha256(checkpoint_path.read_bytes()).hexdigest()
         if self.sha256 != run['files']['final/' + name]['sha256']:

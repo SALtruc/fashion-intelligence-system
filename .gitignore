@@ -12,6 +12,27 @@ artifacts/**
 !artifacts/**/.gitkeep
 !artifacts/**/README.md
 
+# The four submitted models are the exception. The brief asks for "at least 04 final
+# models for predicting, and the scripts to run them", and for a ZIP that "can run only
+# with the code included" -- a marker who clones this should not also need a Drive link
+# to make a prediction. 120 MB total, every file well under GitHub's 100 MB ceiling.
+# Only the selected model per task: the losing candidates stay local, since the report
+# quotes their numbers rather than re-running them.
+!artifacts/task1/resnet_resample_final.pt
+!artifacts/task1/deployment.json
+!artifacts/task1/selection.json
+!artifacts/task1/run.json
+!artifacts/task2/task2_model.pt
+!artifacts/task3/task3_gender_usage_C_weighted.pt
+!artifacts/task4/arcface_best.pt
+!artifacts/task4/image_preprocessing.json
+# Retrieval ranks a query against a gallery, so the encoder alone answers nothing. These
+# two are what make Task 4 runnable from a clone: 33,968 catalogue embeddings and their ids.
+!artifacts/task4/gallery_embeddings.npy
+!artifacts/task4/gallery_ids.npy
+!artifacts/task4/query_embeddings.npy
+!artifacts/task4/query_ids.npy
+
 # Local environments, caches and generated bundles.
 __MACOSX/
 .DS_Store
@@ -37,13 +58,10 @@ task1_kaggle_bundle.zip
 /kaggle/
 .mypy_cache/
 
-# Generated model binaries and archives stay local. Task 1's run tree joined the other
-# tasks' under artifacts/, which the block above already keeps out of git.
-/outputs/**/*.joblib
-/outputs/**/*.npy
-/outputs/**/*.npz
-/outputs/**/*.pt
-/outputs/**/*.zip
+# Every task's weights and generated run output live under artifacts/, which the block
+# above already keeps out of git. Nothing else should be writing model binaries.
+/models/
+/outputs/
 
 preprocessed_datasets/**/*.csv
 preprocessed_datasets/**/*.jpg
@@ -64,3 +82,8 @@ _UPLOAD_*/
 /notebooks/task2/dataset3/
 /notebooks/task2/ExtraSeasonData/
 /preprocessed_datasets/task2/*.npy
+
+# Claude Code's local settings, and the draft the final-prediction notebook writes before
+# WRITE_FINAL is set. The submitted CSV is the one without the DRAFT_ prefix.
+/.claude/
+/predictions/final/DRAFT_*

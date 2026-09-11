@@ -93,15 +93,16 @@ is trained directly against the relevance labels the benchmark scores.
 │   └── task4/                            # 00 preprocessing → 05 ArcFace → 06 final benchmark
 ├── src/                                  # shared library: data, models, training, retrieval, metrics
 │   ├── data_paths.py                     # the one resolver every task uses to find the data
-│   ├── common/  preprocessing.py
-│   └── task1/  task2/  task3/  task4/    # task1 also holds its inference & packaging scripts
+│   ├── preprocessing.py  task2_utils.py  external_data.py
+│   └── task1/  task3/  task4/            # task1 also holds its inference & packaging scripts
 ├── splits/                               # frozen split files — every task evaluates on these
 │   ├── task1/  fit.csv · tuning.csv · reporting.csv
+│   ├── task2_season_split.csv
 │   ├── task3/  train_val_grouped_sha256.csv
 │   └── task4/  train.csv · test.csv
 ├── preprocessed_datasets/
 │   └── train_manifest.csv                # the audited 37,847-row manifest all tasks read
-├── artifacts/                            # weights, embeddings, per-task run metadata (gitignored)
+├── artifacts/                            # one submitted model per task (tracked); the rest on Drive
 ├── predictions/                          # submission CSVs, plus task 3's consolidated result tables
 ├── tests/                                # self-tests for the shared code
 ├── docs/                                 # provenance for the externally collected sets
@@ -134,9 +135,9 @@ Target cardinality: `articleType` 124 · `season` 4 · `gender` 5 · `usage` 8.
 
 ### Where to put the data
 
-**Datasets and trained weights are not committed** (see `.gitignore`) — they are far past what
-belongs in a Git repository. Download `A2_Fashion.zip` from Canvas and unpack it so the repository
-looks like this:
+**The course data is not committed** (see `.gitignore`) — it is far past what belongs in a Git
+repository, and its licence limits it to this assignment. Download `A2_Fashion.zip` from Canvas
+and unpack it so the repository looks like this:
 
 ```
 datasets/
@@ -158,7 +159,11 @@ it looked in, instead of failing several cells later.
 python -c "from src import data_paths; data_paths.check(); print(data_paths.describe())"
 ```
 
-Trained weights are shared separately, in the same Drive folder.
+**The submitted models are in the repository** — one per task, plus Task 4's encoded gallery,
+because retrieval ranks a query against a catalogue and the encoder alone answers nothing. 197 MB
+in total, and it is what lets a clone predict without a Drive link. What stays on Drive is the
+material a prediction does not need: the losing candidates, the training history and the run
+evidence. Each `artifacts/task*/README.md` says what it holds and how to get the rest.
 
 ### Externally collected data
 
@@ -229,6 +234,45 @@ on Linux and `faiss-cpu` on Windows.
 
 ---
 
+## 🎯 Reproducing the submission
+
+**Clone, drop the data in, run one notebook.** The four submitted models are committed, so
+nothing here needs a Drive link or a GPU:
+
+```bash
+git clone https://github.com/SALtruc/Machine-Learning-Assignment-2.git
+cd Machine-Learning-Assignment-2
+uv sync --frozen                       # Python 3.12.0, pinned by uv.lock
+# unpack A2_Fashion.zip into datasets/ as shown above
+uv run jupyter notebook notebooks/01_final_prediction.ipynb   # Run All
+```
+
+Section 3 of that notebook loads each task's checkpoint from `artifacts/` and runs it, then
+merges the four label columns into the issued template. It refuses to write unless every
+column is complete, and records a SHA-256 of each input in a manifest beside the output.
+
+| Task | Model in git | Run it alone |
+|---|---|---|
+| 1 · article type | `artifacts/task1/resnet_resample_final.pt` | `python -m src.task1.task1_inference --template <csv> --image-dir <dir> --output <csv>` |
+| 2 · season | `artifacts/task2/task2_model.pt` | `python -c "from src.task2_utils import predict_test_set; predict_test_set()"` |
+| 3 · gender & usage | `artifacts/task3/task3_gender_usage_C_weighted.pt` | `python src/task3/predict_test.py` |
+| 4 · visual search | `artifacts/task4/arcface_best.pt` + `gallery_embeddings.npy` | `python src/task4/retrieve_topk.py --images datasets/test/images_test` |
+
+Task 4 is a retrieval system and therefore has **no column in `styles_prediction.csv`** — the
+brief asks it for the Top-K similar items, which is a ranking, not a label. It writes one row
+per (query, rank) pair to `predictions/task4/`, and the classification CSV keeps the issued
+format exactly.
+
+> **This was verified, not assumed.** The repository was checked out into an empty directory,
+> given only the course data, and run: Tasks 1 and 3 re-predicted from their committed
+> checkpoints, and the resulting CSV is **byte-identical** to the submitted
+> `predictions/final/COSC2753_A2_SG_G3_…csv` — 204,438 bytes, SHA-256 `3b6b6930…`.
+
+Re-training is a different matter, and needs a GPU and the rest of `artifacts/` from Drive.
+The section below is for that.
+
+---
+
 ## ▶️ Running the notebooks
 
 Launch Jupyter from the repository root and select the project's `.venv` kernel:
@@ -248,6 +292,8 @@ Run them in this order — later notebooks read what earlier ones write:
 | 5 | `notebooks/task4/00…05` then `06_final_benchmark.ipynb` | Five retrieval models, then the hold-out benchmark |
 | 6 | `notebooks/01_final_prediction.ipynb` | the combined submission CSV |
 
+Only step 6 is needed to reproduce the submission; steps 1–5 retrain the models it loads.
+
 To execute a notebook headlessly and keep its outputs:
 
 ```bash
@@ -261,7 +307,7 @@ uv run jupyter nbconvert --to notebook --execute \
 hyper-parameter sensitivity table) and Task 4's Section 7 both read persisted result files and train
 nothing. Task 1 runs its pipeline in an embedded distributed runtime and renders the run's figures
 in its final cell; the seven run figures are kept in `notebooks/task1/figures/` and the full tables
-under `artifacts/task1/tables/`, which travels with the weights on Drive rather than in git.
+under `artifacts/task1/tables/`, which travels on Drive rather than in git.
 
 **What each notebook needs before it will run.** Every notebook is saved with its outputs, so the
 results can be read without re-executing anything. To actually re-execute:
