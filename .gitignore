@@ -37,11 +37,8 @@ task1_kaggle_bundle.zip
 /kaggle/
 .mypy_cache/
 
-# Generated model binaries and archives stay local; result tables and figures remain tracked.
-/models/**/*.joblib
-/models/**/*.npy
-/models/**/*.npz
-/models/**/*.pt
+# Generated model binaries and archives stay local. Task 1's run tree joined the other
+# tasks' under artifacts/, which the block above already keeps out of git.
 /outputs/**/*.joblib
 /outputs/**/*.npy
 /outputs/**/*.npz

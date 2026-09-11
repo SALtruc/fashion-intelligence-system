@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" role="img" aria-labelledby="title desc">
+  <title id="title">Multi-Similarity loss mechanism</title>
+  <desc id="desc">Pair similarities are computed and positive and negative pairs receive weights according to their difficulty.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#475569"/></marker></defs>
+  <rect width="960" height="300" rx="18" fill="#f8fafc"/>
+  <text x="480" y="32" text-anchor="middle" font-family="Segoe UI,Arial" font-size="20" font-weight="700" fill="#0f172a">Multi-Similarity: weight each pair according to its similarity</text>
+  <g font-family="Segoe UI,Arial" font-size="14" fill="#0f172a" text-anchor="middle">
+    <rect x="28" y="80" width="165" height="110" rx="14" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/><text x="110" y="115" font-weight="700">P-K embeddings</text><text x="110" y="141">all pairwise</text><text x="110" y="163">cosine scores</text>
+    <rect x="245" y="63" width="195" height="144" rx="14" fill="#fef3c7" stroke="#d97706" stroke-width="2"/><text x="342" y="98" font-weight="700">1. Form labelled pairs</text><text x="342" y="126">positive:</text><text x="342" y="148" fill="#b45309">same class</text><text x="342" y="174">negative:</text><text x="342" y="196" fill="#b91c1c">different class</text>
+    <rect x="492" y="63" width="195" height="144" rx="14" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/><text x="589" y="98" font-weight="700">2. Similarity weighting</text><text x="589" y="127">α: positive slope</text><text x="589" y="153">β: negative slope</text><text x="589" y="179">base: boundary</text>
+    <rect x="740" y="80" width="190" height="110" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/><text x="835" y="115" font-weight="700">Weighted loss</text><text x="835" y="141">focus gradient on</text><text x="835" y="163">ambiguous neighbours</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5" fill="none" marker-end="url(#arrow)"><path d="M193 135 H240"/><path d="M440 135 H487"/><path d="M687 135 H735"/></g>
+  <line x1="250" y1="247" x2="710" y2="247" stroke="#94a3b8" stroke-width="4"/><text x="250" y="274" font-family="Segoe UI,Arial" font-size="13" fill="#475569">cosine −1</text><text x="690" y="274" font-family="Segoe UI,Arial" font-size="13" fill="#475569">cosine +1</text>
+  <circle cx="390" cy="247" r="9" fill="#16a34a"/><text x="390" y="230" text-anchor="middle" font-family="Segoe UI,Arial" font-size="13" fill="#166534">hard +</text><circle cx="595" cy="247" r="9" fill="#dc2626"/><text x="595" y="230" text-anchor="middle" font-family="Segoe UI,Arial" font-size="13" fill="#991b1b">hard −</text>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="260" viewBox="0 0 960 260" role="img" aria-labelledby="title desc">
+  <title id="title">Leakage-safe preprocessing flow</title>
+  <desc id="desc">Raw fashion images and metadata pass through validation, an outer stratified split, and train-only fitting before frozen artifacts are produced.</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#475569"/></marker></defs>
+  <rect width="960" height="260" rx="18" fill="#f8fafc"/>
+  <text x="480" y="32" text-anchor="middle" font-family="Segoe UI,Arial" font-size="20" font-weight="700" fill="#0f172a">One data contract, fitted without test leakage</text>
+  <g font-family="Segoe UI,Arial" font-size="15" fill="#0f172a" text-anchor="middle">
+    <rect x="35" y="78" width="160" height="92" rx="14" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+    <text x="115" y="112" font-weight="700">Raw catalogue</text><text x="115" y="137">images + metadata</text>
+    <rect x="235" y="78" width="160" height="92" rx="14" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+    <text x="315" y="106" font-weight="700">Validate</text><text x="315" y="131">IDs, labels, files</text><text x="315" y="153">and duplicates</text>
+    <rect x="435" y="65" width="170" height="118" rx="14" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="520" y="98" font-weight="700">Outer 90:10 split</text><text x="520" y="125">iterative strata</text><text x="520" y="150">test remains sealed</text>
+    <rect x="645" y="65" width="170" height="118" rx="14" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+    <text x="730" y="94" font-weight="700">Fit on train only</text><text x="730" y="121">label vocabulary</text><text x="730" y="146">RGB mean / std</text><text x="730" y="168">128×128 letterbox</text>
+    <rect x="690" y="205" width="220" height="38" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="800" y="230" font-weight="700">Frozen splits + config artifacts</text>
+  </g>
+  <g stroke="#475569" stroke-width="2.5" fill="none" marker-end="url(#arrow)"><path d="M195 124 H230"/><path d="M395 124 H430"/><path d="M605 124 H640"/><path d="M730 184 V200"/></g>
+  <text x="35" y="222" font-family="Segoe UI,Arial" font-size="13" fill="#475569">Observed: 37,745 rows • 249 joint classes • 30 classes with &lt;2 train items</text>
+</svg>
