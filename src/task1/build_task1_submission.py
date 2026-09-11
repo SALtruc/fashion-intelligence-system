@@ -5,7 +5,7 @@ import hashlib
 import json
 import zipfile
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 RUN = ROOT / 'artifacts/task1/kaggle-full-16ay9832'
 
 
@@ -15,10 +15,11 @@ def build(output):
     run = json.loads((run_dir/'run.json').read_text())
     named = [
         'README.md','SUBMISSION.md','pyproject.toml','uv.lock',
-        'task1_demo.py',
-        'notebooks/task1-sota.ipynb','notebooks/00_eda_and_preprocessing.ipynb',
-        'src/__init__.py','src/preprocessing.py','src/task1_models.py','src/task1_inference.py',
-        'scripts/build_task1_submission.py','scripts/validate_task1_delivery.py',
+        'notebooks/task1/01_task1_article_type_classification.ipynb',
+        'notebooks/00_eda_and_preprocessing.ipynb',
+        'src/__init__.py','src/preprocessing.py',
+        'src/task1/__init__.py','src/task1/task1_models.py','src/task1/task1_inference.py',
+        'src/task1/build_task1_submission.py','src/task1/validate_task1_delivery.py',
         'docs/REPORT_TASK1.md','docs/INDEPENDENT_EVALUATION_TASK1.md',
         'docs/TASK1_PATCH_NOTES.md','docs/TASK1_DELIVERY_VALIDATION.json',
         'preprocessed_datasets/train_manifest.csv',

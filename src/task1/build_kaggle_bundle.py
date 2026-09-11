@@ -9,7 +9,7 @@ when running on Kaggle with `KAGGLE = True`:
   4. `models/task1/` (verified tables, figures, metadata, and checkpoints)
 
 Usage:
-    python scripts/build_kaggle_bundle.py [--output task1_kaggle_bundle.zip]
+    python src/task1/build_kaggle_bundle.py [--output task1_kaggle_bundle.zip]
 """
 
 import argparse

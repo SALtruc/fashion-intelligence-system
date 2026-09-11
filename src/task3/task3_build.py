@@ -1271,7 +1271,7 @@ else:
 # > border brightness from 101.5 to **201.2** against the catalogue's 247.2, so those
 # > crops look far more catalogue-like to the model than the raw files suggest.
 # > The measured domain-gap audit is recorded in
-# > `docs/REVIEW_Task3UsageExternal.md` and `results/task3/task3_all_results.csv`.
+# > `docs/REVIEW_Task3UsageExternal.md` and `predictions/task3/task3_all_results.csv`.
 
 # %%
 if EXT_OK:
@@ -2365,7 +2365,7 @@ print("  so 'both correct' has no slack of its own: it moves only when a factor 
 # ## 12 - Figures
 #
 # The tables above carry every number; these four make the load-bearing ones visible.
-# They read `results/task3/` and train nothing, so this section runs in seconds.
+# They read `predictions/task3/` and train nothing, so this section runs in seconds.
 #
 # 1. **`usage` is at its label ceiling** - four classes rest on fifteen validation
 #    images between them, and `Home` on none at all.
@@ -2377,7 +2377,7 @@ print("  so 'both correct' has no slack of its own: it moves only when a factor 
 #    spread rather than from a ranking.
 #
 # %%
-# Figures. Every one reads results/task3, so this section costs seconds and needs no
+# Figures. Every one reads predictions/task3, so this section costs seconds and needs no
 # GPU: it draws what the tables above already measured. The resolver handles being run
 # from the notebook folder, the repo root, or a Colab copy with no results directory --
 # in the last case each cell says so and draws nothing rather than failing.
@@ -2389,7 +2389,7 @@ from pathlib import Path
 def _results():
     here = Path.cwd().resolve()
     for base in (here, *here.parents):
-        cand = base / "results" / "task3"
+        cand = base / "predictions" / "task3"
         if cand.is_dir():
             return cand
     return None
@@ -2401,7 +2401,7 @@ if FIGDIR is not None and (FIGDIR / "task3_all_results.csv").is_file():
     ALL = pd.read_csv(FIGDIR / "task3_all_results.csv")
     print(f"reading {FIGDIR / 'task3_all_results.csv'}  ({len(ALL):,} measurements)")
 else:
-    print("results/task3 not found -- the figure cells below will skip.")
+    print("predictions/task3 not found -- the figure cells below will skip.")
 
 
 def _wide(source):

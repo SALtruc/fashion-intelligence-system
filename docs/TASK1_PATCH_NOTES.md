@@ -14,6 +14,6 @@ See `TASK1_DELIVERY_VALIDATION.json` for checks actually executed. GUI interacti
 
 ## Kaggle download organization
 
-scripts/organize_kaggle_results.py copied the raw download into the codebase on 10 September 2026. Canonical runtime paths are models/task1/, predictions/task1/, splits/task1/, outputs/figures/task1/, and artifacts/task1/kaggle-full-16ay9832/. The organization manifest records every copied file and hash. One stale prediction under models/task1/predictions/ differed from the Kaggle run and was replaced after comparison. The raw source was then removed at the user request.
+src/task1/organize_kaggle_results.py copied the raw download into the codebase on 10 September 2026. Canonical runtime paths are models/task1/, predictions/task1/, splits/task1/, outputs/figures/task1/, and artifacts/task1/kaggle-full-16ay9832/. The organization manifest records every copied file and hash. One stale prediction under models/task1/predictions/ differed from the Kaggle run and was replaced after comparison. The raw source was then removed at the user request.
 
 

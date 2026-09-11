@@ -14,7 +14,7 @@ import shutil
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SOURCE = ROOT / "results" / "task1_full_16ay9832"
 
 

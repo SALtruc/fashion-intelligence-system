@@ -67,7 +67,7 @@ def _repo_root():
 
 
 ROOT = _repo_root()
-RES = ROOT / "results" / "task3"
+RES = ROOT / "predictions" / "task3"
 RES.mkdir(parents=True, exist_ok=True)
 SRC = HERE / "task3_build.py"
 PREFIX_STOP = "# ## 5 "

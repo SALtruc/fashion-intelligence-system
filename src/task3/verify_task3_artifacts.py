@@ -37,7 +37,7 @@ def _repo_root():
 
 
 ROOT = _repo_root()
-META = ROOT / "results" / "task3" / "task3_final_metadata.json"
+META = ROOT / "predictions" / "task3" / "task3_final_metadata.json"
 
 
 def sha(b):

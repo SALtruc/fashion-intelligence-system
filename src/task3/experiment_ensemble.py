@@ -71,7 +71,7 @@ def _repo_root():
 
 
 def _results_dir():
-    d = _repo_root() / "results" / "task3"
+    d = _repo_root() / "predictions" / "task3"
     d.mkdir(parents=True, exist_ok=True)
     return d
 

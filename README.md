@@ -93,7 +93,7 @@ is trained directly against the relevance labels the benchmark scores.
 │   └── task4/                            # 00 preprocessing → 05 ArcFace → 06 final benchmark
 ├── src/                                  # shared library: data, models, training, retrieval, metrics
 │   ├── common/  preprocessing.py
-│   └── task1/  task2/  task3/  task4/
+│   └── task1/  task2/  task3/  task4/    # task1 also holds its inference & packaging scripts
 ├── splits/                               # frozen split files — every task evaluates on these
 │   ├── task1/  fit.csv · tuning.csv · reporting.csv
 │   ├── task3/  train_val_grouped_sha256.csv
@@ -101,9 +101,8 @@ is trained directly against the relevance labels the benchmark scores.
 ├── preprocessed_datasets/
 │   └── train_manifest.csv                # the audited 37,847-row manifest all tasks read
 ├── models/                               # per-task selection metadata, tables, figures
-├── results/                              # consolidated measurement tables (task 3)
 ├── artifacts/                            # trained weights & embeddings (gitignored — see below)
-├── predictions/                          # submission CSVs in styles_prediction.csv format
+├── predictions/                          # submission CSVs, plus task 3's consolidated result tables
 ├── docs/                                 # independent-evaluation write-ups
 ├── datasets/                             # course data (gitignored)
 ├── pyproject.toml · uv.lock              # locked environment
@@ -184,7 +183,7 @@ Run them in this order — later notebooks read what earlier ones write:
 | 1 | `notebooks/00_eda_and_preprocessing.ipynb` | `preprocessed_datasets/train_manifest.csv` |
 | 2 | `notebooks/task1/01_task1_article_type_classification.ipynb` | Task 1 models, tables, figures, predictions |
 | 3 | `notebooks/task2/…` | Task 2 checkpoints, comparison, predictions |
-| 4 | `notebooks/task3/03_task3_gender_usage_nguyen.ipynb` | Task 3 checkpoint, `results/task3/` |
+| 4 | `notebooks/task3/03_task3_gender_usage_nguyen.ipynb` | Task 3 checkpoint, `predictions/task3/` |
 | 5 | `notebooks/task4/00…05` then `06_final_benchmark.ipynb` | Five retrieval models, then the hold-out benchmark |
 | 6 | `notebooks/01_final_prediction.ipynb` | the combined submission CSV |
 

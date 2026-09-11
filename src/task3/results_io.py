@@ -35,7 +35,7 @@ def _repo_root():
 
 
 ROOT = _repo_root()
-RES = ROOT / "results" / "task3"
+RES = ROOT / "predictions" / "task3"
 CONSOLIDATED = RES / "task3_all_results.csv"
 BOOLS = ("tta",)
 

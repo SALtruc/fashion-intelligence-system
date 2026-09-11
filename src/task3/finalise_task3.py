@@ -49,11 +49,11 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 
 def _results_dir():
-    """Outputs go to results/task3, not next to the source. This file lives in
+    """Outputs go to predictions/task3, not next to the source. This file lives in
     src/task3 now, so HERE is the wrong place to write."""
     for base in (HERE, *HERE.parents):
         if (base / ".git").exists():
-            d = base / "results" / "task3"
+            d = base / "predictions" / "task3"
             d.mkdir(parents=True, exist_ok=True)
             return d
     return HERE

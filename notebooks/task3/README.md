@@ -57,8 +57,8 @@ python src/task3/experiment_party_external.py    # external data, round 1
 python src/task3/experiment_catalog_external.py  # external data, round 2
 ```
 
-Each writes into `results/task3/`, and all ten result CSVs are also folded into
-`results/task3/task3_all_results.csv` in long form, one row per measurement.
+Each writes into `predictions/task3/`, and all ten result CSVs are also folded into
+`predictions/task3/task3_all_results.csv` in long form, one row per measurement.
 
 Local staging, if `D:/ColabDataset` is ever missing: it needs
 `preprocessed_datasets/train/styles_train.csv` and `images_train/`, holding exactly

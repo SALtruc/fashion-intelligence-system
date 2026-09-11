@@ -39,7 +39,7 @@ def _repo_root():
 
 
 ROOT = _repo_root()
-RES = ROOT / "results" / "task3"
+RES = ROOT / "predictions" / "task3"
 CSV = RES / "sota_comparison.csv"
 PC = RES / "sota_comparison_perclass.csv"
 REPORT = report_path()

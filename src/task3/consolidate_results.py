@@ -1,7 +1,7 @@
-"""Rebuild results/task3/task3_all_results.csv as one tidy table, and fix two defects.
+"""Rebuild predictions/task3/task3_all_results.csv as one tidy table, and fix two defects.
 
 Defect 1, the one that matters for the submission. .gitignore keeps
-`results/task3/*.csv` out of git and admits only this consolidated file, which was the
+`predictions/task3/*.csv` out of git and admits only this consolidated file, which was the
 right call when it was made -- ten CSVs in a notebook folder is sprawl -- but the file
 was last built before the pre-trained comparison, the scratch-vs-pretrained experiment
 and the two ensemble runs existed. So appendices B9 and B10 are generated from CSVs that
@@ -46,7 +46,7 @@ def _repo_root():
 
 
 ROOT = _repo_root()
-RES = ROOT / "results" / "task3"
+RES = ROOT / "predictions" / "task3"
 OUT = RES / "task3_all_results.csv"
 COLS = ["source", "arm", "variant", "rep", "split", "tta",
         "target", "class", "metric", "value"]

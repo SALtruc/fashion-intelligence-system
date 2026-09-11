@@ -12,8 +12,7 @@ The Task 1 handoff ZIP generated here is deliberately not labelled a complete as
 - [x] Multiple algorithms, tuning, imbalance investigation, uncertainty and limitations.
 - [x] Final models, label order, preprocessing and selection metadata.
 - [x] 5,829 article-type predictions, preserving the issued template IDs and columns.
-- [x] Local graphical image chooser with reviewed-label export: `task1_demo.py`.
-- [x] Standalone saved-model prediction: `python -m src.task1_inference`.
+- [x] Standalone saved-model prediction, single image or full template: `python -m src.task1.task1_inference`.
 - [x] External-literature comparison and external data evaluation: `docs/INDEPENDENT_EVALUATION_TASK1.md`.
 - [x] Independent external evaluation dataset (60 images across 12 classes): `data/external_task1/`.
 - [x] Runnable Task 1 packaging script with integrity manifest.
@@ -39,8 +38,8 @@ executed notebook, EDA notebook, source, original run artifacts, audited manifes
 No newly collected external imagery is used. Run:
 
 ```console
-python scripts/validate_task1_delivery.py
-python scripts/build_task1_submission.py
+python src/task1/validate_task1_delivery.py
+python src/task1/build_task1_submission.py
 ```
 
 The original results ZIP is evidence only. Use the new handoff ZIP as the Task 1 component of

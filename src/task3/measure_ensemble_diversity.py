@@ -10,7 +10,7 @@ somebody eventually types in by hand and gets wrong.
 Cheap enough to be worth doing properly: disagreement is a comparison of two argmax
 vectors, so it needs the saved probabilities and no labels, no images and no GPU. The
 probabilities live under artifacts/, which is gitignored, so the rates are written to
-results/task3 where the consolidation can fold them into the one tracked table.
+predictions/task3 where the consolidation can fold them into the one tracked table.
 
     python src/task3/measure_ensemble_diversity.py
 """
@@ -32,7 +32,7 @@ def _repo_root():
 
 ROOT = _repo_root()
 PROBS = ROOT / "artifacts" / "task3" / "probs_cache"
-OUT = ROOT / "results" / "task3" / "ensemble_diversity.csv"
+OUT = ROOT / "predictions" / "task3" / "ensemble_diversity.csv"
 TARGETS = ("gender", "usage")
 
 if not PROBS.is_dir():

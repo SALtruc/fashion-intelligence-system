@@ -19,6 +19,12 @@ Thumbs.db
 .ipynb_checkpoints/
 __pycache__/
 *.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Local scratch space: drafts, downloaded documents, throwaway renders. Nothing here
+# is part of the submission, so it never belongs in the repository.
+/tmp/
 .venv/
 venv/
 datasets.zip

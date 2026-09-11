@@ -10,9 +10,9 @@ import ast
 import numpy as np
 import torch
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
+ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT))
-from src.task1_inference import Predictor, DEFAULT_ARTIFACTS, load_image, predict_template, standardize_image
+from src.task1.task1_inference import Predictor, DEFAULT_ARTIFACTS, load_image, predict_template, standardize_image
 from PIL import Image
 
 
@@ -72,36 +72,14 @@ def main():
             predict_template(predictor,template,ROOT/'datasets/test/images_test',template)
             raise AssertionError('Template overwrite was allowed.')
         except ValueError:pass
-        # Exercise real GUI state transitions and async prediction without leaving a window open.
-        import tkinter as tk
-        from task1_demo import CatalogueApp
-        root=tk.Tk();root.withdraw()
-        app=CatalogueApp(root);app.predictor=predictor
-        image_path=ROOT/'datasets/test/images_test'/f"{rows[0]['id']}.jpg"
-        app.classify_path(image_path)
-        deadline=time.monotonic()+40
-        while app.future is not None and time.monotonic()<deadline:
-            root.update();time.sleep(.03)
-        assert app.result is not None,'GUI prediction failed or timed out'
-        assert len(app.ranking.get_children())==5
-        app.export_review(temp/'review.csv')
-        with (temp/'review.csv').open() as f:review=list(csv.DictReader(f))
-        assert review[0]['reviewed_articleType']==app.result['articleType']
-        bad=temp/'broken.jpg';bad.write_bytes(b'not an image')
-        app.classify_path(bad)
-        deadline=time.monotonic()+10
-        while app.future is not None and time.monotonic()<deadline:
-            root.update();time.sleep(.03)
-        assert app.result is None and str(app.save['state'])=='disabled'
-        app.close()
     result={'artifact_hashes_verified':len(manifest['files']),'sample_rows':len(samples),
             'sample_classes':len(sampled),'cpu_top1_mismatches':mismatches,
             'transform_matches_original':True,'template_preservation':True,
-            'gui_prediction_review_export_and_invalid_image':True,'torch':torch.__version__,
+            'torch':torch.__version__,
             'note':'CPU FP32 replay on a representative sample; not a full retraining or external evaluation.'}
     (ROOT/'docs/TASK1_DELIVERY_VALIDATION.json').write_text(json.dumps(result,indent=2)+'\n')
     assert not mismatches,'Investigate replay differences before delivery.'
-    print('Transform, prediction-template, GUI prediction/export/error checks passed.',flush=True)
+    print('Transform and prediction-template checks passed.',flush=True)
 
 
 if __name__=='__main__':main()

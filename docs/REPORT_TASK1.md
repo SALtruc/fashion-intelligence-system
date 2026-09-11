@@ -50,7 +50,7 @@ The final claim is limited to this supplied catalogue distribution and the 110 o
 
 ## Practical deployment and demo
 
-The local `task1_demo.py` interface loads the selected saved model (`models/task1/final/resnet_resample_final.pt`), accepts a product photo, displays five suggestions with confidence scores, and lets the user review or change the label before CSV export. The interface demonstrates integration without retraining. Scores are explicitly uncalibrated, and unknown inputs are not reliably rejected; the recommended workflow keeps a human reviewer in the loop.
+`python -m src.task1.task1_inference` loads the selected saved model (`models/task1/final/resnet_resample_final.pt`), accepts either a single product photo or the issued prediction template, and reports five suggestions with confidence scores so the operator keeps the labelling decision. It demonstrates integration without retraining. Scores are explicitly uncalibrated, and unknown inputs are not reliably rejected; the recommended workflow keeps a human reviewer in the loop.
 
 ## Evidence and references
 

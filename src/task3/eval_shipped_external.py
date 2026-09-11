@@ -44,7 +44,7 @@ def _repo_root():
 
 
 ROOT = _repo_root()
-RES = ROOT / "results" / "task3"
+RES = ROOT / "predictions" / "task3"
 RES.mkdir(parents=True, exist_ok=True)
 OUT = RES / "external_shipped.csv"
 CKPT = ROOT / "artifacts" / "task3" / "task3_gender_usage_C_weighted.pt"

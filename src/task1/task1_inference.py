@@ -11,7 +11,7 @@ from PIL import Image, ImageOps
 import torch
 from .task1_models import SmallResNet, PlainCNN
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_ARTIFACTS = ROOT / 'models' / 'task1'
 
 
