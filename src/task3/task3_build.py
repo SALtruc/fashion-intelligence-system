@@ -592,7 +592,18 @@ def load_images(paths, size=IMAGE_SIZE, cache=None):
         np.save(cache, out)
     return out
 
-CACHE = Path("/content/train_images.npy") if IN_COLAB else Path("D:/ColabDataset/train_images.npy")
+# The decoded array is ~543 MB, so it is cached rather than rebuilt every run. It used
+# to be written to D:/ColabDataset, which exists on one laptop: anywhere else np.save
+# raised FileNotFoundError *after* the decode had already cost several minutes. It now
+# goes to /content on Colab (local disk, not Drive) and to the gitignored artifacts/
+# tree in a checkout, and the directory is created before the decode starts.
+import tempfile
+
+_CACHE_DIR = (Path("/content") if IN_COLAB
+              else (_REPO / "artifacts" / "task3" if _REPO.is_dir()
+                    else Path(tempfile.gettempdir())))
+_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+CACHE = _CACHE_DIR / "train_images.npy"
 X_all = load_images(frame["path"].tolist(), cache=None if SAMPLE else CACHE)
 print("image array:", X_all.shape, f"{X_all.nbytes / 1e6:.0f} MB")
 
