@@ -103,7 +103,6 @@ is trained directly against the relevance labels the benchmark scores.
 ├── models/                               # per-task selection metadata, tables, figures
 ├── artifacts/                            # trained weights & embeddings (gitignored — see below)
 ├── predictions/                          # submission CSVs, plus task 3's consolidated result tables
-├── docs/                                 # independent-evaluation write-ups
 ├── datasets/                             # course data (gitignored)
 ├── pyproject.toml · uv.lock              # locked environment
 └── README.md

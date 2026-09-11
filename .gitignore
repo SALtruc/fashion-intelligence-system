@@ -25,6 +25,9 @@ __pycache__/
 # Local scratch space: drafts, downloaded documents, throwaway renders. Nothing here
 # is part of the submission, so it never belongs in the repository.
 /tmp/
+
+# Internal working checklist. Kept on the author's machine, not shared in the repo.
+/SUBMISSION.md
 .venv/
 venv/
 datasets.zip
