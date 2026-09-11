@@ -104,7 +104,10 @@ is trained directly against the relevance labels the benchmark scores.
 ├── models/                               # per-task selection metadata, tables, figures
 ├── artifacts/                            # trained weights & embeddings (gitignored — see below)
 ├── predictions/                          # submission CSVs, plus task 3's consolidated result tables
+├── tests/                                # self-tests for the shared code
+├── docs/                                 # provenance for the externally collected sets
 ├── datasets/                             # course data (gitignored)
+├── Dataset/                              # externally collected images (gitignored)
 ├── pyproject.toml · uv.lock              # locked environment
 └── README.md
 ```
@@ -156,7 +159,43 @@ it looked in, instead of failing several cells later.
 python -c "from src import data_paths; data_paths.check(); print(data_paths.describe())"
 ```
 
-Trained weights are shared separately; the Task 3 externally collected images are on the team Drive.
+Trained weights are shared separately, in the same Drive folder.
+
+### Externally collected data
+
+The brief asks for extra-collecting (§ preprocessing) and for an **independent evaluation** on data
+from outside the provided scope (§3.3, required from CR up). Both exist and are distributed through
+the Drive folder `A2_ExternalData`, unpacked into `Dataset/` — code and provenance are committed,
+the images are not:
+
+| set | role | images | licence |
+|---|---|---|---|
+| `ExternalCosmetics` | extra **training** rows | 1,200 | CC0 |
+| `ExternalCosmetics2` | extra **training** rows | 699 | CC BY 4.0 |
+| `ExternalEval` | **independent evaluation — never train on it** | 261 | CC BY / CC0 / PDM |
+
+All three are gated to **zero overlap** with the provided train and test sets. Task 1 additionally
+ships its own 60-image independent evaluation set, which *is* committed, under `data/external_task1/`.
+
+Adding them to a training run is one line, and it is a **per-target** decision. The rows were chosen
+to fill `articleType` classes that are starved *and* concentrated in the region the graded test set
+comes from, so Tasks 1 and 2 are where a gain is plausible. On **Task 3 there was no measurable
+effect on either target** — four runs across two platforms, sign flipped both times.
+
+```python
+training, validation = pp.make_split(frame, TARGET)
+training = ed.add_to_training(training, TARGET)   # the only new line
+```
+
+`add_to_training` takes the **training** frame, not the manifest: appending external rows before the
+split would put some of them in validation, and every with/without comparison would stop meaning
+anything. Read **[docs/EXTERNAL_DATA.md](docs/EXTERNAL_DATA.md)** before using them — provenance,
+licences, the attribution obligation, the leakage evidence and the caveats that belong in the report.
+
+```console
+python src/verify_external_data.py --domain-gap    # reproduces the measured domain gap
+uv run pytest tests/test_external_data.py          # 11 gates, skips cleanly without the images
+```
 
 ---
 

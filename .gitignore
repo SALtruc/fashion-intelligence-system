@@ -35,6 +35,7 @@ task1_kaggle_bundle.zip
 *.zip
 *.sha256.txt
 /kaggle/
+.mypy_cache/
 
 # Generated model binaries and archives stay local; result tables and figures remain tracked.
 /models/**/*.joblib
@@ -49,3 +50,12 @@ task1_kaggle_bundle.zip
 
 preprocessed_datasets/**/*.csv
 preprocessed_datasets/**/*.jpg
+
+# Externally collected data - share via Drive, never git.
+# The provided dataset is licensed for this assignment only ("Any use beyond this
+# scope is not permitted"), and the collected sets are large. Both are distributed
+# through the team Drive folder A2_ExternalData; only the code lives here.
+# Provenance for every set is in docs/EXTERNAL_DATA.md.
+Dataset/
+external_datasets/
+_UPLOAD_*/

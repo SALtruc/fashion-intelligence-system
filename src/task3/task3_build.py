@@ -263,6 +263,9 @@ TRAIN_IMG = _first_path([
 try:
     EXTERNAL_ROOT = _first_dir([
         os.environ.get("A2_EXTERNAL_DATA", "/nonexistent"),
+        # Dataset/ is where src/external_data.py unpacks the Drive folder, so Task 3
+        # and the external-data module agree on one location in a checkout.
+        _REPO / "Dataset",
         _REPO / "datasets" / "external",
         _REPO / "datasets" / "A2_ExternalData",
         "/content",
