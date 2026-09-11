@@ -1,9 +1,9 @@
 > **Historical document — not the current Task 1 result or run instructions.**
-> Use [the current report](REPORT_TASK1.md), [README](../README.md), and [patch record](TASK1_PATCH_NOTES.md). This file is retained as development history.
+> Use [the current report](REPORT_TASK1.md) and [README](../README.md). This file is retained as development history.
 
 # Task 1 output artifacts
 
-Paths below are relative to the project root. `notebooks/Task1/02_task1_full_run.ipynb` is
+Paths below are relative to the project root. `notebooks/task1/01_task1_article_type_classification.ipynb` is
 the source of truth; each path appears when the cell that writes it runs.
 
 ## One run, one directory

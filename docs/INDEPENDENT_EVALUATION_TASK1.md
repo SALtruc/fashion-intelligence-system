@@ -49,3 +49,9 @@ To rigorously test model generalization beyond the studio catalogue distribution
 1. **Scoped Recommendation:** SmallResNet/resample is effective for assisted tagging of isolated product catalogue cutouts ($87.61\%$ accuracy, $0.7635$ macro-F1).
 2. **Generalization Boundary:** The collapse to $13.33\%$ on external imagery demonstrates severe sensitivity to non-white backgrounds and whole-scene clutter. The model cannot be safely deployed directly on unconstrained customer mobile uploads without a front-end object detector or background segmentation stage.
 3. **Calibrated Uncertainty:** The drop in average confidence from $\sim 0.88$ to $0.34$ indicates that prediction probabilities correctly reflect high uncertainty on out-of-domain imagery.
+
+## References
+
+Kolisnik, B., Hogan, I. and Zulkernine, F. (2021). *Condition-CNN: A hierarchical multi-label fashion image classification model*. Expert Systems with Applications, 182, 115195. [doi:10.1016/j.eswa.2021.115195](https://doi.org/10.1016/j.eswa.2021.115195).
+
+Seo, I.-J., Lee, Y.-H. and Jang, B. (2025). *Classification of fashion e-commerce products using ResNet-BERT multi-modal deep learning and transfer learning optimization*. PLOS ONE, 20(5), e0324621. [doi:10.1371/journal.pone.0324621](https://doi.org/10.1371/journal.pone.0324621).
