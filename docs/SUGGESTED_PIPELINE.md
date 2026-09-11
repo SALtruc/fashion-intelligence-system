@@ -1,5 +1,5 @@
 > **Historical document — not the current Task 1 result or run instructions.**
-> Use [the current report](REPORT_TASK1.md), [README](../README.md), and [patch record](TASK1_PATCH_NOTES.md). This file is retained as development history.
+> Use [the current report](REPORT_TASK1.md) and [README](../README.md). This file is retained as development history.
 
 # Current pipeline and reproduction contract
 
@@ -33,7 +33,7 @@ eligible rows, seed, grouping and split shares fixed for every comparison.
 
 ## 2. Run the Task 1 notebook
 
-Run `notebooks/Task1/02_task1_full_run.ipynb` top to bottom. It is self-contained: it defines
+Run `notebooks/task1/01_task1_article_type_classification.ipynb` top to bottom. It is self-contained: it defines
 every transform, model, training loop and metric it uses, imports no project module, and
 reads no checkpoint written elsewhere. There is no worker, launcher or generator step.
 
@@ -95,8 +95,7 @@ is not reproducible here.
 The notebook writes everything under `models/task1/`: the three refitted models in `final/`,
 the tables and figures, the predictions, and `selection.json`, `deployment.json` and
 `run.json`. `run.json` records the protocol, an input digest and a SHA-256 of every file,
-so a result can be traced back to the settings and the rows that produced it. A saved model
-carries its own class order and normalisation, so it can be loaded without the notebook.
+so a result can be traced back to the settings and the rows that produced it. The recorded outputs carry their class order and normalisation alongside the checkpoints, so the results remain interpretable without rerunning the notebook.
 
 Current predictions contain 5,829 `articleType` values; gender, season and usage are blank.
 Implement and evaluate the remaining tasks, then combine predictions using the supplied

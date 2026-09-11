@@ -22,6 +22,9 @@ __pycache__/
 .venv/
 venv/
 datasets.zip
+task1_kaggle_bundle.zip
+*.zip
+*.sha256.txt
 /kaggle/
 
 # Generated model binaries and archives stay local; result tables and figures remain tracked.

@@ -137,7 +137,7 @@
   "recipe": {
     "config": {
       "lr": 0.001,
-      "weight_decay": 0.0001
+      "weight_decay": 0.001
     },
     "epochs": 40,
     "regime": "resample"
@@ -158,10 +158,10 @@
   "reporting_scores": {
     "hog_svm": 0.6345273267713217,
     "hog_svm_offset": 0.6345273267713217,
-    "cnn_reweight": 0.5452958909783295,
-    "cnn_resample": 0.7447392456374435,
-    "resnet_reweight": 0.5524532878721486,
-    "resnet_resample": 0.7653827317142766,
+    "cnn_reweight": 0.5339355742839914,
+    "cnn_resample": 0.7378226194344965,
+    "resnet_reweight": 0.5404597743645911,
+    "resnet_resample": 0.7635366640980263,
     "reference_majority": 0.0026950427175525655,
     "reference_random": 0.009062866813314018
   },

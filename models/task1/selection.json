@@ -37,10 +37,10 @@
         "lr": 0.0003,
         "weight_decay": 0.0001
       },
-      "epochs": 39,
-      "macro_f1": 0.5325971865620045,
-      "accuracy": 0.6416184971098265,
-      "weighted_f1": 0.6669490958076109,
+      "epochs": 40,
+      "macro_f1": 0.5364159425462519,
+      "accuracy": 0.6378199834847234,
+      "weighted_f1": 0.6623835616144312,
       "arm": "cnn_reweight"
     },
     {
@@ -49,12 +49,12 @@
       "regime": "resample",
       "config": {
         "lr": 0.001,
-        "weight_decay": 0.001
+        "weight_decay": 0.0001
       },
-      "epochs": 38,
-      "macro_f1": 0.7612028632395492,
-      "accuracy": 0.8440957886044591,
-      "weighted_f1": 0.8483195189902185,
+      "epochs": 36,
+      "macro_f1": 0.7382317942668771,
+      "accuracy": 0.8379851362510322,
+      "weighted_f1": 0.8415031227506182,
       "arm": "cnn_resample"
     },
     {
@@ -65,10 +65,10 @@
         "lr": 0.0001,
         "weight_decay": 0.0001
       },
-      "epochs": 39,
-      "macro_f1": 0.5265078988879159,
-      "accuracy": 0.6272502064409579,
-      "weighted_f1": 0.6556387594547677,
+      "epochs": 36,
+      "macro_f1": 0.529255597611797,
+      "accuracy": 0.6345169281585467,
+      "weighted_f1": 0.6649505465856415,
       "arm": "resnet_reweight"
     },
     {
@@ -77,12 +77,12 @@
       "regime": "resample",
       "config": {
         "lr": 0.001,
-        "weight_decay": 0.0001
+        "weight_decay": 0.001
       },
       "epochs": 40,
-      "macro_f1": 0.7764658177449341,
-      "accuracy": 0.8649050371593724,
-      "weighted_f1": 0.8658208250923711,
+      "macro_f1": 0.7701515016431495,
+      "accuracy": 0.8642444260941371,
+      "weighted_f1": 0.865760339657908,
       "arm": "resnet_resample"
     }
   ],
@@ -106,15 +106,15 @@
         "lr": 0.0003,
         "weight_decay": 0.0001
       },
-      "epochs": 39,
+      "epochs": 40,
       "regime": "reweight"
     },
     "cnn_resample": {
       "config": {
         "lr": 0.001,
-        "weight_decay": 0.001
+        "weight_decay": 0.0001
       },
-      "epochs": 38,
+      "epochs": 36,
       "regime": "resample"
     },
     "resnet_reweight": {
@@ -122,13 +122,13 @@
         "lr": 0.0001,
         "weight_decay": 0.0001
       },
-      "epochs": 39,
+      "epochs": 36,
       "regime": "reweight"
     },
     "resnet_resample": {
       "config": {
         "lr": 0.001,
-        "weight_decay": 0.0001
+        "weight_decay": 0.001
       },
       "epochs": 40,
       "regime": "resample"

@@ -7,19 +7,18 @@ The Task 1 handoff ZIP generated here is deliberately not labelled a complete as
 
 ## Task 1 evidence now available
 
-- [x] Executed full notebook: `notebooks/task1-sota.ipynb`, 54 executed code cells, no saved errors.
-- [x] Current conclusion: ResNet/resample selected on tuning, reporting macro-F1 0.7654.
+- [x] Executed full notebook: `notebooks/task1/01_task1_article_type_classification.ipynb`, fully executed with inline outputs and verification dashboard.
+- [x] Current conclusion: ResNet/resample selected on tuning, reporting macro-F1 0.7635 (confirmed across runs).
 - [x] Multiple algorithms, tuning, imbalance investigation, uncertainty and limitations.
 - [x] Final models, label order, preprocessing and selection metadata.
 - [x] 5,829 article-type predictions, preserving the issued template IDs and columns.
 - [x] Local graphical image chooser with reviewed-label export: `task1_demo.py`.
 - [x] Standalone saved-model prediction: `python -m src.task1_inference`.
-- [x] External-literature comparison: `docs/INDEPENDENT_EVALUATION_TASK1.md`.
+- [x] External-literature comparison and external data evaluation: `docs/INDEPENDENT_EVALUATION_TASK1.md`.
+- [x] Independent external evaluation dataset (60 images across 12 classes): `data/external_task1/`.
 - [x] Runnable Task 1 packaging script with integrity manifest.
 
-The literature route does not test our model on newly collected images. Prior pilot exposure
-of the reporting population is not fully reconstructed; keep the development-history caveat.
-The interface demonstrates integration but is not an empirical usability or deployment study.
+Independent evaluation covers both published literature and unconstrained out-of-scope photography (`data/external_task1/`). Prior pilot exposure of the reporting population is not fully reconstructed; keep the development-history caveat. The interface demonstrates integration but is not an empirical usability or deployment study.
 
 ## Full-assignment items still required
 
