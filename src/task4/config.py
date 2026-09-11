@@ -3,6 +3,8 @@ from pathlib import Path
 
 import torch
 
+from src import data_paths
+
 SEED = 42
 RESNET_INPUT_SIZE = (128, 128)
 INPUT_SIZE = RESNET_INPUT_SIZE
@@ -29,9 +31,12 @@ MIN_DELTA = 1e-4
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-DATA_PATH = PROJECT_ROOT / "preprocessed_datasets" / "train" / "styles_train.csv"
-IMAGE_DIR = PROJECT_ROOT / "preprocessed_datasets" / "train" / "images_train"
-TEST_IMAGE_DIR = PROJECT_ROOT / "preprocessed_datasets" / "test" / "images_test"
+# Resolved rather than hard-coded: the same checkout has to work whether the data
+# sits in datasets/, in the FashionDataset folder the course archive unpacks to, or
+# on a Colab mount. src/data_paths.py owns that decision for every task.
+DATA_PATH = data_paths.train_table()
+IMAGE_DIR = data_paths.train_images()
+TEST_IMAGE_DIR = data_paths.test_images()
 SPLIT_DIR = PROJECT_ROOT / "splits" / "task4"
 ARTIFACT_DIR = PROJECT_ROOT / "artifacts" / "task4"
 

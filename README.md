@@ -92,6 +92,7 @@ is trained directly against the relevance labels the benchmark scores.
 │   ├── task3/                            # gender & usage classification
 │   └── task4/                            # 00 preprocessing → 05 ArcFace → 06 final benchmark
 ├── src/                                  # shared library: data, models, training, retrieval, metrics
+│   ├── data_paths.py                     # the one resolver every task uses to find the data
 │   ├── common/  preprocessing.py
 │   └── task1/  task2/  task3/  task4/    # task1 also holds its inference & packaging scripts
 ├── splits/                               # frozen split files — every task evaluates on these
@@ -129,10 +130,33 @@ if nobody looks.
 
 Target cardinality: `articleType` 124 · `season` 4 · `gender` 5 · `usage` 8.
 
-> ⚠️ **Datasets and trained weights are not committed** (see `.gitignore`). The course data is
-> distributed via Canvas; place it at `datasets/train/images_train/`, `datasets/train/styles_train.csv`
-> and `datasets/test/images_test/`. Trained weights are shared separately — they exceed what belongs
-> in a Git repository.
+### Where to put the data
+
+**Datasets and trained weights are not committed** (see `.gitignore`) — they are far past what
+belongs in a Git repository. Download `A2_Fashion.zip` from Canvas and unpack it so the repository
+looks like this:
+
+```
+datasets/
+├── train/
+│   ├── styles_train.csv
+│   └── images_train/            # ~38,600 .jpg
+└── test/
+    ├── styles_prediction.csv
+    └── images_test/             # ~5,800 .jpg
+```
+
+That is the only layout you need to get right. Every notebook and script resolves the data through
+[`src/data_paths.py`](src/data_paths.py), which also accepts the folder the course archive unpacks
+to (`datasets/FashionDataset/…`), a Colab mount, and `A2_DATA_ROOT=/somewhere/else` for a machine
+that keeps the images on another drive. If something is missing it says so once, naming every path
+it looked in, instead of failing several cells later.
+
+```console
+python -c "from src import data_paths; data_paths.check(); print(data_paths.describe())"
+```
+
+Trained weights are shared separately; the Task 3 externally collected images are on the team Drive.
 
 ---
 
@@ -199,6 +223,17 @@ uv run jupyter nbconvert --to notebook --execute \
 hyper-parameter sensitivity table) and Task 4's Section 7 both read persisted result files and train
 nothing. Task 1 runs its pipeline in an embedded distributed runtime and renders the run's figures
 in its final cell; the full tables live under `models/task1/tables/`.
+
+**What each notebook needs before it will run.** Every notebook is saved with its outputs, so the
+results can be read without re-executing anything. To actually re-execute:
+
+| Notebook | Needs |
+|---|---|
+| `00_eda_and_preprocessing` | the `datasets/` layout above. CPU only, a few minutes |
+| `task1/01_…` | a CUDA GPU — `ALLOW_CPU = False`, because ResNet training on CPU presents as a hang. Set `KAGGLE = True` in its first cell to run it from the Kaggle bundle that `src/task1/build_kaggle_bundle.py` packs instead |
+| `task3/03_…` | a GPU for sections 2–11; Section 12's figures read `predictions/task3/` and need nothing. Section 7 skips itself when the externally collected images are absent |
+| `task4/00…06` | a GPU, and `artifacts/task4/` from the team Drive for `06` — it benchmarks five frozen checkpoints rather than training them |
+| `01_final_prediction` | the per-task prediction CSVs under `predictions/`; it trains nothing |
 
 ---
 

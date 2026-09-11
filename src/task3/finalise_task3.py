@@ -234,20 +234,17 @@ print(f"\nmodel -> {MODEL_PATH}  ({MODEL_PATH.stat().st_size / 1e6:.1f} MB)")
 # MEAN and STD -- which are computed from TRAINING images and reused here rather than
 # recomputed on the test set, because recomputing would fit a statistic to the data
 # being predicted.
-TEST_DIR = None
-for cand in [HERE.parent / "A2_FashionDataset" / "FashionDataset" / "test",
-             Path("D:/g2/Dataset/FashionDataset/test")]:
-    if (cand / "styles_prediction.csv").exists():
-        TEST_DIR = cand
-        break
-if TEST_DIR is None:
-    raise SystemExit("styles_prediction.csv not found -- point TEST_DIR at the test set")
+if str(HERE.parents[1]) not in sys.path:
+    sys.path.insert(0, str(HERE.parents[1]))
+from src import data_paths                                  # noqa: E402
 
-sample = pd.read_csv(TEST_DIR / "styles_prediction.csv")
-print(f"\n=== test set: {TEST_DIR} ===")
+template_path, img_dir = data_paths.test_template(), data_paths.test_images()
+if not template_path.is_file() or not img_dir.is_dir():
+    data_paths.check()
+
+sample = pd.read_csv(template_path)
+print(f"\n=== test set: {template_path.parent} ===")
 print(f"{len(sample):,} rows, columns {list(sample.columns)}")
-
-img_dir = TEST_DIR / "images_test"
 paths = [str(img_dir / f"{i}.jpg") for i in sample["id"]]
 absent = [p for p in paths if not Path(p).exists()]
 if absent:

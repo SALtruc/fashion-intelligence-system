@@ -208,22 +208,63 @@ def _first_dir(candidates, must_contain=None):
           "Drive, 'Add shortcut to Drive', then re-run."
     )
 
-DATA_ROOT = _first_dir([
-    os.environ.get("A2_COLAB_DATASET", "/nonexistent"),
-    "/content",                 # a zip that unpacked flat -- the common case
-    "/content/ColabDataset",
-    "/content/drive/MyDrive/ColabDataset",
-    "/content/drive/MyDrive/A2/ColabDataset",
-    "/content/drive/MyDrive/[ML] SG_G3/A2/ColabDataset",
-    "D:/ColabDataset",
-], must_contain="preprocessed_datasets/train/styles_train.csv")
+def _first_path(candidates, kind):
+    """First candidate that exists, as a file or a directory."""
+    tried = []
+    for c in candidates:
+        c = Path(c); tried.append(str(c))
+        if (c.is_file() if kind == "file" else c.is_dir()):
+            return c
+    raise FileNotFoundError(
+        "not found. Tried:\n  " + "\n  ".join(tried)
+        + "\n\nIn a repository checkout the data belongs in datasets/ -- see the "
+          "README's dataset section.\nOn Colab: 'Shared with me' is NOT mounted - "
+          "right-click the folder in Drive, 'Add shortcut to Drive', then re-run."
+    )
 
-TRAIN_CSV = DATA_ROOT / "preprocessed_datasets" / "train" / "styles_train.csv"
-TRAIN_IMG = DATA_ROOT / "preprocessed_datasets" / "train" / "images_train"
+
+def _repo_root():
+    """Nearest ancestor holding pyproject.toml, so a checkout finds its own data."""
+    for base in (Path.cwd().resolve(), *Path.cwd().resolve().parents):
+        if (base / "pyproject.toml").is_file():
+            return base
+    return Path("/nonexistent")
+
+
+# The table and the images are resolved separately because a checkout and the Colab
+# bundle disagree about where each one lives: the repository keeps the audited
+# 37,847-row manifest under preprocessed_datasets/ and the JPEGs under datasets/,
+# while the Colab zip keeps both under preprocessed_datasets/train/. Resolving the
+# pair independently is what lets one notebook serve both without a rename.
+_REPO = _repo_root()
+
+TRAIN_CSV = _first_path([
+    os.environ.get("A2_TRAIN_TABLE", "/nonexistent"),
+    _REPO / "preprocessed_datasets" / "train_manifest.csv",
+    _REPO / "datasets" / "train" / "styles_train.csv",
+    _REPO / "datasets" / "FashionDataset" / "train" / "styles_train.csv",
+    "/content/preprocessed_datasets/train/styles_train.csv",
+    "/content/ColabDataset/preprocessed_datasets/train/styles_train.csv",
+    "/content/drive/MyDrive/ColabDataset/preprocessed_datasets/train/styles_train.csv",
+    "D:/ColabDataset/preprocessed_datasets/train/styles_train.csv",
+], "file")
+
+TRAIN_IMG = _first_path([
+    os.environ.get("A2_TRAIN_IMAGES", "/nonexistent"),
+    _REPO / "datasets" / "train" / "images_train",
+    _REPO / "datasets" / "FashionDataset" / "train" / "images_train",
+    _REPO / "preprocessed_datasets" / "train" / "images_train",
+    "/content/preprocessed_datasets/train/images_train",
+    "/content/ColabDataset/preprocessed_datasets/train/images_train",
+    "/content/drive/MyDrive/ColabDataset/preprocessed_datasets/train/images_train",
+    "D:/ColabDataset/preprocessed_datasets/train/images_train",
+], "dir")
 
 try:
     EXTERNAL_ROOT = _first_dir([
         os.environ.get("A2_EXTERNAL_DATA", "/nonexistent"),
+        _REPO / "datasets" / "external",
+        _REPO / "datasets" / "A2_ExternalData",
         "/content",
         "/content/A2_ExternalData",
         "/content/drive/MyDrive/A2_ExternalData",
@@ -235,7 +276,8 @@ except FileNotFoundError as exc:
     EXTERNAL_ROOT = None
     print("external data not found - section 7 will be skipped\n", exc)
 
-print("catalogue :", DATA_ROOT)
+print("catalogue :", TRAIN_CSV)
+print("images    :", TRAIN_IMG)
 print("external  :", EXTERNAL_ROOT)
 
 # %% [markdown]
