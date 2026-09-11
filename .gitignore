@@ -34,3 +34,6 @@ datasets.zip
 /outputs/**/*.npz
 /outputs/**/*.pt
 /outputs/**/*.zip
+
+preprocessed_datasets/**/*.csv
+preprocessed_datasets/**/*.jpg
