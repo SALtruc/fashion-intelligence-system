@@ -32,7 +32,7 @@ from src import data_paths                       # noqa: E402
 from src.task3.models import Net                 # noqa: E402
 
 CHECKPOINT = ROOT / "artifacts" / "task3" / "submitted" / "task3_gender_usage_C_weighted.pt"
-OUTPUT = ROOT / "predictions" / "task3" / "task3_gender_usage_nguyen.csv"
+OUTPUT = ROOT / "predictions" / "task3" / "task3_gender_usage.csv"
 
 
 def load_batch(paths, size):

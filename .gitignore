@@ -23,6 +23,8 @@ artifacts/**
 !artifacts/task3/submitted/**
 !artifacts/task4/submitted/**
 
+outputs/**
+
 # Local environments, caches and generated bundles.
 __MACOSX/
 .DS_Store
@@ -33,25 +35,10 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 
-# Local scratch space: drafts, downloaded documents, throwaway renders. Nothing here
-# is part of the submission, so it never belongs in the repository.
-/tmp/
-
 # Internal working checklist. Kept on the author's machine, not shared in the repo.
-/SUBMISSION.md
 .venv/
 venv/
-datasets.zip
-task1_kaggle_bundle.zip
-*.zip
-*.sha256.txt
-/kaggle/
 .mypy_cache/
-
-# Every task's weights and generated run output live under artifacts/, which the block
-# above already keeps out of git. Nothing else should be writing model binaries.
-/models/
-/outputs/
 
 preprocessed_datasets/**/*.csv
 preprocessed_datasets/**/*.jpg
@@ -72,8 +59,3 @@ _UPLOAD_*/
 /notebooks/task2/dataset3/
 /notebooks/task2/ExtraSeasonData/
 /preprocessed_datasets/task2/*.npy
-
-# Claude Code's local settings, and the draft the final-prediction notebook writes before
-# WRITE_FINAL is set. The submitted CSV is the one without the DRAFT_ prefix.
-/.claude/
-/predictions/final/DRAFT_*
