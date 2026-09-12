@@ -5,7 +5,7 @@ asks for one. So this script produces the two artefacts the notebook is missing:
 
     artifacts/task3/task3_gender_usage_C_weighted.pt   the model, plus everything
                                                        needed to run it
-    predictions/task3_gender_usage_nguyen.csv          styles_prediction.csv format
+    predictions/task3_gender_usage.csv                 styles_prediction.csv format
 
 **The ultimate judgement is design C with a class-weighted loss.** One shared
 convolutional body, two heads, 289k parameters. The reasoning is entirely from the
@@ -290,7 +290,7 @@ assert len(out) == len(sample) and (out["id"].values == sample["id"].values).all
 
 PRED_DIR = ROOT / "predictions"
 PRED_DIR.mkdir(parents=True, exist_ok=True)
-PRED_PATH = PRED_DIR / "task3_gender_usage_nguyen.csv"
+PRED_PATH = PRED_DIR / "task3_gender_usage.csv"
 out.to_csv(PRED_PATH, index=False)
 print(f"\npredictions -> {PRED_PATH}")
 

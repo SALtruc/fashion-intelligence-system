@@ -87,9 +87,6 @@ def _candidate_roots() -> list[Path]:
         # Drive and added with "Add shortcut to Drive" first. These cover the usual
         # places that shortcut ends up.
         Path("/content/drive/MyDrive/A2_ExternalData"),
-        Path("/content/drive/MyDrive/Nguyen/A2_ExternalData"),
-        Path("/content/drive/MyDrive/A2/Nguyen/A2_ExternalData"),
-        Path("/content/drive/MyDrive/[ML] SG_G3/A2/Nguyen/A2_ExternalData"),
         Path("/content/drive/MyDrive/ExternalData"),
         Path("/content/drive/MyDrive/A2/ExternalData"),
         Path("/content/external_data"),

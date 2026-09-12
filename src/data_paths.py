@@ -1,8 +1,8 @@
 """Where the course data lives, answered in one place.
 
 Every task used to resolve the dataset its own way -- Task 1 walked up to
-``datasets/``, Task 3 only ever looked at Colab mounts and one hard-coded
-``D:/ColabDataset``, Task 4 expected ``preprocessed_datasets/train/images_train``.
+``datasets/``, Task 3 only ever looked at Colab mounts, and Task 4 expected
+``preprocessed_datasets/train/images_train``.
 Three layouts meant a checkout could satisfy at most one of them, so "clone and
 run" failed for whichever task the machine was not set up for.
 

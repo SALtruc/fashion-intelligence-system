@@ -4,7 +4,7 @@
 marker who clones this repository can run it without a Drive link:
 
 ```console
-python src/task3/predict_test.py      # writes predictions/task3/task3_gender_usage_nguyen.csv
+python src/task3/predict_test.py      # writes predictions/task3/task3_gender_usage.csv
 ```
 
 Design C: one shared convolutional body, one linear head per target, class-weighted loss,

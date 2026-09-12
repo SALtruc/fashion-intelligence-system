@@ -1,6 +1,6 @@
 # Task 3 - `gender` + `usage`
 
-`03_task3_gender_usage_nguyen.ipynb` is the notebook. `task3_build.py` is the same
+`03_task3_gender_usage.ipynb` is the notebook. `task3_build.py` is the same
 code as a plain script (`# %%` cell markers) - edit whichever you prefer; regenerate
 the notebook from the script with the converter at the bottom of this file.
 
@@ -21,12 +21,10 @@ between them is the design choice and nothing else.
 Then three ablations, one variable each: class-weighted loss, external data, and a
 split that mimics the real test set.
 
-## Running it locally on a GPU - the faster path
+## Running it locally on a GPU
 
-Colab is not required. This repo's owner has an RTX 4070 Laptop, which beats the T4
-the first three runs used, and the catalogue is already staged at `D:/ColabDataset`
-(both that path and `D:/g2/Dataset` for the external images are already in the search
-lists in section 0.2, so nothing needs editing).
+Colab is not required. Point `A2_DATA_ROOT` at the course dataset and, if using the
+external-data sections, point `A2_EXTERNAL_DATA` at the folder holding that dataset.
 
 One-time setup:
 
@@ -38,7 +36,7 @@ python -m ipykernel install --user --name a2torch --display-name "A2 (torch cu12
 
 Then:
 
-Open `03_task3_gender_usage_nguyen.ipynb` and run all cells: about 90 minutes on an
+Open `03_task3_gender_usage.ipynb` and run all cells: about 90 minutes on an
 RTX 4070, and the notebook is self-contained. Setting `A2_QUICK=1` in the environment
 cuts it to roughly two minutes on a 4,000-row sample, which is enough to prove the
 pipeline runs before committing an hour of GPU.
@@ -49,24 +47,17 @@ notebook's preprocessing rather than duplicating it:
 
 ```bash
 python src/task3/finalise_task3.py               # the submitted model and predictions
-python src/task3/experiment_hyperparams.py       # the sweep behind appendix B6
-python src/task3/experiment_epochs_confirm.py    # the confirmation that refuted it
-python src/task3/experiment_transfer_weighted.py # appendix B7
-python src/task3/diagnose_gender_ceiling.py      # per-class ceilings, trains nothing
-python src/task3/experiment_party_external.py    # external data, round 1
-python src/task3/experiment_catalog_external.py  # external data, round 2
 ```
 
 Each writes into `predictions/task3/`, and all ten result CSVs are also folded into
 `predictions/task3/task3_all_results.csv` in long form, one row per measurement.
 
-Local staging, if `D:/ColabDataset` is ever missing: it needs
-`preprocessed_datasets/train/styles_train.csv` and `images_train/`, holding exactly
-the 37,745 rows the frozen split covers. Take the CSV from `ColabDataset.zip` rather
-than filtering the provided `styles_train.csv` - **two `gender` labels differ** between
-them (ids 36762 and 39107, `Unisex` in the de-duplicated file against `Men` and `Boys`
-in the raw one), so the de-duplicated file is not a subset of the raw one and only the
-zip matches what the earlier runs measured.
+The local dataset root needs `preprocessed_datasets/train/styles_train.csv` and
+`images_train/`, holding exactly the 37,745 rows the frozen split covers. Take the CSV
+from `ColabDataset.zip` rather than filtering the provided `styles_train.csv` - **two
+`gender` labels differ** between them (ids 36762 and 39107, `Unisex` in the
+de-duplicated file against `Men` and `Boys` in the raw one), so the de-duplicated file
+is not a subset of the raw one and only the zip matches what the earlier runs measured.
 
 ## Running it on Colab
 

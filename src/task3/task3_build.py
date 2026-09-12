@@ -186,7 +186,7 @@ else:
 #
 # Two datasets are involved and they are **not** the same thing:
 #
-# * **the provided catalogue** - Trực's `ColabDataset`, which is the provided
+# * **the provided catalogue** - `ColabDataset`, the course-provided
 #   training data de-duplicated: 38,617 -> 37,745 rows.
 # * **the externally collected images** - `A2_ExternalData`, added to *training
 #   only* in section 7.
@@ -254,7 +254,6 @@ TRAIN_CSV = _first_path([
     "/content/preprocessed_datasets/train/styles_train.csv",
     "/content/ColabDataset/preprocessed_datasets/train/styles_train.csv",
     "/content/drive/MyDrive/ColabDataset/preprocessed_datasets/train/styles_train.csv",
-    "D:/ColabDataset/preprocessed_datasets/train/styles_train.csv",
 ], "file")
 
 TRAIN_IMG = _first_path([
@@ -267,7 +266,6 @@ TRAIN_IMG = _first_path([
     "/content/preprocessed_datasets/train/images_train",
     "/content/ColabDataset/preprocessed_datasets/train/images_train",
     "/content/drive/MyDrive/ColabDataset/preprocessed_datasets/train/images_train",
-    "D:/ColabDataset/preprocessed_datasets/train/images_train",
 ], "dir")
 
 try:
@@ -281,9 +279,6 @@ try:
         "/content",
         "/content/A2_ExternalData",
         "/content/drive/MyDrive/A2_ExternalData",
-        "/content/drive/MyDrive/A2/Nguyen/A2_ExternalData",
-        "/content/drive/MyDrive/[ML] SG_G3/A2/Nguyen/A2_ExternalData",
-        "D:/g2/Dataset",
     ], must_contain="ExternalCosmetics")
 except FileNotFoundError as exc:
     EXTERNAL_ROOT = None
@@ -605,11 +600,9 @@ def load_images(paths, size=IMAGE_SIZE, cache=None):
         np.save(cache, out)
     return out
 
-# The decoded array is ~543 MB, so it is cached rather than rebuilt every run. It used
-# to be written to D:/ColabDataset, which exists on one laptop: anywhere else np.save
-# raised FileNotFoundError *after* the decode had already cost several minutes. It now
-# goes to /content on Colab (local disk, not Drive) and to the gitignored artifacts/
-# tree in a checkout, and the directory is created before the decode starts.
+# The decoded array is ~543 MB, so it is cached rather than rebuilt every run. It goes
+# to /content on Colab (local disk, not Drive) and to the gitignored artifacts/ tree in
+# a checkout; the directory is created before decoding starts.
 import tempfile
 
 _CACHE_DIR = (Path("/content") if IN_COLAB
@@ -1600,7 +1593,7 @@ def results_path(name):
     """Write results to DRIVE on Colab, never to /content.
 
     /content dies with the VM, and the VM is recycled whenever the browser stays
-    disconnected -- so a run that finishes while the laptop is asleep can leave
+    disconnected -- so a run that finishes after the session has ended can leave
     nothing behind. That already happened once: the first full run's CSV was gone
     on reconnect and had to be read back out of the notebook's printed output.
     Writing to Drive means the numbers outlive the tab, the VM and the machine.

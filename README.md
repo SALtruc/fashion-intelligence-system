@@ -288,7 +288,7 @@ Run them in this order — later notebooks read what earlier ones write:
 | 1 | `notebooks/00_eda_and_preprocessing.ipynb` | `preprocessed_datasets/train_manifest.csv` |
 | 2 | `notebooks/task1/01_task1_article_type_classification.ipynb` | Task 1 models, tables, figures, predictions |
 | 3 | `notebooks/task2/…` | Task 2 checkpoints, comparison, predictions |
-| 4 | `notebooks/task3/03_task3_gender_usage_nguyen.ipynb` | Task 3 checkpoint, `predictions/task3/` |
+| 4 | `notebooks/task3/03_task3_gender_usage.ipynb` | Task 3 checkpoint, `predictions/task3/` |
 | 5 | `notebooks/task4/00…05` then `06_final_benchmark.ipynb` | Five retrieval models, then the hold-out benchmark |
 | 6 | `notebooks/01_final_prediction.ipynb` | the combined submission CSV |
 
